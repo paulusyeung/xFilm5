@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<joborder Caption="Job Order">
+		<item Caption="My Order" ImageUrl="16x16.folder_queuing.png" Tag="cu_Order" />
+		<item Caption="My DropBox" ImageUrl="16x16.dropbox_16x16.png" Tag="cu_DropBox" />
+	</joborder>
+	<admin Caption="Admin">
+		<item Caption="Address Book" ImageUrl="16x16.vcard.png" Tag="cu_Address" />
+		<item Caption="User" ImageUrl="16x16.staffSingle_16.png" Tag="cu_User" />
+		<item Caption="Billing">
+			<item Caption="Outstanding" ImageUrl="16x16.reports16.png" Tag="cu_Outstanding" />
+			<item Caption="Invoice List" ImageUrl="16x16.reports16.png" Tag="cu_InvoiceList" />
+			<item Caption="Order List" ImageUrl="16x16.reports16.png" Tag="cu_OrderList" />
+		</item>
+	</admin>
+</root>

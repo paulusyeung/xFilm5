@@ -1,0 +1,1115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B26DDC16-DF80-4AB0-88BA-69E94B8661B2}</ProjectGuid>
+    <ProjectTypeGuids>{563295b5-8906-4a76-be2d-ff8e711c1204};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>xFilm5</RootNamespace>
+    <AssemblyName>xFilm5</AssemblyName>
+    <StartPageUrl>Form1.wgx</StartPageUrl>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <StartPageUrl>Form1.wgx</StartPageUrl>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.Charts.v15.2.Core, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Data.v15.2, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.PivotGrid.v15.2.Core, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Printing.v15.2.Core, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.RichEdit.v15.2.Core, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Utils.v15.2, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Web.ASPxPivotGrid.v15.2, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Web.ASPxThemes.v15.2, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Web.v15.2, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraCharts.v15.2, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraCharts.v15.2.UI, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraCharts.v15.2.Web, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraEditors.v15.2, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraPivotGrid.v15.2, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraPrinting.v15.2, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraReports.v15.2, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="FileHelpers, Version=3.1.5.0, Culture=neutral, PublicKeyToken=3e0c08d59cc3d657, processorArchitecture=MSIL">
+      <HintPath>..\packages\FileHelpers.3.1.5\lib\net45\FileHelpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Gizmox.WebGUI.Common, Version=4.5.25701.0, Culture=neutral, PublicKeyToken=263fa4ef694acff6, processorArchitecture=MSIL">
+      <SpecificVersion>True</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Gizmox.WebGUI.Forms.Extended, Version=4.5.25701.0, Culture=neutral, PublicKeyToken=85eae29607c9f5f3, processorArchitecture=MSIL" />
+    <Reference Include="Gizmox.WebGUI.Forms.Office, Version=4.5.25701.0, Culture=neutral, PublicKeyToken=d50c2c7452ba77d9, processorArchitecture=MSIL" />
+    <Reference Include="Gizmox.WebGUI.Forms.Themes, Version=4.5.25701.0, Culture=neutral, PublicKeyToken=263fa4ef694acff6, processorArchitecture=MSIL">
+      <SpecificVersion>True</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Gizmox.WebGUI.Forms, Version=4.5.25701.0, Culture=neutral, PublicKeyToken=c508b41386c60f1d, processorArchitecture=MSIL">
+      <SpecificVersion>True</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Gizmox.WebGUI.Server, Version=4.5.25701.0, Culture=neutral, PublicKeyToken=3de6eb684226c24d, processorArchitecture=MSIL">
+      <SpecificVersion>True</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nxStudio, Version=1.0.2813.23161, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Program Files\Common Files\nxStudio\nxStudio.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Accounting\Chart\ClientTrend.aspx" />
+    <Content Include="Accounting\Chart\RevenueByBranch.aspx" />
+    <Content Include="Accounting\Olap\Receivables.aspx" />
+    <Content Include="Accounting\Olap\SalesByProductOlapPage.aspx" />
+    <Content Include="Accounting\Olap\SalesByCustomerOlapPage.aspx" />
+    <Content Include="Accounting\Olap\ReceivablesOlapPage.aspx" />
+    <Content Include="Accounting\Olap\SalesByCustomer.aspx" />
+    <Content Include="Accounting\Olap\SalesByProduct.aspx" />
+    <Content Include="Readme.txt" />
+    <Content Include="Resources\Icons\128x128\Gas.png" />
+    <Content Include="Resources\Icons\128x128\Home.png" />
+    <Content Include="Resources\Icons\128x128\Leaf.png" />
+    <Content Include="Resources\Icons\128x128\Music.png" />
+    <Content Include="Resources\Icons\128x128\Power.png" />
+    <Content Include="Resources\Icons\128x128\Recycle.png" />
+    <Content Include="Resources\Icons\16x16\16_activate.gif" />
+    <Content Include="Resources\Icons\16x16\16_alert.gif" />
+    <Content Include="Resources\Icons\16x16\16_back.gif" />
+    <Content Include="Resources\Icons\16x16\16_cardview.png" />
+    <Content Include="Resources\Icons\16x16\16_close.gif" />
+    <Content Include="Resources\Icons\16x16\16_closeObj.gif" />
+    <Content Include="Resources\Icons\16x16\16_convert.gif" />
+    <Content Include="Resources\Icons\16x16\16_convertresponse.gif" />
+    <Content Include="Resources\Icons\16x16\16_converttooppo.gif" />
+    <Content Include="Resources\Icons\16x16\16_deactivate.gif" />
+    <Content Include="Resources\Icons\16x16\16_error.gif" />
+    <Content Include="Resources\Icons\16x16\16_excel.gif" />
+    <Content Include="Resources\Icons\16x16\16_export.gif" />
+    <Content Include="Resources\Icons\16x16\16_find.gif" />
+    <Content Include="Resources\Icons\16x16\16_forward.gif" />
+    <Content Include="Resources\Icons\16x16\16_help.gif" />
+    <Content Include="Resources\Icons\16x16\16_info.gif" />
+    <Content Include="Resources\Icons\16x16\16_listview.png" />
+    <Content Include="Resources\Icons\16x16\16_L_check.gif" />
+    <Content Include="Resources\Icons\16x16\16_L_help.gif" />
+    <Content Include="Resources\Icons\16x16\16_L_refresh.gif" />
+    <Content Include="Resources\Icons\16x16\16_L_remove.gif" />
+    <Content Include="Resources\Icons\16x16\16_L_save.gif" />
+    <Content Include="Resources\Icons\16x16\16_L_saveOpen.gif" />
+    <Content Include="Resources\Icons\16x16\16_print.gif" />
+    <Content Include="Resources\Icons\16x16\16_propagate.gif" />
+    <Content Include="Resources\Icons\16x16\16_reports.gif" />
+    <Content Include="Resources\Icons\16x16\16_save.gif" />
+    <Content Include="Resources\Icons\16x16\16_saveClose.gif" />
+    <Content Include="Resources\Icons\16x16\16_saveCompleted.gif" />
+    <Content Include="Resources\Icons\16x16\16_schedule.gif" />
+    <Content Include="Resources\Icons\16x16\16_send.gif" />
+    <Content Include="Resources\Icons\16x16\16_thumbnails.png" />
+    <Content Include="Resources\Icons\16x16\18_addResourceGroups.gif" />
+    <Content Include="Resources\Icons\16x16\18_addResources.gif" />
+    <Content Include="Resources\Icons\16x16\18_addSelectionRule.gif" />
+    <Content Include="Resources\Icons\16x16\18_addTeam.gif" />
+    <Content Include="Resources\Icons\16x16\18_addView.gif" />
+    <Content Include="Resources\Icons\16x16\18_editForm.gif" />
+    <Content Include="Resources\Icons\16x16\18_sales.gif" />
+    <Content Include="Resources\Icons\16x16\Alipay_16.png" />
+    <Content Include="Resources\Icons\16x16\appView_columns.png" />
+    <Content Include="Resources\Icons\16x16\appView_icons.png" />
+    <Content Include="Resources\Icons\16x16\appView_list.png" />
+    <Content Include="Resources\Icons\16x16\appView_tile.png" />
+    <Content Include="Resources\Icons\16x16\appView_xp.png" />
+    <Content Include="Resources\Icons\16x16\barcode_16.JPG" />
+    <Content Include="Resources\Icons\16x16\btn_on_lookup.gif" />
+    <Content Include="Resources\Icons\16x16\cart_16x16.png" />
+    <Content Include="Resources\Icons\16x16\chart16.png" />
+    <Content Include="Resources\Icons\16x16\client_cash_16x16.png" />
+    <Content Include="Resources\Icons\16x16\comment.png" />
+    <Content Include="Resources\Icons\16x16\down.gif" />
+    <Content Include="Resources\Icons\16x16\download.gif" />
+    <Content Include="Resources\Icons\16x16\Downloads.png" />
+    <Content Include="Resources\Icons\16x16\dropbox_16x16.png" />
+    <Content Include="Resources\Icons\16x16\dropbox_in_16x16.png" />
+    <Content Include="Resources\Icons\16x16\dropbox_out_16x16.png" />
+    <Content Include="Resources\Icons\16x16\English16.gif" />
+    <Content Include="Resources\Icons\16x16\export.png" />
+    <Content Include="Resources\Icons\16x16\filter_16.png" />
+    <Content Include="Resources\Icons\16x16\find.png" />
+    <Content Include="Resources\Icons\16x16\flag_green.png" />
+    <Content Include="Resources\Icons\16x16\flag_grey.png" />
+    <Content Include="Resources\Icons\16x16\flag_red.png" />
+    <Content Include="Resources\Icons\16x16\flag_yellow.png" />
+    <Content Include="Resources\Icons\16x16\folder.png" />
+    <Content Include="Resources\Icons\16x16\folder_cancelled.png" />
+    <Content Include="Resources\Icons\16x16\folder_close.png" />
+    <Content Include="Resources\Icons\16x16\folder_completed.png" />
+    <Content Include="Resources\Icons\16x16\folder_dispatch.png" />
+    <Content Include="Resources\Icons\16x16\folder_go.png" />
+    <Content Include="Resources\Icons\16x16\folder_grey.png" />
+    <Content Include="Resources\Icons\16x16\folder_open.png" />
+    <Content Include="Resources\Icons\16x16\folder_printing.png" />
+    <Content Include="Resources\Icons\16x16\folder_proofing.png" />
+    <Content Include="Resources\Icons\16x16\folder_proofingin.png" />
+    <Content Include="Resources\Icons\16x16\folder_proofingout.png" />
+    <Content Include="Resources\Icons\16x16\folder_queuing.png" />
+    <Content Include="Resources\Icons\16x16\folder_ready.png" />
+    <Content Include="Resources\Icons\16x16\folder_retouch.png" />
+    <Content Include="Resources\Icons\16x16\group.png" />
+    <Content Include="Resources\Icons\16x16\ico_16_1.gif" />
+    <Content Include="Resources\Icons\16x16\ico_16_1010.gif" />
+    <Content Include="Resources\Icons\16x16\ico_16_1039_default.gif" />
+    <Content Include="Resources\Icons\16x16\ico_16_1084.gif" />
+    <Content Include="Resources\Icons\16x16\ico_16_1089.gif" />
+    <Content Include="Resources\Icons\16x16\ico_16_1090.gif" />
+    <Content Include="Resources\Icons\16x16\ico_16_137.gif" />
+    <Content Include="Resources\Icons\16x16\ico_16_2.gif" />
+    <Content Include="Resources\Icons\16x16\ico_16_3.gif" />
+    <Content Include="Resources\Icons\16x16\ico_16_4001.gif" />
+    <Content Include="Resources\Icons\16x16\ico_16_4007.gif" />
+    <Content Include="Resources\Icons\16x16\ico_16_4209.gif" />
+    <Content Include="Resources\Icons\16x16\ico_16_4407.gif" />
+    <Content Include="Resources\Icons\16x16\ico_16_4502_d.gif" />
+    <Content Include="Resources\Icons\16x16\ico_16_4503.gif" />
+    <Content Include="Resources\Icons\16x16\ico_16_5.gif" />
+    <Content Include="Resources\Icons\16x16\ico_16_9.gif" />
+    <Content Include="Resources\Icons\16x16\ico_16_exportCustomizations.gif" />
+    <Content Include="Resources\Icons\16x16\ico_16_oneToManyCustomRelationship_d.gif" />
+    <Content Include="Resources\Icons\16x16\ico_16_rpt_chart.gif" />
+    <Content Include="Resources\Icons\16x16\ico_18_home.gif" />
+    <Content Include="Resources\Icons\16x16\ico_18_mappings.gif" />
+    <Content Include="Resources\Icons\16x16\ico_18_relationships.gif" />
+    <Content Include="Resources\Icons\16x16\info.GIF" />
+    <Content Include="Resources\Icons\16x16\invoice16_0.png" />
+    <Content Include="Resources\Icons\16x16\invoice16_1.png" />
+    <Content Include="Resources\Icons\16x16\invoice16_2.png" />
+    <Content Include="Resources\Icons\16x16\invoice16_3.png" />
+    <Content Include="Resources\Icons\16x16\jobOrder_billing.png" />
+    <Content Include="Resources\Icons\16x16\jobOrder_checked.png" />
+    <Content Include="Resources\Icons\16x16\jobOrder_comment.png" />
+    <Content Include="Resources\Icons\16x16\jobOrder_commentgrey.png" />
+    <Content Include="Resources\Icons\16x16\jobOrder_deliver.png" />
+    <Content Include="Resources\Icons\16x16\jobOrder_deliverto.png" />
+    <Content Include="Resources\Icons\16x16\jobOrder_delivery.png" />
+    <Content Include="Resources\Icons\16x16\jobOrder_download.png" />
+    <Content Include="Resources\Icons\16x16\jobOrder_fill.png" />
+    <Content Include="Resources\Icons\16x16\jobOrder_invoice.png" />
+    <Content Include="Resources\Icons\16x16\jobOrder_pickup.png" />
+    <Content Include="Resources\Icons\16x16\listview_checkbox.gif" />
+    <Content Include="Resources\Icons\16x16\listview_columns.gif" />
+    <Content Include="Resources\Icons\16x16\listview_multiselect.gif" />
+    <Content Include="Resources\Icons\16x16\listview_sorting.gif" />
+    <Content Include="Resources\Icons\16x16\Note16.png" />
+    <Content Include="Resources\Icons\16x16\orgchart_16.gif" />
+    <Content Include="Resources\Icons\16x16\panel_down.png" />
+    <Content Include="Resources\Icons\16x16\panel_up.png" />
+    <Content Include="Resources\Icons\16x16\paypal.png" />
+    <Content Include="Resources\Icons\16x16\PayPal_16.png" />
+    <Content Include="Resources\Icons\16x16\popup_16x16.gif" />
+    <Content Include="Resources\Icons\16x16\Product16.gif" />
+    <Content Include="Resources\Icons\16x16\prospect.png" />
+    <Content Include="Resources\Icons\16x16\reports16.png" />
+    <Content Include="Resources\Icons\16x16\settings16.png" />
+    <Content Include="Resources\Icons\16x16\SimpChinese16.gif" />
+    <Content Include="Resources\Icons\16x16\SMS_16x16.png" />
+    <Content Include="Resources\Icons\16x16\SMS_Grey_16x16.png" />
+    <Content Include="Resources\Icons\16x16\staff16.gif" />
+    <Content Include="Resources\Icons\16x16\staff16.png" />
+    <Content Include="Resources\Icons\16x16\staff16_key.gif" />
+    <Content Include="Resources\Icons\16x16\staff16_key.png" />
+    <Content Include="Resources\Icons\16x16\staffSingle_16.png" />
+    <Content Include="Resources\Icons\16x16\tick.png" />
+    <Content Include="Resources\Icons\16x16\tick14.png" />
+    <Content Include="Resources\Icons\16x16\TradChinese16.gif" />
+    <Content Include="Resources\Icons\16x16\Tutorial16.gif" />
+    <Content Include="Resources\Icons\16x16\user_suit.png" />
+    <Content Include="Resources\Icons\16x16\vcard.png" />
+    <Content Include="Resources\Icons\16x16\vcard_add.png" />
+    <Content Include="Resources\Icons\16x16\vcard_delete.png" />
+    <Content Include="Resources\Icons\16x16\vcard_edit.png" />
+    <Content Include="Resources\Icons\16x16\vcard_key_16.png" />
+    <Content Include="Resources\Icons\16x16\vcr_pause_dark_16.png" />
+    <Content Include="Resources\Icons\16x16\vcr_play_dark_16.png" />
+    <Content Include="Resources\Icons\16x16\workshop_16.gif" />
+    <Content Include="Resources\Icons\24x24\24_settings.gif" />
+    <Content Include="Resources\Icons\24x24\sales_24x24.gif" />
+    <Content Include="Resources\Icons\24x24\services_24x24.gif" />
+    <Content Include="Resources\Icons\24x24\settings_24x24.gif" />
+    <Content Include="Resources\Icons\32x32\cart_32x32.png" />
+    <Content Include="Resources\Icons\32x32\client_32x32.png" />
+    <Content Include="Resources\Icons\32x32\client_cash_32x32.png" />
+    <Content Include="Resources\Icons\32x32\dropbox_32x32.png" />
+    <Content Include="Resources\Icons\32x32\invoice32_0.png" />
+    <Content Include="Resources\Icons\32x32\invoice32_1.png" />
+    <Content Include="Resources\Icons\32x32\invoice32_2.png" />
+    <Content Include="Resources\Icons\32x32\invoice32_3.png" />
+    <Content Include="Resources\Icons\32x32\prospect_32x32.png" />
+    <Content Include="Resources\Icons\32x32\staff32.png" />
+    <Content Include="Resources\Icons\32x32\staff32_key.png" />
+    <Content Include="Resources\Icons\32x32\staffSingle_32.png" />
+    <Content Include="Resources\Icons\32x32\vcard_32.png" />
+    <Content Include="Resources\Icons\32x32\vcard_key_32.png" />
+    <Content Include="Resources\Icons\48x48\Cancel.png" />
+    <Content Include="Resources\Icons\48x48\Okay.png" />
+    <Content Include="Resources\Icons\FileType\AI16.png" />
+    <Content Include="Resources\Icons\FileType\AI32.png" />
+    <Content Include="Resources\Icons\FileType\CDR16.png" />
+    <Content Include="Resources\Icons\FileType\CDR32.png" />
+    <Content Include="Resources\Icons\FileType\DOC16.gif" />
+    <Content Include="Resources\Icons\FileType\DOC32.gif" />
+    <Content Include="Resources\Icons\FileType\dwt16.png" />
+    <Content Include="Resources\Icons\FileType\dwt32.png" />
+    <Content Include="Resources\Icons\FileType\eps16.png" />
+    <Content Include="Resources\Icons\FileType\eps32.png" />
+    <Content Include="Resources\Icons\FileType\fh16.png" />
+    <Content Include="Resources\Icons\FileType\fh32.png" />
+    <Content Include="Resources\Icons\FileType\INDD16.png" />
+    <Content Include="Resources\Icons\FileType\INDD32.png" />
+    <Content Include="Resources\Icons\FileType\jpg16.png" />
+    <Content Include="Resources\Icons\FileType\jpg32.png" />
+    <Content Include="Resources\Icons\FileType\MDB16.png" />
+    <Content Include="Resources\Icons\FileType\MDB32.png" />
+    <Content Include="Resources\Icons\FileType\PDF16.gif" />
+    <Content Include="Resources\Icons\FileType\PDF32.gif" />
+    <Content Include="Resources\Icons\FileType\pmd16.png" />
+    <Content Include="Resources\Icons\FileType\pmd32.png" />
+    <Content Include="Resources\Icons\FileType\PNG16.gif" />
+    <Content Include="Resources\Icons\FileType\PNG32.gif" />
+    <Content Include="Resources\Icons\FileType\PPT16.GIF" />
+    <Content Include="Resources\Icons\FileType\PPT32.GIF" />
+    <Content Include="Resources\Icons\FileType\ps16.png" />
+    <Content Include="Resources\Icons\FileType\ps32.png" />
+    <Content Include="Resources\Icons\FileType\psd16.png" />
+    <Content Include="Resources\Icons\FileType\psd32.png" />
+    <Content Include="Resources\Icons\FileType\rar16.png" />
+    <Content Include="Resources\Icons\FileType\rar32.png" />
+    <Content Include="Resources\Icons\FileType\sit16.png" />
+    <Content Include="Resources\Icons\FileType\sit32.png" />
+    <Content Include="Resources\Icons\FileType\swf16.png" />
+    <Content Include="Resources\Icons\FileType\swf32.png" />
+    <Content Include="Resources\Icons\FileType\TIF16.gif" />
+    <Content Include="Resources\Icons\FileType\TIF32.gif" />
+    <Content Include="Resources\Icons\FileType\TTF16.png" />
+    <Content Include="Resources\Icons\FileType\TTF32.png" />
+    <Content Include="Resources\Icons\FileType\TXT16.png" />
+    <Content Include="Resources\Icons\FileType\TXT32.png" />
+    <Content Include="Resources\Icons\FileType\Unknown16.png" />
+    <Content Include="Resources\Icons\FileType\Unknown32.png" />
+    <Content Include="Resources\Icons\FileType\WMA16.gif" />
+    <Content Include="Resources\Icons\FileType\WMA32.gif" />
+    <Content Include="Resources\Icons\FileType\XLS16.GIF" />
+    <Content Include="Resources\Icons\FileType\XLS32.GIF" />
+    <Content Include="Resources\Icons\FileType\zip16.png" />
+    <Content Include="Resources\Icons\FileType\zip32.png" />
+    <Content Include="Resources\Icons\JobOrder\DirectPrint.48.png" />
+    <Content Include="Resources\Icons\JobOrder\DirectPrint_16.png" />
+    <Content Include="Resources\Icons\JobOrder\DirectPrint_32.png" />
+    <Content Include="Resources\Icons\JobOrder\Others.48.png" />
+    <Content Include="Resources\Icons\JobOrder\Others_16.png" />
+    <Content Include="Resources\Icons\JobOrder\Others_32.png" />
+    <Content Include="Resources\Icons\JobOrder\PsFile.48.png" />
+    <Content Include="Resources\Icons\JobOrder\PsFile_16.png" />
+    <Content Include="Resources\Icons\JobOrder\PsFile_32.png" />
+    <Content Include="Resources\Icons\JobOrder\UploadFile.48.png" />
+    <Content Include="Resources\Icons\JobOrder\UploadFile_16.png" />
+    <Content Include="Resources\Icons\JobOrder\UploadFile_32.png" />
+    <Content Include="Resources\Icons\Workflow\Completed.32.png" />
+    <Content Include="Resources\Icons\Workflow\Completed.48.png" />
+    <Content Include="Resources\Icons\Workflow\Completed_16.png" />
+    <Content Include="Resources\Icons\Workflow\Dispatch.32.png" />
+    <Content Include="Resources\Icons\Workflow\Dispatch.48.png" />
+    <Content Include="Resources\Icons\Workflow\Dispatch_16.png" />
+    <Content Include="Resources\Icons\Workflow\Printing.32.png" />
+    <Content Include="Resources\Icons\Workflow\Printing.48.png" />
+    <Content Include="Resources\Icons\Workflow\Printing_16.png" />
+    <Content Include="Resources\Icons\Workflow\Proofing.32.png" />
+    <Content Include="Resources\Icons\Workflow\Proofing.48.png" />
+    <Content Include="Resources\Icons\Workflow\Proofing_16.png" />
+    <Content Include="Resources\Icons\Workflow\Queuing.32.png" />
+    <Content Include="Resources\Icons\Workflow\Queuing.48.png" />
+    <Content Include="Resources\Icons\Workflow\Queuing_16.png" />
+    <Content Include="Resources\Icons\Workflow\Ready.32.png" />
+    <Content Include="Resources\Icons\Workflow\Ready.48.png" />
+    <Content Include="Resources\Icons\Workflow\Ready_16.png" />
+    <Content Include="Resources\Icons\Workflow\Retouch.32.png" />
+    <Content Include="Resources\Icons\Workflow\Retouch.48.png" />
+    <Content Include="Resources\Icons\Workflow\Retouch_16.png" />
+    <Content Include="Resources\Icons\Workflow\X.32.png" />
+    <Content Include="Resources\Icons\Workflow\X.48.png" />
+    <Content Include="Resources\Icons\Workflow\X_16.png" />
+    <Content Include="Resources\Images\loading.gif" />
+    <Content Include="Resources\Images\logo_watermark.png" />
+    <Content Include="Resources\Menu\NavMenu.xml" />
+    <Content Include="Resources\Menu\NavMenu4Account.xml" />
+    <Content Include="Resources\Menu\NavMenu4Admin.xml" />
+    <Content Include="Resources\Menu\NavMenu4Customer.xml" />
+    <Content Include="Resources\Menu\NavMenu4Operator.xml" />
+    <Content Include="Resources\Menu\NavMenu4Sales.xml" />
+    <Content Include="Resources\Menu\NavMenu4Workshop.xml" />
+    <Content Include="Resources\UserData\WordDict.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Accounting\AccountingToolbar.cs" />
+    <Compile Include="Accounting\Aging.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Accounting\Aging.Designer.cs">
+      <DependentUpon>Aging.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Accounting\Chart\ClientTrend.aspx.cs">
+      <DependentUpon>ClientTrend.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounting\Chart\ClientTrend.aspx.designer.cs">
+      <DependentUpon>ClientTrend.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounting\Chart\RevenueByBranch.aspx.cs">
+      <DependentUpon>RevenueByBranch.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounting\Chart\RevenueByBranch.aspx.designer.cs">
+      <DependentUpon>RevenueByBranch.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounting\InvoiceList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Accounting\InvoiceList.Designer.cs">
+      <DependentUpon>InvoiceList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Accounting\Olap\Receivables.aspx.cs">
+      <DependentUpon>Receivables.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounting\Olap\Receivables.aspx.designer.cs">
+      <DependentUpon>Receivables.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounting\Olap\SalesByProductOlapPage.aspx.cs">
+      <DependentUpon>SalesByProductOlapPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounting\Olap\SalesByProductOlapPage.aspx.designer.cs">
+      <DependentUpon>SalesByProductOlapPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounting\Olap\SalesByProductOlap.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Accounting\Olap\SalesByProductOlap.Designer.cs">
+      <DependentUpon>SalesByProductOlap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Accounting\Olap\SalesByCustomerOlap.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Accounting\Olap\SalesByCustomerOlap.Designer.cs">
+      <DependentUpon>SalesByCustomerOlap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Accounting\Olap\ReceivablesOlap.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Accounting\Olap\ReceivablesOlap.Designer.cs">
+      <DependentUpon>ReceivablesOlap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Accounting\Olap\SalesByCustomerOlapPage.aspx.cs">
+      <DependentUpon>SalesByCustomerOlapPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounting\Olap\SalesByCustomerOlapPage.aspx.designer.cs">
+      <DependentUpon>SalesByCustomerOlapPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounting\Olap\ReceivablesOlapPage.aspx.cs">
+      <DependentUpon>ReceivablesOlapPage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounting\Olap\ReceivablesOlapPage.aspx.designer.cs">
+      <DependentUpon>ReceivablesOlapPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounting\Olap\SalesByCustomer.aspx.cs">
+      <DependentUpon>SalesByCustomer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounting\Olap\SalesByCustomer.aspx.designer.cs">
+      <DependentUpon>SalesByCustomer.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounting\Olap\SalesByProduct.aspx.cs">
+      <DependentUpon>SalesByProduct.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accounting\Olap\SalesByProduct.aspx.designer.cs">
+      <DependentUpon>SalesByProduct.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Accounting\OrderList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Accounting\OrderList.Designer.cs">
+      <DependentUpon>OrderList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Accounting\Payment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Accounting\Payment.Designer.cs">
+      <DependentUpon>Payment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Accounting\Reports\AgingAts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Accounting\Reports\AgingAts.Designer.cs">
+      <DependentUpon>AgingAts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Accounting\Reports\Invoice.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Accounting\Reports\Invoice.Designer.cs">
+      <DependentUpon>Invoice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Accounting\Reports\PaymentNotice.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Accounting\Reports\PaymentNotice.Designer.cs">
+      <DependentUpon>PaymentNotice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Accounting\Reports\Statement.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Accounting\Reports\Statement.Designer.cs">
+      <DependentUpon>Statement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Staff\StaffList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Admin\Staff\StaffList.Designer.cs">
+      <DependentUpon>StaffList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Staff\StaffListAts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Admin\Staff\StaffListAts.Designer.cs">
+      <DependentUpon>StaffListAts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\Staff\StaffRecord.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\Staff\StaffRecord.Designer.cs">
+      <DependentUpon>StaffRecord.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AtsPane\AccountingAts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AtsPane\AccountingAts.designer.cs">
+      <DependentUpon>AccountingAts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AtsPane\AdminAts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AtsPane\AdminAts.designer.cs">
+      <DependentUpon>AdminAts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AtsPane\JobOrderAts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AtsPane\JobOrderAts.designer.cs">
+      <DependentUpon>JobOrderAts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AtsPane\SettingsAts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AtsPane\SettingsAts.designer.cs">
+      <DependentUpon>SettingsAts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cashier\CompletedList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Cashier\CompletedList.Designer.cs">
+      <DependentUpon>CompletedList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cashier\Desktop.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Cashier\Desktop.Designer.cs">
+      <DependentUpon>Desktop.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Cashier\JobComplete.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Cashier\JobComplete.Designer.cs">
+      <DependentUpon>JobComplete.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Comment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\Comment.Designer.cs">
+      <DependentUpon>Comment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Export\CsvData.cs" />
+    <Compile Include="Controls\Export\CsvLoader.cs" />
+    <Compile Include="Controls\FileDownloadGateway.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Import\UploaderVWG.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\Import\UploaderVWG.Designer.cs">
+      <DependentUpon>UploaderVWG.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reporting\DataSource.cs" />
+    <Compile Include="Controls\Reporting\Loader.cs" />
+    <Compile Include="Controls\Reporting\OlapViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Reporting\OlapViewer.designer.cs">
+      <DependentUpon>OlapViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Reporting\Viewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\Reporting\Viewer.Designer.cs">
+      <DependentUpon>Viewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Utility.cs" />
+    <Compile Include="Controls\WriteFileHelper.cs" />
+    <Compile Include="Customer\Address\AddressList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Customer\Address\AddressList.Designer.cs">
+      <DependentUpon>AddressList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Customer\Address\AddressListAts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Customer\Address\AddressListAts.Designer.cs">
+      <DependentUpon>AddressListAts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Customer\Address\AddressRecord.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Customer\Address\AddressRecord.Designer.cs">
+      <DependentUpon>AddressRecord.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Customer\Billing\Aging.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Customer\Billing\Aging.Designer.cs">
+      <DependentUpon>Aging.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Customer\Billing\InvoiceList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Customer\Billing\InvoiceList.Designer.cs">
+      <DependentUpon>InvoiceList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Customer\Billing\OrderList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Customer\Billing\OrderList.Designer.cs">
+      <DependentUpon>OrderList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Customer\Desktop.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Customer\Desktop.designer.cs">
+      <DependentUpon>Desktop.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Customer\JobOrder\DropBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Customer\JobOrder\DropBox.Designer.cs">
+      <DependentUpon>DropBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Customer\JobOrder\JoList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Customer\JobOrder\JoList.designer.cs">
+      <DependentUpon>JoList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Customer\JobOrder\JoSearch.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Customer\JobOrder\JoSearch.designer.cs">
+      <DependentUpon>JoSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Customer\Staff\StaffList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Customer\Staff\StaffList.Designer.cs">
+      <DependentUpon>StaffList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Customer\Staff\StaffListAts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Customer\Staff\StaffListAts.Designer.cs">
+      <DependentUpon>StaffListAts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Customer\Staff\StaffRecord.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Customer\Staff\StaffRecord.Designer.cs">
+      <DependentUpon>StaffRecord.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Desktop.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Desktop.designer.cs">
+      <DependentUpon>Desktop.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Help\About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Help\About.designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
+    <Compile Include="JobOrder\Billing.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="JobOrder\Billing.Designer.cs">
+      <DependentUpon>Billing.cs</DependentUpon>
+    </Compile>
+    <Compile Include="JobOrder\Forms\DirectPrint.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="JobOrder\Forms\DirectPrint.Designer.cs">
+      <DependentUpon>DirectPrint.cs</DependentUpon>
+    </Compile>
+    <Compile Include="JobOrder\Forms\Plate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="JobOrder\Forms\Plate.Designer.cs">
+      <DependentUpon>Plate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="JobOrder\Forms\PlateComment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="JobOrder\Forms\PlateComment.Designer.cs">
+      <DependentUpon>PlateComment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="JobOrder\Forms\PsFile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="JobOrder\Forms\PsFile.Designer.cs">
+      <DependentUpon>PsFile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="JobOrder\Forms\UploadFile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="JobOrder\Forms\UploadFile.Designer.cs">
+      <DependentUpon>UploadFile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="JobOrder\JoDefaultWsp.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="JobOrder\JoDefaultWsp.designer.cs">
+      <DependentUpon>JoDefaultWsp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="JobOrder\JoSearch.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="JobOrder\JoSearch.designer.cs">
+      <DependentUpon>JoSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="JobOrder\LogFile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="JobOrder\LogFile.Designer.cs">
+      <DependentUpon>LogFile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NavPane\AccountingNav.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="NavPane\AccountingNav.designer.cs">
+      <DependentUpon>AccountingNav.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NavPane\AdminNav.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="NavPane\AdminNav.designer.cs">
+      <DependentUpon>AdminNav.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NavPane\JobOrderNav.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="NavPane\JobOrderNav.designer.cs">
+      <DependentUpon>JobOrderNav.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NavPane\NavMenu.cs" />
+    <Compile Include="NavPane\SettingsNav.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="NavPane\SettingsNav.designer.cs">
+      <DependentUpon>SettingsNav.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Public\Logon.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Public\Logon.designer.cs">
+      <DependentUpon>Logon.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\Client\ClientAts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Sales\Client\ClientAts.Designer.cs">
+      <DependentUpon>ClientAts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\Client\ClientList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Sales\Client\ClientList.Designer.cs">
+      <DependentUpon>ClientList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\Client\ClientRecord.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Sales\Client\ClientRecord.Designer.cs">
+      <DependentUpon>ClientRecord.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\PriceList\PriceList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Sales\PriceList\PriceList.Designer.cs">
+      <DependentUpon>PriceList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\PriceList\PriceListAts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Sales\PriceList\PriceListAts.Designer.cs">
+      <DependentUpon>PriceListAts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\PriceList\PriceListRecord.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Sales\PriceList\PriceListRecord.Designer.cs">
+      <DependentUpon>PriceListRecord.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\Prospect\ProspectAts.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Sales\Prospect\ProspectAts.Designer.cs">
+      <DependentUpon>ProspectAts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\Prospect\ProspectList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Sales\Prospect\ProspectList.Designer.cs">
+      <DependentUpon>ProspectList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\Prospect\ProspectRecord.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Sales\Prospect\ProspectRecord.Designer.cs">
+      <DependentUpon>ProspectRecord.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\SysParameter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Settings\SysParameter.designer.cs">
+      <DependentUpon>SysParameter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\Utility.cs" />
+    <Compile Include="Support\DropBoxExplorer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Support\DropBoxExplorer.Designer.cs">
+      <DependentUpon>DropBoxExplorer.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+    <Content Include="Resources\Icons\FileType\Thumbs.db" />
+    <None Include="Web.config" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\Generated\" />
+    <Folder Include="Resources\Templates\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\xFilm5.DAL\xFilm5.DAL.csproj">
+      <Project>{04aed734-0ce4-4c95-9359-aee6e959b337}</Project>
+      <Name>xFilm5.DAL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Accounting\Aging.resx">
+      <DependentUpon>Aging.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Accounting\InvoiceList.resx">
+      <DependentUpon>InvoiceList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Accounting\Olap\SalesByProductOlap.resx">
+      <DependentUpon>SalesByProductOlap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Accounting\Olap\SalesByCustomerOlap.resx">
+      <DependentUpon>SalesByCustomerOlap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Accounting\Olap\ReceivablesOlap.resx">
+      <DependentUpon>ReceivablesOlap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Accounting\OrderList.resx">
+      <DependentUpon>OrderList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Accounting\Payment.resx">
+      <DependentUpon>Payment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Accounting\Reports\AgingAts.resx">
+      <DependentUpon>AgingAts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Accounting\Reports\Invoice.resx">
+      <DependentUpon>Invoice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Accounting\Reports\PaymentNotice.resx">
+      <DependentUpon>PaymentNotice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Accounting\Reports\Statement.resx">
+      <DependentUpon>Statement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\Staff\StaffList.resx">
+      <DependentUpon>StaffList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\Staff\StaffListAts.resx">
+      <DependentUpon>StaffListAts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\Staff\StaffRecord.resx">
+      <DependentUpon>StaffRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AtsPane\AccountingAts.resx">
+      <DependentUpon>AccountingAts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AtsPane\AdminAts.resx">
+      <DependentUpon>AdminAts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AtsPane\JobOrderAts.resx">
+      <DependentUpon>JobOrderAts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AtsPane\SettingsAts.resx">
+      <DependentUpon>SettingsAts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cashier\CompletedList.resx">
+      <DependentUpon>CompletedList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cashier\Desktop.resx">
+      <DependentUpon>Desktop.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Cashier\JobComplete.resx">
+      <DependentUpon>JobComplete.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Comment.resx">
+      <DependentUpon>Comment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Import\UploaderVWG.resx">
+      <DependentUpon>UploaderVWG.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Reporting\OlapViewer.resx">
+      <DependentUpon>OlapViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Reporting\Viewer.resx">
+      <DependentUpon>Viewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Customer\Address\AddressList.resx">
+      <DependentUpon>AddressList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Customer\Address\AddressListAts.resx">
+      <DependentUpon>AddressListAts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Customer\Address\AddressRecord.resx">
+      <DependentUpon>AddressRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Customer\Billing\Aging.resx">
+      <DependentUpon>Aging.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Customer\Billing\InvoiceList.resx">
+      <DependentUpon>InvoiceList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Customer\Billing\OrderList.resx">
+      <DependentUpon>OrderList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Customer\Desktop.resx">
+      <DependentUpon>Desktop.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Customer\JobOrder\DropBox.resx">
+      <DependentUpon>DropBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Customer\JobOrder\JoList.resx">
+      <DependentUpon>JoList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Customer\JobOrder\JoSearch.resx">
+      <DependentUpon>JoSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Customer\Staff\StaffList.resx">
+      <DependentUpon>StaffList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Customer\Staff\StaffListAts.resx">
+      <DependentUpon>StaffListAts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Customer\Staff\StaffRecord.resx">
+      <DependentUpon>StaffRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Desktop.resx">
+      <DependentUpon>Desktop.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Help\About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JobOrder\Billing.resx">
+      <DependentUpon>Billing.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JobOrder\Forms\DirectPrint.resx">
+      <DependentUpon>DirectPrint.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JobOrder\Forms\Plate.resx">
+      <DependentUpon>Plate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JobOrder\Forms\PlateComment.resx">
+      <DependentUpon>PlateComment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JobOrder\Forms\PsFile.resx">
+      <DependentUpon>PsFile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JobOrder\Forms\UploadFile.resx">
+      <DependentUpon>UploadFile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JobOrder\JoDefaultWsp.resx">
+      <DependentUpon>JoDefaultWsp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JobOrder\JoSearch.resx">
+      <DependentUpon>JoSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JobOrder\LogFile.resx">
+      <DependentUpon>LogFile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NavPane\AccountingNav.resx">
+      <DependentUpon>AccountingNav.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NavPane\AdminNav.resx">
+      <DependentUpon>AdminNav.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NavPane\JobOrderNav.resx">
+      <DependentUpon>JobOrderNav.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NavPane\SettingsNav.resx">
+      <DependentUpon>SettingsNav.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Public\Logon.resx">
+      <DependentUpon>Logon.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sales\Client\ClientAts.resx">
+      <DependentUpon>ClientAts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sales\Client\ClientList.resx">
+      <DependentUpon>ClientList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sales\Client\ClientRecord.resx">
+      <DependentUpon>ClientRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sales\PriceList\PriceList.resx">
+      <DependentUpon>PriceList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sales\PriceList\PriceListAts.resx">
+      <DependentUpon>PriceListAts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sales\PriceList\PriceListRecord.resx">
+      <DependentUpon>PriceListRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sales\Prospect\ProspectAts.resx">
+      <DependentUpon>ProspectAts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sales\Prospect\ProspectList.resx">
+      <DependentUpon>ProspectList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sales\Prospect\ProspectRecord.resx">
+      <DependentUpon>ProspectRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Settings\SysParameter.resx">
+      <DependentUpon>SysParameter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Support\DropBoxExplorer.resx">
+      <DependentUpon>DropBoxExplorer.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomReference Include="Gizmox.WebGUI.Forms.Themes">
+      <HintPath>C:\Projects\xFilm5\xFilm5\bin\Gizmox.WebGUI.Forms.Themes.dll</HintPath>
+      <Visible>false</Visible>
+    </CustomReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v14.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Import Condition="" Project="$(MSBuildExtensionsPath)\Gizmox\v14.0\Net4.5.2\Gizmox.VWGApplication.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>8830</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:8830/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

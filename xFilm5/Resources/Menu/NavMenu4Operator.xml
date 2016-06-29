@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<joborder Caption="Job Order">
+		<item Caption="Queuing" ImageUrl="16x16.folder_queuing.png" Tag="JO_Queuing" />
+		<item Caption="Retouch" ImageUrl="16x16.folder_retouch.png" Tag="JO_Retouch" />
+		<item Caption="Printing" ImageUrl="16x16.folder_printing.png" Tag="JO_Printing" />
+		<item Caption="Proofing" ImageUrl="16x16.folder_proofing.png" Tag="JO_Proofing" />
+		<item Caption="Ready" ImageUrl="16x16.folder_ready.png" Tag="JO_Ready" />
+		<item Caption="Dispatch" ImageUrl="16x16.folder_dispatch.png" Tag="JO_Dispatch" />
+		<item Caption="Completed" ImageUrl="16x16.folder_completed.png" Tag="JO_Completed" />
+		<item Caption="Sales">
+			<item Caption="Prospect" ImageUrl="16x16.user_suit.png" Tag="Sales_Prospect" />
+			<item Caption="Client" ImageUrl="16x16.group.png" Tag="Sales_Client" />
+			<item Caption="Price List" ImageUrl="16x16.cart_16x16.png" Tag="Sales_PriceList" />
+		</item>
+		<item Caption="Support">
+			<item Caption="DropBox" ImageUrl="16x16.dropbox_16x16.png" Tag="Support_DropBox" />
+		</item>
+	</joborder>
+</root>

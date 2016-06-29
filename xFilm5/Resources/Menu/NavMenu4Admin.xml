@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<joborder Caption="Job Order">
+		<item Caption="Queuing" ImageUrl="16x16.folder_queuing.png" Tag="JO_Queuing" />
+		<item Caption="Retouch" ImageUrl="16x16.folder_retouch.png" Tag="JO_Retouch" />
+		<item Caption="Printing" ImageUrl="16x16.folder_printing.png" Tag="JO_Printing" />
+		<item Caption="Proofing" ImageUrl="16x16.folder_proofing.png" Tag="JO_Proofing" />
+		<item Caption="Ready" ImageUrl="16x16.folder_ready.png" Tag="JO_Ready" />
+		<item Caption="Dispatch" ImageUrl="16x16.folder_dispatch.png" Tag="JO_Dispatch" />
+		<item Caption="Completed" ImageUrl="16x16.folder_completed.png" Tag="JO_Completed" />
+		<item Caption="Sales">
+			<item Caption="Prospect" ImageUrl="16x16.user_suit.png" Tag="Sales_Prospect" />
+			<item Caption="Client" ImageUrl="16x16.group.png" Tag="Sales_Client" />
+			<item Caption="Price List" ImageUrl="16x16.cart_16x16.png" Tag="Sales_PriceList" />
+		</item>
+		<item Caption="Support">
+			<item Caption="DropBox" ImageUrl="16x16.dropbox_16x16.png" Tag="Support_DropBox" />
+		</item>
+	</joborder>
+	<accounting Caption="Accounting">
+		<item Caption="Receivables" ImageUrl="16x16.reports16.png" Tag="Acct_Receivables" />
+		<item Caption="Invoice List" ImageUrl="16x16.reports16.png" Tag="Acct_InvoiceList" />
+		<item Caption="Order List" ImageUrl="16x16.reports16.png" Tag="Acct_OrderList" />
+		<item Caption="Analysis">
+			<item Caption="Receivables" ImageUrl="16x16.16_reports.gif" Tag="Olap_Receivables" />
+			<item Caption="Sales By Customer" ImageUrl="16x16.16_reports.gif" Tag="Olap_SalesByCustomer" />
+			<item Caption="Sales By Product" ImageUrl="16x16.16_reports.gif" Tag="Olap_SalesByProduct" />
+			<item Caption="Revenue By Branch" ImageUrl="16x16.chart16.png" Tag="Chart_RevenueByBranch" />
+			<item Caption="Client Trend" ImageUrl="16x16.chart16.png" Tag="Chart_ClientTrend" />
+		</item>
+	</accounting>
+	<admin Caption="Admin">
+		<item Caption="Staff" ImageUrl="16x16.staff16.png" Tag="Admin_Staff" />
+	</admin>
+	<settings Caption="Settings">
+		<item Caption="System Parameters" ImageUrl="16x16.settings16.png" Tag="System_Parameters" />
+	</settings>
+</root>
