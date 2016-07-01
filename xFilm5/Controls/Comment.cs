@@ -74,17 +74,17 @@ namespace xFilm5.JobOrder
             // cmdSave
             ToolBarButton cmdSave = new ToolBarButton("Save", oDict.GetWord("save"));
             cmdSave.Tag = "Save";
-            cmdSave.Image = new IconResourceHandle("Icons.16x16.16_L_save.gif");
+            cmdSave.Image = new IconResourceHandle("16x16.16_L_save.gif");
 
             // cmdSaveClose
             ToolBarButton cmdSaveClose = new ToolBarButton("Save & Close", System.Web.HttpUtility.UrlDecode(oDict.GetWord("save_close")));
             cmdSaveClose.Tag = "Save & Close";
-            cmdSaveClose.Image = new IconResourceHandle("Icons.16x16.16_saveClose.gif");
+            cmdSaveClose.Image = new IconResourceHandle("16x16.16_saveClose.gif");
 
             // cmdDelete
             ToolBarButton cmdDelete = new ToolBarButton("Delete", oDict.GetWord("delete"));
             cmdDelete.Tag = "Delete";
-            cmdDelete.Image = new IconResourceHandle("Icons.16x16.16_L_remove.gif");
+            cmdDelete.Image = new IconResourceHandle("16x16.16_L_remove.gif");
 
             if (_EditMode != Common.Enums.EditMode.Read)
             {
