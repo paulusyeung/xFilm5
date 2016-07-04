@@ -299,99 +299,99 @@ namespace xFilm5.Support
                 switch (fileinfo.Extension.ToLower())
                 {
                     case ".ai":
-                        listitem.SmallImage = new IconResourceHandle("Icons.FileType.ai16.png");
-                        listitem.LargeImage = new IconResourceHandle("Icons.FileType.ai32.png");
+                        listitem.SmallImage = new IconResourceHandle("FileType.ai16.png");
+                        listitem.LargeImage = new IconResourceHandle("FileType.ai32.png");
                         break;
                     case ".cdr":
-                        listitem.SmallImage = new IconResourceHandle("Icons.FileType.cdr16.png");
-                        listitem.LargeImage = new IconResourceHandle("Icons.FileType.cdr32.png");
+                        listitem.SmallImage = new IconResourceHandle("FileType.cdr16.png");
+                        listitem.LargeImage = new IconResourceHandle("FileType.cdr32.png");
                         break;
                     case ".dwt":
-                        listitem.SmallImage = new IconResourceHandle("Icons.FileType.dwt16.png");
-                        listitem.LargeImage = new IconResourceHandle("Icons.FileType.dwt32.png");
+                        listitem.SmallImage = new IconResourceHandle("FileType.dwt16.png");
+                        listitem.LargeImage = new IconResourceHandle("FileType.dwt32.png");
                         break;
                     case ".doc":
                     case ".docx":
-                        listitem.SmallImage = new IconResourceHandle("Icons.FileType.doc16.gif");
-                        listitem.LargeImage = new IconResourceHandle("Icons.FileType.doc32.gif");
+                        listitem.SmallImage = new IconResourceHandle("FileType.doc16.gif");
+                        listitem.LargeImage = new IconResourceHandle("FileType.doc32.gif");
                         break;
                     case ".fh8":
                     case ".fh9":
-                        listitem.SmallImage = new IconResourceHandle("Icons.FileType.fh16.png");
-                        listitem.LargeImage = new IconResourceHandle("Icons.FileType.fh32.png");
+                        listitem.SmallImage = new IconResourceHandle("FileType.fh16.png");
+                        listitem.LargeImage = new IconResourceHandle("FileType.fh32.png");
                         break;
                     case ".ind":
                     case ".indd":
-                        listitem.SmallImage = new IconResourceHandle("Icons.FileType.iddd16.png");
-                        listitem.LargeImage = new IconResourceHandle("Icons.FileType.indd32.png");
+                        listitem.SmallImage = new IconResourceHandle("FileType.iddd16.png");
+                        listitem.LargeImage = new IconResourceHandle("FileType.indd32.png");
                         break;
                     case ".jpg":
                     case ".jpeg":
-                        listitem.SmallImage = new IconResourceHandle("Icons.FileType.jpg16.png");
-                        listitem.LargeImage = new IconResourceHandle("Icons.FileType.jpg32.png");
+                        listitem.SmallImage = new IconResourceHandle("FileType.jpg16.png");
+                        listitem.LargeImage = new IconResourceHandle("FileType.jpg32.png");
                         break;
                     case ".mdb":
-                        listitem.SmallImage = new IconResourceHandle("Icons.FileType.mdb16.png");
-                        listitem.LargeImage = new IconResourceHandle("Icons.FileType.mdb32.png");
+                        listitem.SmallImage = new IconResourceHandle("FileType.mdb16.png");
+                        listitem.LargeImage = new IconResourceHandle("FileType.mdb32.png");
                         break;
                     case ".pdf":
-                        listitem.SmallImage = new IconResourceHandle("Icons.FileType.pdf16.gif");
-                        listitem.LargeImage = new IconResourceHandle("Icons.FileType.pdf32.gif");
+                        listitem.SmallImage = new IconResourceHandle("FileType.pdf16.gif");
+                        listitem.LargeImage = new IconResourceHandle("FileType.pdf32.gif");
                         break;
                     case ".pm":
                     case ".pm6":
                     case ".pmd":
-                        listitem.SmallImage = new IconResourceHandle("Icons.FileType.pmd16.png");
-                        listitem.LargeImage = new IconResourceHandle("Icons.FileType.pmd32.png");
+                        listitem.SmallImage = new IconResourceHandle("FileType.pmd16.png");
+                        listitem.LargeImage = new IconResourceHandle("FileType.pmd32.png");
                         break;
                     case ".png":
-                        listitem.SmallImage = new IconResourceHandle("Icons.FileType.png16.gif");
-                        listitem.LargeImage = new IconResourceHandle("Icons.FileType.png32.gif");
+                        listitem.SmallImage = new IconResourceHandle("FileType.png16.gif");
+                        listitem.LargeImage = new IconResourceHandle("FileType.png32.gif");
                         break;
                     case ".psd":
-                        listitem.SmallImage = new IconResourceHandle("Icons.FileType.psd16.png");
-                        listitem.LargeImage = new IconResourceHandle("Icons.FileType.psd32.png");
+                        listitem.SmallImage = new IconResourceHandle("FileType.psd16.png");
+                        listitem.LargeImage = new IconResourceHandle("FileType.psd32.png");
                         break;
                     case ".ps":
-                        listitem.SmallImage = new IconResourceHandle("Icons.FileType.ps16.png");
-                        listitem.LargeImage = new IconResourceHandle("Icons.FileType.ps32.png");
+                        listitem.SmallImage = new IconResourceHandle("FileType.ps16.png");
+                        listitem.LargeImage = new IconResourceHandle("FileType.ps32.png");
                         break;
                     case ".rar":
-                        listitem.SmallImage = new IconResourceHandle("Icons.FileType.rar16.png");
-                        listitem.LargeImage = new IconResourceHandle("Icons.FileType.rar32.png");
+                        listitem.SmallImage = new IconResourceHandle("FileType.rar16.png");
+                        listitem.LargeImage = new IconResourceHandle("FileType.rar32.png");
                         break;
                     case ".sit":
                     case ".sitx":
-                        listitem.SmallImage = new IconResourceHandle("Icons.FileType.sit16.png");
-                        listitem.LargeImage = new IconResourceHandle("Icons.FileType.sit32.png");
+                        listitem.SmallImage = new IconResourceHandle("FileType.sit16.png");
+                        listitem.LargeImage = new IconResourceHandle("FileType.sit32.png");
                         break;
                     case ".tif":
                     case ".tiff":
-                        listitem.SmallImage = new IconResourceHandle("Icons.FileType.tif16.png");
-                        listitem.LargeImage = new IconResourceHandle("Icons.FileType.tif32.png");
+                        listitem.SmallImage = new IconResourceHandle("FileType.tif16.png");
+                        listitem.LargeImage = new IconResourceHandle("FileType.tif32.png");
                         break;
                     case ".txt":
-                        listitem.SmallImage = new IconResourceHandle("Icons.FileType.txt16.png");
-                        listitem.LargeImage = new IconResourceHandle("Icons.FileType.txt32.png");
+                        listitem.SmallImage = new IconResourceHandle("FileType.txt16.png");
+                        listitem.LargeImage = new IconResourceHandle("FileType.txt32.png");
                         break;
                     case ".xls":
                     case ".xlsx":
-                        listitem.SmallImage = new IconResourceHandle("Icons.FileType.xls16.gif");
-                        listitem.LargeImage = new IconResourceHandle("Icons.FileType.xls32.gif");
+                        listitem.SmallImage = new IconResourceHandle("FileType.xls16.gif");
+                        listitem.LargeImage = new IconResourceHandle("FileType.xls32.gif");
                         break;
                     case ".wma":
                     case ".wmv":
                     case ".avi":
-                        listitem.SmallImage = new IconResourceHandle("Icons.FileType.wma16.gif");
-                        listitem.LargeImage = new IconResourceHandle("Icons.FileType.wma32.gif");
+                        listitem.SmallImage = new IconResourceHandle("FileType.wma16.gif");
+                        listitem.LargeImage = new IconResourceHandle("FileType.wma32.gif");
                         break;
                     case ".zip":
-                        listitem.SmallImage = new IconResourceHandle("Icons.FileType.zip16.png");
-                        listitem.LargeImage = new IconResourceHandle("Icons.FileType.zip32.png");
+                        listitem.SmallImage = new IconResourceHandle("FileType.zip16.png");
+                        listitem.LargeImage = new IconResourceHandle("FileType.zip32.png");
                         break;
                     default:
-                        listitem.SmallImage = new IconResourceHandle("Icons.FileType.Unknown16.png");
-                        listitem.LargeImage = new IconResourceHandle("Icons.FileType.Unknown32.png");
+                        listitem.SmallImage = new IconResourceHandle("FileType.Unknown16.png");
+                        listitem.LargeImage = new IconResourceHandle("FileType.Unknown32.png");
                         break;
                 }
                 #endregion
