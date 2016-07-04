@@ -78,6 +78,8 @@
     <Compile Include="Order_Internal.cs" />
     <Compile Include="Order_Journal.cs" />
     <Compile Include="PosTx.cs" />
+    <Compile Include="PrintQueue.cs" />
+    <Compile Include="PrintQueue_VPS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlHelper.cs" />
     <Compile Include="Staff.cs" />

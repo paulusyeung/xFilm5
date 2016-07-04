@@ -286,6 +286,7 @@
     <Content Include="Resources\Icons\32x32\invoice32_2.png" />
     <Content Include="Resources\Icons\32x32\invoice32_3.png" />
     <Content Include="Resources\Icons\32x32\prospect_32x32.png" />
+    <Content Include="Resources\Icons\32x32\shutdown32.png" />
     <Content Include="Resources\Icons\32x32\staff32.png" />
     <Content Include="Resources\Icons\32x32\staff32_key.png" />
     <Content Include="Resources\Icons\32x32\staffSingle_32.png" />
