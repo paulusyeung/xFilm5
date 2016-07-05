@@ -118,7 +118,7 @@ namespace xFilm5.Public
             // 
             // Logon
             // 
-            this.AcceptButton = this.btnLogon;
+            //this.AcceptButton = this.btnLogon;
             this.Anchor = Gizmox.WebGUI.Forms.AnchorStyles.None;
             this.Controls.Add(this.lblVersionNumber);
             this.Controls.Add(this.lblErrorMessage);

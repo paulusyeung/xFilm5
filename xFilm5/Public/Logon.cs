@@ -50,13 +50,14 @@ namespace xFilm5.Public
         public bool Verify()
         {
             bool result = true;
+
             if (txtUserName.Text.Length == 0)
             {
                 errorProvider.SetError(txtUserName, "Cannot be blank!");
             }
             else
             {
-                errorProvider.SetError(txtUserName, string.Empty);
+                if (errorProvider.GetError(txtUserName) != String.Empty) errorProvider.SetError(txtUserName, String.Empty);
                 result = result & true;
             }
 
@@ -66,7 +67,7 @@ namespace xFilm5.Public
             }
             else
             {
-                errorProvider.SetError(txtPassword, string.Empty);
+                if (errorProvider.GetError(txtPassword) != String.Empty) errorProvider.SetError(txtPassword, String.Empty);
                 result = result & true;
             }
 
@@ -75,7 +76,9 @@ namespace xFilm5.Public
 
         private bool AuthLogon()
         {
-            if (Verify())
+            bool varified = Verify();
+
+            if (varified)
             {
                 string sql = "Email = '" + txtUserName.Text.Trim().Replace("'", "") + "' AND Password = '" + txtPassword.Text.Trim().Replace("'", "") + "'";
                 xFilm5.DAL.Client_User oUser = xFilm5.DAL.Client_User.LoadWhere(sql);
@@ -84,6 +87,7 @@ namespace xFilm5.Public
                     Client oClient = Client.LoadWhere(String.Format("ID = {0} AND Status >= 1", oUser.ClientID.ToString()));
                     if (oClient != null)
                     {
+                        #region Valid login, set environment defaults
                         this.Context.Session.IsLoggedOn = true;
 
                         Common.Config.CurrentUserId = oUser.ID;
@@ -113,6 +117,7 @@ namespace xFilm5.Public
                                 }
                             }
                         }
+                        #endregion
                     }
                     else
                     {
