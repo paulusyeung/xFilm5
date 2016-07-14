@@ -76,7 +76,8 @@ namespace xFilm5.DAL
                 DirectPrint,
                 PsFile,
                 Others,
-                Plate
+                Plate,
+                Plate5
             }
 
             public enum Platform
