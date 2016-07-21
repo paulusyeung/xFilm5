@@ -32,17 +32,26 @@ namespace xFilm5.Api.Controllers
                 DAL.Client client = DAL.Client.Load(clientId);
                 if (client != null)
                 {
-                    #region dbo.PrintQuee_InsRec
-                    DAL.PrintQueue pQueue = new DAL.PrintQueue();
-                    pQueue.ClientID = clientId;
-                    pQueue.CupsJobID = jobId;
-                    pQueue.CupsJobTitle = jobTitle;
-                    pQueue.PlateSize = plateSize;
-                    pQueue.Status = (int)DAL.Common.Enums.Status.Active;
-                    pQueue.CreatedOn = DateTime.Now;
-                    pQueue.ModifiedOn = DateTime.Now;
-                    pQueue.Retired = false;
-                    pQueue.Save();
+                    // 先捜一搜，有可能係 CUPS reprint
+                    String sql = String.Format("ClientID = {0} AND CupsJobID = N'{1}'", clientId.ToString(), jobId);
+                    DAL.PrintQueue pq = DAL.PrintQueue.LoadWhere(sql);
+                    if (pq == null)
+                    {
+                        #region dbo.PrintQueue_InsRec
+                        pq = new DAL.PrintQueue();
+                        pq.ClientID = clientId;
+                        pq.CupsJobID = jobId;
+                        #endregion
+                    }
+
+                    #region common, dbo.PrintQuee_InsRec or _UpdRec
+                    pq.CupsJobTitle = jobTitle;
+                    pq.PlateSize = plateSize;
+                    pq.Status = (int)DAL.Common.Enums.Status.Active;
+                    pq.CreatedOn = DateTime.Now;
+                    pq.ModifiedOn = DateTime.Now;
+                    pq.Retired = false;
+                    pq.Save();
                     #endregion
 
                     return Ok();

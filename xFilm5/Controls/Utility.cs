@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Security.Principal;
 using System.Web;
 
 using xFilm5.DAL;
@@ -9,6 +14,81 @@ namespace xFilm5.Controls
 {
     public class Utility
     {
+        public class Config
+        {
+            public static string Plate5_Shuffle_Blueprint_SourceFolder
+            {
+                get
+                {
+                    String Blueprint_SourceFolder = String.Empty;
+                    if (ConfigurationManager.AppSettings["Blueprint_SourceFolder"] != null)
+                    {
+                        Blueprint_SourceFolder = ConfigurationManager.AppSettings["Blueprint_SourceFolder"];
+                    }
+                    return Blueprint_SourceFolder;
+                }
+            }
+            public static string Plate5_Shuffle_Blueprint_DestinationFolder
+            {
+                get
+                {
+                    String Blueprint_DestinationFolder = String.Empty;
+                    if (ConfigurationManager.AppSettings["Blueprint_DestinationFolder"] != null)
+                    {
+                        Blueprint_DestinationFolder = ConfigurationManager.AppSettings["Blueprint_DestinationFolder"];
+                    }
+                    return Blueprint_DestinationFolder;
+                }
+            }
+            public static string Plate5_Shuffle_Tiff_SourceFolder
+            {
+                get
+                {
+                    String Tiff_SourceFolder = String.Empty;
+                    if (ConfigurationManager.AppSettings["Tiff_SourceFolder"] != null)
+                    {
+                        Tiff_SourceFolder = ConfigurationManager.AppSettings["Tiff_SourceFolder"];
+                    }
+                    return Tiff_SourceFolder;
+                }
+            }
+            public static string Plate5_Shuffle_Tiff_DestinationFolder
+            {
+                get
+                {
+                    String Tiff_DestinationFolder = String.Empty;
+                    if (ConfigurationManager.AppSettings["Tiff_DestinationFolder"] != null)
+                    {
+                        Tiff_DestinationFolder = ConfigurationManager.AppSettings["Tiff_DestinationFolder"];
+                    }
+                    return Tiff_DestinationFolder;
+                }
+            }
+            public static string Plate5_Shuffle_ImpersonateUserName
+            {
+                get
+                {
+                    String ImpersonateUserName = String.Empty;
+                    if (ConfigurationManager.AppSettings["ImpersonateUserName"] != null)
+                    {
+                        ImpersonateUserName = ConfigurationManager.AppSettings["ImpersonateUserName"];
+                    }
+                    return ImpersonateUserName;
+                }
+            }
+            public static string Plate5_Shuffle_ImpersonatePassword
+            {
+                get
+                {
+                    String ImpersonatePassword = String.Empty;
+                    if (ConfigurationManager.AppSettings["ImpersonatePassword"] != null)
+                    {
+                        ImpersonatePassword = ConfigurationManager.AppSettings["ImpersonatePassword"];
+                    }
+                    return ImpersonatePassword;
+                }
+            }
+        }
         public class Owner
         {
             public static int GetOwnerId()
@@ -243,6 +323,150 @@ namespace xFilm5.Controls
                 if (user != null)
                 {
                     result = user.PrimaryUser;
+                }
+
+                return result;
+            }
+        }
+
+        public class JobOrder
+        {
+            /// <summary>
+            /// 將落咗 order 嘅 Direct Print 檔案 (Tiff 同 Blueprint) 由 storage 送去指定嘅 hot folder
+            /// </summary>
+            /// <param name="OrderId"></param>
+            /// <returns></returns>
+            public static bool Plate5_Shuffle(int OrderId)
+            {
+                bool result = true;
+
+                String sql = String.Format("OrderID = {0}", OrderId.ToString());
+                DAL.PrintQueueCollection PQs = DAL.PrintQueue.LoadCollection(sql);
+                if (PQs.Count > 0)
+                {
+                    foreach (DAL.PrintQueue pq in PQs)
+                    {
+                        String oldBlueprint = String.Empty;         // 唔理拆幾多隻色，每 page 祇出一張藍紙
+                        sql = String.Format("PrintQueueID = {0} AND PlateOrdered = 1", pq.ID.ToString());
+                        DAL.PrintQueue_VPSCollection VPSs = DAL.PrintQueue_VPS.LoadCollection(sql);
+                        if (VPSs.Count > 0)
+                        {
+                            foreach (DAL.PrintQueue_VPS vps in VPSs)
+                            {
+                                #region Shuffle Tiff
+                                String tiff = String.Format("TG-A.{0}.{1}", pq.ClientID.ToString(), vps.VpsFileName.Replace(".VPS", ".TIFF"));
+                                result = result && Plate5_ShuffleTiff(tiff);
+                                #endregion
+
+                                if (pq.BlueprintOrdered)
+                                {
+                                    #region Shuffle Blueprint
+                                    String blueprint = String.Format("{0}.{1}", pq.ClientID.ToString(), vps.VpsFileName.Substring(0, vps.VpsFileName.IndexOf('(')) + "CMYK).TIFF");
+                                    if (blueprint != oldBlueprint)  // 唔理拆幾多隻色，每 page 祇出一張藍紙
+                                    {
+                                        result = result && Plate5_ShuffleBlueprint(blueprint);
+                                        oldBlueprint = blueprint;
+                                    }
+                                    #endregion
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return result;
+            }
+
+            /// <summary>
+            /// 將 Blueprint 放去 hot folder 排隊
+            /// </summary>
+            public static bool Plate5_ShuffleBlueprint(String filename)
+            {
+                bool result = false;
+                String source = Path.Combine(Config.Plate5_Shuffle_Blueprint_SourceFolder, filename);
+                String dest = Path.Combine(Config.Plate5_Shuffle_Blueprint_DestinationFolder, filename);
+
+                using (new WindowsIdentity(Config.Plate5_Shuffle_ImpersonateUserName, Config.Plate5_Shuffle_ImpersonatePassword))
+                {
+                    if (File.Exists(source))
+                    {
+                        File.Copy(source, dest, true);
+                        result = true;
+                    }
+                }
+
+                return result;
+            }
+
+            /// <summary>
+            /// 將 Tiff 放去 hot folder 排隊
+            /// </summary>
+            public static bool Plate5_ShuffleTiff(String filename)
+            {
+                bool result = false;
+                String source = Path.Combine(Config.Plate5_Shuffle_Tiff_SourceFolder, filename);
+                String dest = Path.Combine(Config.Plate5_Shuffle_Tiff_DestinationFolder, filename);
+
+                using (new WindowsIdentity(Config.Plate5_Shuffle_ImpersonateUserName, Config.Plate5_Shuffle_ImpersonatePassword))
+                {
+                    if (File.Exists(source))
+                    {
+                        File.Copy(source, dest, true);
+                        result = true;
+                    }
+                }
+
+                return result;
+            }
+        }
+
+        public class PrintQueue_VPS
+        {
+            /// <summary>
+            /// 用 dbo.vwPrintQueueVpsList_Availalbe 搵出 ClientID 1, ClientID 2...
+            /// </summary>
+            /// <param name="clientId"></param>
+            /// <returns></returns>
+            public static String AvailableClientDelimitedList()
+            {
+                String result = String.Empty;
+
+                String sql = @"
+DECLARE @listStr VARCHAR(MAX) 
+SELECT @listStr = COALESCE(@listStr+',' ,'') + CONVERT(varchar(6), ClientID) 
+FROM (SELECT DISTINCT ClientID FROM vwPrintQueueVpsList_Available) t
+SELECT @listStr";
+                SqlDataReader reader = SqlHelper.Default.ExecuteReader(CommandType.Text, sql);
+
+                while (reader.Read())
+                {
+                    if (!(reader.IsDBNull(0)))
+                        result = reader.GetString(0);
+                }
+
+                return result;
+            }
+        }
+
+        public class PrintQueue
+        {
+            /// <summary>
+            /// 當 Plate5 order cancel 的時候，把 order 點選的 dbo.PrintQueueVPS reset，於是可以重新再落 order
+            /// </summary>
+            /// <param name="orderId"></param>
+            /// <returns></returns>
+            public static bool ResetOrder(int orderId)
+            {
+                bool result = false;
+
+                using (SqlCommand cmd = new SqlCommand())
+                {
+                    cmd.CommandText = "apPrintQueue_ResetOrder";
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("orderId", orderId));
+
+                    SqlHelper.Default.ExecuteNonQuery(cmd);
+                    result = true;
                 }
 
                 return result;

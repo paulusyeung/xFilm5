@@ -1084,7 +1084,7 @@
     <cht>相紙</cht>
   </keyword>
   <keyword key="blueprints">
-    <en>Blueprints</en>
+    <en>Blueprint</en>
     <chs>蓝纸</chs>
     <cht>藍紙</cht>
   </keyword>
@@ -1139,10 +1139,23 @@
     <cht>導出 Excel</cht>
   </keyword>
   <keyword key="print_order">
-    <en>print_order</en>
-    <chs>
-    </chs>
-    <cht>
-    </cht>
+    <en>Print Order</en>
+    <chs>打印订单</chs>
+    <cht>打印訂單</cht>
+  </keyword>
+  <keyword key="printed_on">
+    <en>Printed On</en>
+    <chs>输出日期</chs>
+    <cht>輸出日期</cht>
+  </keyword>
+  <keyword key="vps_proofed">
+    <en>VPS Proofed</en>
+    <chs>己确认 VPS</chs>
+    <cht>己確認 VPS</cht>
+  </keyword>
+  <keyword key="plate_size">
+    <en>Plate Size</en>
+    <chs>锌板尺寸</chs>
+    <cht>鋅板呎吋</cht>
   </keyword>
 </root>

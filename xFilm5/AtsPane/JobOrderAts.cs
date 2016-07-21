@@ -82,7 +82,7 @@ namespace xFilm5.AtsPane
                         oPsFile.Show();
                         break;
                     case "plate":
-                        xFilm5.JobOrder.Forms.Plate oPlate = new xFilm5.JobOrder.Forms.Plate();
+                        xFilm5.JobOrder.Forms.Plate5 oPlate = new xFilm5.JobOrder.Forms.Plate5();
                         oPlate.EditMode = Common.Enums.EditMode.Add;
                         oPlate.Show();
                         break;

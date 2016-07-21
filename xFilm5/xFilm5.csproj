@@ -389,7 +389,9 @@
     <Content Include="Resources\Menu\NavMenu4Operator.xml" />
     <Content Include="Resources\Menu\NavMenu4Sales.xml" />
     <Content Include="Resources\Menu\NavMenu4Workshop.xml" />
-    <Content Include="Resources\UserData\WordDict.xml" />
+    <Content Include="Resources\UserData\WordDict.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Accounting\AccountingToolbar.cs" />
@@ -710,6 +712,12 @@
     <Compile Include="JobOrder\Forms\DirectPrint.Designer.cs">
       <DependentUpon>DirectPrint.cs</DependentUpon>
     </Compile>
+    <Compile Include="JobOrder\Forms\Plate5.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="JobOrder\Forms\Plate5.Designer.cs">
+      <DependentUpon>Plate5.cs</DependentUpon>
+    </Compile>
     <Compile Include="JobOrder\Forms\Plate.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -855,7 +863,9 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="Resources\Icons\FileType\Thumbs.db" />
-    <None Include="Web.config" />
+    <None Include="Web.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -999,6 +1009,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="JobOrder\Forms\DirectPrint.resx">
       <DependentUpon>DirectPrint.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JobOrder\Forms\Plate5.resx">
+      <DependentUpon>Plate5.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="JobOrder\Forms\Plate.resx">
       <DependentUpon>Plate.cs</DependentUpon>
