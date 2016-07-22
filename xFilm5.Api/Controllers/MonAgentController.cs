@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -37,10 +39,24 @@ namespace xFilm5.Api.Controllers
                     DAL.PrintQueue pq = DAL.PrintQueue.LoadWhere(sql);
                     if (pq == null)
                     {
-                        #region dbo.PrintQueue_InsRec
+                        #region New print queue, use dbo.PrintQueue_InsRec
                         pq = new DAL.PrintQueue();
                         pq.ClientID = clientId;
                         pq.CupsJobID = jobId;
+                        #endregion
+                    }
+                    else
+                    {
+                        #region Reprint, reset PrintQueue.OrderID, clear dbo.PrintQueue_VPS items
+                        pq.OrderID = 0;
+
+                        using (SqlCommand cmd = new SqlCommand())
+                        {
+                            cmd.CommandText = String.Format("DELETE PrintQueue_VPS WHERE PrintQueueID = {0}", pq.ID.ToString());
+                            cmd.CommandType = CommandType.Text;
+
+                            SqlHelper.Default.ExecuteNonQuery(cmd);
+                        }
                         #endregion
                     }
 
