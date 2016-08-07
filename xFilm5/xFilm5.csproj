@@ -187,9 +187,12 @@
     <Content Include="Resources\Icons\16x16\folder_close.png" />
     <Content Include="Resources\Icons\16x16\folder_completed.png" />
     <Content Include="Resources\Icons\16x16\folder_dispatch.png" />
+    <Content Include="Resources\Icons\16x16\folder_f.png" />
     <Content Include="Resources\Icons\16x16\folder_go.png" />
     <Content Include="Resources\Icons\16x16\folder_grey.png" />
+    <Content Include="Resources\Icons\16x16\folder_m.png" />
     <Content Include="Resources\Icons\16x16\folder_open.png" />
+    <Content Include="Resources\Icons\16x16\folder_p.png" />
     <Content Include="Resources\Icons\16x16\folder_printing.png" />
     <Content Include="Resources\Icons\16x16\folder_proofing.png" />
     <Content Include="Resources\Icons\16x16\folder_proofingin.png" />
@@ -197,6 +200,7 @@
     <Content Include="Resources\Icons\16x16\folder_queuing.png" />
     <Content Include="Resources\Icons\16x16\folder_ready.png" />
     <Content Include="Resources\Icons\16x16\folder_retouch.png" />
+    <Content Include="Resources\Icons\16x16\folder_v.png" />
     <Content Include="Resources\Icons\16x16\group.png" />
     <Content Include="Resources\Icons\16x16\ico_16_1.gif" />
     <Content Include="Resources\Icons\16x16\ico_16_1010.gif" />
@@ -347,6 +351,10 @@
     <Content Include="Resources\Icons\JobOrder\DirectPrint.48.png" />
     <Content Include="Resources\Icons\JobOrder\DirectPrint_16.png" />
     <Content Include="Resources\Icons\JobOrder\DirectPrint_32.png" />
+    <Content Include="Resources\Icons\JobOrder\folder_f.png" />
+    <Content Include="Resources\Icons\JobOrder\folder_m.png" />
+    <Content Include="Resources\Icons\JobOrder\folder_p.png" />
+    <Content Include="Resources\Icons\JobOrder\folder_v.png" />
     <Content Include="Resources\Icons\JobOrder\Others.48.png" />
     <Content Include="Resources\Icons\JobOrder\Others_16.png" />
     <Content Include="Resources\Icons\JobOrder\Others_32.png" />
@@ -712,6 +720,18 @@
     <Compile Include="JobOrder\Forms\DirectPrint.Designer.cs">
       <DependentUpon>DirectPrint.cs</DependentUpon>
     </Compile>
+    <Compile Include="JobOrder\Forms\Film5.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="JobOrder\Forms\Film5.Designer.cs">
+      <DependentUpon>Film5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="JobOrder\Forms\Vps5.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="JobOrder\Forms\Vps5.Designer.cs">
+      <DependentUpon>Vps5.cs</DependentUpon>
+    </Compile>
     <Compile Include="JobOrder\Forms\Plate5.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1009,6 +1029,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="JobOrder\Forms\DirectPrint.resx">
       <DependentUpon>DirectPrint.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JobOrder\Forms\Film5.resx">
+      <DependentUpon>Film5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JobOrder\Forms\Vps5.resx">
+      <DependentUpon>Vps5.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="JobOrder\Forms\Plate5.resx">
       <DependentUpon>Plate5.cs</DependentUpon>

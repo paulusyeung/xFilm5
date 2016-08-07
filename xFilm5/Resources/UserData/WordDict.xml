@@ -1158,4 +1158,19 @@
     <chs>锌板尺寸</chs>
     <cht>鋅板呎吋</cht>
   </keyword>
+  <keyword key="film_size">
+    <en>Film Size</en>
+    <chs>菲林尺寸</chs>
+    <cht>菲林呎吋</cht>
+  </keyword>
+  <keyword key="film">
+    <en>Film</en>
+    <chs>菲林</chs>
+    <cht>菲林</cht>
+  </keyword>
+  <keyword key="vps">
+    <en>VPS</en>
+    <chs>VPS</chs>
+    <cht>VPS</cht>
+  </keyword>
 </root>

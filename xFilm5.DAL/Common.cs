@@ -77,7 +77,9 @@ namespace xFilm5.DAL
                 PsFile,
                 Others,
                 Plate,
-                Plate5
+                Plate5,
+                Film5,
+                Vps5
             }
 
             public enum Platform
@@ -562,11 +564,15 @@ namespace xFilm5.DAL
                 ddlMenu.MenuItems.Add(new MenuItem(oDict.GetWord("direct_print"), string.Empty, "DirectPrint"));
                 ddlMenu.MenuItems.Add(new MenuItem(oDict.GetWord("ps_file"), string.Empty, "PsFile"));
                 ddlMenu.MenuItems.Add(new MenuItem(oDict.GetWord("plate"), string.Empty, "Plate"));
+                ddlMenu.MenuItems.Add(new MenuItem(oDict.GetWord("film"), string.Empty, "Film"));
+                ddlMenu.MenuItems.Add(new MenuItem(oDict.GetWord("vps"), string.Empty, "VPS"));
 
                 ddlMenu.MenuItems[0].Icon = new IconResourceHandle("JobOrder.UploadFile_16.png");
                 ddlMenu.MenuItems[1].Icon = new IconResourceHandle("JobOrder.DirectPrint_16.png");
                 ddlMenu.MenuItems[2].Icon = new IconResourceHandle("JobOrder.PsFile_16.png");
-                ddlMenu.MenuItems[3].Icon = new IconResourceHandle("JobOrder.Others_16.png");
+                ddlMenu.MenuItems[3].Icon = new IconResourceHandle("JobOrder.folder_p.png");
+                ddlMenu.MenuItems[4].Icon = new IconResourceHandle("JobOrder.folder_f.png");
+                ddlMenu.MenuItems[5].Icon = new IconResourceHandle("JobOrder.folder_v.png");
             }
 
             public static void AppendMenuItem_AppViews(ref ContextMenu ddlViews)

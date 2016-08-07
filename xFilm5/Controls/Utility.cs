@@ -446,6 +446,44 @@ SELECT @listStr";
 
                 return result;
             }
+            public static String AvailablePlateClientDelimitedList()
+            {
+                String result = String.Empty;
+
+                String sql = @"
+DECLARE @listStr VARCHAR(MAX) 
+SELECT @listStr = COALESCE(@listStr+',' ,'') + CONVERT(varchar(6), ClientID) 
+FROM (SELECT DISTINCT ClientID FROM vwPrintQueueVpsList_AvailablePlate) t
+SELECT @listStr";
+                SqlDataReader reader = SqlHelper.Default.ExecuteReader(CommandType.Text, sql);
+
+                while (reader.Read())
+                {
+                    if (!(reader.IsDBNull(0)))
+                        result = reader.GetString(0);
+                }
+
+                return result;
+            }
+            public static String AvailableFilmClientDelimitedList()
+            {
+                String result = String.Empty;
+
+                String sql = @"
+DECLARE @listStr VARCHAR(MAX) 
+SELECT @listStr = COALESCE(@listStr+',' ,'') + CONVERT(varchar(6), ClientID) 
+FROM (SELECT DISTINCT ClientID FROM vwPrintQueueVpsList_AvailableFilm) t
+SELECT @listStr";
+                SqlDataReader reader = SqlHelper.Default.ExecuteReader(CommandType.Text, sql);
+
+                while (reader.Read())
+                {
+                    if (!(reader.IsDBNull(0)))
+                        result = reader.GetString(0);
+                }
+
+                return result;
+            }
         }
 
         public class PrintQueue

@@ -86,6 +86,16 @@ namespace xFilm5.AtsPane
                         oPlate.EditMode = Common.Enums.EditMode.Add;
                         oPlate.Show();
                         break;
+                    case "film":
+                        xFilm5.JobOrder.Forms.Film5 oFilm = new xFilm5.JobOrder.Forms.Film5();
+                        oFilm.EditMode = Common.Enums.EditMode.Add;
+                        oFilm.Show();
+                        break;
+                    case "vps":
+                        xFilm5.JobOrder.Forms.Vps5 oVps = new xFilm5.JobOrder.Forms.Vps5();
+                        oVps.EditMode = Common.Enums.EditMode.Add;
+                        oVps.Show();
+                        break;
                 }
             }
         }
