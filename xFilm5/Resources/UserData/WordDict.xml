@@ -1163,14 +1163,19 @@
     <chs>菲林尺寸</chs>
     <cht>菲林呎吋</cht>
   </keyword>
+  <keyword key="size">
+    <en>Size</en>
+    <chs>尺寸</chs>
+    <cht>呎吋</cht>
+  </keyword>
   <keyword key="film">
     <en>Film</en>
-    <chs>菲林</chs>
-    <cht>菲林</cht>
+    <chs>菲林输出</chs>
+    <cht>菲林輸出</cht>
   </keyword>
   <keyword key="vps">
     <en>VPS</en>
-    <chs>VPS</chs>
-    <cht>VPS</cht>
+    <chs>VPS 输出</chs>
+    <cht>VPS 輸出</cht>
   </keyword>
 </root>
