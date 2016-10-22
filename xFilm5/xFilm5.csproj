@@ -298,6 +298,7 @@
     <Content Include="Resources\Icons\32x32\vcard_key_32.png" />
     <Content Include="Resources\Icons\48x48\Cancel.png" />
     <Content Include="Resources\Icons\48x48\Okay.png" />
+    <Content Include="Resources\Icons\favicon.ico" />
     <Content Include="Resources\Icons\FileType\AI16.png" />
     <Content Include="Resources\Icons\FileType\AI32.png" />
     <Content Include="Resources\Icons\FileType\CDR16.png" />

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
@@ -148,6 +148,7 @@ namespace xFilm5.Accounting.Reports
             this.txtPageTitle.Text = _PageTitle;
             this.txtTimeStamp.Text = DateTime.Now.ToString("yyyyMMddHHMM");
 
+            // 2016.10.22 paulus: upgrade 之後唔 work，要喺 designer 改 Margin
             this.Margins.Top = 113;
         }
 

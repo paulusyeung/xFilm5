@@ -469,7 +469,7 @@ namespace xFilm5.Accounting.Reports
             // 
             // topMarginBand1
             // 
-            this.topMarginBand1.HeightF = 0F;
+            this.topMarginBand1.HeightF = 113F;
             this.topMarginBand1.Name = "topMarginBand1";
             // 
             // bottomMarginBand1
@@ -486,7 +486,7 @@ namespace xFilm5.Accounting.Reports
             this.topMarginBand1,
             this.bottomMarginBand1});
             this.Landscape = true;
-            this.Margins = new System.Drawing.Printing.Margins(0, 0, 0, 0);
+            this.Margins = new System.Drawing.Printing.Margins(0, 0, 113, 0);
             this.PageHeight = 583;
             this.PageWidth = 827;
             this.PaperKind = System.Drawing.Printing.PaperKind.A5;
