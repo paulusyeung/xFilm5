@@ -295,6 +295,36 @@ namespace xFilm5.Controls
 
                 return result;
             }
+
+            public static int GetDefaultBranch(int clientId)
+            {
+                int result = 0;
+
+                DAL.Client client = DAL.Client.Load(clientId);
+                if (client != null)
+                {
+                    result = client.Branch;
+                }
+
+                return result;
+            }
+
+            public static String GetDefaultBranchName(int clientId)
+            {
+                String result = String.Empty;
+
+                int branchId = GetDefaultBranch(clientId);
+                if (branchId != 0)
+                {
+                    DAL.Client_User branch = DAL.Client_User.Load(branchId);
+                    if (branch != null)
+                    {
+                        result = branch.FullName;
+                    }
+                }
+
+                return result;
+            }
         }
 
         public class ClientAddress
