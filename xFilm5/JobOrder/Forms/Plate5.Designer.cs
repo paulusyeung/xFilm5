@@ -32,16 +32,16 @@ namespace xFilm5.JobOrder.Forms
             this.ansToolbar = new Gizmox.WebGUI.Forms.ToolBar();
             this.wspPane = new Gizmox.WebGUI.Forms.Panel();
             this.gbxDetails = new Gizmox.WebGUI.Forms.GroupBox();
-            this.chkVpsProofed = new Gizmox.WebGUI.Forms.CheckBox();
             this.lvwVpsList = new Gizmox.WebGUI.Forms.ListView();
             this.colVpsPrintQueueId = ((Gizmox.WebGUI.Forms.ColumnHeader)(new Gizmox.WebGUI.Forms.ColumnHeader()));
             this.colLineNumber = ((Gizmox.WebGUI.Forms.ColumnHeader)(new Gizmox.WebGUI.Forms.ColumnHeader()));
             this.colVpsFileName = ((Gizmox.WebGUI.Forms.ColumnHeader)(new Gizmox.WebGUI.Forms.ColumnHeader()));
+            this.colPlate = ((Gizmox.WebGUI.Forms.ColumnHeader)(new Gizmox.WebGUI.Forms.ColumnHeader()));
+            this.colCIP3 = ((Gizmox.WebGUI.Forms.ColumnHeader)(new Gizmox.WebGUI.Forms.ColumnHeader()));
+            this.colBlueprint = ((Gizmox.WebGUI.Forms.ColumnHeader)(new Gizmox.WebGUI.Forms.ColumnHeader()));
             this.colPlateSize = ((Gizmox.WebGUI.Forms.ColumnHeader)(new Gizmox.WebGUI.Forms.ColumnHeader()));
             this.colCreatedOn = ((Gizmox.WebGUI.Forms.ColumnHeader)(new Gizmox.WebGUI.Forms.ColumnHeader()));
             this.colPrintedOn = ((Gizmox.WebGUI.Forms.ColumnHeader)(new Gizmox.WebGUI.Forms.ColumnHeader()));
-            this.chkProofingWith = new Gizmox.WebGUI.Forms.CheckBox();
-            this.chkCip3 = new Gizmox.WebGUI.Forms.CheckBox();
             this.gbxFooter = new Gizmox.WebGUI.Forms.GroupBox();
             this.cboDeliveryAddress = new Gizmox.WebGUI.Forms.ComboBox();
             this.cmdNewAddress = new Gizmox.WebGUI.Forms.Button();
@@ -79,7 +79,7 @@ namespace xFilm5.JobOrder.Forms
             this.ansToolbar.Name = "ansToolbar";
             this.ansToolbar.RightToLeft = Gizmox.WebGUI.Forms.RightToLeft.No;
             this.ansToolbar.ShowToolTips = true;
-            this.ansToolbar.Size = new System.Drawing.Size(100, 22);
+            this.ansToolbar.Size = new System.Drawing.Size(640, 24);
             this.ansToolbar.TabIndex = 0;
             // 
             // wspPane
@@ -92,31 +92,19 @@ namespace xFilm5.JobOrder.Forms
             this.wspPane.Location = new System.Drawing.Point(0, 28);
             this.wspPane.Name = "wspPane";
             this.wspPane.Padding = new Gizmox.WebGUI.Forms.Padding(6);
-            this.wspPane.Size = new System.Drawing.Size(493, 506);
+            this.wspPane.Size = new System.Drawing.Size(640, 558);
             this.wspPane.TabIndex = 1;
             // 
             // gbxDetails
             // 
-            this.gbxDetails.Controls.Add(this.chkVpsProofed);
             this.gbxDetails.Controls.Add(this.lvwVpsList);
-            this.gbxDetails.Controls.Add(this.chkProofingWith);
-            this.gbxDetails.Controls.Add(this.chkCip3);
             this.gbxDetails.Dock = Gizmox.WebGUI.Forms.DockStyle.Fill;
             this.gbxDetails.FlatStyle = Gizmox.WebGUI.Forms.FlatStyle.Flat;
             this.gbxDetails.Location = new System.Drawing.Point(6, 83);
             this.gbxDetails.Name = "gbxDetails";
-            this.gbxDetails.Size = new System.Drawing.Size(481, 267);
+            this.gbxDetails.Size = new System.Drawing.Size(628, 333);
             this.gbxDetails.TabIndex = 2;
             this.gbxDetails.TabStop = false;
-            // 
-            // chkVpsProofed
-            // 
-            this.chkVpsProofed.Location = new System.Drawing.Point(336, 258);
-            this.chkVpsProofed.Name = "chkVpsProofed";
-            this.chkVpsProofed.Size = new System.Drawing.Size(102, 21);
-            this.chkVpsProofed.TabIndex = 28;
-            this.chkVpsProofed.Text = "VPS Proofed";
-            this.chkVpsProofed.CheckedChanged += new System.EventHandler(this.chkVpsProofed_CheckedChanged);
             // 
             // lvwVpsList
             // 
@@ -125,13 +113,17 @@ namespace xFilm5.JobOrder.Forms
             this.colVpsPrintQueueId,
             this.colLineNumber,
             this.colVpsFileName,
+            this.colPlate,
+            this.colCIP3,
+            this.colBlueprint,
             this.colPlateSize,
             this.colCreatedOn,
             this.colPrintedOn});
             this.lvwVpsList.DataMember = null;
-            this.lvwVpsList.Location = new System.Drawing.Point(7, 17);
+            this.lvwVpsList.Dock = Gizmox.WebGUI.Forms.DockStyle.Fill;
+            this.lvwVpsList.Location = new System.Drawing.Point(3, 17);
             this.lvwVpsList.Name = "lvwVpsList";
-            this.lvwVpsList.Size = new System.Drawing.Size(456, 240);
+            this.lvwVpsList.Size = new System.Drawing.Size(622, 313);
             this.lvwVpsList.TabIndex = 29;
             // 
             // colVpsPrintQueueId
@@ -152,6 +144,32 @@ namespace xFilm5.JobOrder.Forms
             this.colVpsFileName.Text = "VPS File Name";
             this.colVpsFileName.Width = 220;
             // 
+            // colPlate
+            // 
+            this.colPlate.ContentAlign = Gizmox.WebGUI.Forms.ExtendedHorizontalAlignment.Center;
+            this.colPlate.Image = new Gizmox.WebGUI.Common.Resources.IconResourceHandle(resources.GetString("colPlate.Image"));
+            this.colPlate.Text = "";
+            this.colPlate.TextAlign = Gizmox.WebGUI.Forms.HorizontalAlignment.Center;
+            this.colPlate.Type = Gizmox.WebGUI.Forms.ListViewColumnType.Icon;
+            this.colPlate.Width = 20;
+            // 
+            // colCIP3
+            // 
+            this.colCIP3.ContentAlign = Gizmox.WebGUI.Forms.ExtendedHorizontalAlignment.Center;
+            this.colCIP3.Text = "CIP3";
+            this.colCIP3.TextAlign = Gizmox.WebGUI.Forms.HorizontalAlignment.Center;
+            this.colCIP3.Type = Gizmox.WebGUI.Forms.ListViewColumnType.Icon;
+            this.colCIP3.Width = 26;
+            // 
+            // colBlueprint
+            // 
+            this.colBlueprint.ContentAlign = Gizmox.WebGUI.Forms.ExtendedHorizontalAlignment.Center;
+            this.colBlueprint.Image = new Gizmox.WebGUI.Common.Resources.IconResourceHandle(resources.GetString("colBlueprint.Image"));
+            this.colBlueprint.Text = "";
+            this.colBlueprint.TextAlign = Gizmox.WebGUI.Forms.HorizontalAlignment.Center;
+            this.colBlueprint.Type = Gizmox.WebGUI.Forms.ListViewColumnType.Icon;
+            this.colBlueprint.Width = 20;
+            // 
             // colPlateSize
             // 
             this.colPlateSize.ContentAlign = Gizmox.WebGUI.Forms.ExtendedHorizontalAlignment.Center;
@@ -171,23 +189,6 @@ namespace xFilm5.JobOrder.Forms
             this.colPrintedOn.Text = "Printed On";
             this.colPrintedOn.Width = 110;
             // 
-            // chkProofingWith
-            // 
-            this.chkProofingWith.Location = new System.Drawing.Point(204, 258);
-            this.chkProofingWith.Name = "chkProofingWith";
-            this.chkProofingWith.Size = new System.Drawing.Size(102, 21);
-            this.chkProofingWith.TabIndex = 28;
-            this.chkProofingWith.Text = "Proofing With:";
-            this.chkProofingWith.Click += new System.EventHandler(this.chkProofingWith_Click);
-            // 
-            // chkCip3
-            // 
-            this.chkCip3.Location = new System.Drawing.Point(109, 258);
-            this.chkCip3.Name = "chkCip3";
-            this.chkCip3.Size = new System.Drawing.Size(91, 21);
-            this.chkCip3.TabIndex = 25;
-            this.chkCip3.Text = "CIP3";
-            // 
             // gbxFooter
             // 
             this.gbxFooter.Controls.Add(this.cboDeliveryAddress);
@@ -201,9 +202,9 @@ namespace xFilm5.JobOrder.Forms
             this.gbxFooter.Controls.Add(this.lblTotalPages);
             this.gbxFooter.Dock = Gizmox.WebGUI.Forms.DockStyle.Bottom;
             this.gbxFooter.FlatStyle = Gizmox.WebGUI.Forms.FlatStyle.Flat;
-            this.gbxFooter.Location = new System.Drawing.Point(6, 364);
+            this.gbxFooter.Location = new System.Drawing.Point(6, 416);
             this.gbxFooter.Name = "gbxFooter";
-            this.gbxFooter.Size = new System.Drawing.Size(481, 136);
+            this.gbxFooter.Size = new System.Drawing.Size(628, 136);
             this.gbxFooter.TabIndex = 3;
             this.gbxFooter.TabStop = false;
             // 
@@ -298,7 +299,7 @@ namespace xFilm5.JobOrder.Forms
             this.gbxHeader.FlatStyle = Gizmox.WebGUI.Forms.FlatStyle.Flat;
             this.gbxHeader.Location = new System.Drawing.Point(6, 6);
             this.gbxHeader.Name = "gbxHeader";
-            this.gbxHeader.Size = new System.Drawing.Size(481, 77);
+            this.gbxHeader.Size = new System.Drawing.Size(628, 77);
             this.gbxHeader.TabIndex = 1;
             this.gbxHeader.TabStop = false;
             this.gbxHeader.Text = "Order ID";
@@ -386,7 +387,7 @@ namespace xFilm5.JobOrder.Forms
             this.FormBorderStyle = Gizmox.WebGUI.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Size = new System.Drawing.Size(493, 534);
+            this.Size = new System.Drawing.Size(640, 600);
             this.StartPosition = Gizmox.WebGUI.Forms.FormStartPosition.CenterParent;
             this.Text = "Job Order > Plate";
             this.wspPane.ResumeLayout(false);
@@ -409,8 +410,6 @@ namespace xFilm5.JobOrder.Forms
         private Gizmox.WebGUI.Forms.ComboBox cboWorkshop;
         private Gizmox.WebGUI.Forms.ComboBox cboPriority;
         private Gizmox.WebGUI.Forms.Label lblWorkshop;
-        private Gizmox.WebGUI.Forms.CheckBox chkProofingWith;
-        private Gizmox.WebGUI.Forms.CheckBox chkCip3;
         private Gizmox.WebGUI.Forms.Label lblTotalPages;
         private Gizmox.WebGUI.Forms.Label lblRemarks;
         private Gizmox.WebGUI.Forms.Label lblPages;
@@ -431,7 +430,9 @@ namespace xFilm5.JobOrder.Forms
         private Gizmox.WebGUI.Forms.ColumnHeader colPrintedOn;
         private Gizmox.WebGUI.Forms.ColumnHeader colVpsPrintQueueId;
         private Gizmox.WebGUI.Forms.ColumnHeader colLineNumber;
-        private Gizmox.WebGUI.Forms.CheckBox chkVpsProofed;
         private Gizmox.WebGUI.Forms.ColumnHeader colPlateSize;
+        private Gizmox.WebGUI.Forms.ColumnHeader colPlate;
+        private Gizmox.WebGUI.Forms.ColumnHeader colCIP3;
+        private Gizmox.WebGUI.Forms.ColumnHeader colBlueprint;
     }
 }

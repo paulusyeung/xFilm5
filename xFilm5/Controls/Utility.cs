@@ -541,4 +541,40 @@ SELECT @listStr";
             }
         }
     }
+
+    public class ListViewHelper
+    {
+        public static int GetHitColumn(Gizmox.WebGUI.Forms.ListView listview, Gizmox.WebGUI.Forms.MouseEventArgs mea)
+        {
+            int result = -1;
+
+            // ignor 空白的 area, HACK: last column 會搞錯，要避免用到 last column
+            Gizmox.WebGUI.Forms.ListViewItem item = listview.GetItemAt(mea.X, mea.Y);
+            if (item != null)
+            {
+                int mousex = mea.X;
+                int x = 0;
+                const int gridLine = 3;
+                const int checkbox = 24;
+                int subitemindex = 0;
+                if (listview.CheckBoxes)
+                    x += checkbox + gridLine;
+                for (int i = 0; i < listview.Columns.Count; i++)
+                {
+                    if (listview.Columns[i].Visible)    // 唔計 hidden column
+                    {
+                        x += (listview.Columns[i].Width + gridLine);
+                        subitemindex = i;
+                        if (mousex < x)
+                        {
+                            break;
+                        }
+                    }
+                }
+                result = subitemindex;
+            }
+
+            return result;
+        }
+    }
 }

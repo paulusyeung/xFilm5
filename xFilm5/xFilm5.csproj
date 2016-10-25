@@ -163,9 +163,14 @@
     <Content Include="Resources\Icons\16x16\appView_tile.png" />
     <Content Include="Resources\Icons\16x16\appView_xp.png" />
     <Content Include="Resources\Icons\16x16\barcode_16.JPG" />
+    <Content Include="Resources\Icons\16x16\blueprint-16x16.png" />
     <Content Include="Resources\Icons\16x16\btn_on_lookup.gif" />
     <Content Include="Resources\Icons\16x16\cart_16x16.png" />
     <Content Include="Resources\Icons\16x16\chart16.png" />
+    <Content Include="Resources\Icons\16x16\checkbox-no-12x12.jpg" />
+    <Content Include="Resources\Icons\16x16\checkbox-no.jpg" />
+    <Content Include="Resources\Icons\16x16\checkbox-ok-12x12.jpg" />
+    <Content Include="Resources\Icons\16x16\checkbox-ok.jpg" />
     <Content Include="Resources\Icons\16x16\client_cash_16x16.png" />
     <Content Include="Resources\Icons\16x16\comment.png" />
     <Content Include="Resources\Icons\16x16\down.gif" />
@@ -245,6 +250,7 @@
     <Content Include="Resources\Icons\16x16\listview_columns.gif" />
     <Content Include="Resources\Icons\16x16\listview_multiselect.gif" />
     <Content Include="Resources\Icons\16x16\listview_sorting.gif" />
+    <Content Include="Resources\Icons\16x16\listview_uncheckbox.gif" />
     <Content Include="Resources\Icons\16x16\Note16.png" />
     <Content Include="Resources\Icons\16x16\orgchart_16.gif" />
     <Content Include="Resources\Icons\16x16\panel_down.png" />

@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="colPlate.Image" xml:space="preserve">
+    <value>JobOrder.folder_p.png</value>
+  </data>
+  <data name="colBlueprint.Image" xml:space="preserve">
+    <value>16x16.blueprint-16x16.png</value>
+  </data>
   <data name="cmdNewAddress.Image" xml:space="preserve">
     <value>16x16.vcard_add.png</value>
   </data>
