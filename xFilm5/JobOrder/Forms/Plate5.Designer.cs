@@ -49,7 +49,6 @@ namespace xFilm5.JobOrder.Forms
             this.chkPickUp = new Gizmox.WebGUI.Forms.CheckBox();
             this.txtRemarks = new Gizmox.WebGUI.Forms.TextBox();
             this.lblRemarks = new Gizmox.WebGUI.Forms.Label();
-            this.lblPages = new Gizmox.WebGUI.Forms.Label();
             this.txtTotalPages = new Gizmox.WebGUI.Forms.TextBox();
             this.lblTotalPages = new Gizmox.WebGUI.Forms.Label();
             this.gbxHeader = new Gizmox.WebGUI.Forms.GroupBox();
@@ -63,6 +62,11 @@ namespace xFilm5.JobOrder.Forms
             this.lblClient = new Gizmox.WebGUI.Forms.Label();
             this.ofdAttachment = new Gizmox.WebGUI.Forms.OpenFileDialog();
             this.toolTip1 = new Gizmox.WebGUI.Forms.ToolTip();
+            this.butPlate = new Gizmox.WebGUI.Forms.Button();
+            this.txtTotalCIP3 = new Gizmox.WebGUI.Forms.TextBox();
+            this.label1 = new Gizmox.WebGUI.Forms.Label();
+            this.butBlueprint = new Gizmox.WebGUI.Forms.Button();
+            this.txtTotalBlueprints = new Gizmox.WebGUI.Forms.TextBox();
             this.wspPane.SuspendLayout();
             this.gbxDetails.SuspendLayout();
             this.gbxFooter.SuspendLayout();
@@ -191,13 +195,17 @@ namespace xFilm5.JobOrder.Forms
             // 
             // gbxFooter
             // 
+            this.gbxFooter.Controls.Add(this.txtTotalBlueprints);
+            this.gbxFooter.Controls.Add(this.butBlueprint);
+            this.gbxFooter.Controls.Add(this.label1);
+            this.gbxFooter.Controls.Add(this.txtTotalCIP3);
+            this.gbxFooter.Controls.Add(this.butPlate);
             this.gbxFooter.Controls.Add(this.cboDeliveryAddress);
             this.gbxFooter.Controls.Add(this.cmdNewAddress);
             this.gbxFooter.Controls.Add(this.chkDeliverTo);
             this.gbxFooter.Controls.Add(this.chkPickUp);
             this.gbxFooter.Controls.Add(this.txtRemarks);
             this.gbxFooter.Controls.Add(this.lblRemarks);
-            this.gbxFooter.Controls.Add(this.lblPages);
             this.gbxFooter.Controls.Add(this.txtTotalPages);
             this.gbxFooter.Controls.Add(this.lblTotalPages);
             this.gbxFooter.Dock = Gizmox.WebGUI.Forms.DockStyle.Bottom;
@@ -260,21 +268,14 @@ namespace xFilm5.JobOrder.Forms
             this.lblRemarks.Text = "Remarks:";
             this.lblRemarks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // lblPages
-            // 
-            this.lblPages.Location = new System.Drawing.Point(215, 16);
-            this.lblPages.Name = "lblPages";
-            this.lblPages.Size = new System.Drawing.Size(36, 21);
-            this.lblPages.TabIndex = 2;
-            this.lblPages.Text = "Pages";
-            this.lblPages.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // txtTotalPages
             // 
             this.txtTotalPages.Location = new System.Drawing.Point(109, 16);
             this.txtTotalPages.Name = "txtTotalPages";
-            this.txtTotalPages.Size = new System.Drawing.Size(100, 20);
+            this.txtTotalPages.ReadOnly = true;
+            this.txtTotalPages.Size = new System.Drawing.Size(40, 20);
             this.txtTotalPages.TabIndex = 1;
+            this.txtTotalPages.TabStop = false;
             // 
             // lblTotalPages
             // 
@@ -380,6 +381,53 @@ namespace xFilm5.JobOrder.Forms
             this.ofdAttachment.Theme = "";
             this.ofdAttachment.FileOk += new System.ComponentModel.CancelEventHandler(this.ofdAttachment_FileOk);
             // 
+            // butPlate
+            // 
+            this.butPlate.Image = new Gizmox.WebGUI.Common.Resources.IconResourceHandle(resources.GetString("butPlate.Image"));
+            this.butPlate.Location = new System.Drawing.Point(149, 12);
+            this.butPlate.Name = "butPlate";
+            this.butPlate.Size = new System.Drawing.Size(24, 24);
+            this.butPlate.TabIndex = 14;
+            this.butPlate.TabStop = false;
+            this.butPlate.TextImageRelation = Gizmox.WebGUI.Forms.TextImageRelation.ImageAboveText;
+            // 
+            // txtTotalCIP3
+            // 
+            this.txtTotalCIP3.Location = new System.Drawing.Point(241, 16);
+            this.txtTotalCIP3.Name = "txtTotalCIP3";
+            this.txtTotalCIP3.ReadOnly = true;
+            this.txtTotalCIP3.Size = new System.Drawing.Size(40, 20);
+            this.txtTotalCIP3.TabIndex = 1;
+            this.txtTotalCIP3.TabStop = false;
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(283, 14);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(31, 21);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "CIP3";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // butBlueprint
+            // 
+            this.butBlueprint.Image = new Gizmox.WebGUI.Common.Resources.IconResourceHandle(resources.GetString("butBlueprint.Image"));
+            this.butBlueprint.Location = new System.Drawing.Point(411, 12);
+            this.butBlueprint.Name = "butBlueprint";
+            this.butBlueprint.Size = new System.Drawing.Size(24, 24);
+            this.butBlueprint.TabIndex = 14;
+            this.butBlueprint.TabStop = false;
+            this.butBlueprint.TextImageRelation = Gizmox.WebGUI.Forms.TextImageRelation.ImageAboveText;
+            // 
+            // txtTotalBlueprints
+            // 
+            this.txtTotalBlueprints.Location = new System.Drawing.Point(371, 16);
+            this.txtTotalBlueprints.Name = "txtTotalBlueprints";
+            this.txtTotalBlueprints.ReadOnly = true;
+            this.txtTotalBlueprints.Size = new System.Drawing.Size(40, 20);
+            this.txtTotalBlueprints.TabIndex = 1;
+            this.txtTotalBlueprints.TabStop = false;
+            // 
             // Plate5
             // 
             this.Controls.Add(this.wspPane);
@@ -412,7 +460,6 @@ namespace xFilm5.JobOrder.Forms
         private Gizmox.WebGUI.Forms.Label lblWorkshop;
         private Gizmox.WebGUI.Forms.Label lblTotalPages;
         private Gizmox.WebGUI.Forms.Label lblRemarks;
-        private Gizmox.WebGUI.Forms.Label lblPages;
         private Gizmox.WebGUI.Forms.TextBox txtTotalPages;
         private Gizmox.WebGUI.Forms.TextBox txtRemarks;
         private Gizmox.WebGUI.Forms.OpenFileDialog ofdAttachment;
@@ -434,5 +481,10 @@ namespace xFilm5.JobOrder.Forms
         private Gizmox.WebGUI.Forms.ColumnHeader colPlate;
         private Gizmox.WebGUI.Forms.ColumnHeader colCIP3;
         private Gizmox.WebGUI.Forms.ColumnHeader colBlueprint;
+        private Gizmox.WebGUI.Forms.Button butPlate;
+        private Gizmox.WebGUI.Forms.TextBox txtTotalBlueprints;
+        private Gizmox.WebGUI.Forms.Button butBlueprint;
+        private Gizmox.WebGUI.Forms.Label label1;
+        private Gizmox.WebGUI.Forms.TextBox txtTotalCIP3;
     }
 }
