@@ -101,8 +101,13 @@ namespace xFilm5.Api.Controllers
                 DAL.PrintQueue pQueue = DAL.PrintQueue.LoadWhere(sql);
                 if (pQueue != null)
                 {
-                    #region dbo.PrintQuee_VPS_InsRec
-                    DAL.PrintQueue_VPS pQueueVps = new DAL.PrintQueue_VPS();
+                    // 2011.11.08 paulus: 先 check 下有冇相同 PrintQueue_VPS，如果冇先至 InsRec，否則 UpdRec
+                    sql = String.Format("PrintQueueID = '{0}' AND VpsFileName = N'{1}'", pQueue.ID.ToString(), vpsFileName);
+                    DAL.PrintQueue_VPS pQueueVps = DAL.PrintQueue_VPS.LoadWhere(sql);
+                    if (pQueueVps == null)
+                        pQueueVps = new DAL.PrintQueue_VPS();
+                    #region dbo.PrintQuee_VPS_InsRec or UpRec
+                    //DAL.PrintQueue_VPS pQueueVps = new DAL.PrintQueue_VPS();
                     pQueueVps.PrintQueueID = pQueue.ID;
                     pQueueVps.VpsFileName = vpsFileName;
                     pQueueVps.CreatedOn = DateTime.Now;

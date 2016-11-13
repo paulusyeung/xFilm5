@@ -611,22 +611,22 @@
   <keyword key="save_close">
     <en>Save %26 Close</en>
     <chs>保存并关闭</chs>
-    <cht>存檔并關閉</cht>
+    <cht>存檔並關閉</cht>
   </keyword>
   <keyword key="save_new">
     <en>Save %26 New</en>
     <chs>保存并新增</chs>
-    <cht>存檔并新增</cht>
+    <cht>存檔並新增</cht>
   </keyword>
   <keyword key="save_dup">
     <en>Save %26 Dup</en>
     <chs>保存并复制</chs>
-    <cht>存檔并複制</cht>
+    <cht>存檔並複制</cht>
   </keyword>
   <keyword key="save_next">
     <en>Save %26 Next</en>
     <chs>保存并复制</chs>
-    <cht>存檔并複製</cht>
+    <cht>存檔並複製</cht>
   </keyword>
   <keyword key="delete">
     <en>Delete</en>

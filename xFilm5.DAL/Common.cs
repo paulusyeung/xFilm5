@@ -85,7 +85,10 @@ namespace xFilm5.DAL
             public enum Platform
             {
                 PC = 1,
-                Mac
+                Mac,
+                iOS,
+                Android,
+                WindwsPhone
             }
 
             public enum Priority
@@ -130,6 +133,28 @@ namespace xFilm5.DAL
                 Workshop,
                 Cashier
             }
+
+            #region 2016.11.05 paulus: 工業 4.0
+            public enum PrintQSubitemType
+            {
+                Ps,
+                Vps,
+                Tiff,
+                Cip3,
+                Blueprint,
+                Plate
+            }
+
+            public enum DeviceType
+            {
+                Chrome,
+                Firefox,
+                Safari,
+                Email,
+                SMS,
+                WhatsApp
+            }
+            #endregion
         }
         #endregion
 
