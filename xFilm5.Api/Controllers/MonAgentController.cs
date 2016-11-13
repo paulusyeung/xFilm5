@@ -70,6 +70,8 @@ namespace xFilm5.Api.Controllers
                     pq.Save();
                     #endregion
 
+                    UpdateListCycle(pq.ID, (int)DAL.Common.Enums.PrintQSubitemType.Ps);
+
                     return Ok();
                 }
                 else
@@ -106,6 +108,7 @@ namespace xFilm5.Api.Controllers
                     DAL.PrintQueue_VPS pQueueVps = DAL.PrintQueue_VPS.LoadWhere(sql);
                     if (pQueueVps == null)
                         pQueueVps = new DAL.PrintQueue_VPS();
+
                     #region dbo.PrintQuee_VPS_InsRec or UpRec
                     //DAL.PrintQueue_VPS pQueueVps = new DAL.PrintQueue_VPS();
                     pQueueVps.PrintQueueID = pQueue.ID;
@@ -116,6 +119,8 @@ namespace xFilm5.Api.Controllers
                     pQueueVps.Save();
                     #endregion
 
+                    UpdateListCycle(pQueue.ID, (int)DAL.Common.Enums.PrintQSubitemType.Vps);
+
                     return Ok();
                 }
                 else
@@ -125,6 +130,159 @@ namespace xFilm5.Api.Controllers
 
                 #endregion
             }
+        }
+
+        [Route("api/cip3")]
+        public IHttpActionResult PostCip3([FromBody] JObject jsonData)
+        {
+            if (jsonData == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                #region Extract POST json data and update dbo.PrintQueue_VPS
+
+                // 每個 call 祇得一隻 record
+                int clientId = Convert.ToInt32(jsonData["clientId"].Value<int>());
+                String jobId = jsonData["jobId"].Value<String>();
+                String vpsFileName = jsonData["vpsFileName"].Value<String>();
+
+                String sql = String.Format("ClientID = {0} AND CupsJobId = N'{1}'", clientId.ToString(), jobId);
+                DAL.PrintQueue pQueue = DAL.PrintQueue.LoadWhere(sql);
+                if (pQueue != null)
+                {
+                    UpdateListCycle(pQueue.ID, (int)DAL.Common.Enums.PrintQSubitemType.Cip3);
+
+                    return Ok();
+                }
+                else
+                {
+                    return NotFound();
+                }
+
+                #endregion
+            }
+        }
+
+        [Route("api/tiff")]
+        public IHttpActionResult PostTiff([FromBody] JObject jsonData)
+        {
+            if (jsonData == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                #region Extract POST json data and update dbo.PrintQueue_VPS
+
+                // 每個 call 祇得一隻 record
+                int clientId = Convert.ToInt32(jsonData["clientId"].Value<int>());
+                String jobId = jsonData["jobId"].Value<String>();
+                String vpsFileName = jsonData["vpsFileName"].Value<String>();
+
+                String sql = String.Format("ClientID = {0} AND CupsJobId = N'{1}'", clientId.ToString(), jobId);
+                DAL.PrintQueue pQueue = DAL.PrintQueue.LoadWhere(sql);
+                if (pQueue != null)
+                {
+                    UpdateListCycle(pQueue.ID, (int)DAL.Common.Enums.PrintQSubitemType.Tiff);
+
+                    return Ok();
+                }
+                else
+                {
+                    return NotFound();
+                }
+
+                #endregion
+            }
+        }
+
+        [Route("api/bp")]
+        public IHttpActionResult PostBlueprint([FromBody] JObject jsonData)
+        {
+            if (jsonData == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                #region Extract POST json data and update dbo.PrintQueue_VPS
+
+                // 每個 call 祇得一隻 record
+                int clientId = Convert.ToInt32(jsonData["clientId"].Value<int>());
+                String jobId = jsonData["jobId"].Value<String>();
+                String vpsFileName = jsonData["vpsFileName"].Value<String>();
+
+                String sql = String.Format("ClientID = {0} AND CupsJobId = N'{1}'", clientId.ToString(), jobId);
+                DAL.PrintQueue pQueue = DAL.PrintQueue.LoadWhere(sql);
+                if (pQueue != null)
+                {
+                    UpdateListCycle(pQueue.ID, (int)DAL.Common.Enums.PrintQSubitemType.Blueprint);
+
+                    return Ok();
+                }
+                else
+                {
+                    return NotFound();
+                }
+
+                #endregion
+            }
+        }
+
+        [Route("api/plate")]
+        public IHttpActionResult PostPlate([FromBody] JObject jsonData)
+        {
+            if (jsonData == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                #region Extract POST json data and update dbo.PrintQueue_VPS
+
+                // 每個 call 祇得一隻 record
+                int clientId = Convert.ToInt32(jsonData["clientId"].Value<int>());
+                String jobId = jsonData["jobId"].Value<String>();
+                String vpsFileName = jsonData["vpsFileName"].Value<String>();
+
+                String sql = String.Format("ClientID = {0} AND CupsJobId = N'{1}'", clientId.ToString(), jobId);
+                DAL.PrintQueue pQueue = DAL.PrintQueue.LoadWhere(sql);
+                if (pQueue != null)
+                {
+                    UpdateListCycle(pQueue.ID, (int)DAL.Common.Enums.PrintQSubitemType.Plate);
+
+                    return Ok();
+                }
+                else
+                {
+                    return NotFound();
+                }
+
+                #endregion
+            }
+        }
+
+        /// <summary>
+        /// log Life Cycle, 每個 SubitemType 一個 record
+        /// </summary>
+        /// <param name="pQueueId"></param>
+        /// <param name="type"></param>
+        private void UpdateListCycle(int pQueueId, int type)
+        {
+            String sql = String.Format("PrintQueueId = {0} AND PrintQSubitemType = {1}", pQueueId.ToString(), type);
+            DAL.PrintQueue_LifeCycle lifeCycle = DAL.PrintQueue_LifeCycle.LoadWhere(sql);
+            if (lifeCycle == null)
+            {
+                lifeCycle = new DAL.PrintQueue_LifeCycle();
+                lifeCycle.PrintQueueId = pQueueId;
+                lifeCycle.PrintQSubitemType = type;
+            }
+            lifeCycle.Status = (int)DAL.Common.Enums.Status.Active;
+            lifeCycle.CreatedOn = DateTime.Now;
+            lifeCycle.CreatedBy = 0;
+            lifeCycle.Save();
         }
     }
 }

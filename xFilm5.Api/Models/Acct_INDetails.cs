@@ -12,6 +12,8 @@ namespace xFilm5.Api.Models
 
         public int INMasterID { get; set; }
 
+        public int OrderPkPrintQId { get; set; }
+
         [StringLength(16)]
         public string BillingCode { get; set; }
 
