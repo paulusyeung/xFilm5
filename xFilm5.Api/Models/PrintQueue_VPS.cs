@@ -18,19 +18,16 @@ namespace xFilm5.Api.Models
 
         public bool PlateOrdered { get; set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime CreatedOn { get; set; }
 
         public int? CreatedBy { get; set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime ModifiedOn { get; set; }
 
         public int? ModifiedBy { get; set; }
 
         public bool? Retired { get; set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime RetiredOn { get; set; }
 
         public int? RetiredBy { get; set; }

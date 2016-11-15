@@ -12,6 +12,7 @@ namespace xFilm5.Api.Models
         public T_PaymentType()
         {
             Acct_INMaster = new HashSet<Acct_INMaster>();
+            ReceiptHeader = new HashSet<ReceiptHeader>();
         }
 
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
@@ -22,5 +23,8 @@ namespace xFilm5.Api.Models
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Acct_INMaster> Acct_INMaster { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ReceiptHeader> ReceiptHeader { get; set; }
     }
 }

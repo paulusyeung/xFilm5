@@ -8,6 +8,12 @@ namespace xFilm5.Api.Models
 
     public partial class T_BillingCode_Item
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public T_BillingCode_Item()
+        {
+            ClientPricing = new HashSet<ClientPricing>();
+        }
+
         public int ID { get; set; }
 
         public int? DeptID { get; set; }
@@ -28,6 +34,9 @@ namespace xFilm5.Api.Models
         public decimal? UnitPrice { get; set; }
 
         public bool Retired { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientPricing> ClientPricing { get; set; }
 
         public virtual T_BillingCode_Dept T_BillingCode_Dept { get; set; }
     }

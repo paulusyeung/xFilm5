@@ -12,7 +12,9 @@ namespace xFilm5.Api.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PrintQueue()
         {
+            OrderPkPrintQ = new HashSet<OrderPkPrintQ>();
             PrintQueue_VPS = new HashSet<PrintQueue_VPS>();
+            PrintQueue_LifeCycle = new HashSet<PrintQueue_LifeCycle>();
         }
 
         public int ID { get; set; }
@@ -36,19 +38,16 @@ namespace xFilm5.Api.Models
 
         public int Status { get; set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime CreatedOn { get; set; }
 
         public int? CreatedBy { get; set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime ModifiedOn { get; set; }
 
         public int? ModifiedBy { get; set; }
 
         public bool Retired { get; set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime? RetiredOn { get; set; }
 
         public int? RetiredBy { get; set; }
@@ -58,6 +57,12 @@ namespace xFilm5.Api.Models
         public virtual OrderHeader OrderHeader { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OrderPkPrintQ> OrderPkPrintQ { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PrintQueue_VPS> PrintQueue_VPS { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PrintQueue_LifeCycle> PrintQueue_LifeCycle { get; set; }
     }
 }

@@ -17,6 +17,7 @@ namespace xFilm5.Api.Models
             Order_Internal = new HashSet<Order_Internal>();
             Order_Journal = new HashSet<Order_Journal>();
             OrderComment = new HashSet<OrderComment>();
+            OrderPkPrintQ = new HashSet<OrderPkPrintQ>();
             PrintQueue = new HashSet<PrintQueue>();
         }
 
@@ -76,6 +77,9 @@ namespace xFilm5.Api.Models
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderComment> OrderComment { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OrderPkPrintQ> OrderPkPrintQ { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PrintQueue> PrintQueue { get; set; }

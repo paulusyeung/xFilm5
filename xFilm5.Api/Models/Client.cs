@@ -15,8 +15,10 @@ namespace xFilm5.Api.Models
             Acct_INMaster = new HashSet<Acct_INMaster>();
             Client_AddressBook = new HashSet<Client_AddressBook>();
             Client_User = new HashSet<Client_User>();
+            ClientPricing = new HashSet<ClientPricing>();
             OrderHeader = new HashSet<OrderHeader>();
             PrintQueue = new HashSet<PrintQueue>();
+            ReceiptHeader = new HashSet<ReceiptHeader>();
         }
 
         public int ID { get; set; }
@@ -49,9 +51,15 @@ namespace xFilm5.Api.Models
         public virtual ICollection<Client_User> Client_User { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientPricing> ClientPricing { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderHeader> OrderHeader { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PrintQueue> PrintQueue { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ReceiptHeader> ReceiptHeader { get; set; }
     }
 }

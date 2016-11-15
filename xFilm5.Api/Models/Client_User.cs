@@ -12,6 +12,7 @@ namespace xFilm5.Api.Models
         public Client_User()
         {
             OrderHeader = new HashSet<OrderHeader>();
+            ReceiptHeader = new HashSet<ReceiptHeader>();
         }
 
         public int ID { get; set; }
@@ -42,5 +43,8 @@ namespace xFilm5.Api.Models
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderHeader> OrderHeader { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ReceiptHeader> ReceiptHeader { get; set; }
     }
 }

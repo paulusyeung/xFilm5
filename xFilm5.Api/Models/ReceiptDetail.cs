@@ -6,11 +6,12 @@ namespace xFilm5.Api.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class Acct_INDetails
+    [Table("ReceiptDetail")]
+    public partial class ReceiptDetail
     {
-        public int ID { get; set; }
+        public int ReceiptDetailId { get; set; }
 
-        public int INMasterID { get; set; }
+        public int ReceiptHeaderId { get; set; }
 
         public int? OrderPkPrintQId { get; set; }
 
@@ -30,8 +31,8 @@ namespace xFilm5.Api.Models
         [Column(TypeName = "money")]
         public decimal? Amount { get; set; }
 
-        public virtual Acct_INMaster Acct_INMaster { get; set; }
-
         public virtual OrderPkPrintQ OrderPkPrintQ { get; set; }
+
+        public virtual ReceiptHeader ReceiptHeader { get; set; }
     }
 }
