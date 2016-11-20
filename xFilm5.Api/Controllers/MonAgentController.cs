@@ -146,7 +146,7 @@ namespace xFilm5.Api.Controllers
                 // 每個 call 祇得一隻 record
                 int clientId = Convert.ToInt32(jsonData["clientId"].Value<int>());
                 String jobId = jsonData["jobId"].Value<String>();
-                String vpsFileName = jsonData["vpsFileName"].Value<String>();
+                String cip3FileName = jsonData["cip3FileName"].Value<String>();
 
                 String sql = String.Format("ClientID = {0} AND CupsJobId = N'{1}'", clientId.ToString(), jobId);
                 DAL.PrintQueue pQueue = DAL.PrintQueue.LoadWhere(sql);
@@ -179,7 +179,7 @@ namespace xFilm5.Api.Controllers
                 // 每個 call 祇得一隻 record
                 int clientId = Convert.ToInt32(jsonData["clientId"].Value<int>());
                 String jobId = jsonData["jobId"].Value<String>();
-                String vpsFileName = jsonData["vpsFileName"].Value<String>();
+                String tiffFileName = jsonData["tiffFileName"].Value<String>();
 
                 String sql = String.Format("ClientID = {0} AND CupsJobId = N'{1}'", clientId.ToString(), jobId);
                 DAL.PrintQueue pQueue = DAL.PrintQueue.LoadWhere(sql);
@@ -212,7 +212,7 @@ namespace xFilm5.Api.Controllers
                 // 每個 call 祇得一隻 record
                 int clientId = Convert.ToInt32(jsonData["clientId"].Value<int>());
                 String jobId = jsonData["jobId"].Value<String>();
-                String vpsFileName = jsonData["vpsFileName"].Value<String>();
+                String bpFileName = jsonData["bpFileName"].Value<String>();
 
                 String sql = String.Format("ClientID = {0} AND CupsJobId = N'{1}'", clientId.ToString(), jobId);
                 DAL.PrintQueue pQueue = DAL.PrintQueue.LoadWhere(sql);
@@ -245,7 +245,7 @@ namespace xFilm5.Api.Controllers
                 // 每個 call 祇得一隻 record
                 int clientId = Convert.ToInt32(jsonData["clientId"].Value<int>());
                 String jobId = jsonData["jobId"].Value<String>();
-                String vpsFileName = jsonData["vpsFileName"].Value<String>();
+                String plateFileName = jsonData["plateFileName"].Value<String>();
 
                 String sql = String.Format("ClientID = {0} AND CupsJobId = N'{1}'", clientId.ToString(), jobId);
                 DAL.PrintQueue pQueue = DAL.PrintQueue.LoadWhere(sql);

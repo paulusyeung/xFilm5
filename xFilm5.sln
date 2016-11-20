@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xFilm5", "xFilm5\xFilm5.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xFilm5.Api", "xFilm5.Api\xFilm5.Api.csproj", "{E17297B0-CBBF-4142-8647-106984B6FE9C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xFilm5.QRStation", "xFilm5.QRStation\xFilm5.QRStation.csproj", "{476C25ED-D983-404C-ABA0-2AE53B704D83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xFilm5.DAL4Win", "xFilm5.DAL4Win\xFilm5.DAL4Win.csproj", "{FB4C40AC-E30D-48DD-B0B7-6B06BF379FBC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{E17297B0-CBBF-4142-8647-106984B6FE9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E17297B0-CBBF-4142-8647-106984B6FE9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E17297B0-CBBF-4142-8647-106984B6FE9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{476C25ED-D983-404C-ABA0-2AE53B704D83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{476C25ED-D983-404C-ABA0-2AE53B704D83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{476C25ED-D983-404C-ABA0-2AE53B704D83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{476C25ED-D983-404C-ABA0-2AE53B704D83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB4C40AC-E30D-48DD-B0B7-6B06BF379FBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB4C40AC-E30D-48DD-B0B7-6B06BF379FBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB4C40AC-E30D-48DD-B0B7-6B06BF379FBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB4C40AC-E30D-48DD-B0B7-6B06BF379FBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

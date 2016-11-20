@@ -51,5 +51,41 @@ namespace xFilm5.QRStation.Properties {
                 return ((string)(this["SysDb"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\192.168.12.230\\JobsOrder\\Bitmap")]
+        public string BitmapUri {
+            get {
+                return ((string)(this["BitmapUri"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("MonAgent")]
+        public string BitmapUri_UserName {
+            get {
+                return ((string)(this["BitmapUri_UserName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("nx-9602")]
+        public string BitmapUri_UserPassword {
+            get {
+                return ((string)(this["BitmapUri_UserPassword"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://192.168.12.143/xFilm5.Api/")]
+        public string ApiUri {
+            get {
+                return ((string)(this["ApiUri"]));
+            }
+        }
     }
 }
