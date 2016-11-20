@@ -20,8 +20,8 @@ namespace xFilm5.QRStation
         private enum SourceType
         {
             None,
-            Blueprint,
-            Plate
+            Blueprint = (int)DAL4Win.Common.Enums.PrintQSubitemType.Blueprint,
+            Plate = (int)DAL4Win.Common.Enums.PrintQSubitemType.Plate
         }
         #endregion
 
@@ -69,9 +69,14 @@ namespace xFilm5.QRStation
                         String sql = String.Format("ClientID = {0} AND CupsJobID = N'{1}'", clientId.ToString(), cupsJobId);
                         DAL4Win.PrintQueue pq = DAL4Win.PrintQueue.LoadWhere(sql);
 
-                        ShowClientInfo(clientId);
-                        if (pq != null) ShowPrintQLifeCycle(pq.ID);
-                        ShowPreview(sourceType, qrCodeData[2]);
+                        ShowClientInfo(clientId);                       // 目前淨係顯示 Client 名，日後可以顯示其他資料
+                        if (pq != null)                                 // 如果已經有 PrintQueue
+                        {
+                            LogLifeCycle(sourceType, pq.ID);            //   update Log File
+                            ShowPrintQLifeCycle(pq.ID);                 //   顯示同一隻 PrintQueue 嘅 log file
+                        }
+                        ShowPreview(sourceType, qrCodeData[2]);         // 顯示 thumbnail
+
                         #endregion
                     }
                 }
@@ -191,6 +196,28 @@ namespace xFilm5.QRStation
                     picPreview.ImageLocation = "";
                 }
             }
+        }
+
+        private bool LogLifeCycle(SourceType type, int pQueueId)
+        {
+            bool result = false;
+
+            String sql = String.Format("PrintQueueId = {0} AND PrintQSubitemType = {1}", pQueueId.ToString(), type.ToString());
+            DAL4Win.PrintQueue_LifeCycle cycle = DAL4Win.PrintQueue_LifeCycle.LoadWhere(sql);
+            if (cycle == null)
+            {
+                cycle = new DAL4Win.PrintQueue_LifeCycle();
+                cycle.PrintQueueId = pQueueId;
+                cycle.PrintQSubitemType = (int)type;
+                cycle.Status = (int)DAL4Win.Common.Enums.Status.Active;
+                cycle.CreatedOn = DateTime.Now;
+                cycle.CreatedBy = 0;
+                cycle.Save();
+
+                result = true;
+            }
+
+            return result;
         }
 
         #region RestSharp samples
