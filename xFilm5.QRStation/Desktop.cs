@@ -130,7 +130,7 @@ namespace xFilm5.QRStation
                     ListViewItem item = lvwLifeCycle.Items.Add(allCycle[i].LifeCycleId.ToString());
 
                     item.SubItems.Add((i + 1).ToString());
-                    item.SubItems.Add(cycle.CreatedOn.ToString("yyyy-MM-dd hh:mm:ss"));
+                    item.SubItems.Add(cycle.CreatedOn.ToString("yyyy-MM-dd HH:mm:ss"));
 
                     #region Subitem.Add(SubitemType
                     String type = String.Empty;
