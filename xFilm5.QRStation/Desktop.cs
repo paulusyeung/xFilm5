@@ -11,6 +11,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WhatsAppApi;
 
 namespace xFilm5.QRStation
 {
@@ -30,6 +31,9 @@ namespace xFilm5.QRStation
             InitializeComponent();
 
             txtQrCodeData.KeyUp += TxtQrCodeData_KeyUp;
+#if (!DEBUG)
+            this.WindowState = FormWindowState.Maximized;
+#endif
         }
 
         private void Desktop_Load(object sender, EventArgs e)
@@ -50,8 +54,6 @@ namespace xFilm5.QRStation
                     // select 哂所有 text，下一個 scanned data 可以 overwrite 之前嘅
                     txtQrCodeData.Select(0, txtQrCodeData.TextLength);
 
-                    this.Text += "%" + txtQrCodeData.Text;
-
                     String[] qrCodeData = txtQrCodeData.Text.Trim().Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
                     // 2016.11.15 paulus: QR Code 有 3 行 text,
@@ -68,6 +70,11 @@ namespace xFilm5.QRStation
                         String cupsJobId = line3[1].Split('-')[0];
                         String sql = String.Format("ClientID = {0} AND CupsJobID = N'{1}'", clientId.ToString(), cupsJobId);
                         DAL4Win.PrintQueue pq = DAL4Win.PrintQueue.LoadWhere(sql);
+
+                        // 清空原有的資料
+                        txtClientInfo.Text = String.Empty;
+                        if (lvwLifeCycle.Items.Count > 0) lvwLifeCycle.Items.Clear();
+                        if (picPreview.Image != null) picPreview.Image.Dispose();
 
                         ShowClientInfo(clientId);                       // 目前淨係顯示 Client 名，日後可以顯示其他資料
                         if (pq != null)                                 // 如果已經有 PrintQueue
@@ -117,7 +124,6 @@ namespace xFilm5.QRStation
             DAL4Win.PrintQueue_LifeCycleCollection allCycle = DAL4Win.PrintQueue_LifeCycle.LoadCollection(sql, orderBy, true);
             if (allCycle.Count > 0)
             {
-                lvwLifeCycle.Items.Clear();
                 int i = 0;
                 foreach (DAL4Win.PrintQueue_LifeCycle cycle in allCycle)
                 {
@@ -167,7 +173,7 @@ namespace xFilm5.QRStation
             {
                 case SourceType.Blueprint:
                     #region tiff = 202020.A1245-745x605-TEST.p1(CMYK).tif
-                    imgFile = Path.Combine(uri.LocalPath, filename.Substring(0, filename.IndexOf('(') - 1) + "(CMYK).tif");
+                    imgFile = Path.Combine(uri.LocalPath, filename.Substring(0, filename.IndexOf('(')) + "(CMYK).tif");
                     #endregion
                     break;
                 case SourceType.Plate:
@@ -191,10 +197,6 @@ namespace xFilm5.QRStation
                     picPreview.SizeMode = PictureBoxSizeMode.StretchImage;
                     picPreview.Image = Image.FromFile(imgFile);
                 }
-                else
-                {
-                    picPreview.ImageLocation = "";
-                }
             }
         }
 
@@ -202,7 +204,7 @@ namespace xFilm5.QRStation
         {
             bool result = false;
 
-            String sql = String.Format("PrintQueueId = {0} AND PrintQSubitemType = {1}", pQueueId.ToString(), type.ToString());
+            String sql = String.Format("PrintQueueId = {0} AND PrintQSubitemType = {1}", pQueueId.ToString(), type.ToString("D"));
             DAL4Win.PrintQueue_LifeCycle cycle = DAL4Win.PrintQueue_LifeCycle.LoadWhere(sql);
             if (cycle == null)
             {
@@ -218,6 +220,34 @@ namespace xFilm5.QRStation
             }
 
             return result;
+        }
+
+        private void SendWhatsAppMsg()
+        {
+            String from = "", pwd = "", name = "";
+
+            WhatsApp wa = new WhatsApp(from, pwd, name, true);
+            wa.OnConnectSuccess += () =>
+            {
+                Console.WriteLine("Connected...");
+                wa.OnLoginSuccess += (phno, data) =>
+                {
+                    Console.WriteLine("\r\nConnection success!");
+                    wa.SendMessage("to", "msg");
+                    Console.WriteLine("\r\nMessage sent!");
+                };
+
+                wa.OnLoginFailed += (data) =>
+                {
+                    Console.WriteLine(String.Format("\r\nLogin failed {0}", data));
+                };
+                wa.Login();
+            };
+            wa.OnConnectFailed += (ex) =>
+            {
+                Console.WriteLine(String.Format("\r\nConnection failed {0}"), ex.StackTrace);
+            };
+            wa.Connect();
         }
 
         #region RestSharp samples

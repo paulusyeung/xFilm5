@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="BlueprintMachines" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">eti</Value>
+      <Value Profile="(Default)">efi</Value>
     </Setting>
     <Setting Name="CtpMachines" Type="System.String" Scope="Application">
       <Value Profile="(Default)">TG-A, TG-B</Value>

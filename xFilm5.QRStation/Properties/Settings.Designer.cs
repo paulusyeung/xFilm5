@@ -25,7 +25,7 @@ namespace xFilm5.QRStation.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("eti")]
+        [global::System.Configuration.DefaultSettingValueAttribute("efi")]
         public string BlueprintMachines {
             get {
                 return ((string)(this["BlueprintMachines"]));
