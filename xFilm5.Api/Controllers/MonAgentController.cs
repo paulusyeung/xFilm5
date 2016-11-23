@@ -84,7 +84,7 @@ namespace xFilm5.Api.Controllers
                     }
                     catch (Exception e)
                     {
-                        log.Warn("[cups]", e);
+                        log.Warn("[cups]" + jsonData.ToString(), e);
                         return NotFound();
                     }
                 }
@@ -147,7 +147,7 @@ namespace xFilm5.Api.Controllers
                 }
                 catch (Exception e)
                 {
-                    log.Warn("[vps", e);
+                    log.Warn("[vps]" + jsonData.ToString(), e);
                     return NotFound();
                 }
                 #endregion
@@ -190,7 +190,7 @@ namespace xFilm5.Api.Controllers
                 }
                 catch (Exception e)
                 {
-                    log.Warn("[cip3]", e);
+                    log.Warn("[cip3]" + jsonData.ToString(), e);
                     return NotFound();
                 }
                 #endregion
@@ -231,7 +231,7 @@ namespace xFilm5.Api.Controllers
                 }
                 catch (Exception e)
                 {
-                    log.Warn("[tiff]", e);
+                    log.Warn("[tiff]" + jsonData.ToString(), e);
                     return NotFound();
                 }
                 #endregion
@@ -272,7 +272,7 @@ namespace xFilm5.Api.Controllers
                 }
                 catch (Exception e)
                 {
-                    log.Warn("[blueprint]", e);
+                    log.Warn("[blueprint]" + jsonData.ToString(), e);
                     return NotFound();
                 }
                 #endregion
@@ -313,7 +313,7 @@ namespace xFilm5.Api.Controllers
                 }
                 catch (Exception e)
                 {
-                    log.Warn("[plate]", e);
+                    log.Warn("[plate]" + jsonData.ToString(), e);
                     return NotFound();
                 }
                 #endregion
