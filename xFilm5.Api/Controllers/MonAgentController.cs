@@ -360,7 +360,7 @@ namespace xFilm5.Api.Controllers
 
         private void UpdateListCycle_Vps(int pQueueId, int pQueueVpsId, int type)
         {
-            String sql = String.Format("PrintQueueId = {0} AND PrintQSubitemType = {1}", pQueueId.ToString(), type);
+            String sql = String.Format("PrintQueueId = {0} AND PrintQueueVpsId = {1} AND PrintQSubitemType = {2}", pQueueId.ToString(), pQueueVpsId.ToString(), type);
             DAL.PrintQueue_LifeCycle lifeCycle = DAL.PrintQueue_LifeCycle.LoadWhere(sql);
             if (lifeCycle == null)
             {

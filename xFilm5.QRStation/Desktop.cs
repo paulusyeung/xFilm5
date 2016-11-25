@@ -258,7 +258,7 @@ namespace xFilm5.QRStation
         {
             bool result = false;
 
-            String sql = String.Format("PrintQueueId = {0} AND PrintQSubitemType = {1}", pQueueId.ToString(), type.ToString("D"));
+            String sql = String.Format("PrintQueueId = {0} AND PrintQueueVpsId = {1} AND PrintQSubitemType = {2}", pQueueId.ToString(), pQueueVpsId.ToString(), type.ToString("D"));
             DAL4Win.PrintQueue_LifeCycle cycle = DAL4Win.PrintQueue_LifeCycle.LoadWhere(sql);
             if (cycle == null)
             {
