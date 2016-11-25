@@ -112,7 +112,7 @@ namespace xFilm5.QRStation
                             int pQueueVpsId = (pQueueVps == null) ? 0 : pQueueVps.ID;
 
                             LogLifeCycle(sourceType, pq.ID, pQueueVpsId);   //   update Log File
-                            ShowPrintQLifeCycle(pq.ID);                     //   顯示同一隻 PrintQueue 嘅 log file
+                            ShowPrintQLifeCycle(pq.ID, filename.Substring(0, filename.IndexOf('(')));                     //   顯示同一隻 PrintQueue 嘅 log file
                         }
                         ShowPreview(sourceType, qrCodeData[2]);             // 顯示 thumbnail
 
@@ -164,7 +164,7 @@ namespace xFilm5.QRStation
             }
         }
 
-        private void ShowPrintQLifeCycle(int printQueueId)
+        private void ShowPrintQLifeCycle(int printQueueId, String pageName)
         {
             String sql = String.Format("PrintQueueId = {0}", printQueueId.ToString());
             String[] orderBy = { "CreatedOn" };
@@ -174,43 +174,56 @@ namespace xFilm5.QRStation
                 int i = 0;
                 foreach (DAL4Win.PrintQueue_LifeCycle cycle in allCycle)
                 {
-                    ListViewItem item = lvwLifeCycle.Items.Add(allCycle[i].LifeCycleId.ToString());
-
-                    item.SubItems.Add((i + 1).ToString());
-                    item.SubItems.Add(cycle.CreatedOn.ToString("yyyy-MM-dd HH:mm:ss"));
-
-                    #region Subitem.Add(SubitemType
-                    String type = String.Empty;
-                    switch (cycle.PrintQSubitemType)
+                    bool samepage = true;
+                    if (cycle.PrintQueueVpsId != 0)
                     {
-                        case (int)DAL4Win.Common.Enums.PrintQSubitemType.Ps:
-                            type = DAL4Win.Common.Enums.PrintQSubitemType.Ps.ToString("G");
-                            break;
-                        case (int)DAL4Win.Common.Enums.PrintQSubitemType.Vps:
-                            type = DAL4Win.Common.Enums.PrintQSubitemType.Vps.ToString("G");
-                            break;
-                        case (int)DAL4Win.Common.Enums.PrintQSubitemType.Cip3:
-                            type = DAL4Win.Common.Enums.PrintQSubitemType.Cip3.ToString("G");
-                            break;
-                        case (int)DAL4Win.Common.Enums.PrintQSubitemType.Tiff:
-                            type = DAL4Win.Common.Enums.PrintQSubitemType.Tiff.ToString("G");
-                            break;
-                        case (int)DAL4Win.Common.Enums.PrintQSubitemType.Blueprint:
-                            type = DAL4Win.Common.Enums.PrintQSubitemType.Blueprint.ToString("G");
-                            break;
-                        case (int)DAL4Win.Common.Enums.PrintQSubitemType.Plate:
-                            type = DAL4Win.Common.Enums.PrintQSubitemType.Plate.ToString("G");
-                            break;
+                        DAL4Win.PrintQueue_VPS vps = DAL4Win.PrintQueue_VPS.Load(cycle.PrintQueueVpsId);
+                        if (vps.VpsFileName.IndexOf(pageName) >= 0)
+                            samepage = true;
+                        else
+                            samepage = false;
                     }
-                    item.SubItems.Add(type);
-                    #endregion
 
-                    #region 拆色資料
-                    String color = String.Empty;
-                    DAL4Win.PrintQueue_VPS pqVps = DAL4Win.PrintQueue_VPS.Load(cycle.PrintQueueVpsId);
-                    color = (pqVps != null) ? pqVps.VpsFileName.Substring(pqVps.VpsFileName.IndexOf('(') + 1, pqVps.VpsFileName.IndexOf(')') - pqVps.VpsFileName.IndexOf('(') - 1) : "";
-                    item.SubItems.Add(color);
-                    #endregion
+                    if (samepage)
+                    {
+                        ListViewItem item = lvwLifeCycle.Items.Add(allCycle[i].LifeCycleId.ToString());
+
+                        item.SubItems.Add((i + 1).ToString());
+                        item.SubItems.Add(cycle.CreatedOn.ToString("yyyy-MM-dd HH:mm:ss"));
+
+                        #region Subitem.Add(SubitemType
+                        String type = String.Empty;
+                        switch (cycle.PrintQSubitemType)
+                        {
+                            case (int)DAL4Win.Common.Enums.PrintQSubitemType.Ps:
+                                type = DAL4Win.Common.Enums.PrintQSubitemType.Ps.ToString("G");
+                                break;
+                            case (int)DAL4Win.Common.Enums.PrintQSubitemType.Vps:
+                                type = DAL4Win.Common.Enums.PrintQSubitemType.Vps.ToString("G");
+                                break;
+                            case (int)DAL4Win.Common.Enums.PrintQSubitemType.Cip3:
+                                type = DAL4Win.Common.Enums.PrintQSubitemType.Cip3.ToString("G");
+                                break;
+                            case (int)DAL4Win.Common.Enums.PrintQSubitemType.Tiff:
+                                type = DAL4Win.Common.Enums.PrintQSubitemType.Tiff.ToString("G");
+                                break;
+                            case (int)DAL4Win.Common.Enums.PrintQSubitemType.Blueprint:
+                                type = DAL4Win.Common.Enums.PrintQSubitemType.Blueprint.ToString("G");
+                                break;
+                            case (int)DAL4Win.Common.Enums.PrintQSubitemType.Plate:
+                                type = DAL4Win.Common.Enums.PrintQSubitemType.Plate.ToString("G");
+                                break;
+                        }
+                        item.SubItems.Add(type);
+                        #endregion
+
+                        #region 拆色資料
+                        String color = String.Empty;
+                        DAL4Win.PrintQueue_VPS pqVps = DAL4Win.PrintQueue_VPS.Load(cycle.PrintQueueVpsId);
+                        color = (pqVps != null) ? pqVps.VpsFileName.Substring(pqVps.VpsFileName.IndexOf('(') + 1, pqVps.VpsFileName.IndexOf(')') - pqVps.VpsFileName.IndexOf('(') - 1) : "";
+                        item.SubItems.Add(color);
+                        #endregion
+                    }
 
                     i++;
                 }
