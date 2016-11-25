@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Desktop));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.pnlInput = new System.Windows.Forms.Panel();
-            this.txtQrCodeData = new System.Windows.Forms.TextBox();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.pnlContent = new System.Windows.Forms.Panel();
             this.lvwLifeCycle = new System.Windows.Forms.ListView();
@@ -41,6 +40,12 @@
             this.colSubitemType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.txtClientInfo = new System.Windows.Forms.TextBox();
             this.picPreview = new System.Windows.Forms.PictureBox();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.pnlCounter = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.txtQrCodeData = new System.Windows.Forms.TextBox();
+            this.lblGoodCount = new System.Windows.Forms.Label();
+            this.lblBadCount = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -52,6 +57,8 @@
             this.splitContainer2.SuspendLayout();
             this.pnlContent.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picPreview)).BeginInit();
+            this.pnlCounter.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -75,23 +82,13 @@
             // 
             // pnlInput
             // 
-            this.pnlInput.Controls.Add(this.txtQrCodeData);
+            this.pnlInput.Controls.Add(this.panel1);
+            this.pnlInput.Controls.Add(this.pnlCounter);
             this.pnlInput.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlInput.Location = new System.Drawing.Point(0, 0);
             this.pnlInput.Name = "pnlInput";
             this.pnlInput.Size = new System.Drawing.Size(784, 81);
             this.pnlInput.TabIndex = 0;
-            // 
-            // txtQrCodeData
-            // 
-            this.txtQrCodeData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtQrCodeData.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtQrCodeData.Location = new System.Drawing.Point(0, 0);
-            this.txtQrCodeData.Multiline = true;
-            this.txtQrCodeData.Name = "txtQrCodeData";
-            this.txtQrCodeData.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.txtQrCodeData.Size = new System.Drawing.Size(784, 81);
-            this.txtQrCodeData.TabIndex = 0;
             // 
             // splitContainer2
             // 
@@ -185,11 +182,72 @@
             this.picPreview.TabIndex = 0;
             this.picPreview.TabStop = false;
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Location = new System.Drawing.Point(0, 539);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(784, 22);
+            this.statusStrip1.TabIndex = 1;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // pnlCounter
+            // 
+            this.pnlCounter.Controls.Add(this.lblBadCount);
+            this.pnlCounter.Controls.Add(this.lblGoodCount);
+            this.pnlCounter.Dock = System.Windows.Forms.DockStyle.Right;
+            this.pnlCounter.Location = new System.Drawing.Point(703, 0);
+            this.pnlCounter.Name = "pnlCounter";
+            this.pnlCounter.Size = new System.Drawing.Size(81, 81);
+            this.pnlCounter.TabIndex = 1;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.txtQrCodeData);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(703, 81);
+            this.panel1.TabIndex = 2;
+            // 
+            // txtQrCodeData
+            // 
+            this.txtQrCodeData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtQrCodeData.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtQrCodeData.Location = new System.Drawing.Point(0, 0);
+            this.txtQrCodeData.Multiline = true;
+            this.txtQrCodeData.Name = "txtQrCodeData";
+            this.txtQrCodeData.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.txtQrCodeData.Size = new System.Drawing.Size(703, 81);
+            this.txtQrCodeData.TabIndex = 1;
+            // 
+            // lblGoodCount
+            // 
+            this.lblGoodCount.Font = new System.Drawing.Font("Tahoma", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblGoodCount.ForeColor = System.Drawing.Color.Green;
+            this.lblGoodCount.Location = new System.Drawing.Point(6, 4);
+            this.lblGoodCount.Name = "lblGoodCount";
+            this.lblGoodCount.Size = new System.Drawing.Size(70, 36);
+            this.lblGoodCount.TabIndex = 0;
+            this.lblGoodCount.Text = "99";
+            this.lblGoodCount.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblBadCount
+            // 
+            this.lblBadCount.Font = new System.Drawing.Font("Tahoma", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBadCount.ForeColor = System.Drawing.Color.Red;
+            this.lblBadCount.Location = new System.Drawing.Point(6, 41);
+            this.lblBadCount.Name = "lblBadCount";
+            this.lblBadCount.Size = new System.Drawing.Size(70, 36);
+            this.lblBadCount.TabIndex = 1;
+            this.lblBadCount.Text = "99";
+            this.lblBadCount.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // Desktop
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 561);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.splitContainer1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Desktop";
@@ -201,7 +259,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.pnlInput.ResumeLayout(false);
-            this.pnlInput.PerformLayout();
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
@@ -209,7 +266,11 @@
             this.pnlContent.ResumeLayout(false);
             this.pnlContent.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picPreview)).EndInit();
+            this.pnlCounter.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -218,7 +279,6 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.Panel pnlInput;
-        private System.Windows.Forms.TextBox txtQrCodeData;
         private System.Windows.Forms.Panel pnlContent;
         private System.Windows.Forms.TextBox txtClientInfo;
         private System.Windows.Forms.ListView lvwLifeCycle;
@@ -227,6 +287,12 @@
         private System.Windows.Forms.ColumnHeader colSubitemType;
         private System.Windows.Forms.ColumnHeader colId;
         private System.Windows.Forms.PictureBox picPreview;
+        private System.Windows.Forms.Panel pnlCounter;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TextBox txtQrCodeData;
+        private System.Windows.Forms.Label lblBadCount;
+        private System.Windows.Forms.Label lblGoodCount;
     }
 }
 

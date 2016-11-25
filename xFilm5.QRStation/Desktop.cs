@@ -40,6 +40,30 @@ namespace xFilm5.QRStation
         {
             //this.Text += " " + Properties.Settings.Default.BlueprintMachines;
             //Get_xFilm5Api();
+
+            InitializeCounter();
+            //SendWhatsAppMsg();
+        }
+
+        private void InitializeCounter()
+        {
+            String sql = "";
+
+            #region Good Counts
+            sql = String.Format("CONVERT(varchar(10), CreatedOn, 20) = '{0}' AND (PrintQSubitemType = {1})", 
+                DateTime.Now.ToString("yyyy-MM-dd"),
+                DAL4Win.Common.Enums.PrintQSubitemType.Plate.ToString("D"));
+            DAL4Win.PrintQueue_LifeCycleCollection allPlate = DAL4Win.PrintQueue_LifeCycle.LoadCollection(sql);
+            lblGoodCount.Text = allPlate != null ? allPlate.Count.ToString() : "0";
+            #endregion
+
+            #region Bad Counts
+            sql = String.Format("CONVERT(varchar(10), CreatedOn, 20) = '{0}' AND (PrintQSubitemType = {1})",
+                DateTime.Now.ToString("yyyy-MM-dd"),
+                DAL4Win.Common.Enums.PrintQSubitemType.Blueprint.ToString("D"));
+            DAL4Win.PrintQueue_LifeCycleCollection allBp = DAL4Win.PrintQueue_LifeCycle.LoadCollection(sql);
+            lblBadCount.Text = allBp != null ? allBp.Count.ToString() : "0";
+            #endregion
         }
 
         private void TxtQrCodeData_KeyUp(object sender, KeyEventArgs e)
@@ -65,9 +89,13 @@ namespace xFilm5.QRStation
                         #region QR Code 有料，做嘢
                         SourceType sourceType = IdentifySourceType(qrCodeData[0]);
 
-                        String[] line3 = qrCodeData[2].Split('.');
-                        int clientId = Convert.ToInt32(line3[0]);
-                        String cupsJobId = line3[1].Split('-')[0];
+                        String line3 = qrCodeData[2];
+                        String[] line3parts = line3.Split('.');
+
+                        int clientId = Convert.ToInt32(line3parts[0]);
+                        String cupsJobId = line3parts[1].Split('-')[0];
+                        String filename = line3.Replace(clientId.ToString() + ".", "");
+
                         String sql = String.Format("ClientID = {0} AND CupsJobID = N'{1}'", clientId.ToString(), cupsJobId);
                         DAL4Win.PrintQueue pq = DAL4Win.PrintQueue.LoadWhere(sql);
 
@@ -76,17 +104,36 @@ namespace xFilm5.QRStation
                         if (lvwLifeCycle.Items.Count > 0) lvwLifeCycle.Items.Clear();
                         if (picPreview.Image != null) picPreview.Image.Dispose();
 
-                        ShowClientInfo(clientId);                       // 目前淨係顯示 Client 名，日後可以顯示其他資料
-                        if (pq != null)                                 // 如果已經有 PrintQueue
+                        ShowClientInfo(clientId);                           // 目前淨係顯示 Client 名，日後可以顯示其他資料
+                        if (pq != null)                                     // 如果已經有 PrintQueue
                         {
-                            LogLifeCycle(sourceType, pq.ID);            //   update Log File
-                            ShowPrintQLifeCycle(pq.ID);                 //   顯示同一隻 PrintQueue 嘅 log file
-                        }
-                        ShowPreview(sourceType, qrCodeData[2]);         // 顯示 thumbnail
+                            sql = String.Format("PrintQueueID = '{0}' AND VpsFileName = N'{1}.vps'", pq.ID.ToString(), filename);
+                            DAL4Win.PrintQueue_VPS pQueueVps = DAL4Win.PrintQueue_VPS.LoadWhere(sql);
+                            int pQueueVpsId = (pQueueVps == null) ? 0 : pQueueVps.ID;
 
+                            LogLifeCycle(sourceType, pq.ID, pQueueVpsId);   //   update Log File
+                            ShowPrintQLifeCycle(pq.ID);                     //   顯示同一隻 PrintQueue 嘅 log file
+                        }
+                        ShowPreview(sourceType, qrCodeData[2]);             // 顯示 thumbnail
+
+                        InitializeCounter();
+                        //IncrementCounter(sourceType);
                         #endregion
                     }
                 }
+            }
+        }
+
+        private void IncrementCounter(SourceType type)
+        {
+            switch (type)
+            {
+                case SourceType.Plate:
+                    lblGoodCount.Text = (Convert.ToInt16(lblGoodCount.Text) + 1).ToString();
+                    break;
+                case SourceType.Blueprint:
+                    lblBadCount.Text = (Convert.ToInt16(lblGoodCount.Text) + 1).ToString();
+                    break;
             }
         }
 
@@ -194,13 +241,20 @@ namespace xFilm5.QRStation
                 // 順利攞到 access permission
                 if (File.Exists(imgFile))
                 {
-                    picPreview.SizeMode = PictureBoxSizeMode.StretchImage;
-                    picPreview.Image = Image.FromFile(imgFile);
+                    try
+                    {
+                        picPreview.SizeMode = PictureBoxSizeMode.StretchImage;
+                        picPreview.Image = Image.FromFile(imgFile);
+                    }
+                    catch
+                    {
+
+                    }
                 }
             }
         }
 
-        private bool LogLifeCycle(SourceType type, int pQueueId)
+        private bool LogLifeCycle(SourceType type, int pQueueId, int pQueueVpsId)
         {
             bool result = false;
 
@@ -210,6 +264,7 @@ namespace xFilm5.QRStation
             {
                 cycle = new DAL4Win.PrintQueue_LifeCycle();
                 cycle.PrintQueueId = pQueueId;
+                cycle.PrintQueueVpsId = pQueueVpsId;
                 cycle.PrintQSubitemType = (int)type;
                 cycle.Status = (int)DAL4Win.Common.Enums.Status.Active;
                 cycle.CreatedOn = DateTime.Now;
@@ -224,16 +279,16 @@ namespace xFilm5.QRStation
 
         private void SendWhatsAppMsg()
         {
-            String from = "", pwd = "", name = "";
+            String from = "85260620034", pwd = "AgoOF4qWeQ4pkdH7okR6grxJ0mE=", name = "Support@NuStar";
 
-            WhatsApp wa = new WhatsApp(from, pwd, name, true);
+            WhatsApp wa = new WhatsApp(from, pwd, name, true, false);
             wa.OnConnectSuccess += () =>
             {
                 Console.WriteLine("Connected...");
                 wa.OnLoginSuccess += (phno, data) =>
                 {
                     Console.WriteLine("\r\nConnection success!");
-                    wa.SendMessage("to", "msg");
+                    wa.SendMessage("85298384761", "from c#");
                     Console.WriteLine("\r\nMessage sent!");
                 };
 
