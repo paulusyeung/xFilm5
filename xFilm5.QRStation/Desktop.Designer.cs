@@ -45,6 +45,7 @@
             this.colSubitemType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.txtClientInfo = new System.Windows.Forms.TextBox();
             this.picPreview = new System.Windows.Forms.PictureBox();
+            this.colColor = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -176,7 +177,8 @@
             this.colId,
             this.colLn,
             this.colCreatedOn,
-            this.colSubitemType});
+            this.colSubitemType,
+            this.colColor});
             this.lvwLifeCycle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvwLifeCycle.GridLines = true;
             this.lvwLifeCycle.Location = new System.Drawing.Point(0, 82);
@@ -233,6 +235,10 @@
             this.picPreview.TabIndex = 0;
             this.picPreview.TabStop = false;
             // 
+            // colColor
+            // 
+            this.colColor.Text = "Color";
+            // 
             // Desktop
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -281,6 +287,7 @@
         private System.Windows.Forms.TextBox txtQrCodeData;
         private System.Windows.Forms.Label lblBadCount;
         private System.Windows.Forms.Label lblGoodCount;
+        private System.Windows.Forms.ColumnHeader colColor;
     }
 }
 

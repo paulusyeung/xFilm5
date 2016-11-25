@@ -205,6 +205,13 @@ namespace xFilm5.QRStation
                     item.SubItems.Add(type);
                     #endregion
 
+                    #region 拆色資料
+                    String color = String.Empty;
+                    DAL4Win.PrintQueue_VPS pqVps = DAL4Win.PrintQueue_VPS.Load(cycle.PrintQueueVpsId);
+                    color = (pqVps != null) ? pqVps.VpsFileName.Substring(pqVps.VpsFileName.IndexOf('(') + 1, pqVps.VpsFileName.IndexOf(')') - pqVps.VpsFileName.IndexOf('(') - 1) : "";
+                    item.SubItems.Add(color);
+                    #endregion
+
                     i++;
                 }
             }
