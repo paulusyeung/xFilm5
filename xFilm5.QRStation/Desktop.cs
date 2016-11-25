@@ -174,6 +174,7 @@ namespace xFilm5.QRStation
                 int i = 0;
                 foreach (DAL4Win.PrintQueue_LifeCycle cycle in allCycle)
                 {
+                    #region 祇顯示同一個 page 嘅 VPS + Plate
                     bool samepage = true;
                     if (cycle.PrintQueueVpsId != 0)
                     {
@@ -183,7 +184,7 @@ namespace xFilm5.QRStation
                         else
                             samepage = false;
                     }
-
+                    #endregion
                     if (samepage)
                     {
                         ListViewItem item = lvwLifeCycle.Items.Add(allCycle[i].LifeCycleId.ToString());
