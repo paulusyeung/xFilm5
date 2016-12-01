@@ -31,6 +31,7 @@ namespace xFilm5.QRStation
             InitializeComponent();
 
             txtQrCodeData.KeyUp += TxtQrCodeData_KeyUp;
+            txtQrCodeData.Enter += TxtQrCodeData_Enter;
 #if (!DEBUG)
             this.WindowState = FormWindowState.Maximized;
 #endif
@@ -122,6 +123,10 @@ namespace xFilm5.QRStation
                     }
                 }
             }
+        }
+        private void TxtQrCodeData_Enter(object sender, EventArgs e)
+        {
+            txtQrCodeData.Select(0, txtQrCodeData.TextLength);
         }
 
         private void IncrementCounter(SourceType type)
