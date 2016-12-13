@@ -75,7 +75,7 @@
     <Compile Include="Common.cs" />
     <Compile Include="OrderComment.cs" />
     <Compile Include="OrderHeader.cs" />
-    <Compile Include="OrderPkPrintQ.cs" />
+    <Compile Include="OrderPkPrintQueueVps.cs" />
     <Compile Include="Order_Details.cs" />
     <Compile Include="Order_Internal.cs" />
     <Compile Include="Order_Journal.cs" />

@@ -137,12 +137,15 @@ namespace xFilm5.DAL
             #region 2016.11.05 paulus: 工業 4.0
             public enum PrintQSubitemType
             {
-                Ps,
-                Vps,
-                Tiff,
-                Cip3,
-                Blueprint,
-                Plate
+                Ps,             // 收到 ps
+                Vps,            // 有 vps
+                Tiff,           // 有 tiff
+                Cip3,           // 有 cip3
+                Blueprint,      // 有 藍紙
+                Plate,          // 有 鋅
+                Order,          // 落咗荷打
+                Receipt,        // 收咗貸
+                Invoice         // 開咗單
             }
 
             public enum DeviceType

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="4e50de6e2d9b442093c79defe073e020" Name="Diagram1">
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.Acct_INDetails" Width="1.5" PointX="8.25" PointY="26.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.Acct_INMaster" Width="1.5" PointX="3" PointY="25.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.Client" Width="1.5" PointX="0.75" PointY="27.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.Client_AddressBook" Width="1.5" PointX="3" PointY="31.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.Client_User" Width="1.5" PointX="3" PointY="36.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.ClientPricing" Width="1.5" PointX="6" PointY="24.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.Order_Details" Width="1.5" PointX="15.5" PointY="28.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.Order_Internal" Width="1.5" PointX="7.5" PointY="32.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.Order_Journal" Width="1.5" PointX="12.5" PointY="32.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.OrderComment" Width="1.5" PointX="7.5" PointY="39.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.OrderHeader" Width="1.5" PointX="5.25" PointY="30.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.OrderPkPrintQ" Width="1.5" PointX="10.5" PointY="37.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.PosTx" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.PrintQueue" Width="1.5" PointX="10.5" PointY="25.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.PrintQueue_LifeCycle" Width="1.5" PointX="15" PointY="24.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.PrintQueue_VPS" Width="1.5" PointX="12.75" PointY="25.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.ReceiptDetail" Width="1.5" PointX="12.75" PointY="36" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.ReceiptHeader" Width="1.5" PointX="10.25" PointY="30.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.Staff" Width="1.5" PointX="7.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.T_BillingCode_Dept" Width="1.5" PointX="1.5" PointY="22" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.T_BillingCode_Item" Width="1.5" PointX="3.75" PointY="21.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.T_DeliveryMethod" Width="1.5" PointX="13.25" PointY="21.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.T_FriendlyService" Width="1.5" PointX="5.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.T_JobTitle" Width="1.5" PointX="8" PointY="43.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.T_LSR" Width="1.5" PointX="7.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.T_Media" Width="1.5" PointX="13.25" PointY="39.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.T_PaperSize" Width="1.5" PointX="13.25" PointY="30.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.T_PaymentType" Width="1.5" PointX="0.75" PointY="19.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.T_Platform" Width="1.5" PointX="13.25" PointY="42.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.T_Priority" Width="1.5" PointX="3" PointY="41.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.T_ProofingMaterial" Width="1.5" PointX="9.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.T_Service" Width="1.5" PointX="3" PointY="44" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.T_Software" Width="1.5" PointX="5.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.T_SoftwareVersion" Width="1.5" PointX="8" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.T_Status" Width="1.5" PointX="3" PointY="46.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.T_Workflow" Width="1.5" PointX="10.25" PointY="42.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.User" Width="1.5" PointX="0.75" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.UserAuth" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.UserNotification" Width="1.5" PointX="3" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.UserPreference" Width="1.5" PointX="3" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.X_Counter" Width="1.5" PointX="9.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.Z_WebColor" Width="1.5" PointX="7.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilm5.Bot.Models.Log4Net" Width="1.5" PointX="9.75" PointY="9.75" IsExpanded="true" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_Acct_INMaster_Acct_INDetails" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_OrderPkPrintQ_INDetails" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_Acct_INMaster_ReceiptHeader" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_Client_Acct_INMaster" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_OrderHeader_Acct_INMaster" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_T_PaymentType_Acct_INMaster" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_Client_Client_AddressBook" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_Client_Client_User" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_Client_ClientPricing" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_Client_OrderHeader" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_Client_PrintQueue" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_Client_ReceiptHeader" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_Client_User_OrderHeader" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_Client_User_ReceiptHeader" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_BillingItem_ClientPricing" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_OrderHeader_Order_Details" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_T_DeliveryMethod_Order_Details" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_T_Media_Order_Details" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_T_PaperSize_Order_Details" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_T_Platform_Order_Details" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_OrderHeader_Order_Internal" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_OrderHeader_Order_Journal" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_T_Workflow_Order_Journal" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_OrderHeader_OrderComment" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_OrderHeader_OrderPkPrintQ" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_OrderHeader_PrintQueue" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_T_Priority_OrderHeader" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_T_Service_OrderHeader" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_T_Status_OrderHeader" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_OrderPkPrintQ_ReceiptDetail" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_PrintQueue_OrderPkPrintQ" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_PrintQueue_PrintQueue_VPS" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_PrintQueue_PrintQueueLifeCycle" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK__PrintQueu__Print__1CDC41A7" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_ReceiptHeader_ReceiptDetail" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_T_PaymentType_ReceiptHeader" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_T_BillingCode_Dept_T_BillingCode_Item" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_T_JobTitle_T_Workflow" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_T_Software_T_SoftwareVersion" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_User_UserAuth" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_User_UserNotification" ManuallyRouted="false" />
+        <AssociationConnector Association="xFilm5.Bot.Models.FK_User_UserPreference" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

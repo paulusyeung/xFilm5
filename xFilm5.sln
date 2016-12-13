@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xFilm5.QRStation", "xFilm5.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xFilm5.DAL4Win", "xFilm5.DAL4Win\xFilm5.DAL4Win.csproj", "{FB4C40AC-E30D-48DD-B0B7-6B06BF379FBC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xFilm5.Bot", "xFilm5.Bot\xFilm5.Bot.csproj", "{120CCBE2-50C4-46EF-9631-5765A8A46F14}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{FB4C40AC-E30D-48DD-B0B7-6B06BF379FBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB4C40AC-E30D-48DD-B0B7-6B06BF379FBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB4C40AC-E30D-48DD-B0B7-6B06BF379FBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{120CCBE2-50C4-46EF-9631-5765A8A46F14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{120CCBE2-50C4-46EF-9631-5765A8A46F14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{120CCBE2-50C4-46EF-9631-5765A8A46F14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{120CCBE2-50C4-46EF-9631-5765A8A46F14}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
