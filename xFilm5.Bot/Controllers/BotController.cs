@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Principal;
 using System.Web.Http;
 
 namespace xFilm5.Bot.Controllers
@@ -121,6 +122,10 @@ namespace xFilm5.Bot.Controllers
                         System.Net.NetworkCredential readCredentials = new System.Net.NetworkCredential(userName, userPassword);
                         #endregion
 
+                        //using (new WindowsIdentity(userName, userPassword))
+                        //{
+
+                        //}
                         using (new NetworkConnection(String.Format(@"\\{0}", uri.Host), readCredentials))
                         {
                             // 參考：https://bitbucket.org/nxstudio/xfilm5/wiki/xFilm5%20Plate5%20Order%20Form
