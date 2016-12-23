@@ -1178,4 +1178,19 @@
     <chs>VPS 输出</chs>
     <cht>VPS 輸出</cht>
   </keyword>
+  <keyword key="vip_price">
+    <en>VIP Price</en>
+    <chs>VIP 价格</chs>
+    <cht>VIP 價格</cht>
+  </keyword>
+  <keyword key="vip_discount">
+    <en>VIP Discount</en>
+    <chs>VIP 折扣</chs>
+    <cht>VIP 折扣</cht>
+  </keyword>
+  <keyword key="alias">
+    <en>Alias</en>
+    <chs>昵称</chs>
+    <cht>暱稱</cht>
+  </keyword>
 </root>

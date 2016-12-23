@@ -211,6 +211,9 @@
     <Content Include="Resources\Icons\16x16\folder_retouch.png" />
     <Content Include="Resources\Icons\16x16\folder_v.png" />
     <Content Include="Resources\Icons\16x16\group.png" />
+    <Content Include="Resources\Icons\16x16\icons5_Color_VIP_16px.png" />
+    <Content Include="Resources\Icons\16x16\icons5_office_CurrencyExchange_16px.png" />
+    <Content Include="Resources\Icons\16x16\icons5_office_PriceTag_16px.png" />
     <Content Include="Resources\Icons\16x16\ico_16_1.gif" />
     <Content Include="Resources\Icons\16x16\ico_16_1010.gif" />
     <Content Include="Resources\Icons\16x16\ico_16_1039_default.gif" />
@@ -877,6 +880,24 @@
     <Compile Include="Sales\Prospect\ProspectRecord.Designer.cs">
       <DependentUpon>ProspectRecord.cs</DependentUpon>
     </Compile>
+    <Compile Include="Sales\VipPrice\Client2ProductList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Sales\VipPrice\Client2ProductList.Designer.cs">
+      <DependentUpon>Client2ProductList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\VipPrice\Product2ClientRecord.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Sales\VipPrice\Product2ClientRecord.Designer.cs">
+      <DependentUpon>Product2ClientRecord.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sales\VipPrice\Product2ClientList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Sales\VipPrice\Product2ClientList.Designer.cs">
+      <DependentUpon>Product2ClientList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Settings\SysParameter.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1113,6 +1134,17 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Sales\Prospect\ProspectRecord.resx">
       <DependentUpon>ProspectRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sales\VipPrice\Client2ProductList.resx">
+      <DependentUpon>Client2ProductList.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sales\VipPrice\Product2ClientRecord.resx">
+      <DependentUpon>Product2ClientRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sales\VipPrice\Product2ClientList.resx">
+      <DependentUpon>Product2ClientList.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Settings\SysParameter.resx">
       <DependentUpon>SysParameter.cs</DependentUpon>

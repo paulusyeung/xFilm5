@@ -89,6 +89,7 @@ namespace xFilm5.Controls
                 }
             }
         }
+
         public class Owner
         {
             public static int GetOwnerId()
@@ -535,6 +536,26 @@ SELECT @listStr";
 
                     SqlHelper.Default.ExecuteNonQuery(cmd);
                     result = true;
+                }
+
+                return result;
+            }
+        }
+
+        public class Product
+        {
+            public static bool IsX5Item(int id)
+            {
+                bool result = false;
+
+                DAL.T_BillingCode_Item item = DAL.T_BillingCode_Item.Load(id);
+                if (item != null)
+                {
+                    DAL.T_BillingCode_Dept dept = DAL.T_BillingCode_Dept.Load(item.DeptID);
+                    if (dept != null)
+                    {
+                        if (dept.Code == "X5") result = true;
+                    }
                 }
 
                 return result;
