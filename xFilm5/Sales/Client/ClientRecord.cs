@@ -132,6 +132,11 @@ namespace xFilm5.Sales.Client
             cmdUnsuspend.Tag = "Unsuspend";
             cmdUnsuspend.Image = new IconResourceHandle("16x16.vcr_play_dark_16.png");
 
+            // cmdVipPrice
+            ToolBarButton cmdVipPrice = new ToolBarButton("VipPrice", oDict.GetWord("vip_price"));
+            cmdVipPrice.Tag = "VipPrice";
+            cmdVipPrice.Image = new IconResourceHandle("16x16.icons5_Color_VIP_16px.png");
+
             if (_EditMode != Common.Enums.EditMode.Read)
             {
                 this.ansToolbar.Buttons.Add(cmdSave);
@@ -152,6 +157,7 @@ namespace xFilm5.Sales.Client
                             this.ansToolbar.Buttons.Add(cmdSuspend);
                         }
                     }
+                    this.ansToolbar.Buttons.Add(cmdVipPrice);
                 }
             }
 
@@ -441,6 +447,11 @@ namespace xFilm5.Sales.Client
                         break;
                     case "unsuspend":
                         MessageBox.Show(String.Format("{0}?", oDict.GetWord("unsuspend")), "Unsuspend Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, new EventHandler(cmdUnsuspend_Click));
+                        break;
+                    case "vipprice":
+                        Sales.VipPrice.Client2ProductList c2p = new VipPrice.Client2ProductList();
+                        c2p.ClientId = _ClientId;
+                        c2p.ShowDialog();
                         break;
                 }
             }

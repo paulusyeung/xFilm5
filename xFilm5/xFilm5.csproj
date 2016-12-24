@@ -886,6 +886,12 @@
     <Compile Include="Sales\VipPrice\Client2ProductList.Designer.cs">
       <DependentUpon>Client2ProductList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Sales\VipPrice\Client2ProductRecord.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Sales\VipPrice\Client2ProductRecord.Designer.cs">
+      <DependentUpon>Client2ProductRecord.cs</DependentUpon>
+    </Compile>
     <Compile Include="Sales\VipPrice\Product2ClientRecord.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1138,6 +1144,9 @@
     <EmbeddedResource Include="Sales\VipPrice\Client2ProductList.resx">
       <DependentUpon>Client2ProductList.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sales\VipPrice\Client2ProductRecord.resx">
+      <DependentUpon>Client2ProductRecord.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Sales\VipPrice\Product2ClientRecord.resx">
       <DependentUpon>Product2ClientRecord.cs</DependentUpon>

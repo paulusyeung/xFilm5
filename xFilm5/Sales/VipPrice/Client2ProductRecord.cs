@@ -17,14 +17,14 @@ using xFilm5.DAL;
 
 namespace xFilm5.Sales.VipPrice
 {
-    public partial class Product2ClientRecord : Form
+    public partial class Client2ProductRecord : Form
     {
         private Common.Enums.EditMode _EditMode = Common.Enums.EditMode.Read;
         private int _PricingId = 0;
-        private int _ProductId = 0;
+        private int _ClientId = 0;
         private string _ItemCode = String.Empty;
 
-        public Product2ClientRecord()
+        public Client2ProductRecord()
         {
             InitializeComponent();
         }
@@ -32,24 +32,18 @@ namespace xFilm5.Sales.VipPrice
         #region public properties
         public Common.Enums.EditMode EditMode
         {
-            get
-            {
-                return _EditMode;
-            }
-            set
-            {
-                _EditMode = value;
-            }
+            get { return _EditMode; }
+            set { _EditMode = value; }
         }
         public int PricingId
         {
             get { return _PricingId; }
             set { _PricingId = value; }
         }
-        public int ProductId
+        public int ClientId
         {
-            get { return _ProductId; }
-            set { _ProductId = value; }
+            get { return _ClientId; }
+            set { _ClientId = value; }
         }
         #endregion
 
@@ -68,10 +62,12 @@ namespace xFilm5.Sales.VipPrice
             }
             else
             {
-                DAL.Client.LoadCombo(ref cboClient, "Name", false, false, "", "Status >= 1");
-                ShowProductInfo();
+                DAL.T_BillingCode_Item.LoadCombo(ref cboCProduct, "ItemCode", false, true, "", "Retired = 0 AND GroupCode = 'X5'");
+                ShowClientInfo();
             }
             SetFormLayout();
+
+            cboCProduct.SelectedIndexChanged += CboCProduct_SelectedIndexChanged;
         }
 
         #region Configure Controls on Form Load
@@ -79,11 +75,11 @@ namespace xFilm5.Sales.VipPrice
         {
             nxStudio.BaseClass.WordDict oDict = new nxStudio.BaseClass.WordDict(Common.Config.CurrentWordDict, Common.Config.CurrentLanguageId);
 
+            lblClient.Text = oDict.GetWordWithColon("client_name");
             lblItemCode .Text = oDict.GetWordWithColon("item_code");
             lblItemName.Text = oDict.GetWordWithColon("item_description");
             lblUnitPrice.Text = oDict.GetWordWithColon("unit_price");
             lblUoM.Text = oDict.GetWordWithColon("unit");
-            lblClient.Text = oDict.GetWordWithColon("client_name");
             lblAlias.Text = oDict.GetWordWithColon("alias");
             lblVipPrice.Text = oDict.GetWordWithColon("vip_price");
             lblVipDiscount.Text = oDict.GetWordWithColon("vip_discount");
@@ -136,11 +132,19 @@ namespace xFilm5.Sales.VipPrice
         private void SetDropdowns()
         {
             //T_BillingCode_Dept.LoadCombo(ref cboDeptCode, "Code", false);
+            //cboCProduct.SelectedIndexChanged += CboCProduct_SelectedIndexChanged;
+        }
+
+        private void CboCProduct_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int productId = Convert.ToInt32(cboCProduct.SelectedValue.ToString());
+            ShowProductInfo(productId);
         }
 
         private void SetFormLayout()
         {
-            txtItemCode.ReadOnly = true;
+            txtClientName.Visible = true;
+            txtClientName.ReadOnly = true;
             txtItemName.ReadOnly = true;
             txtUnitPrice.ReadOnly = true;
             txtUoM.ReadOnly = true;
@@ -148,17 +152,19 @@ namespace xFilm5.Sales.VipPrice
             switch (_EditMode)
             {
                 case Common.Enums.EditMode.Add:
-                    cboClient.Visible = true;
-                    txtClientName.Visible = false;
-                    cboClient.Focus();
+                    cboCProduct.Visible = true;
+                    txtItemCode.Visible = true;
+                    cboCProduct.Focus();
                     break;
                 case Common.Enums.EditMode.Edit:
-                    cboClient.Visible = false;
-                    txtClientName.Visible = true;
-                    txtClientName.ReadOnly = true;
+                    cboCProduct.Visible = false;
+                    txtItemCode.Visible = true;
+                    txtItemCode.ReadOnly = true;
                     txtAlias.Focus();
                     break;
                 case Common.Enums.EditMode.Read:
+                    cboCProduct.Visible = false;
+                    txtItemCode.Visible = true;
                     txtAlias.ReadOnly = true;
                     txtVipPrice.ReadOnly = true;
                     txtVipDiscount.ReadOnly = true;
@@ -168,9 +174,18 @@ namespace xFilm5.Sales.VipPrice
         #endregion
 
         #region ShowItem(), SaveItem(), VerifyItem(), DeleteItem()
-        private void ShowProductInfo()
+        private void ShowClientInfo()
         {
-            DAL.T_BillingCode_Item item = DAL.T_BillingCode_Item.Load(_ProductId);
+            DAL.Client client = DAL.Client.Load(_ClientId);
+            if (client != null)
+            {
+                txtClientName.Text = client.Name;
+            }
+        }
+
+        private void ShowProductInfo(int productId)
+        {
+            DAL.T_BillingCode_Item item = DAL.T_BillingCode_Item.Load(productId);
             if (item != null)
             {
                 txtItemCode.Text = item.ItemCode;
@@ -194,9 +209,9 @@ namespace xFilm5.Sales.VipPrice
             if (item != null)
             {
                 DAL.Client client = DAL.Client.Load(item.ClientId);
-                _ProductId = item.ItemId;
+                _ClientId = item.ItemId;
 
-                ShowProductInfo();
+                ShowProductInfo(item.ItemId);
                 txtClientName.Text = client.Name;
                 txtAlias.Text = item.Alias;
                 txtVipPrice.Text = item.UnitPrice.ToString("##0.00");
@@ -219,8 +234,8 @@ namespace xFilm5.Sales.VipPrice
                 {
                     case (int)Common.Enums.EditMode.Add:
                         item = new DAL.ClientPricing();
-                        item.ItemId = _ProductId;
-                        item.ClientId = Convert.ToInt32(cboClient.SelectedValue.ToString());
+                        item.ClientId = _ClientId;
+                        item.ItemId = Convert.ToInt32(cboCProduct.SelectedValue.ToString());
                         item.Tag = txtItemCode.Text.Trim();
                         item.Status = (int)DAL.Common.Enums.Status.Active;
                         item.CreatedOn = DateTime.Now;
@@ -253,8 +268,8 @@ namespace xFilm5.Sales.VipPrice
             string msg = String.Empty;
 
             #region Check duplicate
-            int clientId = Convert.ToInt32(cboClient.SelectedValue.ToString());
-            String sql = String.Format("ClientId = {0} AND ItemId = {1}", clientId.ToString(), _ProductId.ToString());
+            int clientId = Convert.ToInt32(cboCProduct.SelectedValue.ToString());
+            String sql = String.Format("ClientId = {0} AND ItemId = {1}", clientId.ToString(), _ClientId.ToString());
             DAL.ClientPricing cp = DAL.ClientPricing.LoadWhere(sql);
             if (cp != null)
             {
@@ -321,7 +336,7 @@ namespace xFilm5.Sales.VipPrice
                             if (_EditMode == Common.Enums.EditMode.Add)
                             {
                                 _EditMode = Common.Enums.EditMode.Edit;
-                                txtClientName.Text = cboClient.SelectedItem.ToString();
+                                txtClientName.Text = cboCProduct.SelectedItem.ToString();
                                 SetFormLayout();
                             }
                         }
