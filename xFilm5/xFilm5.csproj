@@ -211,8 +211,11 @@
     <Content Include="Resources\Icons\16x16\folder_retouch.png" />
     <Content Include="Resources\Icons\16x16\folder_v.png" />
     <Content Include="Resources\Icons\16x16\group.png" />
+    <Content Include="Resources\Icons\16x16\icon5_office_US_Dollar_16px.png" />
     <Content Include="Resources\Icons\16x16\icons5_Color_VIP_16px.png" />
+    <Content Include="Resources\Icons\16x16\icons5_office_Calendar_31_16px_1.png" />
     <Content Include="Resources\Icons\16x16\icons5_office_CurrencyExchange_16px.png" />
+    <Content Include="Resources\Icons\16x16\icons5_office_EditFile_16px.png" />
     <Content Include="Resources\Icons\16x16\icons5_office_PriceTag_16px.png" />
     <Content Include="Resources\Icons\16x16\ico_16_1.gif" />
     <Content Include="Resources\Icons\16x16\ico_16_1010.gif" />
@@ -722,6 +725,12 @@
     <Compile Include="Help\About.designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
+    <Compile Include="JobOrder\Billing5.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="JobOrder\Billing5.Designer.cs">
+      <DependentUpon>Billing5.cs</DependentUpon>
+    </Compile>
     <Compile Include="JobOrder\Billing.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -794,6 +803,13 @@
     <Compile Include="JobOrder\LogFile.Designer.cs">
       <DependentUpon>LogFile.cs</DependentUpon>
     </Compile>
+    <Compile Include="JobOrder\Reports5\Invoice_A4.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="JobOrder\Reports5\Invoice_A4.Designer.cs">
+      <DependentUpon>Invoice_A4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="JobOrder\Reports5\Loader.cs" />
     <Compile Include="NavPane\AccountingNav.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1062,6 +1078,9 @@
     <EmbeddedResource Include="Help\About.resx">
       <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="JobOrder\Billing5.resx">
+      <DependentUpon>Billing5.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="JobOrder\Billing.resx">
       <DependentUpon>Billing.cs</DependentUpon>
     </EmbeddedResource>
@@ -1097,6 +1116,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="JobOrder\LogFile.resx">
       <DependentUpon>LogFile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JobOrder\Reports5\Invoice_A4.resx">
+      <DependentUpon>Invoice_A4.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="NavPane\AccountingNav.resx">
       <DependentUpon>AccountingNav.cs</DependentUpon>

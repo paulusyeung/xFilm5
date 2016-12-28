@@ -1193,4 +1193,24 @@
     <chs>昵称</chs>
     <cht>暱稱</cht>
   </keyword>
+  <keyword key="paid_monthly">
+    <en>Monthly</en>
+    <chs>月结</chs>
+    <cht>月結</cht>
+  </keyword>
+  <keyword key="paid_cash">
+    <en>Cash</en>
+    <chs>现金</chs>
+    <cht>現金</cht>
+  </keyword>
+  <keyword key="date">
+    <en>Date</en>
+    <chs>日期</chs>
+    <cht>日期</cht>
+  </keyword>
+  <keyword key="number">
+    <en>Number</en>
+    <chs>单号</chs>
+    <cht>單號</cht>
+  </keyword>
 </root>

@@ -16,6 +16,7 @@ namespace xFilm5.Controls
     {
         public class Config
         {
+            // 冇用
             public static string Plate5_Shuffle_Blueprint_SourceFolder
             {
                 get
@@ -449,6 +450,84 @@ namespace xFilm5.Controls
 
                 return result;
             }
+
+            public static bool IsPlate5(int orderId)
+            {
+                bool result = false;
+
+                OrderHeader oOrder = OrderHeader.Load(orderId);
+                if (oOrder != null)
+                {
+                    if (oOrder.ServiceType == (int)Common.Enums.OrderType.Plate5)
+                    {
+                        result = true;
+                    }
+                }
+
+                    return result;
+            }
+
+            public static bool SetAsCompleted(List<int> orderIdList)
+            {
+                bool result = false;
+
+                foreach(int id in orderIdList)
+                {
+                    result = SetAsCompleted(id);
+                }
+
+                return result;
+            }
+
+            public static bool SetAsCompleted(int orderId)
+            {
+                bool result = false;
+
+                OrderHeader oOrder = OrderHeader.Load(orderId);
+                if (oOrder != null)
+                {
+                    oOrder.Status = (int)DAL.Common.Enums.Workflow.Completed;
+                    oOrder.Save();
+
+                    result = true;
+                }
+
+                return result;
+            }
+
+            public static bool WriteJournal(List<int> orderIdList, DAL.Common.Enums.Workflow status)
+            {
+                bool result = false;
+
+                foreach (int id in orderIdList)
+                {
+                    result = WriteJournal(id, status);
+                }
+
+                return result;
+            }
+
+            public static bool WriteJournal(int orderId, DAL.Common.Enums.Workflow status)
+            {
+                bool result = false;
+
+                try
+                {
+                    DAL.Order_Journal log = new Order_Journal();
+                    log.OrderID = orderId;
+                    log.Status = (int)status;
+                    log.UserID = DAL.Common.Config.CurrentUserId;
+                    log.DateUpdated = DateTime.Now;
+                    log.Save();
+                    result = true;
+                }
+                catch
+                {
+                    result = false;
+                }
+
+                return result;
+            }
         }
 
         public class PrintQueue_VPS
@@ -542,6 +621,52 @@ SELECT @listStr";
             }
         }
 
+        public class PrintQueue_LifeCycle
+        {
+            public static bool WriteLogWithPqId(int pqId, DAL.Common.Enums.PrintQSubitemType type)
+            {
+                bool result = false;
+
+                DAL.PrintQueue pq = DAL.PrintQueue.Load(pqId);
+                if (pq != null)
+                {
+                    DAL.PrintQueue_LifeCycle log = new DAL.PrintQueue_LifeCycle();
+                    log.PrintQueueId = pq.ID;
+                    log.PrintQSubitemType = (int)type;
+                    log.Status = (int)DAL.Common.Enums.Status.Active;
+                    log.CreatedOn = DateTime.Now;
+                    log.CreatedBy = DAL.Common.Config.CurrentUserId;
+                    log.Save();
+
+                    result = true;
+                }
+
+                return result;
+            }
+
+            public static bool WriteLogWithVpsId(int vpsId, DAL.Common.Enums.PrintQSubitemType type)
+            {
+                bool result = false;
+
+                DAL.PrintQueue_VPS vps = DAL.PrintQueue_VPS.Load(vpsId);
+                if (vps != null)
+                {
+                    DAL.PrintQueue_LifeCycle log = new DAL.PrintQueue_LifeCycle();
+                    log.PrintQueueId = vps.PrintQueueID;
+                    log.PrintQueueVpsId = vps.ID;
+                    log.PrintQSubitemType = (int)type;
+                    log.Status = (int)DAL.Common.Enums.Status.Active;
+                    log.CreatedOn = DateTime.Now;
+                    log.CreatedBy = DAL.Common.Config.CurrentUserId;
+                    log.Save();
+
+                    result = true;
+                }
+
+                return result;
+            }
+        }
+
         public class Product
         {
             public static bool IsX5Item(int id)
@@ -556,6 +681,25 @@ SELECT @listStr";
                     {
                         if (dept.Code == "X5") result = true;
                     }
+                }
+
+                return result;
+            }
+        }
+
+        public class System
+        {
+            public static int GetNextInvoiceNumber()
+            {
+                int result = 0;
+
+                DAL.X_CounterCollection items = DAL.X_Counter.LoadCollection();
+                if (items.Count > 0)
+                {
+                    DAL.X_Counter sys = items[0];
+                    result = sys.InvoiceNo;
+                    sys.InvoiceNo++;
+                    sys.Save();
                 }
 
                 return result;
