@@ -1213,4 +1213,29 @@
     <chs>单号</chs>
     <cht>單號</cht>
   </keyword>
+  <keyword key="delivery_note">
+    <en>Delivery Note</en>
+    <chs>送货单</chs>
+    <cht>送貨單</cht>
+  </keyword>
+  <keyword key="transaction#">
+    <en>Transaction #</en>
+    <chs>票据号码</chs>
+    <cht>票據號碼</cht>
+  </keyword>
+  <keyword key="date_time">
+    <en>Date Time</en>
+    <chs>票据日期</chs>
+    <cht>票據日期</cht>
+  </keyword>
+  <keyword key="bill_to">
+    <en>Bill To</en>
+    <chs>收单地址</chs>
+    <cht>收單地址</cht>
+  </keyword>
+  <keyword key="ship_to">
+    <en>Ship To</en>
+    <chs>收货地址</chs>
+    <cht>收貨地址</cht>
+  </keyword>
 </root>

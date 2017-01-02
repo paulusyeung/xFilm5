@@ -133,6 +133,19 @@ namespace xFilm5.Controls
 
                 return result;
             }
+
+            public static String GetWorkshopAddress(int workshopId)
+            {
+                String result = String.Empty;
+
+                DAL.Client_User user = DAL.Client_User.Load(workshopId);
+                if (user != null)
+                {
+                    result = ConfigurationManager.AppSettings[user.FullName] != null ? ConfigurationManager.AppSettings[user.FullName].ToString() : user.FullName;
+                }
+
+                return result;
+            }
         }
 
         public class User
@@ -479,6 +492,19 @@ namespace xFilm5.Controls
                 return result;
             }
 
+            // depricated
+            public static bool SetAsCompleted_x5(List<int> orderIdList)
+            {
+                bool result = false;
+
+                foreach (int id in orderIdList)
+                {
+                    result = IsAllPkItemsCompleted(id) ? SetAsCompleted(id) : false;
+                }
+
+                return result;
+            }
+
             public static bool SetAsCompleted(int orderId)
             {
                 bool result = false;
@@ -486,11 +512,23 @@ namespace xFilm5.Controls
                 OrderHeader oOrder = OrderHeader.Load(orderId);
                 if (oOrder != null)
                 {
+                    oOrder.DateCompleted = DateTime.Now;
                     oOrder.Status = (int)DAL.Common.Enums.Workflow.Completed;
                     oOrder.Save();
 
                     result = true;
                 }
+
+                return result;
+            }
+
+            public static bool IsAllPkItemsCompleted(int orderId)
+            {
+                bool result = false;
+
+                String sql = String.Format("OrderHeaderId = {0} AND IsReceived = 1", orderId.ToString());
+                DAL.OrderPkPrintQueueVpsCollection pks = DAL.OrderPkPrintQueueVps.LoadCollection(sql);
+                result = (pks.Count == 1) ? true : false;
 
                 return result;
             }
@@ -700,6 +738,36 @@ SELECT @listStr";
                     result = sys.InvoiceNo;
                     sys.InvoiceNo++;
                     sys.Save();
+                }
+
+                return result;
+            }
+
+            public static bool x5OnAir()
+            {
+                bool result = false;
+
+                result = ConfigurationManager.AppSettings["x5OnAir"] != null ? Boolean.TryParse(ConfigurationManager.AppSettings["x5OnAir"].ToLower().ToString(), out result) : false;
+
+                return result;
+            }
+        }
+
+        public class Invoice
+        {
+            public static bool SetInvoiceToVoid(int invoiceId)
+            {
+                bool result = false;
+
+                DAL.Acct_INMaster inv = DAL.Acct_INMaster.Load(invoiceId);
+                if (inv != null)
+                {
+                    inv.Status = (int)DAL.Common.Enums.Status.Inactive;
+                    inv.LastModifiedOn = DateTime.Now;
+                    inv.LastModifiedBy = DAL.Common.Config.CurrentUserId;
+                    inv.Save();
+
+                    result = true;
                 }
 
                 return result;

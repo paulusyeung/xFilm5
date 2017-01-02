@@ -83,16 +83,22 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Program Files\Common Files\nxStudio\nxStudio.dll</HintPath>
     </Reference>
+    <Reference Include="PrinterUtility, Version=1.0.1.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PrinterUtility.1.1.1\lib\PrinterUtility.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RestSharp.105.2.3\lib\net452\RestSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
     <Reference Include="System.Core" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -405,6 +411,7 @@
     <Content Include="Resources\Icons\Workflow\X.32.png" />
     <Content Include="Resources\Icons\Workflow\X.48.png" />
     <Content Include="Resources\Icons\Workflow\X_16.png" />
+    <Content Include="Resources\Images\CompanyLogo.png" />
     <Content Include="Resources\Images\loading.gif" />
     <Content Include="Resources\Images\logo_watermark.png" />
     <Content Include="Resources\Menu\NavMenu.xml" />
@@ -803,6 +810,25 @@
     <Compile Include="JobOrder\LogFile.Designer.cs">
       <DependentUpon>LogFile.cs</DependentUpon>
     </Compile>
+    <Compile Include="JobOrder\Reports5\DataSource.cs" />
+    <Compile Include="JobOrder\Reports5\INV_80mm.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="JobOrder\Reports5\INV_80mm.Designer.cs">
+      <DependentUpon>INV_80mm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="JobOrder\Reports5\INV_A4.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="JobOrder\Reports5\INV_A4.Designer.cs">
+      <DependentUpon>INV_A4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="JobOrder\Reports5\DN_80mm.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="JobOrder\Reports5\DN_80mm.Designer.cs">
+      <DependentUpon>DN_80mm.cs</DependentUpon>
+    </Compile>
     <Compile Include="JobOrder\Reports5\Invoice_A4.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -1116,6 +1142,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="JobOrder\LogFile.resx">
       <DependentUpon>LogFile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JobOrder\Reports5\INV_80mm.resx">
+      <DependentUpon>INV_80mm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JobOrder\Reports5\INV_A4.resx">
+      <DependentUpon>INV_A4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JobOrder\Reports5\DN_80mm.resx">
+      <DependentUpon>DN_80mm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="JobOrder\Reports5\Invoice_A4.resx">
       <DependentUpon>Invoice_A4.cs</DependentUpon>
