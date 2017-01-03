@@ -747,7 +747,12 @@ SELECT @listStr";
             {
                 bool result = false;
 
-                result = ConfigurationManager.AppSettings["x5OnAir"] != null ? Boolean.TryParse(ConfigurationManager.AppSettings["x5OnAir"].ToLower().ToString(), out result) : false;
+                if (ConfigurationManager.AppSettings["x5OnAir"] != null)
+                {
+                    String onAir = ConfigurationManager.AppSettings["x5OnAir"].ToString().ToLower();
+                    result = Convert.ToBoolean(onAir);
+                }
+                //result = ConfigurationManager.AppSettings["x5OnAir"] != null ? Boolean.TryParse(ConfigurationManager.AppSettings["x5OnAir"].ToString().ToLower(), out result) : false;
 
                 return result;
             }

@@ -1238,4 +1238,9 @@
     <chs>收货地址</chs>
     <cht>收貨地址</cht>
   </keyword>
+  <keyword key="invoice_#">
+    <en>Invoice #</en>
+    <chs>发票号码</chs>
+    <cht>發票號碼</cht>
+  </keyword>
 </root>

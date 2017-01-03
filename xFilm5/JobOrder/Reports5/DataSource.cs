@@ -49,20 +49,20 @@ ORDER BY [INDetailsId];
         {
             string sql = @"
 SELECT  TOP (100) PERCENT
-		[InvoiceId]
+		[InvoiceHeaderId]
         ,[InvoiceNumber]
         ,[InvoiceDate]
         ,[InvoiceAmount]
-        ,[OrderID]
+        ,[OrderHeaderId]
         ,ISNULL([PaymentType], 0)
-        ,ISNULL([PaidBy], '')
+        --,ISNULL([PaidBy], '')
         ,[Remarks]
         ,[Status]
         ,[ClientName]
-        ,[OrderedBy]
-        ,[ReceivedOn]
-        ,[CompletedOn]
-        ,[INDetailsId]
+        --,[OrderedBy]
+        --,[ReceivedOn]
+        --,[CompletedOn]
+        ,[OrderPkPrintQueueVpsId]
         ,[ItemCode]
         ,[ItemDescription]
         ,[ItemQty]
@@ -71,8 +71,8 @@ SELECT  TOP (100) PERCENT
         ,[ItemDiscount]
         ,[ItemAmount]
 FROM    [dbo].[vwInv5DetailsList]
-WHERE	[InvoiceId] = " + invoiceId.ToString() + @"
-ORDER BY [INDetailsId];
+WHERE	[InvoiceHeaderId] = " + invoiceId.ToString() + @"
+ORDER BY [OrderPkPrintQueueVpsId];
 ";
             DataSet dataset = new DataSet();
             using (dataset = SqlHelper.Default.ExecuteDataSet(CommandType.Text, sql))

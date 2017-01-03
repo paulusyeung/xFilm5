@@ -69,8 +69,8 @@ namespace xFilm5.JobOrder.Reports5
 
         public static void INV_80mm(int invoiceId)
         {
-            ReceiptHeader receipt = ReceiptHeader.Load(invoiceId);
-            if (receipt != null)
+            Acct_INMaster invoice = Acct_INMaster.Load(invoiceId);
+            if (invoice != null)
             {
                 DataTable dt = DataSource.Inv5(invoiceId);
 

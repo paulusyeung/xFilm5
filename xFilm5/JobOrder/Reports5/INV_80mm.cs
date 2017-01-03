@@ -36,7 +36,7 @@ namespace xFilm5.JobOrder.Reports5
 
             #region Set Captions
             lblDeliveryNote.Text = oDict.GetWord("invoice");
-            lblTransactionNumber.Text = oDict.GetWordWithColon("invoice_number#");
+            lblTransactionNumber.Text = oDict.GetWordWithColon("invoice_#");
             lblTransactionDate.Text = oDict.GetWordWithColon("invoice_date");
             lblBillTo.Text = oDict.GetWordWithColon("bill_to").ToUpper();
             lblShipTo.Text = oDict.GetWordWithColon("ship_to").ToUpper();
@@ -47,11 +47,11 @@ namespace xFilm5.JobOrder.Reports5
 
             String sql = String.Empty;
 
-            DAL.ReceiptHeader receipt = DAL.ReceiptHeader.Load(_InvoiceId);
-            if (receipt != null)
+            DAL.Acct_INMaster invHdr = DAL.Acct_INMaster.Load(_InvoiceId);
+            if (invHdr != null)
             {
                 #region 如果仲未確認，加水印: DRAFT
-                if (receipt.Status == (int)Common.Enums.Status.Draft)
+                if (invHdr.Status == (int)Common.Enums.Status.Draft)
                 {
                     this.Watermark.Text = "DRAFT";
                     this.Watermark.ShowBehind = true;
@@ -63,7 +63,7 @@ namespace xFilm5.JobOrder.Reports5
                 #endregion
 
                 #region bill to address info
-                Client_AddressBook client = Client_AddressBook.LoadWhere(String.Format("ClientID = {0} AND PrimaryAddr = 1", receipt.ClientId.ToString()));
+                Client_AddressBook client = Client_AddressBook.LoadWhere(String.Format("ClientID = {0} AND PrimaryAddr = 1", invHdr.ClientID.ToString()));
                 if (client != null)
                 {
                     this.txtBillingAddress.Text = client.Name + Environment.NewLine + client.Address;
@@ -72,9 +72,9 @@ namespace xFilm5.JobOrder.Reports5
                 #endregion
                  
                 #region HACK: 攞第一隻 dbo.OrderHeader 做代表
-                sql = String.Format("ReceiptHeaderId = {0}", _InvoiceId.ToString());
-                DAL.ReceiptDetail receiptDtl = DAL.ReceiptDetail.LoadWhere(sql);
-                DAL.OrderPkPrintQueueVps pk = DAL.OrderPkPrintQueueVps.Load(receiptDtl.OrderPkPrintQueueVpsId);
+                sql = String.Format("INMasterID = {0}", _InvoiceId.ToString());
+                DAL.Acct_INDetails invDtl = DAL.Acct_INDetails.LoadWhere(sql);
+                DAL.OrderPkPrintQueueVps pk = DAL.OrderPkPrintQueueVps.Load(invDtl.OrderPkPrintQueueVpsId);
                 #endregion
 
                 OrderHeader order = OrderHeader.Load(pk.OrderHeaderId);
