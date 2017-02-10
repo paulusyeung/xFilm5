@@ -21,7 +21,8 @@
 		<item Caption="Receivables" ImageUrl="16x16.reports16.png" Tag="Acct_Receivables" />
 		<item Caption="Invoice List" ImageUrl="16x16.reports16.png" Tag="Acct_InvoiceList" />
 		<item Caption="Order List" ImageUrl="16x16.reports16.png" Tag="Acct_OrderList" />
-		<item Caption="Analysis">
+    <item Caption="Delivery Note List" ImageUrl="16x16.reports16.png" Tag="Acct_DNList" />
+    <item Caption="Analysis">
 			<item Caption="Receivables" ImageUrl="16x16.16_reports.gif" Tag="Olap_Receivables" />
 			<item Caption="Sales By Customer" ImageUrl="16x16.16_reports.gif" Tag="Olap_SalesByCustomer" />
 			<item Caption="Sales By Product" ImageUrl="16x16.16_reports.gif" Tag="Olap_SalesByProduct" />

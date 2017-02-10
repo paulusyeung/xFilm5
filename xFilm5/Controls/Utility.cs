@@ -8,7 +8,11 @@ using System.Linq;
 using System.Security.Principal;
 using System.Web;
 
+using Gizmox.WebGUI;
+
 using xFilm5.DAL;
+using Gizmox.WebGUI.Forms;
+using Gizmox.WebGUI.Common.Resources;
 
 namespace xFilm5.Controls
 {
@@ -776,6 +780,70 @@ SELECT @listStr";
                 }
 
                 return result;
+            }
+        }
+
+        public class ComboEx
+        {
+            public static void LoadCombo_MonthlyQuery(ref Gizmox.WebGUI.Forms.ComboBox comboBox)
+            {
+                nxStudio.BaseClass.WordDict oDict = new nxStudio.BaseClass.WordDict(Common.Config.CurrentWordDict, Common.Config.CurrentLanguageId);
+
+                comboBox.Items.Clear();
+                comboBox.Items.Add(String.Empty);
+
+                comboBox.Items.Add(oDict.GetWord("qry_curremt_month"));
+                comboBox.Items.Add(oDict.GetWord("qry_last_month"));
+                comboBox.Items.Add(oDict.GetWord("qry_previous_month"));
+
+                comboBox.SelectedIndex = 0;
+            }
+        }
+
+        public class ImageEx
+        {
+            public static ImageList OrderTypeImages_16px()
+            {
+                ImageList imageList = new ImageList();
+
+                imageList.Images.Add(DAL.Common.Enums.OrderType.UploadFile.ToString("g"), new IconResourceHandle("JobOrder.UploadFile_16.png"));
+                imageList.Images.Add(DAL.Common.Enums.OrderType.DirectPrint.ToString("g"), new IconResourceHandle("JobOrder.DirectPrint_16.png"));
+                imageList.Images.Add(DAL.Common.Enums.OrderType.PsFile.ToString("g"), new IconResourceHandle("JobOrder.PsFile_16.png"));
+                imageList.Images.Add(DAL.Common.Enums.OrderType.Others.ToString("g"), new IconResourceHandle("JobOrder.Others_16.png"));
+                imageList.Images.Add(DAL.Common.Enums.OrderType.Plate.ToString("g"), new IconResourceHandle("JobOrder.Others_16.png"));
+                imageList.Images.Add(DAL.Common.Enums.OrderType.Plate5.ToString("g"), new IconResourceHandle("JobOrder.folder_p.png"));
+                imageList.Images.Add(DAL.Common.Enums.OrderType.Film5.ToString("g"), new IconResourceHandle("JobOrder.folder_f.png"));
+                imageList.Images.Add(DAL.Common.Enums.OrderType.Vps5.ToString("g"), new IconResourceHandle("JobOrder.folder_v.png"));
+
+                return imageList;
+            }
+
+            public static ImageList WorkflowImages_16px()
+            {
+                ImageList imageList = new ImageList();
+
+                imageList.Images.Add(DAL.Common.Enums.Workflow.Queuing.ToString("g"), new IconResourceHandle("16x16.folder_queuing.png"));
+                imageList.Images.Add(DAL.Common.Enums.Workflow.Retouch.ToString("g"), new IconResourceHandle("16x16.folder_retouch.png"));
+                imageList.Images.Add(DAL.Common.Enums.Workflow.Printing.ToString("g"), new IconResourceHandle("16x16.folder_printing.png"));
+                imageList.Images.Add(DAL.Common.Enums.Workflow.ProofingOutgoing.ToString("g"), new IconResourceHandle("16x16.folder_proofingout.png"));
+                imageList.Images.Add(DAL.Common.Enums.Workflow.ProofingIncoming.ToString("g"), new IconResourceHandle("16x16.folder_proofingin.png"));
+                imageList.Images.Add(DAL.Common.Enums.Workflow.Ready.ToString("g"), new IconResourceHandle("16x16.folder_ready.png"));
+                imageList.Images.Add(DAL.Common.Enums.Workflow.Dispatch.ToString("g"), new IconResourceHandle("16x16.folder_dispatch.png"));
+                imageList.Images.Add(DAL.Common.Enums.Workflow.Completed.ToString("g"), new IconResourceHandle("16x16.folder_completed.png"));
+                imageList.Images.Add(DAL.Common.Enums.Workflow.Cancelled.ToString("g"), new IconResourceHandle("16x16.folder_cancelled.png"));
+
+                return imageList;
+            }
+
+            public static ImageList PriorityImages_16px()
+            {
+                ImageList imageList = new ImageList();
+
+                imageList.Images.Add(DAL.Common.Enums.Priority.Rush.ToString("g"), new IconResourceHandle("16x16.flag_red.png"));
+                imageList.Images.Add(DAL.Common.Enums.Priority.Express.ToString("g"), new IconResourceHandle("16x16.flag_yellow.png"));
+                imageList.Images.Add(DAL.Common.Enums.Priority.Regular.ToString("g"), new IconResourceHandle("16x16.flag_green.png"));
+
+                return imageList;
             }
         }
     }

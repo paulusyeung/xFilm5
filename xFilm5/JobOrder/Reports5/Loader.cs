@@ -90,7 +90,6 @@ namespace xFilm5.JobOrder.Reports5
             }
         }
 
-
         public static void DN_80mm(int receiptId)
         {
             ReceiptHeader receipt = ReceiptHeader.Load(receiptId);

@@ -337,6 +337,18 @@ namespace xFilm5.Accounting
                         objItem.SmallImage = new IconResourceHandle("JobOrder.Others_16.png");
                         objItem.LargeImage = new IconResourceHandle("JobOrder.Others_32.png");
                         break;
+                    case (int)Common.Enums.OrderType.Plate5:
+                        objItem.SmallImage = new IconResourceHandle("JobOrder.folder_p.png");
+                        objItem.LargeImage = new IconResourceHandle("JobOrder.folder_p.png");
+                        break;
+                    case (int)Common.Enums.OrderType.Film5:
+                        objItem.SmallImage = new IconResourceHandle("JobOrder.folder_f.png");
+                        objItem.LargeImage = new IconResourceHandle("JobOrder.folder_f.png");
+                        break;
+                    case (int)Common.Enums.OrderType.Vps5:
+                        objItem.SmallImage = new IconResourceHandle("JobOrder.folder_v.png");
+                        objItem.LargeImage = new IconResourceHandle("JobOrder.folder_v.png");
+                        break;
                 }
                 #endregion
                 #region Priority Icon
@@ -662,6 +674,24 @@ ORDER BY [OrderID] DESC
                         oPlate.EditMode = Common.Enums.EditMode.Read;
                         oPlate.OrderId = orderId;
                         oPlate.ShowDialog();
+                        break;
+                    case (int)Common.Enums.OrderType.Plate5:
+                        xFilm5.JobOrder.Forms.Plate5 oPlate5 = new xFilm5.JobOrder.Forms.Plate5();
+                        oPlate5.EditMode = Common.Enums.EditMode.Edit;
+                        oPlate5.OrderId = Convert.ToInt32(lvwOrderList.SelectedItem.Text);
+                        oPlate5.ShowDialog();
+                        break;
+                    case (int)Common.Enums.OrderType.Film5:
+                        xFilm5.JobOrder.Forms.Film5 oFilm5 = new xFilm5.JobOrder.Forms.Film5();
+                        oFilm5.EditMode = Common.Enums.EditMode.Edit;
+                        oFilm5.OrderId = Convert.ToInt32(lvwOrderList.SelectedItem.Text);
+                        oFilm5.ShowDialog();
+                        break;
+                    case (int)Common.Enums.OrderType.Vps5:
+                        xFilm5.JobOrder.Forms.Vps5 oVps5 = new xFilm5.JobOrder.Forms.Vps5();
+                        oVps5.EditMode = Common.Enums.EditMode.Edit;
+                        oVps5.OrderId = Convert.ToInt32(lvwOrderList.SelectedItem.Text);
+                        oVps5.ShowDialog();
                         break;
                 }
             }

@@ -1,0 +1,3274 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="xFilmModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Acct_INDetails">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="INMasterID" Type="int" Nullable="false" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="int" />
+          <Property Name="BillingCode" Type="nvarchar" MaxLength="16" />
+          <Property Name="Description" Type="nvarchar" MaxLength="255" />
+          <Property Name="Qty" Type="smallint" />
+          <Property Name="UnitAmount" Type="money" />
+          <Property Name="Discount" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="Amount" Type="money" />
+        </EntityType>
+        <EntityType Name="Acct_INMaster">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InvoiceNumber" Type="int" />
+          <Property Name="InvoiceDate" Type="datetime" />
+          <Property Name="InvoiceAmount" Type="money" />
+          <Property Name="ClientID" Type="int" Nullable="false" />
+          <Property Name="OrderID" Type="int" />
+          <Property Name="PaymentType" Type="int" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="255" />
+          <Property Name="Paid" Type="bit" Nullable="false" />
+          <Property Name="PaidOn" Type="datetime" />
+          <Property Name="PaidAmount" Type="money" Nullable="false" />
+          <Property Name="PaidRef" Type="nvarchar" MaxLength="128" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="LastModifiedBy" Type="int" />
+          <Property Name="LastModifiedOn" Type="datetime" />
+          <Property Name="Status" Type="smallint" />
+        </EntityType>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="128" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="Status" Type="smallint" />
+          <Property Name="CreditLimit" Type="smallint" />
+          <Property Name="PaymentTerms" Type="smallint" />
+          <Property Name="PaymentType" Type="smallint" />
+          <Property Name="PIN" Type="nvarchar" MaxLength="16" />
+          <Property Name="Branch" Type="int" />
+        </EntityType>
+        <EntityType Name="Client_AddressBook">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClientID" Type="int" Nullable="false" />
+          <Property Name="PrimaryAddr" Type="bit" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="128" />
+          <Property Name="Address" Type="nvarchar" MaxLength="255" />
+          <Property Name="Tel" Type="nvarchar" MaxLength="32" />
+          <Property Name="Fax" Type="nvarchar" MaxLength="32" />
+          <Property Name="ContactPerson" Type="nvarchar" MaxLength="64" />
+          <Property Name="Mobile" Type="nvarchar" MaxLength="32" />
+          <Property Name="Pager" Type="nvarchar" MaxLength="32" />
+          <Property Name="SMS" Type="nvarchar" MaxLength="32" />
+          <Property Name="SMS_Lang" Type="int" />
+          <Property Name="CreatedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Client_User">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClientID" Type="int" Nullable="false" />
+          <Property Name="PrimaryUser" Type="bit" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="64" />
+          <Property Name="Password" Type="nvarchar" MaxLength="32" />
+          <Property Name="SecurityLevel" Type="smallint" />
+          <Property Name="Email" Type="nvarchar" MaxLength="64" />
+          <Property Name="LastIP" Type="nvarchar" MaxLength="32" />
+          <Property Name="LastVisit" Type="datetime" />
+          <Property Name="Branch" Type="int" />
+        </EntityType>
+        <EntityType Name="ClientPricing">
+          <Key>
+            <PropertyRef Name="PricingId" />
+          </Key>
+          <Property Name="PricingId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClientId" Type="int" Nullable="false" />
+          <Property Name="ItemId" Type="int" Nullable="false" />
+          <Property Name="Alias" Type="nvarchar" MaxLength="255" />
+          <Property Name="Tag" Type="nvarchar" MaxLength="64" />
+          <Property Name="UnitPrice" Type="money" Nullable="false" />
+          <Property Name="Discount" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" Nullable="false" />
+          <Property Name="ModifiedOn" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedBy" Type="int" Nullable="false" />
+          <Property Name="Retired" Type="bit" Nullable="false" />
+          <Property Name="RetiredOn" Type="datetime" />
+          <Property Name="RetiredBy" Type="int" />
+        </EntityType>
+        <EntityType Name="Order_Details">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderID" Type="int" Nullable="false" />
+          <Property Name="Media" Type="int" />
+          <Property Name="Platform" Type="int" />
+          <Property Name="Software" Type="nvarchar" MaxLength="32" />
+          <Property Name="DeliveryMethod" Type="int" />
+          <Property Name="DeliveryAddr" Type="int" />
+          <Property Name="Proofing" Type="bit" Nullable="false" />
+          <Property Name="ProofingWith" Type="int" />
+          <Property Name="ProofingQty" Type="int" />
+          <Property Name="LineScreensResolution" Type="int" />
+          <Property Name="StandardSize" Type="bit" Nullable="false" />
+          <Property Name="SizeID" Type="int" />
+          <Property Name="A4Size" Type="bit" Nullable="false" />
+          <Property Name="A3Size" Type="bit" Nullable="false" />
+          <Property Name="OtherSize" Type="bit" Nullable="false" />
+          <Property Name="OtherSizeText" Type="nvarchar" MaxLength="32" />
+          <Property Name="Positive" Type="bit" Nullable="false" />
+          <Property Name="Negative" Type="bit" Nullable="false" />
+          <Property Name="EmulsionUp" Type="bit" Nullable="false" />
+          <Property Name="EmulsionDown" Type="bit" Nullable="false" />
+          <Property Name="PrintComposite" Type="bit" Nullable="false" />
+          <Property Name="BlackPlateOnly" Type="bit" Nullable="false" />
+          <Property Name="Pages" Type="smallint" />
+          <Property Name="Separation" Type="bit" Nullable="false" />
+          <Property Name="SeparationC" Type="bit" Nullable="false" />
+          <Property Name="SeparationM" Type="bit" Nullable="false" />
+          <Property Name="SeparationY" Type="bit" Nullable="false" />
+          <Property Name="SeparationK" Type="bit" Nullable="false" />
+          <Property Name="DieCut" Type="bit" Nullable="false" />
+          <Property Name="DieCutB" Type="bit" Nullable="false" />
+          <Property Name="DieCutM" Type="bit" Nullable="false" />
+          <Property Name="DieCutC" Type="bit" Nullable="false" />
+          <Property Name="SpotColor" Type="bit" Nullable="false" />
+          <Property Name="SpotColorText" Type="nvarchar" MaxLength="32" />
+          <Property Name="CropMarks" Type="bit" Nullable="false" />
+          <Property Name="BlackOverprint" Type="bit" Nullable="false" />
+          <Property Name="RegistrationMarks" Type="bit" Nullable="false" />
+          <Property Name="TotalFilms" Type="smallint" />
+          <Property Name="ColorPrint" Type="bit" Nullable="false" />
+          <Property Name="ColorPrintType" Type="smallint" />
+          <Property Name="ColorPrintQty" Type="smallint" />
+          <Property Name="ColorScan" Type="bit" Nullable="false" />
+          <Property Name="ColorScanType" Type="smallint" />
+          <Property Name="ColorScanQty" Type="smallint" />
+          <Property Name="Barcode" Type="bit" Nullable="false" />
+          <Property Name="BarcodeQty" Type="smallint" />
+          <Property Name="Artwork" Type="bit" Nullable="false" />
+          <Property Name="ArtworkAmount" Type="money" />
+        </EntityType>
+        <EntityType Name="Order_Internal">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderID" Type="int" Nullable="false" />
+          <Property Name="OutputBy" Type="int" />
+          <Property Name="A4" Type="bit" Nullable="false" />
+          <Property Name="A4Qty" Type="smallint" />
+          <Property Name="A3" Type="bit" Nullable="false" />
+          <Property Name="A3Qty" Type="smallint" />
+          <Property Name="A4SetWProof" Type="bit" Nullable="false" />
+          <Property Name="A4SetWProofQty" Type="smallint" />
+          <Property Name="A3SetWProof" Type="bit" Nullable="false" />
+          <Property Name="A3SetWProofQty" Type="smallint" />
+          <Property Name="OtherSize" Type="bit" Nullable="false" />
+          <Property Name="OtherSizeW" Type="smallint" />
+          <Property Name="OtherSizeH" Type="smallint" />
+          <Property Name="OtherSizeQty" Type="smallint" />
+          <Property Name="Proofing4C" Type="bit" Nullable="false" />
+          <Property Name="Proofing4CQty" Type="smallint" />
+          <Property Name="ProofingSpotColor" Type="bit" Nullable="false" />
+          <Property Name="ProofingSpotColorQty" Type="smallint" />
+          <Property Name="ProofingAdditional" Type="bit" Nullable="false" />
+          <Property Name="ProofingAdditionalQty" Type="smallint" />
+          <Property Name="ArtworkFee" Type="bit" Nullable="false" />
+          <Property Name="ArtworkFeeAmount" Type="money" />
+          <Property Name="UrgentCharge" Type="bit" Nullable="false" />
+          <Property Name="Reprint" Type="bit" Nullable="false" />
+          <Property Name="ReprintText" Type="nvarchar" MaxLength="32" />
+          <Property Name="DateUpdated" Type="datetime" />
+          <Property Name="UpdateCounter" Type="smallint" />
+        </EntityType>
+        <EntityType Name="Order_Journal">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderID" Type="int" Nullable="false" />
+          <Property Name="Status" Type="int" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="DateUpdated" Type="datetime" />
+        </EntityType>
+        <EntityType Name="OrderComment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Comment" Type="ntext" />
+          <Property Name="OrderID" Type="int" />
+        </EntityType>
+        <EntityType Name="OrderHeader">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClientID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="ServiceType" Type="int" />
+          <Property Name="PrePressOp" Type="int" />
+          <Property Name="ProofingOp" Type="int" />
+          <Property Name="Attachment" Type="bit" Nullable="false" />
+          <Property Name="AttachmentURL" Type="nvarchar" MaxLength="255" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="255" />
+          <Property Name="DateReceived" Type="datetime" Nullable="false" />
+          <Property Name="DateCompleted" Type="datetime" />
+          <Property Name="Status" Type="int" />
+          <Property Name="Priority" Type="int" />
+          <Property Name="Amount" Type="money" />
+          <Property Name="Paid" Type="bit" Nullable="false" />
+          <Property Name="PaidOn" Type="datetime" />
+          <Property Name="PaidRef" Type="nvarchar" MaxLength="32" />
+        </EntityType>
+        <EntityType Name="OrderPkPrintQueueVps">
+          <Key>
+            <PropertyRef Name="OrderPkPrintQueueVpsId" />
+          </Key>
+          <Property Name="OrderPkPrintQueueVpsId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderHeaderId" Type="int" />
+          <Property Name="PrintQueueVpsId" Type="int" />
+          <Property Name="CheckedPlate" Type="bit" Nullable="false" />
+          <Property Name="CheckedCip3" Type="bit" Nullable="false" />
+          <Property Name="CheckedBlueprint" Type="bit" Nullable="false" />
+          <Property Name="IsReady" Type="bit" Nullable="false" />
+          <Property Name="IsReceived" Type="bit" Nullable="false" />
+          <Property Name="IsBilled" Type="bit" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" Nullable="false" />
+          <Property Name="ModifiedOn" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="Retired" Type="bit" Nullable="false" />
+          <Property Name="RetiredOn" Type="datetime" />
+          <Property Name="RetiredBy" Type="int" />
+        </EntityType>
+        <EntityType Name="PosTx">
+          <Key>
+            <PropertyRef Name="TxID" />
+          </Key>
+          <Property Name="TxID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TxDate" Type="datetime" Nullable="false" />
+          <Property Name="Branch" Type="int" />
+          <Property Name="TxPosID" Type="int" Nullable="false" />
+          <Property Name="TxType" Type="int" Nullable="false" />
+          <Property Name="TxRef" Type="nvarchar" MaxLength="32" />
+          <Property Name="TxAmount" Type="money" />
+          <Property Name="TxAmountType" Type="int" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="256" />
+        </EntityType>
+        <EntityType Name="PrintQueue">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClientID" Type="int" Nullable="false" />
+          <Property Name="OrderID" Type="int" />
+          <Property Name="CupsJobID" Type="nvarchar" MaxLength="16" Nullable="false" />
+          <Property Name="CupsJobTitle" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="PlateSize" Type="nvarchar" MaxLength="16" />
+          <Property Name="BlueprintOrdered" Type="bit" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="ModifiedOn" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="Retired" Type="bit" Nullable="false" />
+          <Property Name="RetiredOn" Type="datetime" />
+          <Property Name="RetiredBy" Type="int" />
+        </EntityType>
+        <EntityType Name="PrintQueue_LifeCycle">
+          <Key>
+            <PropertyRef Name="LifeCycleId" />
+          </Key>
+          <Property Name="LifeCycleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PrintQueueId" Type="int" Nullable="false" />
+          <Property Name="PrintQueueVpsId" Type="int" />
+          <Property Name="PrintQSubitemType" Type="int" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PrintQueue_VPS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PrintQueueID" Type="int" Nullable="false" />
+          <Property Name="VpsFileName" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="PlateOrdered" Type="bit" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="ModifiedOn" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="Retired" Type="bit" />
+          <Property Name="RetiredOn" Type="datetime" Nullable="false" />
+          <Property Name="RetiredBy" Type="int" />
+        </EntityType>
+        <EntityType Name="ReceiptDetail">
+          <Key>
+            <PropertyRef Name="ReceiptDetailId" />
+          </Key>
+          <Property Name="ReceiptDetailId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReceiptHeaderId" Type="int" Nullable="false" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="int" />
+          <Property Name="BillingCode" Type="nvarchar" MaxLength="16" />
+          <Property Name="Description" Type="nvarchar" MaxLength="255" />
+          <Property Name="Qty" Type="smallint" />
+          <Property Name="UnitAmount" Type="money" />
+          <Property Name="Discount" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="Amount" Type="money" />
+        </EntityType>
+        <EntityType Name="ReceiptHeader">
+          <Key>
+            <PropertyRef Name="ReceiptHeaderId" />
+          </Key>
+          <Property Name="ReceiptHeaderId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReceiptNumber" Type="nvarchar" MaxLength="16" />
+          <Property Name="ReceiptDate" Type="datetime" />
+          <Property Name="ReceiptAmount" Type="money" />
+          <Property Name="ClientId" Type="int" Nullable="false" />
+          <Property Name="PaymentType" Type="int" />
+          <Property Name="INMasterId" Type="int" />
+          <Property Name="ClientUserId" Type="int" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="255" />
+          <Property Name="Paid" Type="bit" Nullable="false" />
+          <Property Name="PaidOn" Type="datetime" />
+          <Property Name="PaidAmount" Type="money" Nullable="false" />
+          <Property Name="PaidRef" Type="nvarchar" MaxLength="128" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" Nullable="false" />
+          <Property Name="ModifiedOn" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedBy" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Staff">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="50" />
+          <Property Name="JobTitle" Type="int" />
+        </EntityType>
+        <EntityType Name="T_BillingCode_Dept">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="16" />
+          <Property Name="Name" Type="nvarchar" MaxLength="128" />
+        </EntityType>
+        <EntityType Name="T_BillingCode_Item">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DeptID" Type="int" />
+          <Property Name="ItemCode" Type="nvarchar" MaxLength="16" />
+          <Property Name="GroupCode" Type="nvarchar" MaxLength="16" />
+          <Property Name="Name" Type="nvarchar" MaxLength="128" />
+          <Property Name="UoM" Type="nvarchar" MaxLength="32" />
+          <Property Name="UnitPrice" Type="money" />
+          <Property Name="Retired" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_DeliveryMethod">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="32" />
+        </EntityType>
+        <EntityType Name="T_FriendlyService">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="32" />
+        </EntityType>
+        <EntityType Name="T_JobTitle">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="T_LSR">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="32" />
+        </EntityType>
+        <EntityType Name="T_Media">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="32" />
+        </EntityType>
+        <EntityType Name="T_PaperSize">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="32" />
+        </EntityType>
+        <EntityType Name="T_PaymentType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="32" />
+        </EntityType>
+        <EntityType Name="T_Platform">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="32" />
+        </EntityType>
+        <EntityType Name="T_Priority">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="32" />
+        </EntityType>
+        <EntityType Name="T_ProofingMaterial">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="32" />
+        </EntityType>
+        <EntityType Name="T_Service">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="32" />
+        </EntityType>
+        <EntityType Name="T_Software">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="32" />
+        </EntityType>
+        <EntityType Name="T_SoftwareVersion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SoftwareID" Type="int" Nullable="false" />
+          <Property Name="VersionNumber" Type="nvarchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="T_Status">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="32" />
+          <Property Name="Phase" Type="int" />
+        </EntityType>
+        <EntityType Name="T_Workflow">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JobTitle" Type="int" />
+          <Property Name="Name" Type="nvarchar" MaxLength="64" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserType" Type="int" Nullable="false" />
+          <Property Name="UserSid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="LoginName" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="LoginPassword" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="Alias" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" Nullable="false" />
+          <Property Name="ModifiedOn" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedBy" Type="int" Nullable="false" />
+          <Property Name="Retired" Type="bit" Nullable="false" />
+          <Property Name="RetiredOn" Type="datetime" />
+          <Property Name="RetiredBy" Type="int" />
+        </EntityType>
+        <EntityType Name="UserAuth">
+          <Key>
+            <PropertyRef Name="AuthId" />
+          </Key>
+          <Property Name="AuthId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="DeviceId" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="DeviceType" Type="int" Nullable="false" />
+          <Property Name="Plateform" Type="int" Nullable="false" />
+          <Property Name="MetadataXml" Type="xml" />
+        </EntityType>
+        <EntityType Name="UserNotification">
+          <Key>
+            <PropertyRef Name="NotifyId" />
+          </Key>
+          <Property Name="NotifyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="DeviceId" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="DeviceType" Type="int" Nullable="false" />
+          <Property Name="Plateform" Type="int" Nullable="false" />
+          <Property Name="MetadataXml" Type="xml" />
+        </EntityType>
+        <EntityType Name="UserPreference">
+          <Key>
+            <PropertyRef Name="PreferenceId" />
+          </Key>
+          <Property Name="PreferenceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="ObjectId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ObjectType" Type="int" Nullable="false" />
+          <Property Name="MetadataXml" Type="xml" />
+        </EntityType>
+        <EntityType Name="X_Counter">
+          <Key>
+            <PropertyRef Name="CounterID" />
+          </Key>
+          <Property Name="CounterID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClientID" Type="int" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="StaffID" Type="int" />
+          <Property Name="OrderID" Type="int" />
+          <Property Name="InvoiceNo" Type="int" />
+        </EntityType>
+        <EntityType Name="Z_WebColor">
+          <Key>
+            <PropertyRef Name="ColorID" />
+          </Key>
+          <Property Name="ColorID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="6" />
+          <Property Name="Name" Type="nvarchar" MaxLength="32" />
+        </EntityType>
+        <Association Name="FK_Acct_INMaster_Acct_INDetails">
+          <End Role="Acct_INMaster" Type="Self.Acct_INMaster" Multiplicity="1" />
+          <End Role="Acct_INDetails" Type="Self.Acct_INDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Acct_INMaster">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Acct_INDetails">
+              <PropertyRef Name="INMasterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Acct_INMaster_ReceiptHeader">
+          <End Role="Acct_INMaster" Type="Self.Acct_INMaster" Multiplicity="0..1" />
+          <End Role="ReceiptHeader" Type="Self.ReceiptHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Acct_INMaster">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ReceiptHeader">
+              <PropertyRef Name="INMasterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BillingItem_ClientPricing">
+          <End Role="T_BillingCode_Item" Type="Self.T_BillingCode_Item" Multiplicity="1" />
+          <End Role="ClientPricing" Type="Self.ClientPricing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_BillingCode_Item">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ClientPricing">
+              <PropertyRef Name="ItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Client_Acct_INMaster">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Acct_INMaster" Type="Self.Acct_INMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Acct_INMaster">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Client_Client_AddressBook">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Client_AddressBook" Type="Self.Client_AddressBook" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Client_AddressBook">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Client_Client_User">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Client_User" Type="Self.Client_User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Client_User">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Client_ClientPricing">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="ClientPricing" Type="Self.ClientPricing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ClientPricing">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Client_OrderHeader">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderHeader">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Client_PrintQueue">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="PrintQueue" Type="Self.PrintQueue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PrintQueue">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Client_ReceiptHeader">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="ReceiptHeader" Type="Self.ReceiptHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ReceiptHeader">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Client_User_OrderHeader">
+          <End Role="Client_User" Type="Self.Client_User" Multiplicity="0..1" />
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client_User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderHeader">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Client_User_ReceiptHeader">
+          <End Role="Client_User" Type="Self.Client_User" Multiplicity="0..1" />
+          <End Role="ReceiptHeader" Type="Self.ReceiptHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client_User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ReceiptHeader">
+              <PropertyRef Name="ClientUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderHeader_Acct_INMaster">
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="0..1" />
+          <End Role="Acct_INMaster" Type="Self.Acct_INMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderHeader">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Acct_INMaster">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderHeader_Order_Details">
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="1" />
+          <End Role="Order_Details" Type="Self.Order_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderHeader">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order_Details">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderHeader_Order_Internal">
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="1" />
+          <End Role="Order_Internal" Type="Self.Order_Internal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderHeader">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order_Internal">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderHeader_Order_Journal">
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="1" />
+          <End Role="Order_Journal" Type="Self.Order_Journal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderHeader">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order_Journal">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderHeader_OrderComment">
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="0..1" />
+          <End Role="OrderComment" Type="Self.OrderComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderHeader">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderComment">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderHeader_OrderPkPrintQueuVps">
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="0..1" />
+          <End Role="OrderPkPrintQueueVps" Type="Self.OrderPkPrintQueueVps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderHeader">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderPkPrintQueueVps">
+              <PropertyRef Name="OrderHeaderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderHeader_PrintQueue">
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="0..1" />
+          <End Role="PrintQueue" Type="Self.PrintQueue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderHeader">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PrintQueue">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderPkPrintQueueVps_INDetails">
+          <End Role="OrderPkPrintQueueVps" Type="Self.OrderPkPrintQueueVps" Multiplicity="0..1" />
+          <End Role="Acct_INDetails" Type="Self.Acct_INDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderPkPrintQueueVps">
+              <PropertyRef Name="OrderPkPrintQueueVpsId" />
+            </Principal>
+            <Dependent Role="Acct_INDetails">
+              <PropertyRef Name="OrderPkPrintQueueVpsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderPkPrintQueueVps_ReceiptDetail">
+          <End Role="OrderPkPrintQueueVps" Type="Self.OrderPkPrintQueueVps" Multiplicity="0..1" />
+          <End Role="ReceiptDetail" Type="Self.ReceiptDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderPkPrintQueueVps">
+              <PropertyRef Name="OrderPkPrintQueueVpsId" />
+            </Principal>
+            <Dependent Role="ReceiptDetail">
+              <PropertyRef Name="OrderPkPrintQueueVpsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PrintQueue_PrintQueue_VPS">
+          <End Role="PrintQueue" Type="Self.PrintQueue" Multiplicity="1" />
+          <End Role="PrintQueue_VPS" Type="Self.PrintQueue_VPS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PrintQueue">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PrintQueue_VPS">
+              <PropertyRef Name="PrintQueueID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PrintQueue_PrintQueueLifeCycle">
+          <End Role="PrintQueue" Type="Self.PrintQueue" Multiplicity="1" />
+          <End Role="PrintQueue_LifeCycle" Type="Self.PrintQueue_LifeCycle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PrintQueue">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PrintQueue_LifeCycle">
+              <PropertyRef Name="PrintQueueId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PrintQueueVps_OrderPkPrintQueuVps">
+          <End Role="PrintQueue_VPS" Type="Self.PrintQueue_VPS" Multiplicity="0..1" />
+          <End Role="OrderPkPrintQueueVps" Type="Self.OrderPkPrintQueueVps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PrintQueue_VPS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderPkPrintQueueVps">
+              <PropertyRef Name="PrintQueueVpsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PrintQueueVPS_PrintQueueLifeCycle">
+          <End Role="PrintQueue_VPS" Type="Self.PrintQueue_VPS" Multiplicity="0..1" />
+          <End Role="PrintQueue_LifeCycle" Type="Self.PrintQueue_LifeCycle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PrintQueue_VPS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PrintQueue_LifeCycle">
+              <PropertyRef Name="PrintQueueVpsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ReceiptHeader_ReceiptDetail">
+          <End Role="ReceiptHeader" Type="Self.ReceiptHeader" Multiplicity="1" />
+          <End Role="ReceiptDetail" Type="Self.ReceiptDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ReceiptHeader">
+              <PropertyRef Name="ReceiptHeaderId" />
+            </Principal>
+            <Dependent Role="ReceiptDetail">
+              <PropertyRef Name="ReceiptHeaderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_BillingCode_Dept_T_BillingCode_Item">
+          <End Role="T_BillingCode_Dept" Type="Self.T_BillingCode_Dept" Multiplicity="0..1" />
+          <End Role="T_BillingCode_Item" Type="Self.T_BillingCode_Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_BillingCode_Dept">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_BillingCode_Item">
+              <PropertyRef Name="DeptID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_DeliveryMethod_Order_Details">
+          <End Role="T_DeliveryMethod" Type="Self.T_DeliveryMethod" Multiplicity="0..1" />
+          <End Role="Order_Details" Type="Self.Order_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_DeliveryMethod">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order_Details">
+              <PropertyRef Name="DeliveryMethod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_JobTitle_T_Workflow">
+          <End Role="T_JobTitle" Type="Self.T_JobTitle" Multiplicity="0..1" />
+          <End Role="T_Workflow" Type="Self.T_Workflow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_JobTitle">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_Workflow">
+              <PropertyRef Name="JobTitle" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_Media_Order_Details">
+          <End Role="T_Media" Type="Self.T_Media" Multiplicity="0..1" />
+          <End Role="Order_Details" Type="Self.Order_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_Media">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order_Details">
+              <PropertyRef Name="Media" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_PaperSize_Order_Details">
+          <End Role="T_PaperSize" Type="Self.T_PaperSize" Multiplicity="0..1" />
+          <End Role="Order_Details" Type="Self.Order_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_PaperSize">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order_Details">
+              <PropertyRef Name="SizeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_PaymentType_Acct_INMaster">
+          <End Role="T_PaymentType" Type="Self.T_PaymentType" Multiplicity="0..1" />
+          <End Role="Acct_INMaster" Type="Self.Acct_INMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_PaymentType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Acct_INMaster">
+              <PropertyRef Name="PaymentType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_PaymentType_ReceiptHeader">
+          <End Role="T_PaymentType" Type="Self.T_PaymentType" Multiplicity="0..1" />
+          <End Role="ReceiptHeader" Type="Self.ReceiptHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_PaymentType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ReceiptHeader">
+              <PropertyRef Name="PaymentType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_Platform_Order_Details">
+          <End Role="T_Platform" Type="Self.T_Platform" Multiplicity="0..1" />
+          <End Role="Order_Details" Type="Self.Order_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_Platform">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order_Details">
+              <PropertyRef Name="Platform" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_Priority_OrderHeader">
+          <End Role="T_Priority" Type="Self.T_Priority" Multiplicity="0..1" />
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_Priority">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderHeader">
+              <PropertyRef Name="Priority" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_Service_OrderHeader">
+          <End Role="T_Service" Type="Self.T_Service" Multiplicity="0..1" />
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_Service">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderHeader">
+              <PropertyRef Name="ServiceType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_Software_T_SoftwareVersion">
+          <End Role="T_Software" Type="Self.T_Software" Multiplicity="1" />
+          <End Role="T_SoftwareVersion" Type="Self.T_SoftwareVersion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_Software">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_SoftwareVersion">
+              <PropertyRef Name="SoftwareID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_Status_OrderHeader">
+          <End Role="T_Status" Type="Self.T_Status" Multiplicity="0..1" />
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_Status">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderHeader">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_Workflow_Order_Journal">
+          <End Role="T_Workflow" Type="Self.T_Workflow" Multiplicity="0..1" />
+          <End Role="Order_Journal" Type="Self.Order_Journal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_Workflow">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order_Journal">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_UserAuth">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserAuth" Type="Self.UserAuth" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserAuth">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_UserNotification">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserNotification" Type="Self.UserNotification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserNotification">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_UserPreference">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserPreference" Type="Self.UserPreference" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserPreference">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="xFilmModelStoreContainer">
+          <EntitySet Name="Acct_INDetails" EntityType="Self.Acct_INDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Acct_INMaster" EntityType="Self.Acct_INMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Client_AddressBook" EntityType="Self.Client_AddressBook" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Client_User" EntityType="Self.Client_User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ClientPricing" EntityType="Self.ClientPricing" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order_Details" EntityType="Self.Order_Details" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order_Internal" EntityType="Self.Order_Internal" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order_Journal" EntityType="Self.Order_Journal" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderComment" EntityType="Self.OrderComment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderHeader" EntityType="Self.OrderHeader" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderPkPrintQueueVps" EntityType="Self.OrderPkPrintQueueVps" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PosTx" EntityType="Self.PosTx" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PrintQueue" EntityType="Self.PrintQueue" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PrintQueue_LifeCycle" EntityType="Self.PrintQueue_LifeCycle" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PrintQueue_VPS" EntityType="Self.PrintQueue_VPS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReceiptDetail" EntityType="Self.ReceiptDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReceiptHeader" EntityType="Self.ReceiptHeader" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Staff" EntityType="Self.Staff" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_BillingCode_Dept" EntityType="Self.T_BillingCode_Dept" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_BillingCode_Item" EntityType="Self.T_BillingCode_Item" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_DeliveryMethod" EntityType="Self.T_DeliveryMethod" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_FriendlyService" EntityType="Self.T_FriendlyService" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_JobTitle" EntityType="Self.T_JobTitle" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_LSR" EntityType="Self.T_LSR" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Media" EntityType="Self.T_Media" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_PaperSize" EntityType="Self.T_PaperSize" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_PaymentType" EntityType="Self.T_PaymentType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Platform" EntityType="Self.T_Platform" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Priority" EntityType="Self.T_Priority" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_ProofingMaterial" EntityType="Self.T_ProofingMaterial" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Service" EntityType="Self.T_Service" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Software" EntityType="Self.T_Software" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_SoftwareVersion" EntityType="Self.T_SoftwareVersion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Status" EntityType="Self.T_Status" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Workflow" EntityType="Self.T_Workflow" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserAuth" EntityType="Self.UserAuth" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserNotification" EntityType="Self.UserNotification" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserPreference" EntityType="Self.UserPreference" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="X_Counter" EntityType="Self.X_Counter" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Z_WebColor" EntityType="Self.Z_WebColor" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Acct_INMaster_Acct_INDetails" Association="Self.FK_Acct_INMaster_Acct_INDetails">
+            <End Role="Acct_INMaster" EntitySet="Acct_INMaster" />
+            <End Role="Acct_INDetails" EntitySet="Acct_INDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Acct_INMaster_ReceiptHeader" Association="Self.FK_Acct_INMaster_ReceiptHeader">
+            <End Role="Acct_INMaster" EntitySet="Acct_INMaster" />
+            <End Role="ReceiptHeader" EntitySet="ReceiptHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BillingItem_ClientPricing" Association="Self.FK_BillingItem_ClientPricing">
+            <End Role="T_BillingCode_Item" EntitySet="T_BillingCode_Item" />
+            <End Role="ClientPricing" EntitySet="ClientPricing" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Client_Acct_INMaster" Association="Self.FK_Client_Acct_INMaster">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Acct_INMaster" EntitySet="Acct_INMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Client_Client_AddressBook" Association="Self.FK_Client_Client_AddressBook">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Client_AddressBook" EntitySet="Client_AddressBook" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Client_Client_User" Association="Self.FK_Client_Client_User">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Client_User" EntitySet="Client_User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Client_ClientPricing" Association="Self.FK_Client_ClientPricing">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="ClientPricing" EntitySet="ClientPricing" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Client_OrderHeader" Association="Self.FK_Client_OrderHeader">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Client_PrintQueue" Association="Self.FK_Client_PrintQueue">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="PrintQueue" EntitySet="PrintQueue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Client_ReceiptHeader" Association="Self.FK_Client_ReceiptHeader">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="ReceiptHeader" EntitySet="ReceiptHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Client_User_OrderHeader" Association="Self.FK_Client_User_OrderHeader">
+            <End Role="Client_User" EntitySet="Client_User" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Client_User_ReceiptHeader" Association="Self.FK_Client_User_ReceiptHeader">
+            <End Role="Client_User" EntitySet="Client_User" />
+            <End Role="ReceiptHeader" EntitySet="ReceiptHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderHeader_Acct_INMaster" Association="Self.FK_OrderHeader_Acct_INMaster">
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+            <End Role="Acct_INMaster" EntitySet="Acct_INMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderHeader_Order_Details" Association="Self.FK_OrderHeader_Order_Details">
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+            <End Role="Order_Details" EntitySet="Order_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderHeader_Order_Internal" Association="Self.FK_OrderHeader_Order_Internal">
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+            <End Role="Order_Internal" EntitySet="Order_Internal" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderHeader_Order_Journal" Association="Self.FK_OrderHeader_Order_Journal">
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+            <End Role="Order_Journal" EntitySet="Order_Journal" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderHeader_OrderComment" Association="Self.FK_OrderHeader_OrderComment">
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+            <End Role="OrderComment" EntitySet="OrderComment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderHeader_OrderPkPrintQueuVps" Association="Self.FK_OrderHeader_OrderPkPrintQueuVps">
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+            <End Role="OrderPkPrintQueueVps" EntitySet="OrderPkPrintQueueVps" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderHeader_PrintQueue" Association="Self.FK_OrderHeader_PrintQueue">
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+            <End Role="PrintQueue" EntitySet="PrintQueue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderPkPrintQueueVps_INDetails" Association="Self.FK_OrderPkPrintQueueVps_INDetails">
+            <End Role="OrderPkPrintQueueVps" EntitySet="OrderPkPrintQueueVps" />
+            <End Role="Acct_INDetails" EntitySet="Acct_INDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderPkPrintQueueVps_ReceiptDetail" Association="Self.FK_OrderPkPrintQueueVps_ReceiptDetail">
+            <End Role="OrderPkPrintQueueVps" EntitySet="OrderPkPrintQueueVps" />
+            <End Role="ReceiptDetail" EntitySet="ReceiptDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PrintQueue_PrintQueue_VPS" Association="Self.FK_PrintQueue_PrintQueue_VPS">
+            <End Role="PrintQueue" EntitySet="PrintQueue" />
+            <End Role="PrintQueue_VPS" EntitySet="PrintQueue_VPS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PrintQueue_PrintQueueLifeCycle" Association="Self.FK_PrintQueue_PrintQueueLifeCycle">
+            <End Role="PrintQueue" EntitySet="PrintQueue" />
+            <End Role="PrintQueue_LifeCycle" EntitySet="PrintQueue_LifeCycle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PrintQueueVps_OrderPkPrintQueuVps" Association="Self.FK_PrintQueueVps_OrderPkPrintQueuVps">
+            <End Role="PrintQueue_VPS" EntitySet="PrintQueue_VPS" />
+            <End Role="OrderPkPrintQueueVps" EntitySet="OrderPkPrintQueueVps" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PrintQueueVPS_PrintQueueLifeCycle" Association="Self.FK_PrintQueueVPS_PrintQueueLifeCycle">
+            <End Role="PrintQueue_VPS" EntitySet="PrintQueue_VPS" />
+            <End Role="PrintQueue_LifeCycle" EntitySet="PrintQueue_LifeCycle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ReceiptHeader_ReceiptDetail" Association="Self.FK_ReceiptHeader_ReceiptDetail">
+            <End Role="ReceiptHeader" EntitySet="ReceiptHeader" />
+            <End Role="ReceiptDetail" EntitySet="ReceiptDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_BillingCode_Dept_T_BillingCode_Item" Association="Self.FK_T_BillingCode_Dept_T_BillingCode_Item">
+            <End Role="T_BillingCode_Dept" EntitySet="T_BillingCode_Dept" />
+            <End Role="T_BillingCode_Item" EntitySet="T_BillingCode_Item" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_DeliveryMethod_Order_Details" Association="Self.FK_T_DeliveryMethod_Order_Details">
+            <End Role="T_DeliveryMethod" EntitySet="T_DeliveryMethod" />
+            <End Role="Order_Details" EntitySet="Order_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_JobTitle_T_Workflow" Association="Self.FK_T_JobTitle_T_Workflow">
+            <End Role="T_JobTitle" EntitySet="T_JobTitle" />
+            <End Role="T_Workflow" EntitySet="T_Workflow" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_Media_Order_Details" Association="Self.FK_T_Media_Order_Details">
+            <End Role="T_Media" EntitySet="T_Media" />
+            <End Role="Order_Details" EntitySet="Order_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_PaperSize_Order_Details" Association="Self.FK_T_PaperSize_Order_Details">
+            <End Role="T_PaperSize" EntitySet="T_PaperSize" />
+            <End Role="Order_Details" EntitySet="Order_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_PaymentType_Acct_INMaster" Association="Self.FK_T_PaymentType_Acct_INMaster">
+            <End Role="T_PaymentType" EntitySet="T_PaymentType" />
+            <End Role="Acct_INMaster" EntitySet="Acct_INMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_PaymentType_ReceiptHeader" Association="Self.FK_T_PaymentType_ReceiptHeader">
+            <End Role="T_PaymentType" EntitySet="T_PaymentType" />
+            <End Role="ReceiptHeader" EntitySet="ReceiptHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_Platform_Order_Details" Association="Self.FK_T_Platform_Order_Details">
+            <End Role="T_Platform" EntitySet="T_Platform" />
+            <End Role="Order_Details" EntitySet="Order_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_Priority_OrderHeader" Association="Self.FK_T_Priority_OrderHeader">
+            <End Role="T_Priority" EntitySet="T_Priority" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_Service_OrderHeader" Association="Self.FK_T_Service_OrderHeader">
+            <End Role="T_Service" EntitySet="T_Service" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_Software_T_SoftwareVersion" Association="Self.FK_T_Software_T_SoftwareVersion">
+            <End Role="T_Software" EntitySet="T_Software" />
+            <End Role="T_SoftwareVersion" EntitySet="T_SoftwareVersion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_Status_OrderHeader" Association="Self.FK_T_Status_OrderHeader">
+            <End Role="T_Status" EntitySet="T_Status" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_Workflow_Order_Journal" Association="Self.FK_T_Workflow_Order_Journal">
+            <End Role="T_Workflow" EntitySet="T_Workflow" />
+            <End Role="Order_Journal" EntitySet="Order_Journal" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_UserAuth" Association="Self.FK_User_UserAuth">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserAuth" EntitySet="UserAuth" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_UserNotification" Association="Self.FK_User_UserNotification">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserNotification" EntitySet="UserNotification" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_UserPreference" Association="Self.FK_User_UserPreference">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserPreference" EntitySet="UserPreference" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="xFilmModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Acct_INDetails">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="INMasterID" Type="Int32" Nullable="false" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="Int32" />
+          <Property Name="BillingCode" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Qty" Type="Int16" />
+          <Property Name="UnitAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Discount" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="Acct_INMaster" Relationship="Self.FK_Acct_INMaster_Acct_INDetails" FromRole="Acct_INDetails" ToRole="Acct_INMaster" />
+          <NavigationProperty Name="OrderPkPrintQueueVps" Relationship="Self.FK_OrderPkPrintQueueVps_INDetails" FromRole="Acct_INDetails" ToRole="OrderPkPrintQueueVps" />
+        </EntityType>
+        <EntityType Name="Acct_INMaster">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InvoiceNumber" Type="Int32" />
+          <Property Name="InvoiceDate" Type="DateTime" Precision="3" />
+          <Property Name="InvoiceAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ClientID" Type="Int32" Nullable="false" />
+          <Property Name="OrderID" Type="Int32" />
+          <Property Name="PaymentType" Type="Int32" />
+          <Property Name="Remarks" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Paid" Type="Boolean" Nullable="false" />
+          <Property Name="PaidOn" Type="DateTime" Precision="3" />
+          <Property Name="PaidAmount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="PaidRef" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="LastModifiedBy" Type="Int32" />
+          <Property Name="LastModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int16" />
+          <NavigationProperty Name="Acct_INDetails" Relationship="Self.FK_Acct_INMaster_Acct_INDetails" FromRole="Acct_INMaster" ToRole="Acct_INDetails" />
+          <NavigationProperty Name="ReceiptHeader" Relationship="Self.FK_Acct_INMaster_ReceiptHeader" FromRole="Acct_INMaster" ToRole="ReceiptHeader" />
+          <NavigationProperty Name="Client" Relationship="Self.FK_Client_Acct_INMaster" FromRole="Acct_INMaster" ToRole="Client" />
+          <NavigationProperty Name="OrderHeader" Relationship="Self.FK_OrderHeader_Acct_INMaster" FromRole="Acct_INMaster" ToRole="OrderHeader" />
+          <NavigationProperty Name="T_PaymentType" Relationship="Self.FK_T_PaymentType_Acct_INMaster" FromRole="Acct_INMaster" ToRole="T_PaymentType" />
+        </EntityType>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int16" />
+          <Property Name="CreditLimit" Type="Int16" />
+          <Property Name="PaymentTerms" Type="Int16" />
+          <Property Name="PaymentType" Type="Int16" />
+          <Property Name="PIN" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Branch" Type="Int32" />
+          <NavigationProperty Name="Acct_INMaster" Relationship="Self.FK_Client_Acct_INMaster" FromRole="Client" ToRole="Acct_INMaster" />
+          <NavigationProperty Name="Client_AddressBook" Relationship="Self.FK_Client_Client_AddressBook" FromRole="Client" ToRole="Client_AddressBook" />
+          <NavigationProperty Name="Client_User" Relationship="Self.FK_Client_Client_User" FromRole="Client" ToRole="Client_User" />
+          <NavigationProperty Name="ClientPricing" Relationship="Self.FK_Client_ClientPricing" FromRole="Client" ToRole="ClientPricing" />
+          <NavigationProperty Name="OrderHeader" Relationship="Self.FK_Client_OrderHeader" FromRole="Client" ToRole="OrderHeader" />
+          <NavigationProperty Name="PrintQueue" Relationship="Self.FK_Client_PrintQueue" FromRole="Client" ToRole="PrintQueue" />
+          <NavigationProperty Name="ReceiptHeader" Relationship="Self.FK_Client_ReceiptHeader" FromRole="Client" ToRole="ReceiptHeader" />
+        </EntityType>
+        <EntityType Name="Client_AddressBook">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClientID" Type="Int32" Nullable="false" />
+          <Property Name="PrimaryAddr" Type="Boolean" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Tel" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="Fax" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="ContactPerson" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Mobile" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="Pager" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="SMS" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="SMS_Lang" Type="Int32" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Client" Relationship="Self.FK_Client_Client_AddressBook" FromRole="Client_AddressBook" ToRole="Client" />
+        </EntityType>
+        <EntityType Name="Client_User">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClientID" Type="Int32" Nullable="false" />
+          <Property Name="PrimaryUser" Type="Boolean" Nullable="false" />
+          <Property Name="FullName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityLevel" Type="Int16" />
+          <Property Name="Email" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="LastIP" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="LastVisit" Type="DateTime" Precision="3" />
+          <Property Name="Branch" Type="Int32" />
+          <NavigationProperty Name="Client" Relationship="Self.FK_Client_Client_User" FromRole="Client_User" ToRole="Client" />
+          <NavigationProperty Name="OrderHeader" Relationship="Self.FK_Client_User_OrderHeader" FromRole="Client_User" ToRole="OrderHeader" />
+          <NavigationProperty Name="ReceiptHeader" Relationship="Self.FK_Client_User_ReceiptHeader" FromRole="Client_User" ToRole="ReceiptHeader" />
+        </EntityType>
+        <EntityType Name="ClientPricing">
+          <Key>
+            <PropertyRef Name="PricingId" />
+          </Key>
+          <Property Name="PricingId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="ItemId" Type="Int32" Nullable="false" />
+          <Property Name="Alias" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Tag" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Discount" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+          <Property Name="ModifiedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" Nullable="false" />
+          <Property Name="Retired" Type="Boolean" Nullable="false" />
+          <Property Name="RetiredOn" Type="DateTime" Precision="3" />
+          <Property Name="RetiredBy" Type="Int32" />
+          <NavigationProperty Name="Client" Relationship="Self.FK_Client_ClientPricing" FromRole="ClientPricing" ToRole="Client" />
+          <NavigationProperty Name="T_BillingCode_Item" Relationship="Self.FK_BillingItem_ClientPricing" FromRole="ClientPricing" ToRole="T_BillingCode_Item" />
+        </EntityType>
+        <EntityType Name="Order_Details">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
+          <Property Name="Media" Type="Int32" />
+          <Property Name="Platform" Type="Int32" />
+          <Property Name="Software" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="DeliveryMethod" Type="Int32" />
+          <Property Name="DeliveryAddr" Type="Int32" />
+          <Property Name="Proofing" Type="Boolean" Nullable="false" />
+          <Property Name="ProofingWith" Type="Int32" />
+          <Property Name="ProofingQty" Type="Int32" />
+          <Property Name="LineScreensResolution" Type="Int32" />
+          <Property Name="StandardSize" Type="Boolean" Nullable="false" />
+          <Property Name="SizeID" Type="Int32" />
+          <Property Name="A4Size" Type="Boolean" Nullable="false" />
+          <Property Name="A3Size" Type="Boolean" Nullable="false" />
+          <Property Name="OtherSize" Type="Boolean" Nullable="false" />
+          <Property Name="OtherSizeText" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="Positive" Type="Boolean" Nullable="false" />
+          <Property Name="Negative" Type="Boolean" Nullable="false" />
+          <Property Name="EmulsionUp" Type="Boolean" Nullable="false" />
+          <Property Name="EmulsionDown" Type="Boolean" Nullable="false" />
+          <Property Name="PrintComposite" Type="Boolean" Nullable="false" />
+          <Property Name="BlackPlateOnly" Type="Boolean" Nullable="false" />
+          <Property Name="Pages" Type="Int16" />
+          <Property Name="Separation" Type="Boolean" Nullable="false" />
+          <Property Name="SeparationC" Type="Boolean" Nullable="false" />
+          <Property Name="SeparationM" Type="Boolean" Nullable="false" />
+          <Property Name="SeparationY" Type="Boolean" Nullable="false" />
+          <Property Name="SeparationK" Type="Boolean" Nullable="false" />
+          <Property Name="DieCut" Type="Boolean" Nullable="false" />
+          <Property Name="DieCutB" Type="Boolean" Nullable="false" />
+          <Property Name="DieCutM" Type="Boolean" Nullable="false" />
+          <Property Name="DieCutC" Type="Boolean" Nullable="false" />
+          <Property Name="SpotColor" Type="Boolean" Nullable="false" />
+          <Property Name="SpotColorText" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="CropMarks" Type="Boolean" Nullable="false" />
+          <Property Name="BlackOverprint" Type="Boolean" Nullable="false" />
+          <Property Name="RegistrationMarks" Type="Boolean" Nullable="false" />
+          <Property Name="TotalFilms" Type="Int16" />
+          <Property Name="ColorPrint" Type="Boolean" Nullable="false" />
+          <Property Name="ColorPrintType" Type="Int16" />
+          <Property Name="ColorPrintQty" Type="Int16" />
+          <Property Name="ColorScan" Type="Boolean" Nullable="false" />
+          <Property Name="ColorScanType" Type="Int16" />
+          <Property Name="ColorScanQty" Type="Int16" />
+          <Property Name="Barcode" Type="Boolean" Nullable="false" />
+          <Property Name="BarcodeQty" Type="Int16" />
+          <Property Name="Artwork" Type="Boolean" Nullable="false" />
+          <Property Name="ArtworkAmount" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="OrderHeader" Relationship="Self.FK_OrderHeader_Order_Details" FromRole="Order_Details" ToRole="OrderHeader" />
+          <NavigationProperty Name="T_DeliveryMethod" Relationship="Self.FK_T_DeliveryMethod_Order_Details" FromRole="Order_Details" ToRole="T_DeliveryMethod" />
+          <NavigationProperty Name="T_Media" Relationship="Self.FK_T_Media_Order_Details" FromRole="Order_Details" ToRole="T_Media" />
+          <NavigationProperty Name="T_PaperSize" Relationship="Self.FK_T_PaperSize_Order_Details" FromRole="Order_Details" ToRole="T_PaperSize" />
+          <NavigationProperty Name="T_Platform" Relationship="Self.FK_T_Platform_Order_Details" FromRole="Order_Details" ToRole="T_Platform" />
+        </EntityType>
+        <EntityType Name="Order_Internal">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
+          <Property Name="OutputBy" Type="Int32" />
+          <Property Name="A4" Type="Boolean" Nullable="false" />
+          <Property Name="A4Qty" Type="Int16" />
+          <Property Name="A3" Type="Boolean" Nullable="false" />
+          <Property Name="A3Qty" Type="Int16" />
+          <Property Name="A4SetWProof" Type="Boolean" Nullable="false" />
+          <Property Name="A4SetWProofQty" Type="Int16" />
+          <Property Name="A3SetWProof" Type="Boolean" Nullable="false" />
+          <Property Name="A3SetWProofQty" Type="Int16" />
+          <Property Name="OtherSize" Type="Boolean" Nullable="false" />
+          <Property Name="OtherSizeW" Type="Int16" />
+          <Property Name="OtherSizeH" Type="Int16" />
+          <Property Name="OtherSizeQty" Type="Int16" />
+          <Property Name="Proofing4C" Type="Boolean" Nullable="false" />
+          <Property Name="Proofing4CQty" Type="Int16" />
+          <Property Name="ProofingSpotColor" Type="Boolean" Nullable="false" />
+          <Property Name="ProofingSpotColorQty" Type="Int16" />
+          <Property Name="ProofingAdditional" Type="Boolean" Nullable="false" />
+          <Property Name="ProofingAdditionalQty" Type="Int16" />
+          <Property Name="ArtworkFee" Type="Boolean" Nullable="false" />
+          <Property Name="ArtworkFeeAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="UrgentCharge" Type="Boolean" Nullable="false" />
+          <Property Name="Reprint" Type="Boolean" Nullable="false" />
+          <Property Name="ReprintText" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="DateUpdated" Type="DateTime" Precision="3" />
+          <Property Name="UpdateCounter" Type="Int16" />
+          <NavigationProperty Name="OrderHeader" Relationship="Self.FK_OrderHeader_Order_Internal" FromRole="Order_Internal" ToRole="OrderHeader" />
+        </EntityType>
+        <EntityType Name="Order_Journal">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="DateUpdated" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="OrderHeader" Relationship="Self.FK_OrderHeader_Order_Journal" FromRole="Order_Journal" ToRole="OrderHeader" />
+          <NavigationProperty Name="T_Workflow" Relationship="Self.FK_T_Workflow_Order_Journal" FromRole="Order_Journal" ToRole="T_Workflow" />
+        </EntityType>
+        <EntityType Name="OrderComment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OrderID" Type="Int32" />
+          <NavigationProperty Name="OrderHeader" Relationship="Self.FK_OrderHeader_OrderComment" FromRole="OrderComment" ToRole="OrderHeader" />
+        </EntityType>
+        <EntityType Name="OrderHeader">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClientID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="ServiceType" Type="Int32" />
+          <Property Name="PrePressOp" Type="Int32" />
+          <Property Name="ProofingOp" Type="Int32" />
+          <Property Name="Attachment" Type="Boolean" Nullable="false" />
+          <Property Name="AttachmentURL" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Remarks" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DateReceived" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateCompleted" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="Priority" Type="Int32" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Paid" Type="Boolean" Nullable="false" />
+          <Property Name="PaidOn" Type="DateTime" Precision="3" />
+          <Property Name="PaidRef" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Acct_INMaster" Relationship="Self.FK_OrderHeader_Acct_INMaster" FromRole="OrderHeader" ToRole="Acct_INMaster" />
+          <NavigationProperty Name="Client" Relationship="Self.FK_Client_OrderHeader" FromRole="OrderHeader" ToRole="Client" />
+          <NavigationProperty Name="Client_User" Relationship="Self.FK_Client_User_OrderHeader" FromRole="OrderHeader" ToRole="Client_User" />
+          <NavigationProperty Name="Order_Details" Relationship="Self.FK_OrderHeader_Order_Details" FromRole="OrderHeader" ToRole="Order_Details" />
+          <NavigationProperty Name="Order_Internal" Relationship="Self.FK_OrderHeader_Order_Internal" FromRole="OrderHeader" ToRole="Order_Internal" />
+          <NavigationProperty Name="Order_Journal" Relationship="Self.FK_OrderHeader_Order_Journal" FromRole="OrderHeader" ToRole="Order_Journal" />
+          <NavigationProperty Name="OrderComment" Relationship="Self.FK_OrderHeader_OrderComment" FromRole="OrderHeader" ToRole="OrderComment" />
+          <NavigationProperty Name="OrderPkPrintQueueVps" Relationship="Self.FK_OrderHeader_OrderPkPrintQueuVps" FromRole="OrderHeader" ToRole="OrderPkPrintQueueVps" />
+          <NavigationProperty Name="PrintQueue" Relationship="Self.FK_OrderHeader_PrintQueue" FromRole="OrderHeader" ToRole="PrintQueue" />
+          <NavigationProperty Name="T_Priority" Relationship="Self.FK_T_Priority_OrderHeader" FromRole="OrderHeader" ToRole="T_Priority" />
+          <NavigationProperty Name="T_Service" Relationship="Self.FK_T_Service_OrderHeader" FromRole="OrderHeader" ToRole="T_Service" />
+          <NavigationProperty Name="T_Status" Relationship="Self.FK_T_Status_OrderHeader" FromRole="OrderHeader" ToRole="T_Status" />
+        </EntityType>
+        <EntityType Name="OrderPkPrintQueueVps">
+          <Key>
+            <PropertyRef Name="OrderPkPrintQueueVpsId" />
+          </Key>
+          <Property Name="OrderPkPrintQueueVpsId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderHeaderId" Type="Int32" />
+          <Property Name="PrintQueueVpsId" Type="Int32" />
+          <Property Name="CheckedPlate" Type="Boolean" Nullable="false" />
+          <Property Name="CheckedCip3" Type="Boolean" Nullable="false" />
+          <Property Name="CheckedBlueprint" Type="Boolean" Nullable="false" />
+          <Property Name="IsReady" Type="Boolean" Nullable="false" />
+          <Property Name="IsReceived" Type="Boolean" Nullable="false" />
+          <Property Name="IsBilled" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+          <Property Name="ModifiedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="Retired" Type="Boolean" Nullable="false" />
+          <Property Name="RetiredOn" Type="DateTime" Precision="3" />
+          <Property Name="RetiredBy" Type="Int32" />
+          <NavigationProperty Name="Acct_INDetails" Relationship="Self.FK_OrderPkPrintQueueVps_INDetails" FromRole="OrderPkPrintQueueVps" ToRole="Acct_INDetails" />
+          <NavigationProperty Name="OrderHeader" Relationship="Self.FK_OrderHeader_OrderPkPrintQueuVps" FromRole="OrderPkPrintQueueVps" ToRole="OrderHeader" />
+          <NavigationProperty Name="ReceiptDetail" Relationship="Self.FK_OrderPkPrintQueueVps_ReceiptDetail" FromRole="OrderPkPrintQueueVps" ToRole="ReceiptDetail" />
+          <NavigationProperty Name="PrintQueue_VPS" Relationship="Self.FK_PrintQueueVps_OrderPkPrintQueuVps" FromRole="OrderPkPrintQueueVps" ToRole="PrintQueue_VPS" />
+        </EntityType>
+        <EntityType Name="PosTx">
+          <Key>
+            <PropertyRef Name="TxID" />
+          </Key>
+          <Property Name="TxID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TxDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Branch" Type="Int32" />
+          <Property Name="TxPosID" Type="Int32" Nullable="false" />
+          <Property Name="TxType" Type="Int32" Nullable="false" />
+          <Property Name="TxRef" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="TxAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="TxAmountType" Type="Int32" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="Remarks" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PrintQueue">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClientID" Type="Int32" Nullable="false" />
+          <Property Name="OrderID" Type="Int32" />
+          <Property Name="CupsJobID" Type="String" MaxLength="16" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CupsJobTitle" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PlateSize" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="BlueprintOrdered" Type="Boolean" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="ModifiedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="Retired" Type="Boolean" Nullable="false" />
+          <Property Name="RetiredOn" Type="DateTime" Precision="3" />
+          <Property Name="RetiredBy" Type="Int32" />
+          <NavigationProperty Name="Client" Relationship="Self.FK_Client_PrintQueue" FromRole="PrintQueue" ToRole="Client" />
+          <NavigationProperty Name="OrderHeader" Relationship="Self.FK_OrderHeader_PrintQueue" FromRole="PrintQueue" ToRole="OrderHeader" />
+          <NavigationProperty Name="PrintQueue_VPS" Relationship="Self.FK_PrintQueue_PrintQueue_VPS" FromRole="PrintQueue" ToRole="PrintQueue_VPS" />
+          <NavigationProperty Name="PrintQueue_LifeCycle" Relationship="Self.FK_PrintQueue_PrintQueueLifeCycle" FromRole="PrintQueue" ToRole="PrintQueue_LifeCycle" />
+        </EntityType>
+        <EntityType Name="PrintQueue_LifeCycle">
+          <Key>
+            <PropertyRef Name="LifeCycleId" />
+          </Key>
+          <Property Name="LifeCycleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PrintQueueId" Type="Int32" Nullable="false" />
+          <Property Name="PrintQueueVpsId" Type="Int32" />
+          <Property Name="PrintQSubitemType" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PrintQueue" Relationship="Self.FK_PrintQueue_PrintQueueLifeCycle" FromRole="PrintQueue_LifeCycle" ToRole="PrintQueue" />
+          <NavigationProperty Name="PrintQueue_VPS" Relationship="Self.FK_PrintQueueVPS_PrintQueueLifeCycle" FromRole="PrintQueue_LifeCycle" ToRole="PrintQueue_VPS" />
+        </EntityType>
+        <EntityType Name="PrintQueue_VPS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PrintQueueID" Type="Int32" Nullable="false" />
+          <Property Name="VpsFileName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PlateOrdered" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="ModifiedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="Retired" Type="Boolean" />
+          <Property Name="RetiredOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="RetiredBy" Type="Int32" />
+          <NavigationProperty Name="OrderPkPrintQueueVps" Relationship="Self.FK_PrintQueueVps_OrderPkPrintQueuVps" FromRole="PrintQueue_VPS" ToRole="OrderPkPrintQueueVps" />
+          <NavigationProperty Name="PrintQueue" Relationship="Self.FK_PrintQueue_PrintQueue_VPS" FromRole="PrintQueue_VPS" ToRole="PrintQueue" />
+          <NavigationProperty Name="PrintQueue_LifeCycle" Relationship="Self.FK_PrintQueueVPS_PrintQueueLifeCycle" FromRole="PrintQueue_VPS" ToRole="PrintQueue_LifeCycle" />
+        </EntityType>
+        <EntityType Name="ReceiptDetail">
+          <Key>
+            <PropertyRef Name="ReceiptDetailId" />
+          </Key>
+          <Property Name="ReceiptDetailId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReceiptHeaderId" Type="Int32" Nullable="false" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="Int32" />
+          <Property Name="BillingCode" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Qty" Type="Int16" />
+          <Property Name="UnitAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Discount" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
+          <NavigationProperty Name="OrderPkPrintQueueVps" Relationship="Self.FK_OrderPkPrintQueueVps_ReceiptDetail" FromRole="ReceiptDetail" ToRole="OrderPkPrintQueueVps" />
+          <NavigationProperty Name="ReceiptHeader" Relationship="Self.FK_ReceiptHeader_ReceiptDetail" FromRole="ReceiptDetail" ToRole="ReceiptHeader" />
+        </EntityType>
+        <EntityType Name="ReceiptHeader">
+          <Key>
+            <PropertyRef Name="ReceiptHeaderId" />
+          </Key>
+          <Property Name="ReceiptHeaderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReceiptNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiptDate" Type="DateTime" Precision="3" />
+          <Property Name="ReceiptAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="PaymentType" Type="Int32" />
+          <Property Name="INMasterId" Type="Int32" />
+          <Property Name="ClientUserId" Type="Int32" />
+          <Property Name="Remarks" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Paid" Type="Boolean" Nullable="false" />
+          <Property Name="PaidOn" Type="DateTime" Precision="3" />
+          <Property Name="PaidAmount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="PaidRef" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+          <Property Name="ModifiedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Acct_INMaster" Relationship="Self.FK_Acct_INMaster_ReceiptHeader" FromRole="ReceiptHeader" ToRole="Acct_INMaster" />
+          <NavigationProperty Name="Client" Relationship="Self.FK_Client_ReceiptHeader" FromRole="ReceiptHeader" ToRole="Client" />
+          <NavigationProperty Name="Client_User" Relationship="Self.FK_Client_User_ReceiptHeader" FromRole="ReceiptHeader" ToRole="Client_User" />
+          <NavigationProperty Name="ReceiptDetail" Relationship="Self.FK_ReceiptHeader_ReceiptDetail" FromRole="ReceiptHeader" ToRole="ReceiptDetail" />
+          <NavigationProperty Name="T_PaymentType" Relationship="Self.FK_T_PaymentType_ReceiptHeader" FromRole="ReceiptHeader" ToRole="T_PaymentType" />
+        </EntityType>
+        <EntityType Name="Staff">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="FullName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="JobTitle" Type="Int32" />
+        </EntityType>
+        <EntityType Name="T_BillingCode_Dept">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="T_BillingCode_Item" Relationship="Self.FK_T_BillingCode_Dept_T_BillingCode_Item" FromRole="T_BillingCode_Dept" ToRole="T_BillingCode_Item" />
+        </EntityType>
+        <EntityType Name="T_BillingCode_Item">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DeptID" Type="Int32" />
+          <Property Name="ItemCode" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="GroupCode" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="UoM" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Retired" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ClientPricing" Relationship="Self.FK_BillingItem_ClientPricing" FromRole="T_BillingCode_Item" ToRole="ClientPricing" />
+          <NavigationProperty Name="T_BillingCode_Dept" Relationship="Self.FK_T_BillingCode_Dept_T_BillingCode_Item" FromRole="T_BillingCode_Item" ToRole="T_BillingCode_Dept" />
+        </EntityType>
+        <EntityType Name="T_DeliveryMethod">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Order_Details" Relationship="Self.FK_T_DeliveryMethod_Order_Details" FromRole="T_DeliveryMethod" ToRole="Order_Details" />
+        </EntityType>
+        <EntityType Name="T_FriendlyService">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="T_JobTitle">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="T_Workflow" Relationship="Self.FK_T_JobTitle_T_Workflow" FromRole="T_JobTitle" ToRole="T_Workflow" />
+        </EntityType>
+        <EntityType Name="T_LSR">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="T_Media">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Order_Details" Relationship="Self.FK_T_Media_Order_Details" FromRole="T_Media" ToRole="Order_Details" />
+        </EntityType>
+        <EntityType Name="T_PaperSize">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Order_Details" Relationship="Self.FK_T_PaperSize_Order_Details" FromRole="T_PaperSize" ToRole="Order_Details" />
+        </EntityType>
+        <EntityType Name="T_PaymentType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Acct_INMaster" Relationship="Self.FK_T_PaymentType_Acct_INMaster" FromRole="T_PaymentType" ToRole="Acct_INMaster" />
+          <NavigationProperty Name="ReceiptHeader" Relationship="Self.FK_T_PaymentType_ReceiptHeader" FromRole="T_PaymentType" ToRole="ReceiptHeader" />
+        </EntityType>
+        <EntityType Name="T_Platform">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Order_Details" Relationship="Self.FK_T_Platform_Order_Details" FromRole="T_Platform" ToRole="Order_Details" />
+        </EntityType>
+        <EntityType Name="T_Priority">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="OrderHeader" Relationship="Self.FK_T_Priority_OrderHeader" FromRole="T_Priority" ToRole="OrderHeader" />
+        </EntityType>
+        <EntityType Name="T_ProofingMaterial">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="T_Service">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="OrderHeader" Relationship="Self.FK_T_Service_OrderHeader" FromRole="T_Service" ToRole="OrderHeader" />
+        </EntityType>
+        <EntityType Name="T_Software">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="T_SoftwareVersion" Relationship="Self.FK_T_Software_T_SoftwareVersion" FromRole="T_Software" ToRole="T_SoftwareVersion" />
+        </EntityType>
+        <EntityType Name="T_SoftwareVersion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SoftwareID" Type="Int32" Nullable="false" />
+          <Property Name="VersionNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="T_Software" Relationship="Self.FK_T_Software_T_SoftwareVersion" FromRole="T_SoftwareVersion" ToRole="T_Software" />
+        </EntityType>
+        <EntityType Name="T_Status">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="Phase" Type="Int32" />
+          <NavigationProperty Name="OrderHeader" Relationship="Self.FK_T_Status_OrderHeader" FromRole="T_Status" ToRole="OrderHeader" />
+        </EntityType>
+        <EntityType Name="T_Workflow">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobTitle" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Order_Journal" Relationship="Self.FK_T_Workflow_Order_Journal" FromRole="T_Workflow" ToRole="Order_Journal" />
+          <NavigationProperty Name="T_JobTitle" Relationship="Self.FK_T_JobTitle_T_Workflow" FromRole="T_Workflow" ToRole="T_JobTitle" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserType" Type="Int32" Nullable="false" />
+          <Property Name="UserSid" Type="Guid" Nullable="false" />
+          <Property Name="LoginName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LoginPassword" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Alias" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+          <Property Name="ModifiedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" Nullable="false" />
+          <Property Name="Retired" Type="Boolean" Nullable="false" />
+          <Property Name="RetiredOn" Type="DateTime" Precision="3" />
+          <Property Name="RetiredBy" Type="Int32" />
+          <NavigationProperty Name="UserAuth" Relationship="Self.FK_User_UserAuth" FromRole="User" ToRole="UserAuth" />
+          <NavigationProperty Name="UserNotification" Relationship="Self.FK_User_UserNotification" FromRole="User" ToRole="UserNotification" />
+          <NavigationProperty Name="UserPreference" Relationship="Self.FK_User_UserPreference" FromRole="User" ToRole="UserPreference" />
+        </EntityType>
+        <EntityType Name="UserAuth">
+          <Key>
+            <PropertyRef Name="AuthId" />
+          </Key>
+          <Property Name="AuthId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="DeviceId" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DeviceType" Type="Int32" Nullable="false" />
+          <Property Name="Plateform" Type="Int32" Nullable="false" />
+          <Property Name="MetadataXml" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="User" Relationship="Self.FK_User_UserAuth" FromRole="UserAuth" ToRole="User" />
+        </EntityType>
+        <EntityType Name="UserNotification">
+          <Key>
+            <PropertyRef Name="NotifyId" />
+          </Key>
+          <Property Name="NotifyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="DeviceId" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DeviceType" Type="Int32" Nullable="false" />
+          <Property Name="Plateform" Type="Int32" Nullable="false" />
+          <Property Name="MetadataXml" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="User" Relationship="Self.FK_User_UserNotification" FromRole="UserNotification" ToRole="User" />
+        </EntityType>
+        <EntityType Name="UserPreference">
+          <Key>
+            <PropertyRef Name="PreferenceId" />
+          </Key>
+          <Property Name="PreferenceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="ObjectId" Type="Guid" Nullable="false" />
+          <Property Name="ObjectType" Type="Int32" Nullable="false" />
+          <Property Name="MetadataXml" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="User" Relationship="Self.FK_User_UserPreference" FromRole="UserPreference" ToRole="User" />
+        </EntityType>
+        <EntityType Name="X_Counter">
+          <Key>
+            <PropertyRef Name="CounterID" />
+          </Key>
+          <Property Name="CounterID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClientID" Type="Int32" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="StaffID" Type="Int32" />
+          <Property Name="OrderID" Type="Int32" />
+          <Property Name="InvoiceNo" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Z_WebColor">
+          <Key>
+            <PropertyRef Name="ColorID" />
+          </Key>
+          <Property Name="ColorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_Acct_INMaster_Acct_INDetails">
+          <End Role="Acct_INMaster" Type="Self.Acct_INMaster" Multiplicity="1" />
+          <End Role="Acct_INDetails" Type="Self.Acct_INDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Acct_INMaster">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Acct_INDetails">
+              <PropertyRef Name="INMasterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderPkPrintQueueVps_INDetails">
+          <End Role="OrderPkPrintQueueVps" Type="Self.OrderPkPrintQueueVps" Multiplicity="0..1" />
+          <End Role="Acct_INDetails" Type="Self.Acct_INDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderPkPrintQueueVps">
+              <PropertyRef Name="OrderPkPrintQueueVpsId" />
+            </Principal>
+            <Dependent Role="Acct_INDetails">
+              <PropertyRef Name="OrderPkPrintQueueVpsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Acct_INMaster_ReceiptHeader">
+          <End Role="Acct_INMaster" Type="Self.Acct_INMaster" Multiplicity="0..1" />
+          <End Role="ReceiptHeader" Type="Self.ReceiptHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Acct_INMaster">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ReceiptHeader">
+              <PropertyRef Name="INMasterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Client_Acct_INMaster">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Acct_INMaster" Type="Self.Acct_INMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Acct_INMaster">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderHeader_Acct_INMaster">
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="0..1" />
+          <End Role="Acct_INMaster" Type="Self.Acct_INMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderHeader">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Acct_INMaster">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_PaymentType_Acct_INMaster">
+          <End Role="T_PaymentType" Type="Self.T_PaymentType" Multiplicity="0..1" />
+          <End Role="Acct_INMaster" Type="Self.Acct_INMaster" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_PaymentType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Acct_INMaster">
+              <PropertyRef Name="PaymentType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Client_Client_AddressBook">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Client_AddressBook" Type="Self.Client_AddressBook" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Client_AddressBook">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Client_Client_User">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="Client_User" Type="Self.Client_User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Client_User">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Client_ClientPricing">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="ClientPricing" Type="Self.ClientPricing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ClientPricing">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Client_OrderHeader">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderHeader">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Client_PrintQueue">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="PrintQueue" Type="Self.PrintQueue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PrintQueue">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Client_ReceiptHeader">
+          <End Role="Client" Type="Self.Client" Multiplicity="1" />
+          <End Role="ReceiptHeader" Type="Self.ReceiptHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ReceiptHeader">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Client_User_OrderHeader">
+          <End Role="Client_User" Type="Self.Client_User" Multiplicity="0..1" />
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client_User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderHeader">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Client_User_ReceiptHeader">
+          <End Role="Client_User" Type="Self.Client_User" Multiplicity="0..1" />
+          <End Role="ReceiptHeader" Type="Self.ReceiptHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client_User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ReceiptHeader">
+              <PropertyRef Name="ClientUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BillingItem_ClientPricing">
+          <End Role="T_BillingCode_Item" Type="Self.T_BillingCode_Item" Multiplicity="1" />
+          <End Role="ClientPricing" Type="Self.ClientPricing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_BillingCode_Item">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ClientPricing">
+              <PropertyRef Name="ItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderHeader_Order_Details">
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="1" />
+          <End Role="Order_Details" Type="Self.Order_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderHeader">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order_Details">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_DeliveryMethod_Order_Details">
+          <End Role="T_DeliveryMethod" Type="Self.T_DeliveryMethod" Multiplicity="0..1" />
+          <End Role="Order_Details" Type="Self.Order_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_DeliveryMethod">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order_Details">
+              <PropertyRef Name="DeliveryMethod" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_Media_Order_Details">
+          <End Role="T_Media" Type="Self.T_Media" Multiplicity="0..1" />
+          <End Role="Order_Details" Type="Self.Order_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_Media">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order_Details">
+              <PropertyRef Name="Media" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_PaperSize_Order_Details">
+          <End Role="T_PaperSize" Type="Self.T_PaperSize" Multiplicity="0..1" />
+          <End Role="Order_Details" Type="Self.Order_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_PaperSize">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order_Details">
+              <PropertyRef Name="SizeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_Platform_Order_Details">
+          <End Role="T_Platform" Type="Self.T_Platform" Multiplicity="0..1" />
+          <End Role="Order_Details" Type="Self.Order_Details" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_Platform">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order_Details">
+              <PropertyRef Name="Platform" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderHeader_Order_Internal">
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="1" />
+          <End Role="Order_Internal" Type="Self.Order_Internal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderHeader">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order_Internal">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderHeader_Order_Journal">
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="1" />
+          <End Role="Order_Journal" Type="Self.Order_Journal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderHeader">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order_Journal">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_Workflow_Order_Journal">
+          <End Role="T_Workflow" Type="Self.T_Workflow" Multiplicity="0..1" />
+          <End Role="Order_Journal" Type="Self.Order_Journal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_Workflow">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order_Journal">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderHeader_OrderComment">
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="0..1" />
+          <End Role="OrderComment" Type="Self.OrderComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderHeader">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderComment">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderHeader_OrderPkPrintQueuVps">
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="0..1" />
+          <End Role="OrderPkPrintQueueVps" Type="Self.OrderPkPrintQueueVps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderHeader">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderPkPrintQueueVps">
+              <PropertyRef Name="OrderHeaderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderHeader_PrintQueue">
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="0..1" />
+          <End Role="PrintQueue" Type="Self.PrintQueue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderHeader">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PrintQueue">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_Priority_OrderHeader">
+          <End Role="T_Priority" Type="Self.T_Priority" Multiplicity="0..1" />
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_Priority">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderHeader">
+              <PropertyRef Name="Priority" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_Service_OrderHeader">
+          <End Role="T_Service" Type="Self.T_Service" Multiplicity="0..1" />
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_Service">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderHeader">
+              <PropertyRef Name="ServiceType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_Status_OrderHeader">
+          <End Role="T_Status" Type="Self.T_Status" Multiplicity="0..1" />
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_Status">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderHeader">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderPkPrintQueueVps_ReceiptDetail">
+          <End Role="OrderPkPrintQueueVps" Type="Self.OrderPkPrintQueueVps" Multiplicity="0..1" />
+          <End Role="ReceiptDetail" Type="Self.ReceiptDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderPkPrintQueueVps">
+              <PropertyRef Name="OrderPkPrintQueueVpsId" />
+            </Principal>
+            <Dependent Role="ReceiptDetail">
+              <PropertyRef Name="OrderPkPrintQueueVpsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PrintQueueVps_OrderPkPrintQueuVps">
+          <End Role="PrintQueue_VPS" Type="Self.PrintQueue_VPS" Multiplicity="0..1" />
+          <End Role="OrderPkPrintQueueVps" Type="Self.OrderPkPrintQueueVps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PrintQueue_VPS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderPkPrintQueueVps">
+              <PropertyRef Name="PrintQueueVpsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PrintQueue_PrintQueue_VPS">
+          <End Role="PrintQueue" Type="Self.PrintQueue" Multiplicity="1" />
+          <End Role="PrintQueue_VPS" Type="Self.PrintQueue_VPS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PrintQueue">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PrintQueue_VPS">
+              <PropertyRef Name="PrintQueueID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PrintQueue_PrintQueueLifeCycle">
+          <End Role="PrintQueue" Type="Self.PrintQueue" Multiplicity="1" />
+          <End Role="PrintQueue_LifeCycle" Type="Self.PrintQueue_LifeCycle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PrintQueue">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PrintQueue_LifeCycle">
+              <PropertyRef Name="PrintQueueId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PrintQueueVPS_PrintQueueLifeCycle">
+          <End Role="PrintQueue_VPS" Type="Self.PrintQueue_VPS" Multiplicity="0..1" />
+          <End Role="PrintQueue_LifeCycle" Type="Self.PrintQueue_LifeCycle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PrintQueue_VPS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PrintQueue_LifeCycle">
+              <PropertyRef Name="PrintQueueVpsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ReceiptHeader_ReceiptDetail">
+          <End Role="ReceiptHeader" Type="Self.ReceiptHeader" Multiplicity="1" />
+          <End Role="ReceiptDetail" Type="Self.ReceiptDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ReceiptHeader">
+              <PropertyRef Name="ReceiptHeaderId" />
+            </Principal>
+            <Dependent Role="ReceiptDetail">
+              <PropertyRef Name="ReceiptHeaderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_PaymentType_ReceiptHeader">
+          <End Role="T_PaymentType" Type="Self.T_PaymentType" Multiplicity="0..1" />
+          <End Role="ReceiptHeader" Type="Self.ReceiptHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_PaymentType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ReceiptHeader">
+              <PropertyRef Name="PaymentType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_BillingCode_Dept_T_BillingCode_Item">
+          <End Role="T_BillingCode_Dept" Type="Self.T_BillingCode_Dept" Multiplicity="0..1" />
+          <End Role="T_BillingCode_Item" Type="Self.T_BillingCode_Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_BillingCode_Dept">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_BillingCode_Item">
+              <PropertyRef Name="DeptID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_JobTitle_T_Workflow">
+          <End Role="T_JobTitle" Type="Self.T_JobTitle" Multiplicity="0..1" />
+          <End Role="T_Workflow" Type="Self.T_Workflow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_JobTitle">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_Workflow">
+              <PropertyRef Name="JobTitle" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_Software_T_SoftwareVersion">
+          <End Role="T_Software" Type="Self.T_Software" Multiplicity="1" />
+          <End Role="T_SoftwareVersion" Type="Self.T_SoftwareVersion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_Software">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="T_SoftwareVersion">
+              <PropertyRef Name="SoftwareID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_UserAuth">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserAuth" Type="Self.UserAuth" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserAuth">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_UserNotification">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserNotification" Type="Self.UserNotification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserNotification">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_UserPreference">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="UserPreference" Type="Self.UserPreference" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserPreference">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="xFilmEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Acct_INDetails" EntityType="Self.Acct_INDetails" />
+          <EntitySet Name="Acct_INMaster" EntityType="Self.Acct_INMaster" />
+          <EntitySet Name="Client" EntityType="Self.Client" />
+          <EntitySet Name="Client_AddressBook" EntityType="Self.Client_AddressBook" />
+          <EntitySet Name="Client_User" EntityType="Self.Client_User" />
+          <EntitySet Name="ClientPricing" EntityType="Self.ClientPricing" />
+          <EntitySet Name="Order_Details" EntityType="Self.Order_Details" />
+          <EntitySet Name="Order_Internal" EntityType="Self.Order_Internal" />
+          <EntitySet Name="Order_Journal" EntityType="Self.Order_Journal" />
+          <EntitySet Name="OrderComment" EntityType="Self.OrderComment" />
+          <EntitySet Name="OrderHeader" EntityType="Self.OrderHeader" />
+          <EntitySet Name="OrderPkPrintQueueVps" EntityType="Self.OrderPkPrintQueueVps" />
+          <EntitySet Name="PosTx" EntityType="Self.PosTx" />
+          <EntitySet Name="PrintQueue" EntityType="Self.PrintQueue" />
+          <EntitySet Name="PrintQueue_LifeCycle" EntityType="Self.PrintQueue_LifeCycle" />
+          <EntitySet Name="PrintQueue_VPS" EntityType="Self.PrintQueue_VPS" />
+          <EntitySet Name="ReceiptDetail" EntityType="Self.ReceiptDetail" />
+          <EntitySet Name="ReceiptHeader" EntityType="Self.ReceiptHeader" />
+          <EntitySet Name="Staff" EntityType="Self.Staff" />
+          <EntitySet Name="T_BillingCode_Dept" EntityType="Self.T_BillingCode_Dept" />
+          <EntitySet Name="T_BillingCode_Item" EntityType="Self.T_BillingCode_Item" />
+          <EntitySet Name="T_DeliveryMethod" EntityType="Self.T_DeliveryMethod" />
+          <EntitySet Name="T_FriendlyService" EntityType="Self.T_FriendlyService" />
+          <EntitySet Name="T_JobTitle" EntityType="Self.T_JobTitle" />
+          <EntitySet Name="T_LSR" EntityType="Self.T_LSR" />
+          <EntitySet Name="T_Media" EntityType="Self.T_Media" />
+          <EntitySet Name="T_PaperSize" EntityType="Self.T_PaperSize" />
+          <EntitySet Name="T_PaymentType" EntityType="Self.T_PaymentType" />
+          <EntitySet Name="T_Platform" EntityType="Self.T_Platform" />
+          <EntitySet Name="T_Priority" EntityType="Self.T_Priority" />
+          <EntitySet Name="T_ProofingMaterial" EntityType="Self.T_ProofingMaterial" />
+          <EntitySet Name="T_Service" EntityType="Self.T_Service" />
+          <EntitySet Name="T_Software" EntityType="Self.T_Software" />
+          <EntitySet Name="T_SoftwareVersion" EntityType="Self.T_SoftwareVersion" />
+          <EntitySet Name="T_Status" EntityType="Self.T_Status" />
+          <EntitySet Name="T_Workflow" EntityType="Self.T_Workflow" />
+          <EntitySet Name="User" EntityType="Self.User" />
+          <EntitySet Name="UserAuth" EntityType="Self.UserAuth" />
+          <EntitySet Name="UserNotification" EntityType="Self.UserNotification" />
+          <EntitySet Name="UserPreference" EntityType="Self.UserPreference" />
+          <EntitySet Name="X_Counter" EntityType="Self.X_Counter" />
+          <EntitySet Name="Z_WebColor" EntityType="Self.Z_WebColor" />
+          <AssociationSet Name="FK_Acct_INMaster_Acct_INDetails" Association="Self.FK_Acct_INMaster_Acct_INDetails">
+            <End Role="Acct_INMaster" EntitySet="Acct_INMaster" />
+            <End Role="Acct_INDetails" EntitySet="Acct_INDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderPkPrintQueueVps_INDetails" Association="Self.FK_OrderPkPrintQueueVps_INDetails">
+            <End Role="OrderPkPrintQueueVps" EntitySet="OrderPkPrintQueueVps" />
+            <End Role="Acct_INDetails" EntitySet="Acct_INDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Acct_INMaster_ReceiptHeader" Association="Self.FK_Acct_INMaster_ReceiptHeader">
+            <End Role="Acct_INMaster" EntitySet="Acct_INMaster" />
+            <End Role="ReceiptHeader" EntitySet="ReceiptHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Client_Acct_INMaster" Association="Self.FK_Client_Acct_INMaster">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Acct_INMaster" EntitySet="Acct_INMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderHeader_Acct_INMaster" Association="Self.FK_OrderHeader_Acct_INMaster">
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+            <End Role="Acct_INMaster" EntitySet="Acct_INMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_PaymentType_Acct_INMaster" Association="Self.FK_T_PaymentType_Acct_INMaster">
+            <End Role="T_PaymentType" EntitySet="T_PaymentType" />
+            <End Role="Acct_INMaster" EntitySet="Acct_INMaster" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Client_Client_AddressBook" Association="Self.FK_Client_Client_AddressBook">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Client_AddressBook" EntitySet="Client_AddressBook" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Client_Client_User" Association="Self.FK_Client_Client_User">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="Client_User" EntitySet="Client_User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Client_ClientPricing" Association="Self.FK_Client_ClientPricing">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="ClientPricing" EntitySet="ClientPricing" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Client_OrderHeader" Association="Self.FK_Client_OrderHeader">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Client_PrintQueue" Association="Self.FK_Client_PrintQueue">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="PrintQueue" EntitySet="PrintQueue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Client_ReceiptHeader" Association="Self.FK_Client_ReceiptHeader">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="ReceiptHeader" EntitySet="ReceiptHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Client_User_OrderHeader" Association="Self.FK_Client_User_OrderHeader">
+            <End Role="Client_User" EntitySet="Client_User" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Client_User_ReceiptHeader" Association="Self.FK_Client_User_ReceiptHeader">
+            <End Role="Client_User" EntitySet="Client_User" />
+            <End Role="ReceiptHeader" EntitySet="ReceiptHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BillingItem_ClientPricing" Association="Self.FK_BillingItem_ClientPricing">
+            <End Role="T_BillingCode_Item" EntitySet="T_BillingCode_Item" />
+            <End Role="ClientPricing" EntitySet="ClientPricing" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderHeader_Order_Details" Association="Self.FK_OrderHeader_Order_Details">
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+            <End Role="Order_Details" EntitySet="Order_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_DeliveryMethod_Order_Details" Association="Self.FK_T_DeliveryMethod_Order_Details">
+            <End Role="T_DeliveryMethod" EntitySet="T_DeliveryMethod" />
+            <End Role="Order_Details" EntitySet="Order_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_Media_Order_Details" Association="Self.FK_T_Media_Order_Details">
+            <End Role="T_Media" EntitySet="T_Media" />
+            <End Role="Order_Details" EntitySet="Order_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_PaperSize_Order_Details" Association="Self.FK_T_PaperSize_Order_Details">
+            <End Role="T_PaperSize" EntitySet="T_PaperSize" />
+            <End Role="Order_Details" EntitySet="Order_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_Platform_Order_Details" Association="Self.FK_T_Platform_Order_Details">
+            <End Role="T_Platform" EntitySet="T_Platform" />
+            <End Role="Order_Details" EntitySet="Order_Details" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderHeader_Order_Internal" Association="Self.FK_OrderHeader_Order_Internal">
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+            <End Role="Order_Internal" EntitySet="Order_Internal" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderHeader_Order_Journal" Association="Self.FK_OrderHeader_Order_Journal">
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+            <End Role="Order_Journal" EntitySet="Order_Journal" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_Workflow_Order_Journal" Association="Self.FK_T_Workflow_Order_Journal">
+            <End Role="T_Workflow" EntitySet="T_Workflow" />
+            <End Role="Order_Journal" EntitySet="Order_Journal" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderHeader_OrderComment" Association="Self.FK_OrderHeader_OrderComment">
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+            <End Role="OrderComment" EntitySet="OrderComment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderHeader_OrderPkPrintQueuVps" Association="Self.FK_OrderHeader_OrderPkPrintQueuVps">
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+            <End Role="OrderPkPrintQueueVps" EntitySet="OrderPkPrintQueueVps" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderHeader_PrintQueue" Association="Self.FK_OrderHeader_PrintQueue">
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+            <End Role="PrintQueue" EntitySet="PrintQueue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_Priority_OrderHeader" Association="Self.FK_T_Priority_OrderHeader">
+            <End Role="T_Priority" EntitySet="T_Priority" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_Service_OrderHeader" Association="Self.FK_T_Service_OrderHeader">
+            <End Role="T_Service" EntitySet="T_Service" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_Status_OrderHeader" Association="Self.FK_T_Status_OrderHeader">
+            <End Role="T_Status" EntitySet="T_Status" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderPkPrintQueueVps_ReceiptDetail" Association="Self.FK_OrderPkPrintQueueVps_ReceiptDetail">
+            <End Role="OrderPkPrintQueueVps" EntitySet="OrderPkPrintQueueVps" />
+            <End Role="ReceiptDetail" EntitySet="ReceiptDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PrintQueueVps_OrderPkPrintQueuVps" Association="Self.FK_PrintQueueVps_OrderPkPrintQueuVps">
+            <End Role="PrintQueue_VPS" EntitySet="PrintQueue_VPS" />
+            <End Role="OrderPkPrintQueueVps" EntitySet="OrderPkPrintQueueVps" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PrintQueue_PrintQueue_VPS" Association="Self.FK_PrintQueue_PrintQueue_VPS">
+            <End Role="PrintQueue" EntitySet="PrintQueue" />
+            <End Role="PrintQueue_VPS" EntitySet="PrintQueue_VPS" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PrintQueue_PrintQueueLifeCycle" Association="Self.FK_PrintQueue_PrintQueueLifeCycle">
+            <End Role="PrintQueue" EntitySet="PrintQueue" />
+            <End Role="PrintQueue_LifeCycle" EntitySet="PrintQueue_LifeCycle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PrintQueueVPS_PrintQueueLifeCycle" Association="Self.FK_PrintQueueVPS_PrintQueueLifeCycle">
+            <End Role="PrintQueue_VPS" EntitySet="PrintQueue_VPS" />
+            <End Role="PrintQueue_LifeCycle" EntitySet="PrintQueue_LifeCycle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ReceiptHeader_ReceiptDetail" Association="Self.FK_ReceiptHeader_ReceiptDetail">
+            <End Role="ReceiptHeader" EntitySet="ReceiptHeader" />
+            <End Role="ReceiptDetail" EntitySet="ReceiptDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_PaymentType_ReceiptHeader" Association="Self.FK_T_PaymentType_ReceiptHeader">
+            <End Role="T_PaymentType" EntitySet="T_PaymentType" />
+            <End Role="ReceiptHeader" EntitySet="ReceiptHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_BillingCode_Dept_T_BillingCode_Item" Association="Self.FK_T_BillingCode_Dept_T_BillingCode_Item">
+            <End Role="T_BillingCode_Dept" EntitySet="T_BillingCode_Dept" />
+            <End Role="T_BillingCode_Item" EntitySet="T_BillingCode_Item" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_JobTitle_T_Workflow" Association="Self.FK_T_JobTitle_T_Workflow">
+            <End Role="T_JobTitle" EntitySet="T_JobTitle" />
+            <End Role="T_Workflow" EntitySet="T_Workflow" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_Software_T_SoftwareVersion" Association="Self.FK_T_Software_T_SoftwareVersion">
+            <End Role="T_Software" EntitySet="T_Software" />
+            <End Role="T_SoftwareVersion" EntitySet="T_SoftwareVersion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_UserAuth" Association="Self.FK_User_UserAuth">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserAuth" EntitySet="UserAuth" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_UserNotification" Association="Self.FK_User_UserNotification">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserNotification" EntitySet="UserNotification" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_UserPreference" Association="Self.FK_User_UserPreference">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserPreference" EntitySet="UserPreference" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="xFilmModelStoreContainer" CdmEntityContainer="xFilmEntities">
+          <EntitySetMapping Name="Acct_INDetails">
+            <EntityTypeMapping TypeName="xFilmModel.Acct_INDetails">
+              <MappingFragment StoreEntitySet="Acct_INDetails">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="INMasterID" ColumnName="INMasterID" />
+                <ScalarProperty Name="OrderPkPrintQueueVpsId" ColumnName="OrderPkPrintQueueVpsId" />
+                <ScalarProperty Name="BillingCode" ColumnName="BillingCode" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="UnitAmount" ColumnName="UnitAmount" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Acct_INMaster">
+            <EntityTypeMapping TypeName="xFilmModel.Acct_INMaster">
+              <MappingFragment StoreEntitySet="Acct_INMaster">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="InvoiceNumber" ColumnName="InvoiceNumber" />
+                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+                <ScalarProperty Name="InvoiceAmount" ColumnName="InvoiceAmount" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="Paid" ColumnName="Paid" />
+                <ScalarProperty Name="PaidOn" ColumnName="PaidOn" />
+                <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
+                <ScalarProperty Name="PaidRef" ColumnName="PaidRef" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
+                <ScalarProperty Name="LastModifiedOn" ColumnName="LastModifiedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Client">
+            <EntityTypeMapping TypeName="xFilmModel.Client">
+              <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreditLimit" ColumnName="CreditLimit" />
+                <ScalarProperty Name="PaymentTerms" ColumnName="PaymentTerms" />
+                <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
+                <ScalarProperty Name="PIN" ColumnName="PIN" />
+                <ScalarProperty Name="Branch" ColumnName="Branch" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Client_AddressBook">
+            <EntityTypeMapping TypeName="xFilmModel.Client_AddressBook">
+              <MappingFragment StoreEntitySet="Client_AddressBook">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="PrimaryAddr" ColumnName="PrimaryAddr" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Pager" ColumnName="Pager" />
+                <ScalarProperty Name="SMS" ColumnName="SMS" />
+                <ScalarProperty Name="SMS_Lang" ColumnName="SMS_Lang" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Client_User">
+            <EntityTypeMapping TypeName="xFilmModel.Client_User">
+              <MappingFragment StoreEntitySet="Client_User">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="PrimaryUser" ColumnName="PrimaryUser" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="SecurityLevel" ColumnName="SecurityLevel" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="LastIP" ColumnName="LastIP" />
+                <ScalarProperty Name="LastVisit" ColumnName="LastVisit" />
+                <ScalarProperty Name="Branch" ColumnName="Branch" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ClientPricing">
+            <EntityTypeMapping TypeName="xFilmModel.ClientPricing">
+              <MappingFragment StoreEntitySet="ClientPricing">
+                <ScalarProperty Name="PricingId" ColumnName="PricingId" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="Alias" ColumnName="Alias" />
+                <ScalarProperty Name="Tag" ColumnName="Tag" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="Retired" ColumnName="Retired" />
+                <ScalarProperty Name="RetiredOn" ColumnName="RetiredOn" />
+                <ScalarProperty Name="RetiredBy" ColumnName="RetiredBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Order_Details">
+            <EntityTypeMapping TypeName="xFilmModel.Order_Details">
+              <MappingFragment StoreEntitySet="Order_Details">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="Media" ColumnName="Media" />
+                <ScalarProperty Name="Platform" ColumnName="Platform" />
+                <ScalarProperty Name="Software" ColumnName="Software" />
+                <ScalarProperty Name="DeliveryMethod" ColumnName="DeliveryMethod" />
+                <ScalarProperty Name="DeliveryAddr" ColumnName="DeliveryAddr" />
+                <ScalarProperty Name="Proofing" ColumnName="Proofing" />
+                <ScalarProperty Name="ProofingWith" ColumnName="ProofingWith" />
+                <ScalarProperty Name="ProofingQty" ColumnName="ProofingQty" />
+                <ScalarProperty Name="LineScreensResolution" ColumnName="LineScreensResolution" />
+                <ScalarProperty Name="StandardSize" ColumnName="StandardSize" />
+                <ScalarProperty Name="SizeID" ColumnName="SizeID" />
+                <ScalarProperty Name="A4Size" ColumnName="A4Size" />
+                <ScalarProperty Name="A3Size" ColumnName="A3Size" />
+                <ScalarProperty Name="OtherSize" ColumnName="OtherSize" />
+                <ScalarProperty Name="OtherSizeText" ColumnName="OtherSizeText" />
+                <ScalarProperty Name="Positive" ColumnName="Positive" />
+                <ScalarProperty Name="Negative" ColumnName="Negative" />
+                <ScalarProperty Name="EmulsionUp" ColumnName="EmulsionUp" />
+                <ScalarProperty Name="EmulsionDown" ColumnName="EmulsionDown" />
+                <ScalarProperty Name="PrintComposite" ColumnName="PrintComposite" />
+                <ScalarProperty Name="BlackPlateOnly" ColumnName="BlackPlateOnly" />
+                <ScalarProperty Name="Pages" ColumnName="Pages" />
+                <ScalarProperty Name="Separation" ColumnName="Separation" />
+                <ScalarProperty Name="SeparationC" ColumnName="SeparationC" />
+                <ScalarProperty Name="SeparationM" ColumnName="SeparationM" />
+                <ScalarProperty Name="SeparationY" ColumnName="SeparationY" />
+                <ScalarProperty Name="SeparationK" ColumnName="SeparationK" />
+                <ScalarProperty Name="DieCut" ColumnName="DieCut" />
+                <ScalarProperty Name="DieCutB" ColumnName="DieCutB" />
+                <ScalarProperty Name="DieCutM" ColumnName="DieCutM" />
+                <ScalarProperty Name="DieCutC" ColumnName="DieCutC" />
+                <ScalarProperty Name="SpotColor" ColumnName="SpotColor" />
+                <ScalarProperty Name="SpotColorText" ColumnName="SpotColorText" />
+                <ScalarProperty Name="CropMarks" ColumnName="CropMarks" />
+                <ScalarProperty Name="BlackOverprint" ColumnName="BlackOverprint" />
+                <ScalarProperty Name="RegistrationMarks" ColumnName="RegistrationMarks" />
+                <ScalarProperty Name="TotalFilms" ColumnName="TotalFilms" />
+                <ScalarProperty Name="ColorPrint" ColumnName="ColorPrint" />
+                <ScalarProperty Name="ColorPrintType" ColumnName="ColorPrintType" />
+                <ScalarProperty Name="ColorPrintQty" ColumnName="ColorPrintQty" />
+                <ScalarProperty Name="ColorScan" ColumnName="ColorScan" />
+                <ScalarProperty Name="ColorScanType" ColumnName="ColorScanType" />
+                <ScalarProperty Name="ColorScanQty" ColumnName="ColorScanQty" />
+                <ScalarProperty Name="Barcode" ColumnName="Barcode" />
+                <ScalarProperty Name="BarcodeQty" ColumnName="BarcodeQty" />
+                <ScalarProperty Name="Artwork" ColumnName="Artwork" />
+                <ScalarProperty Name="ArtworkAmount" ColumnName="ArtworkAmount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Order_Internal">
+            <EntityTypeMapping TypeName="xFilmModel.Order_Internal">
+              <MappingFragment StoreEntitySet="Order_Internal">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="OutputBy" ColumnName="OutputBy" />
+                <ScalarProperty Name="A4" ColumnName="A4" />
+                <ScalarProperty Name="A4Qty" ColumnName="A4Qty" />
+                <ScalarProperty Name="A3" ColumnName="A3" />
+                <ScalarProperty Name="A3Qty" ColumnName="A3Qty" />
+                <ScalarProperty Name="A4SetWProof" ColumnName="A4SetWProof" />
+                <ScalarProperty Name="A4SetWProofQty" ColumnName="A4SetWProofQty" />
+                <ScalarProperty Name="A3SetWProof" ColumnName="A3SetWProof" />
+                <ScalarProperty Name="A3SetWProofQty" ColumnName="A3SetWProofQty" />
+                <ScalarProperty Name="OtherSize" ColumnName="OtherSize" />
+                <ScalarProperty Name="OtherSizeW" ColumnName="OtherSizeW" />
+                <ScalarProperty Name="OtherSizeH" ColumnName="OtherSizeH" />
+                <ScalarProperty Name="OtherSizeQty" ColumnName="OtherSizeQty" />
+                <ScalarProperty Name="Proofing4C" ColumnName="Proofing4C" />
+                <ScalarProperty Name="Proofing4CQty" ColumnName="Proofing4CQty" />
+                <ScalarProperty Name="ProofingSpotColor" ColumnName="ProofingSpotColor" />
+                <ScalarProperty Name="ProofingSpotColorQty" ColumnName="ProofingSpotColorQty" />
+                <ScalarProperty Name="ProofingAdditional" ColumnName="ProofingAdditional" />
+                <ScalarProperty Name="ProofingAdditionalQty" ColumnName="ProofingAdditionalQty" />
+                <ScalarProperty Name="ArtworkFee" ColumnName="ArtworkFee" />
+                <ScalarProperty Name="ArtworkFeeAmount" ColumnName="ArtworkFeeAmount" />
+                <ScalarProperty Name="UrgentCharge" ColumnName="UrgentCharge" />
+                <ScalarProperty Name="Reprint" ColumnName="Reprint" />
+                <ScalarProperty Name="ReprintText" ColumnName="ReprintText" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="UpdateCounter" ColumnName="UpdateCounter" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Order_Journal">
+            <EntityTypeMapping TypeName="xFilmModel.Order_Journal">
+              <MappingFragment StoreEntitySet="Order_Journal">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderComment">
+            <EntityTypeMapping TypeName="xFilmModel.OrderComment">
+              <MappingFragment StoreEntitySet="OrderComment">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderHeader">
+            <EntityTypeMapping TypeName="xFilmModel.OrderHeader">
+              <MappingFragment StoreEntitySet="OrderHeader">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ServiceType" ColumnName="ServiceType" />
+                <ScalarProperty Name="PrePressOp" ColumnName="PrePressOp" />
+                <ScalarProperty Name="ProofingOp" ColumnName="ProofingOp" />
+                <ScalarProperty Name="Attachment" ColumnName="Attachment" />
+                <ScalarProperty Name="AttachmentURL" ColumnName="AttachmentURL" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="DateReceived" ColumnName="DateReceived" />
+                <ScalarProperty Name="DateCompleted" ColumnName="DateCompleted" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Paid" ColumnName="Paid" />
+                <ScalarProperty Name="PaidOn" ColumnName="PaidOn" />
+                <ScalarProperty Name="PaidRef" ColumnName="PaidRef" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderPkPrintQueueVps">
+            <EntityTypeMapping TypeName="xFilmModel.OrderPkPrintQueueVps">
+              <MappingFragment StoreEntitySet="OrderPkPrintQueueVps">
+                <ScalarProperty Name="OrderPkPrintQueueVpsId" ColumnName="OrderPkPrintQueueVpsId" />
+                <ScalarProperty Name="OrderHeaderId" ColumnName="OrderHeaderId" />
+                <ScalarProperty Name="PrintQueueVpsId" ColumnName="PrintQueueVpsId" />
+                <ScalarProperty Name="CheckedPlate" ColumnName="CheckedPlate" />
+                <ScalarProperty Name="CheckedCip3" ColumnName="CheckedCip3" />
+                <ScalarProperty Name="CheckedBlueprint" ColumnName="CheckedBlueprint" />
+                <ScalarProperty Name="IsReady" ColumnName="IsReady" />
+                <ScalarProperty Name="IsReceived" ColumnName="IsReceived" />
+                <ScalarProperty Name="IsBilled" ColumnName="IsBilled" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="Retired" ColumnName="Retired" />
+                <ScalarProperty Name="RetiredOn" ColumnName="RetiredOn" />
+                <ScalarProperty Name="RetiredBy" ColumnName="RetiredBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PosTx">
+            <EntityTypeMapping TypeName="xFilmModel.PosTx">
+              <MappingFragment StoreEntitySet="PosTx">
+                <ScalarProperty Name="TxID" ColumnName="TxID" />
+                <ScalarProperty Name="TxDate" ColumnName="TxDate" />
+                <ScalarProperty Name="Branch" ColumnName="Branch" />
+                <ScalarProperty Name="TxPosID" ColumnName="TxPosID" />
+                <ScalarProperty Name="TxType" ColumnName="TxType" />
+                <ScalarProperty Name="TxRef" ColumnName="TxRef" />
+                <ScalarProperty Name="TxAmount" ColumnName="TxAmount" />
+                <ScalarProperty Name="TxAmountType" ColumnName="TxAmountType" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PrintQueue">
+            <EntityTypeMapping TypeName="xFilmModel.PrintQueue">
+              <MappingFragment StoreEntitySet="PrintQueue">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="CupsJobID" ColumnName="CupsJobID" />
+                <ScalarProperty Name="CupsJobTitle" ColumnName="CupsJobTitle" />
+                <ScalarProperty Name="PlateSize" ColumnName="PlateSize" />
+                <ScalarProperty Name="BlueprintOrdered" ColumnName="BlueprintOrdered" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="Retired" ColumnName="Retired" />
+                <ScalarProperty Name="RetiredOn" ColumnName="RetiredOn" />
+                <ScalarProperty Name="RetiredBy" ColumnName="RetiredBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PrintQueue_LifeCycle">
+            <EntityTypeMapping TypeName="xFilmModel.PrintQueue_LifeCycle">
+              <MappingFragment StoreEntitySet="PrintQueue_LifeCycle">
+                <ScalarProperty Name="LifeCycleId" ColumnName="LifeCycleId" />
+                <ScalarProperty Name="PrintQueueId" ColumnName="PrintQueueId" />
+                <ScalarProperty Name="PrintQueueVpsId" ColumnName="PrintQueueVpsId" />
+                <ScalarProperty Name="PrintQSubitemType" ColumnName="PrintQSubitemType" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PrintQueue_VPS">
+            <EntityTypeMapping TypeName="xFilmModel.PrintQueue_VPS">
+              <MappingFragment StoreEntitySet="PrintQueue_VPS">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PrintQueueID" ColumnName="PrintQueueID" />
+                <ScalarProperty Name="VpsFileName" ColumnName="VpsFileName" />
+                <ScalarProperty Name="PlateOrdered" ColumnName="PlateOrdered" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="Retired" ColumnName="Retired" />
+                <ScalarProperty Name="RetiredOn" ColumnName="RetiredOn" />
+                <ScalarProperty Name="RetiredBy" ColumnName="RetiredBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReceiptDetail">
+            <EntityTypeMapping TypeName="xFilmModel.ReceiptDetail">
+              <MappingFragment StoreEntitySet="ReceiptDetail">
+                <ScalarProperty Name="ReceiptDetailId" ColumnName="ReceiptDetailId" />
+                <ScalarProperty Name="ReceiptHeaderId" ColumnName="ReceiptHeaderId" />
+                <ScalarProperty Name="OrderPkPrintQueueVpsId" ColumnName="OrderPkPrintQueueVpsId" />
+                <ScalarProperty Name="BillingCode" ColumnName="BillingCode" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="UnitAmount" ColumnName="UnitAmount" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReceiptHeader">
+            <EntityTypeMapping TypeName="xFilmModel.ReceiptHeader">
+              <MappingFragment StoreEntitySet="ReceiptHeader">
+                <ScalarProperty Name="ReceiptHeaderId" ColumnName="ReceiptHeaderId" />
+                <ScalarProperty Name="ReceiptNumber" ColumnName="ReceiptNumber" />
+                <ScalarProperty Name="ReceiptDate" ColumnName="ReceiptDate" />
+                <ScalarProperty Name="ReceiptAmount" ColumnName="ReceiptAmount" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
+                <ScalarProperty Name="INMasterId" ColumnName="INMasterId" />
+                <ScalarProperty Name="ClientUserId" ColumnName="ClientUserId" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="Paid" ColumnName="Paid" />
+                <ScalarProperty Name="PaidOn" ColumnName="PaidOn" />
+                <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
+                <ScalarProperty Name="PaidRef" ColumnName="PaidRef" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Staff">
+            <EntityTypeMapping TypeName="xFilmModel.Staff">
+              <MappingFragment StoreEntitySet="Staff">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="JobTitle" ColumnName="JobTitle" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_BillingCode_Dept">
+            <EntityTypeMapping TypeName="xFilmModel.T_BillingCode_Dept">
+              <MappingFragment StoreEntitySet="T_BillingCode_Dept">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_BillingCode_Item">
+            <EntityTypeMapping TypeName="xFilmModel.T_BillingCode_Item">
+              <MappingFragment StoreEntitySet="T_BillingCode_Item">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DeptID" ColumnName="DeptID" />
+                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+                <ScalarProperty Name="GroupCode" ColumnName="GroupCode" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UoM" ColumnName="UoM" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Retired" ColumnName="Retired" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_DeliveryMethod">
+            <EntityTypeMapping TypeName="xFilmModel.T_DeliveryMethod">
+              <MappingFragment StoreEntitySet="T_DeliveryMethod">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_FriendlyService">
+            <EntityTypeMapping TypeName="xFilmModel.T_FriendlyService">
+              <MappingFragment StoreEntitySet="T_FriendlyService">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_JobTitle">
+            <EntityTypeMapping TypeName="xFilmModel.T_JobTitle">
+              <MappingFragment StoreEntitySet="T_JobTitle">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_LSR">
+            <EntityTypeMapping TypeName="xFilmModel.T_LSR">
+              <MappingFragment StoreEntitySet="T_LSR">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Media">
+            <EntityTypeMapping TypeName="xFilmModel.T_Media">
+              <MappingFragment StoreEntitySet="T_Media">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_PaperSize">
+            <EntityTypeMapping TypeName="xFilmModel.T_PaperSize">
+              <MappingFragment StoreEntitySet="T_PaperSize">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_PaymentType">
+            <EntityTypeMapping TypeName="xFilmModel.T_PaymentType">
+              <MappingFragment StoreEntitySet="T_PaymentType">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Platform">
+            <EntityTypeMapping TypeName="xFilmModel.T_Platform">
+              <MappingFragment StoreEntitySet="T_Platform">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Priority">
+            <EntityTypeMapping TypeName="xFilmModel.T_Priority">
+              <MappingFragment StoreEntitySet="T_Priority">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_ProofingMaterial">
+            <EntityTypeMapping TypeName="xFilmModel.T_ProofingMaterial">
+              <MappingFragment StoreEntitySet="T_ProofingMaterial">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Service">
+            <EntityTypeMapping TypeName="xFilmModel.T_Service">
+              <MappingFragment StoreEntitySet="T_Service">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Software">
+            <EntityTypeMapping TypeName="xFilmModel.T_Software">
+              <MappingFragment StoreEntitySet="T_Software">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_SoftwareVersion">
+            <EntityTypeMapping TypeName="xFilmModel.T_SoftwareVersion">
+              <MappingFragment StoreEntitySet="T_SoftwareVersion">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="SoftwareID" ColumnName="SoftwareID" />
+                <ScalarProperty Name="VersionNumber" ColumnName="VersionNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Status">
+            <EntityTypeMapping TypeName="xFilmModel.T_Status">
+              <MappingFragment StoreEntitySet="T_Status">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Phase" ColumnName="Phase" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Workflow">
+            <EntityTypeMapping TypeName="xFilmModel.T_Workflow">
+              <MappingFragment StoreEntitySet="T_Workflow">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="JobTitle" ColumnName="JobTitle" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="xFilmModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="UserSid" ColumnName="UserSid" />
+                <ScalarProperty Name="LoginName" ColumnName="LoginName" />
+                <ScalarProperty Name="LoginPassword" ColumnName="LoginPassword" />
+                <ScalarProperty Name="Alias" ColumnName="Alias" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="Retired" ColumnName="Retired" />
+                <ScalarProperty Name="RetiredOn" ColumnName="RetiredOn" />
+                <ScalarProperty Name="RetiredBy" ColumnName="RetiredBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserAuth">
+            <EntityTypeMapping TypeName="xFilmModel.UserAuth">
+              <MappingFragment StoreEntitySet="UserAuth">
+                <ScalarProperty Name="AuthId" ColumnName="AuthId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
+                <ScalarProperty Name="DeviceType" ColumnName="DeviceType" />
+                <ScalarProperty Name="Plateform" ColumnName="Plateform" />
+                <ScalarProperty Name="MetadataXml" ColumnName="MetadataXml" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserNotification">
+            <EntityTypeMapping TypeName="xFilmModel.UserNotification">
+              <MappingFragment StoreEntitySet="UserNotification">
+                <ScalarProperty Name="NotifyId" ColumnName="NotifyId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
+                <ScalarProperty Name="DeviceType" ColumnName="DeviceType" />
+                <ScalarProperty Name="Plateform" ColumnName="Plateform" />
+                <ScalarProperty Name="MetadataXml" ColumnName="MetadataXml" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserPreference">
+            <EntityTypeMapping TypeName="xFilmModel.UserPreference">
+              <MappingFragment StoreEntitySet="UserPreference">
+                <ScalarProperty Name="PreferenceId" ColumnName="PreferenceId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ObjectId" ColumnName="ObjectId" />
+                <ScalarProperty Name="ObjectType" ColumnName="ObjectType" />
+                <ScalarProperty Name="MetadataXml" ColumnName="MetadataXml" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="X_Counter">
+            <EntityTypeMapping TypeName="xFilmModel.X_Counter">
+              <MappingFragment StoreEntitySet="X_Counter">
+                <ScalarProperty Name="CounterID" ColumnName="CounterID" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="StaffID" ColumnName="StaffID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Z_WebColor">
+            <EntityTypeMapping TypeName="xFilmModel.Z_WebColor">
+              <MappingFragment StoreEntitySet="Z_WebColor">
+                <ScalarProperty Name="ColorID" ColumnName="ColorID" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

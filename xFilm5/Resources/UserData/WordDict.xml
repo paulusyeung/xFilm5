@@ -533,6 +533,11 @@
     <chs>创建于</chs>
     <cht>創建於</cht>
   </keyword>
+  <keyword key="created_by">
+    <en>Created By</en>
+    <chs>创建人</chs>
+    <cht>創建人</cht>
+  </keyword>
   <keyword key="full_name">
     <en>Full Name</en>
     <chs>姓名</chs>
@@ -557,6 +562,11 @@
     <en>Total Due</en>
     <chs>未付金额总数</chs>
     <cht>未付金額總數</cht>
+  </keyword>
+  <keyword key="month">
+    <en>Month</en>
+    <chs>月份</chs>
+    <cht>月份</cht>
   </keyword>
   <keyword key="current_month">
     <en>Current Month</en>
@@ -1242,5 +1252,25 @@
     <en>Invoice #</en>
     <chs>发票号码</chs>
     <cht>發票號碼</cht>
+  </keyword>
+  <keyword key="qry_curremt_month">
+    <en>Current Month</en>
+    <chs>当月</chs>
+    <cht>本月</cht>
+  </keyword>
+  <keyword key="qry_last_month">
+    <en>Last Month</en>
+    <chs>上个月</chs>
+    <cht>上個月</cht>
+  </keyword>
+  <keyword key="qry_previous_month">
+    <en>Previous Month</en>
+    <chs>再上个月</chs>
+    <cht>再上個月</cht>
+  </keyword>
+  <keyword key="delivery_note_list">
+    <en>Delivery Note List</en>
+    <chs>送货单记录</chs>
+    <cht>送貨單記錄</cht>
   </keyword>
 </root>

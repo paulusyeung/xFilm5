@@ -41,6 +41,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ClosedXML, Version=0.86.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.86.0\lib\net40\ClosedXML.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="DevExpress.Charts.v15.2.Core, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Data.v15.2, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.PivotGrid.v15.2.Core, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
@@ -57,6 +61,10 @@
     <Reference Include="DevExpress.XtraPivotGrid.v15.2, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraPrinting.v15.2, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraReports.v15.2, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FileHelpers, Version=3.1.5.0, Culture=neutral, PublicKeyToken=3e0c08d59cc3d657, processorArchitecture=MSIL">
       <HintPath>..\packages\FileHelpers.3.1.5\lib\net45\FileHelpers.dll</HintPath>
       <Private>True</Private>
@@ -84,7 +92,7 @@
       <HintPath>..\..\..\Program Files\Common Files\nxStudio\nxStudio.dll</HintPath>
     </Reference>
     <Reference Include="PrinterUtility, Version=1.0.1.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\PrinterUtility.1.1.1\lib\PrinterUtility.dll</HintPath>
+      <HintPath>..\packages\PrinterUtility.1.1.2\lib\PrinterUtility.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
@@ -183,6 +191,11 @@
     <Content Include="Resources\Icons\16x16\checkbox-ok.jpg" />
     <Content Include="Resources\Icons\16x16\client_cash_16x16.png" />
     <Content Include="Resources\Icons\16x16\comment.png" />
+    <Content Include="Resources\Icons\16x16\document_text-add.png" />
+    <Content Include="Resources\Icons\16x16\document_text-edit.png" />
+    <Content Include="Resources\Icons\16x16\document_text-ok.png" />
+    <Content Include="Resources\Icons\16x16\document_text-remove.png" />
+    <Content Include="Resources\Icons\16x16\document_text.png" />
     <Content Include="Resources\Icons\16x16\down.gif" />
     <Content Include="Resources\Icons\16x16\download.gif" />
     <Content Include="Resources\Icons\16x16\Downloads.png" />
@@ -306,6 +319,7 @@
     <Content Include="Resources\Icons\32x32\cart_32x32.png" />
     <Content Include="Resources\Icons\32x32\client_32x32.png" />
     <Content Include="Resources\Icons\32x32\client_cash_32x32.png" />
+    <Content Include="Resources\Icons\32x32\document_text.png" />
     <Content Include="Resources\Icons\32x32\dropbox_32x32.png" />
     <Content Include="Resources\Icons\32x32\invoice32_0.png" />
     <Content Include="Resources\Icons\32x32\invoice32_1.png" />
@@ -447,6 +461,12 @@
     <Compile Include="Accounting\Chart\RevenueByBranch.aspx.designer.cs">
       <DependentUpon>RevenueByBranch.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Accounting\DNList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Accounting\DNList.designer.cs">
+      <DependentUpon>DNList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Accounting\InvoiceList.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -518,6 +538,18 @@
     </Compile>
     <Compile Include="Accounting\OrderList.Designer.cs">
       <DependentUpon>OrderList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Accounting\DNList_v5.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Accounting\DNList_v5.Designer.cs">
+      <DependentUpon>DNList_v5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Accounting\OrderList_v5.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Accounting\OrderList_v5.Designer.cs">
+      <DependentUpon>OrderList_v5.cs</DependentUpon>
     </Compile>
     <Compile Include="Accounting\Payment.cs">
       <SubType>Form</SubType>
@@ -615,6 +647,7 @@
     <Compile Include="Controls\Comment.Designer.cs">
       <DependentUpon>Comment.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DataGridViewExtension.cs" />
     <Compile Include="Controls\Export\CsvData.cs" />
     <Compile Include="Controls\Export\CsvLoader.cs" />
     <Compile Include="Controls\FileDownloadGateway.cs">
@@ -626,6 +659,7 @@
     <Compile Include="Controls\Import\UploaderVWG.Designer.cs">
       <DependentUpon>UploaderVWG.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\RawPrinterHelper.cs" />
     <Compile Include="Controls\Reporting\DataSource.cs" />
     <Compile Include="Controls\Reporting\Loader.cs" />
     <Compile Include="Controls\Reporting\OlapViewer.cs">
@@ -811,6 +845,7 @@
       <DependentUpon>LogFile.cs</DependentUpon>
     </Compile>
     <Compile Include="JobOrder\Reports5\DataSource.cs" />
+    <Compile Include="JobOrder\Reports5\DN_POS80.cs" />
     <Compile Include="JobOrder\Reports5\INV_80mm.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -987,6 +1022,9 @@
     <EmbeddedResource Include="Accounting\Aging.resx">
       <DependentUpon>Aging.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Accounting\DNList.resx">
+      <DependentUpon>DNList.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Accounting\InvoiceList.resx">
       <DependentUpon>InvoiceList.cs</DependentUpon>
     </EmbeddedResource>
@@ -1001,6 +1039,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Accounting\OrderList.resx">
       <DependentUpon>OrderList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Accounting\DNList_v5.resx">
+      <DependentUpon>DNList_v5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Accounting\OrderList_v5.resx">
+      <DependentUpon>OrderList_v5.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Accounting\Payment.resx">
       <DependentUpon>Payment.cs</DependentUpon>
