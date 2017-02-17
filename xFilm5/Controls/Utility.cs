@@ -93,6 +93,34 @@ namespace xFilm5.Controls
                     return ImpersonatePassword;
                 }
             }
+            public static string SparkPost_ApiName
+            {
+                get
+                {
+                    return ConfigurationManager.AppSettings["SparkPost_ApiName"] != null ? ConfigurationManager.AppSettings["SparkPost_ApiName"] : "";
+                }
+            }
+            public static string SparkPost_ApiKey
+            {
+                get
+                {
+                    return ConfigurationManager.AppSettings["SparkPost_ApiKey"] != null ? ConfigurationManager.AppSettings["SparkPost_ApiKey"] : "";
+                }
+            }
+            public static string SparkPost_TemplateId_DN
+            {
+                get
+                {
+                    return ConfigurationManager.AppSettings["SparkPost_TemplateId_DN"] != null ? ConfigurationManager.AppSettings["SparkPost_TemplateId_DN"] : "";
+                }
+            }
+            public static string SparkPost_TemplateId_INV
+            {
+                get
+                {
+                    return ConfigurationManager.AppSettings["SparkPost_TemplateId_INV"] != null ? ConfigurationManager.AppSettings["SparkPost_TemplateId_INV"] : "";
+                }
+            }
         }
 
         public class Owner

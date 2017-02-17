@@ -56,7 +56,7 @@ namespace xFilm5.JobOrder.Reports5
             DAL.ReceiptHeader receipt = DAL.ReceiptHeader.Load(_ReceiptId);
             if (receipt != null)
             {
-                #region 如果仲未確認，加水印: DRAFT
+                #region 如果仲未確認，加水印: DRAFT; 如果超過 12 小時，加水印: RE-PRINT
                 if (receipt.Status == (int)Common.Enums.Status.Draft)
                 {
                     this.Watermark.Text = "DRAFT";
@@ -65,6 +65,19 @@ namespace xFilm5.JobOrder.Reports5
                     this.txtBarcode.Visible = false;
                     this.txtInvoiceNumber.Visible = false;
                     this.txtInvoiceDate.Visible = false;
+                }
+                else
+                {
+                    var timespan = DateTime.Now - receipt.CreatedOn;
+                    if (timespan.Hours > 12)
+                    {
+                        this.Watermark.Text = "RE-PRINT";
+                        this.Watermark.ShowBehind = true;
+
+                        //this.txtBarcode.Visible = false;
+                        //this.txtInvoiceNumber.Visible = false;
+                        //this.txtInvoiceDate.Visible = false;
+                    }
                 }
                 #endregion
 

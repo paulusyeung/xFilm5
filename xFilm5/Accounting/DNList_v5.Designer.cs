@@ -55,9 +55,15 @@ namespace xFilm5.Accounting
             this.dgvRtfItems = new Gizmox.WebGUI.Forms.HierarchicInfo();
             this.splitContainer1 = new Gizmox.WebGUI.Forms.SplitContainer();
             this.pnlToolStrip = new Gizmox.WebGUI.Forms.Panel();
-            this.dtpSelectedDate = new Gizmox.WebGUI.Forms.DateTimePicker();
-            this.cmdRefresh = new Gizmox.WebGUI.Forms.Button();
+            this.toolStrip1 = new Gizmox.WebGUI.Forms.ToolStrip();
+            this.lblPrint = new Gizmox.WebGUI.Forms.ToolStripLabel();
+            this.cmdA5 = new Gizmox.WebGUI.Forms.ToolStripButton();
+            this.cmd80mm = new Gizmox.WebGUI.Forms.ToolStripButton();
+            this.cmdEmail = new Gizmox.WebGUI.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new Gizmox.WebGUI.Forms.ToolStripSeparator();
             this.lblMonth = new Gizmox.WebGUI.Forms.Label();
+            this.cmdRefresh = new Gizmox.WebGUI.Forms.Button();
+            this.dtpSelectedDate = new Gizmox.WebGUI.Forms.DateTimePicker();
             this.navPane.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.idxSelect)).BeginInit();
             this.idxSelect.SuspendLayout();
@@ -297,35 +303,89 @@ namespace xFilm5.Accounting
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.pnlToolStrip);
-            this.splitContainer1.Panel1MinSize = 24;
+            this.splitContainer1.Panel1MinSize = 28;
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.dgvDNList);
             this.splitContainer1.Size = new System.Drawing.Size(540, 306);
-            this.splitContainer1.SplitterDistance = 24;
+            this.splitContainer1.SplitterDistance = 28;
             this.splitContainer1.SplitterWidth = 2;
             this.splitContainer1.TabIndex = 3;
             // 
             // pnlToolStrip
             // 
+            this.pnlToolStrip.Controls.Add(this.toolStrip1);
             this.pnlToolStrip.Controls.Add(this.lblMonth);
             this.pnlToolStrip.Controls.Add(this.cmdRefresh);
             this.pnlToolStrip.Controls.Add(this.dtpSelectedDate);
             this.pnlToolStrip.Dock = Gizmox.WebGUI.Forms.DockStyle.Fill;
             this.pnlToolStrip.Location = new System.Drawing.Point(0, 0);
             this.pnlToolStrip.Name = "pnlToolStrip";
-            this.pnlToolStrip.Size = new System.Drawing.Size(540, 24);
+            this.pnlToolStrip.Size = new System.Drawing.Size(540, 28);
             this.pnlToolStrip.TabIndex = 0;
             // 
-            // dtpSelectedDate
+            // toolStrip1
             // 
-            this.dtpSelectedDate.CustomFormat = "MMM, yyyy";
-            this.dtpSelectedDate.Format = Gizmox.WebGUI.Forms.DateTimePickerFormat.Custom;
-            this.dtpSelectedDate.Location = new System.Drawing.Point(60, 0);
-            this.dtpSelectedDate.Name = "dtpSelectedDate";
-            this.dtpSelectedDate.Size = new System.Drawing.Size(100, 21);
-            this.dtpSelectedDate.TabIndex = 1;
+            this.toolStrip1.Dock = Gizmox.WebGUI.Forms.DockStyle.None;
+            this.toolStrip1.DockPadding.Right = 8;
+            this.toolStrip1.Items.AddRange(new Gizmox.WebGUI.Forms.ToolStripItem[] {
+            this.lblPrint,
+            this.cmdA5,
+            this.cmd80mm,
+            this.cmdEmail,
+            this.toolStripSeparator1});
+            this.toolStrip1.Location = new System.Drawing.Point(211, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Padding = new Gizmox.WebGUI.Forms.Padding(0, 0, 8, 0);
+            this.toolStrip1.Size = new System.Drawing.Size(540, 24);
+            this.toolStrip1.TabIndex = 5;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // lblPrint
+            // 
+            this.lblPrint.Name = "toolStripLabel1";
+            this.lblPrint.Size = new System.Drawing.Size(33, 13);
+            this.lblPrint.Text = "Print:";
+            // 
+            // cmdA5
+            // 
+            this.cmdA5.Image = new Gizmox.WebGUI.Common.Resources.IconResourceHandle(resources.GetString("cmdA5.Image"));
+            this.cmdA5.Name = "toolStripButton1";
+            this.cmdA5.Size = new System.Drawing.Size(40, 20);
+            this.cmdA5.Text = "A5";
+            this.cmdA5.ToolTipText = "InkJet Printer";
+            // 
+            // cmd80mm
+            // 
+            this.cmd80mm.Image = new Gizmox.WebGUI.Common.Resources.IconResourceHandle(resources.GetString("cmd80mm.Image"));
+            this.cmd80mm.Name = "toolStripButton2";
+            this.cmd80mm.Size = new System.Drawing.Size(47, 17);
+            this.cmd80mm.Text = "Receipt";
+            this.cmd80mm.ToolTipText = "Receipt Printer";
+            // 
+            // cmdEmail
+            // 
+            this.cmdEmail.Image = new Gizmox.WebGUI.Common.Resources.IconResourceHandle(resources.GetString("cmdEmail.Image"));
+            this.cmdEmail.Name = "toolStripButton3";
+            this.cmdEmail.Size = new System.Drawing.Size(35, 17);
+            this.cmdEmail.Text = "Email";
+            this.cmdEmail.ToolTipText = "Send Email";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 23);
+            // 
+            // lblMonth
+            // 
+            this.lblMonth.Location = new System.Drawing.Point(11, 0);
+            this.lblMonth.Name = "lblMonth";
+            this.lblMonth.Size = new System.Drawing.Size(49, 20);
+            this.lblMonth.TabIndex = 0;
+            this.lblMonth.Text = "Month:";
+            this.lblMonth.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // cmdRefresh
             // 
@@ -336,14 +396,14 @@ namespace xFilm5.Accounting
             this.cmdRefresh.TabIndex = 4;
             this.cmdRefresh.Click += new System.EventHandler(this.cmdRefresh_Click);
             // 
-            // lblMonth
+            // dtpSelectedDate
             // 
-            this.lblMonth.Location = new System.Drawing.Point(11, 0);
-            this.lblMonth.Name = "lblMonth";
-            this.lblMonth.Size = new System.Drawing.Size(37, 20);
-            this.lblMonth.TabIndex = 0;
-            this.lblMonth.Text = "Month:";
-            this.lblMonth.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.dtpSelectedDate.CustomFormat = "MMM, yyyy";
+            this.dtpSelectedDate.Format = Gizmox.WebGUI.Forms.DateTimePickerFormat.Custom;
+            this.dtpSelectedDate.Location = new System.Drawing.Point(60, 0);
+            this.dtpSelectedDate.Name = "dtpSelectedDate";
+            this.dtpSelectedDate.Size = new System.Drawing.Size(100, 21);
+            this.dtpSelectedDate.TabIndex = 1;
             // 
             // DNList_v5
             // 
@@ -397,5 +457,11 @@ namespace xFilm5.Accounting
         private Gizmox.WebGUI.Forms.DateTimePicker dtpSelectedDate;
         private Gizmox.WebGUI.Forms.Button cmdRefresh;
         private Gizmox.WebGUI.Forms.Label lblMonth;
+        private Gizmox.WebGUI.Forms.ToolStrip toolStrip1;
+        private Gizmox.WebGUI.Forms.ToolStripLabel lblPrint;
+        private Gizmox.WebGUI.Forms.ToolStripButton cmdA5;
+        private Gizmox.WebGUI.Forms.ToolStripButton cmd80mm;
+        private Gizmox.WebGUI.Forms.ToolStripButton cmdEmail;
+        private Gizmox.WebGUI.Forms.ToolStripSeparator toolStripSeparator1;
     }
 }

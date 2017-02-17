@@ -24,6 +24,7 @@ namespace xFilm5.Controls.Reporting
     {
         private string _ReportName = String.Empty;
         private MemoryStream _BinarySource = null;
+        private String _BinaryType = "";
 
         public Viewer()
         {

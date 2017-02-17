@@ -40,6 +40,38 @@ namespace xFilm5.Accounting
         public DNList_v5()
         {
             InitializeComponent();
+
+            #region 將 dtpSelectedDate 搬入 toolStrip1 之內，睇起上嚟會靚啲
+            cmdRefresh.Visible = false;
+
+            nxStudio.BaseClass.WordDict oDict = new nxStudio.BaseClass.WordDict(Common.Config.CurrentWordDict, Common.Config.CurrentLanguageId);
+            var lb = new ToolStripControlHost(lblMonth);
+            var dt = new ToolStripControlHost(dtpSelectedDate);
+            //var cd = new ToolStripControlHost(cmdRefresh);
+            var cm = new ToolStripButton();
+            cm.Name = "btnRefresh";
+            cm.Image = new IconResourceHandle("16x16.view_refresh.png");
+            cm.Alignment = ToolStripItemAlignment.Right;
+            cm.Click += cmdRefresh_Click;
+            cm.ToolTipText = oDict.GetWord("refresh");
+
+            lb.Alignment = ToolStripItemAlignment.Right;
+            dt.Alignment = ToolStripItemAlignment.Right;
+            //cd.Alignment = ToolStripItemAlignment.Right;
+
+            //toolStrip1.Items.Add(cd);
+            toolStrip1.Items.Add(cm);
+            toolStrip1.Items.Add(dt);
+            toolStrip1.Items.Add(lb);
+
+            toolStrip1.Dock = DockStyle.Top;
+            #endregion
+
+            #region Wire toolStripy1 command clicks
+            cmdA5.Click += cmdA5_Click;
+            cmd80mm.Click += cmd80mm_Click;
+            cmdEmail.Click += cmdEmail_Click;
+            #endregion
         }
 
         protected override void OnLoad(EventArgs e)
@@ -54,7 +86,7 @@ namespace xFilm5.Accounting
 
             SetDgvOrderListHeader();
             dgvDNList.RowExpanding += DgvOrderList_RowExpanding;
-            dgvDNList.DoubleClick += DgvOrderList_DoubleClick;
+            //dgvDNList.DoubleClick += DgvOrderList_DoubleClick;
 
             idxSelect.TabPages.Remove(tabAdvanced);     // 唔要
         }
@@ -71,7 +103,7 @@ namespace xFilm5.Accounting
             dgvDNList.Dock = DockStyle.Fill;
             dgvDNList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvDNList.AllowUserToAddRows = false;
-            dgvDNList.ItemsPerPage = 25;
+            dgvDNList.ItemsPerPage = 250;
 
             DataGridViewColumn colRowNumber = new DataGridViewTextBoxColumn();
             colRowNumber.Width = 32;
@@ -453,6 +485,13 @@ ORDER BY [ReceiptHeaderId], [ItemDescription]
             lblOrderedOnTo.Text = oDict.GetWordWithColon("to");
 
             lblMonth.Text = oDict.GetWordWithColon("month");
+            lblPrint.Text = oDict.GetWordWithColon("print");
+            cmdA5.Text = oDict.GetWord("a5");
+            cmdA5.ToolTipText = oDict.GetWord("inkjet_printer");
+            cmd80mm.Text = oDict.GetWord("receipt");
+            cmd80mm.ToolTipText = oDict.GetWord("receipt_printer");
+            cmdEmail.Text = oDict.GetWord("email");
+            cmdEmail.ToolTipText = oDict.GetWord("send_email");
         }
 
         private void SetAttribute()
@@ -839,6 +878,55 @@ WHERE Rn = 1
             {
                 _Mode = 2;
                 ShowClientOrderList();
+            }
+        }
+
+        private void cmdA5_Click(object sender, EventArgs e)
+        {
+            if (dgvDNList.SelectedRows.Count > 0)
+            {
+                DataRowView drv = (DataRowView)dgvDNList.SelectedRows[0].DataBoundItem;
+                if (drv != null)
+                {
+                    DataRow row = (DataRow)drv.Row;
+                    int receiptId = (int)row["ReceiptHeaderId"];
+
+                    JobOrder.Reports5.Loader.DN_80mm(receiptId);
+                }
+            }
+        }
+
+        private void cmd80mm_Click(object sender, EventArgs e)
+        {
+            if (dgvDNList.SelectedRows.Count > 0)
+            {
+                DataRowView drv = (DataRowView)dgvDNList.SelectedRows[0].DataBoundItem;
+                if (drv != null)
+                {
+                    DataRow row = (DataRow)drv.Row;
+                    int receiptId = (int)row["ReceiptHeaderId"];
+
+                    JobOrder.Reports5.DN_POS80 pos80 = new JobOrder.Reports5.DN_POS80();
+                    pos80.Print(receiptId);
+                }
+            }
+        }
+
+        private void cmdEmail_Click(object sender, EventArgs e)
+        {
+            if (dgvDNList.SelectedRows.Count > 0)
+            {
+                DataRowView drv = (DataRowView)dgvDNList.SelectedRows[0].DataBoundItem;
+                if (drv != null)
+                {
+                    DataRow row = (DataRow)drv.Row;
+                    int receiptId = (int)row["ReceiptHeaderId"];
+
+                    xFilm5.Controls.Email.DN dn = new xFilm5.Controls.Email.DN();
+                    dn.ReceiptHeaderId = receiptId;
+                    dn.ShowDialog();
+                    //JobOrder.Reports5.Loader.DN_Email(receiptId);
+                }
             }
         }
 

@@ -1228,6 +1228,11 @@
     <chs>送货单</chs>
     <cht>送貨單</cht>
   </keyword>
+  <keyword key="delivery_note_number">
+    <en>DN#</en>
+    <chs>送货单#</chs>
+    <cht>送貨單#</cht>
+  </keyword>
   <keyword key="transaction#">
     <en>Transaction #</en>
     <chs>票据号码</chs>
@@ -1272,5 +1277,55 @@
     <en>Delivery Note List</en>
     <chs>送货单记录</chs>
     <cht>送貨單記錄</cht>
+  </keyword>
+  <keyword key="a5">
+    <en>A5</en>
+    <chs>A5</chs>
+    <cht>A5</cht>
+  </keyword>
+  <keyword key="inkjet_printer">
+    <en>InkJet Printer</en>
+    <chs>喷墨打印机</chs>
+    <cht>噴墨打印機</cht>
+  </keyword>
+  <keyword key="receipt">
+    <en>Receipt</en>
+    <chs>小票据</chs>
+    <cht>小票據</cht>
+  </keyword>
+  <keyword key="receipt_printer">
+    <en>Receipt Printer</en>
+    <chs>票据打印机</chs>
+    <cht>票據打印機</cht>
+  </keyword>
+  <keyword key="recipient">
+    <en>Recipient</en>
+    <chs>收件人</chs>
+    <cht>收件人</cht>
+  </keyword>
+  <keyword key="send_email">
+    <en>Send Email</en>
+    <chs>发成电邮</chs>
+    <cht>發成電郵</cht>
+  </keyword>
+  <keyword key="send_out_email">
+    <en>Send out email</en>
+    <chs>发出电邮</chs>
+    <cht>發出電郵</cht>
+  </keyword>
+  <keyword key="done">
+    <en>Done</en>
+    <chs>完成</chs>
+    <cht>完成</cht>
+  </keyword>
+  <keyword key="error_found">
+    <en>Error found...</en>
+    <chs>发生问题...</chs>
+    <cht>發生問題...</cht>
+  </keyword>
+  <keyword key="error_invalid_email">
+    <en>Invalid Email</en>
+    <chs>电邮格式有问题</chs>
+    <cht>電郵格式有問題</cht>
   </keyword>
 </root>

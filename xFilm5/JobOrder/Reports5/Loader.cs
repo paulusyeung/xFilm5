@@ -1,4 +1,7 @@
-﻿using Gizmox.WebGUI.Common.Resources;
+﻿using DevExpress.XtraPrinting;
+using DevExpress.XtraReports.UI;
+using Gizmox.WebGUI.Common.Resources;
+using SparkPost;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -113,6 +116,37 @@ namespace xFilm5.JobOrder.Reports5
             }
         }
 
+        public static void DN_Email(int receiptId)
+        {
+            var transmission = new SparkPost.Transmission();
+            transmission.Content.TemplateId = "invoice";    // xFilm5.Controls.Utility.Config.SparkPost_TemplateId_DN;
+            //transmission.Content.From.Email = "support@directoutput.com.hk";
+            //transmission.Content.ReplyTo = "no-reply<support@directoutput.com.hk>";
+
+            transmission.SubstitutionData["first_name"] = "John Phillip";
+            transmission.SubstitutionData["last_name"] = "Doe";
+            /*
+            var orders = new List<Order>
+{
+    new Order { OrderId = "1", Total = 101 },
+    new Order { OrderId = "2", Total = 304 }
+};
+
+            // you can pass more complicated data, so long as it
+            // can be parsed easily to JSON
+            transmission.SubstitutionData["orders"] = orders;
+            */
+            var recipient = new SparkPost.Recipient
+            {
+                Address = new Address { Email = "paulusyeung@gmail.com" }
+            };
+            transmission.Recipients.Add(recipient);
+
+            var client = new SparkPost.Client(xFilm5.Controls.Utility.Config.SparkPost_ApiKey);
+            var response = client.Transmissions.Send(transmission).Result;
+            // or client.Transmissions.Send(transmission).Wait();
+        }
+
         public static void DN_80mm_Html(int receiptId)
         {
             ReceiptHeader receipt = ReceiptHeader.Load(receiptId);
@@ -132,6 +166,26 @@ namespace xFilm5.JobOrder.Reports5
                 viewer.ReportName = "delivery_note";
                 viewer.BinarySource = memStream;
                 viewer.Show();
+
+            }
+        }
+
+        // using XtraReport.ExportToMail()
+        private static void XtraReportToEmail(XtraReport report)
+        {
+
+            using (SmtpClient client = new SmtpClient("smtp.gmail.com"))
+            {
+                using (MailMessage message = report.ExportToMail(
+                    "sender@test.test",
+                    "reciever1@test.test, reciever2@test.test, reciever3@test.test",
+                    "Subject"))
+                {
+                    client.Port = 587;
+                    client.Credentials = new System.Net.NetworkCredential("username", "password");
+                    client.EnableSsl = true;
+                    client.Send(message);
+                }
             }
         }
 

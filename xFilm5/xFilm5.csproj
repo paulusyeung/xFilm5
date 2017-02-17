@@ -87,6 +87,10 @@
       <SpecificVersion>True</SpecificVersion>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="nxStudio, Version=1.0.2813.23161, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Program Files\Common Files\nxStudio\nxStudio.dll</HintPath>
@@ -97,6 +101,10 @@
     </Reference>
     <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RestSharp.105.2.3\lib\net452\RestSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SparkPost, Version=1.13.0.36877, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SparkPost.1.13.0\lib\net45\SparkPost.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -648,6 +656,13 @@
       <DependentUpon>Comment.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\DataGridViewExtension.cs" />
+    <Compile Include="Controls\Email\DN.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\Email\DN.Designer.cs">
+      <DependentUpon>DN.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Email\EmailEx.cs" />
     <Compile Include="Controls\Export\CsvData.cs" />
     <Compile Include="Controls\Export\CsvLoader.cs" />
     <Compile Include="Controls\FileDownloadGateway.cs">
@@ -1093,6 +1108,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Comment.resx">
       <DependentUpon>Comment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Email\DN.resx">
+      <DependentUpon>DN.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Import\UploaderVWG.resx">
       <DependentUpon>UploaderVWG.cs</DependentUpon>

@@ -23,19 +23,21 @@ namespace xFilm5.JobOrder.Reports5
                 {
                     var BytesValue = GetPrintContent(dt);
 
-                    //PrinterUtility.PrintExtensions.Print(BytesValue, PrintUtilityTest.Properties.Settings.Default.PrinterPath);
+                    PrinterUtility.PrintExtensions.Print(BytesValue, "\\\\192.168.2.188:631\\printers\\tx2"); // PrintUtilityTest.Properties.Settings.Default.PrinterPath);
+
                     String finalResult = Encoding.Unicode.GetString(BytesValue);
-                    File.WriteAllBytes(@"C:\Shared\ThermalPrinter", BytesValue);
+                    File.WriteAllBytes(String.Format(@"C:\Shared\ThermalPrinter-{0}.txt", DateTime.Now.ToString("MMdd-HHmmss")), BytesValue);
                     xFilm5.Controls.RawPrinterHelper.SendStringToPrinter("printer name", Encoding.Default.GetString(BytesValue));
                 }
             }
         }
 
+        // PrinterUtility video: https://www.youtube.com/watch?v=0mC_yvT3abw
         // paper:  576 dots/line
         // font A: 12x24 48 characters/line
         // font B:  9x17 64 characters/line
         // 中文字: 24x24 24 characters/line
-        // https://msdn.microsoft.com/en-us/library/windows/desktop/dd317756(v=vs.85).aspx
+        // CodePage: https://msdn.microsoft.com/en-us/library/windows/desktop/dd317756(v=vs.85).aspx
         // GB18030 = Codepage 54936, GB2312 = 936, Big5 = 950
         private Byte[] GetPrintContent(DataTable dt)
         {
@@ -83,7 +85,7 @@ namespace xFilm5.JobOrder.Reports5
             #region Prepare Client Address
             Client_AddressBook client = Client_AddressBook.LoadWhere(String.Format("ClientID = {0} AND PrimaryAddr = 1", order.ClientID.ToString()));
             List<String> billToName = ConvertToMultipleLines(client.Name, 50);
-            List<String> billToAddr = ConvertToMultipleLines(client.Address.Replace(@"\r\n", " ").Replace(@"\n", " "), 24);
+            List<String> billToAddr = ConvertToMultipleLines(client.Address.Replace(System.Environment.NewLine, " ").Replace("\n", " "), 24);
             String billToTel = client.Tel;
             List<String> shipToName = new List<String>();
             List<String> shipToAddr = new List<String>();
@@ -99,7 +101,7 @@ namespace xFilm5.JobOrder.Reports5
                         if (delivery != null)
                         {
                             shipToName = ConvertToMultipleLines(delivery.Name, 24);
-                            shipToAddr = ConvertToMultipleLines(delivery.Address.Replace(@"\r\n", " ").Replace(@"\n", " "), 24);
+                            shipToAddr = ConvertToMultipleLines(delivery.Address.Replace(System.Environment.NewLine, " ").Replace("\n", " "), 24);
                             shipToTel = delivery.Tel; 
                         }
                         break;
@@ -240,24 +242,18 @@ namespace xFilm5.JobOrder.Reports5
             return BytesValue;
         }
 
-        private List<String> ConvertToMultipleLines(String source, int colLength)
+        private List<String> ConvertToMultipleLines(String source, int chunkSize)
         {
-            List<String> result = new List<String>();
+            var result = source
+                .Where((x, i) => i % chunkSize == 0)
+                .Select(
+                    (x, i) => new string(source
+                        .Skip(i * chunkSize)
+                        .Take(chunkSize)
+                        .ToArray()))
+                .ToArray();
 
-            if (source.Length > colLength)
-            {
-                int lines = source.Length % colLength == 0 ? source.Length / colLength : source.Length / colLength + 1;
-                for (int i = 0; i < lines; i++)
-                {
-                    result.Add((i + 1) * colLength >= source.Length ? source.Substring(i * colLength) : source.Substring(i * colLength, (i + 1) * colLength));
-                }
-            }
-            else
-            {
-                result.Add(source);
-            }
-
-            return result;
+            return result.ToList();
         }
 
         private byte[] CutPage()

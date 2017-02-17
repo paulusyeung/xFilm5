@@ -117,22 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="cmdFindOrderedOn.Image" xml:space="preserve">
-    <value>16x16.btn_on_lookup.gif</value>
-  </data>
-  <data name="cmdFindOrderId.Image" xml:space="preserve">
-    <value>16x16.btn_on_lookup.gif</value>
-  </data>
-  <data name="cmdA5.Image" xml:space="preserve">
-    <value>16x16.16_print.gif</value>
-  </data>
-  <data name="cmd80mm.Image" xml:space="preserve">
-    <value>16x16.printer_network.png</value>
-  </data>
-  <data name="cmdEmail.Image" xml:space="preserve">
-    <value>16x16.email-blue.png</value>
-  </data>
-  <data name="cmdRefresh.Image" xml:space="preserve">
-    <value>16x16.btn_on_lookup.gif</value>
-  </data>
 </root>
