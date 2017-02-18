@@ -22,6 +22,7 @@ using Gizmox.WebGUI.Forms;
 using Gizmox.WebGUI.Forms.Dialogs;
 
 using xFilm5.DAL;
+using ClosedXML.Excel;
 
 #endregion
 
@@ -492,6 +493,7 @@ ORDER BY [ReceiptHeaderId], [ItemDescription]
             cmd80mm.ToolTipText = oDict.GetWord("receipt_printer");
             cmdEmail.Text = oDict.GetWord("email");
             cmdEmail.ToolTipText = oDict.GetWord("send_email");
+            cmdExcel.ToolTipText = oDict.GetWord("export_to_excel");
         }
 
         private void SetAttribute()
@@ -933,6 +935,51 @@ WHERE Rn = 1
         private void cmdRefresh_Click(object sender, EventArgs e)
         {
             BindDgvOrderList();
+        }
+
+        private void cmdExcel_Click(object sender, EventArgs e)
+        {
+            if (_ClientId != 0)
+            {
+                //xFilm5.Controls.Excel.ExcelEx.ExportDNList(this, _ClientId, dtpSelectedDate.Value.Year, dtpSelectedDate.Value.Month);
+                String wksheetName = "DNList";
+                String filename = "DNList.xlsx";
+                String filePath = Path.Combine(DAL.Common.Config.OutBox, filename);
+
+                // Turn off Tracking to save memory and increase performance
+                var wb = new XLWorkbook(XLEventTracking.Disabled);
+
+                var dataTable = xFilm5.Controls.Excel.DataSource.Receipts(_ClientId, dtpSelectedDate.Value.Year, dtpSelectedDate.Value.Month);
+
+                // Add a DataTable as a worksheet
+                wb.Worksheets.Add(dataTable, wksheetName);
+
+                #region 設定 cell formats
+                var ws = wb.Worksheets.Worksheet(wksheetName);
+
+                var header = ws.Range("A1:S1");
+                header.Style.Font.Bold = true;
+                header.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                int rowcount = dataTable.Rows.Count + 1;        // 計多一行，Header row
+                wb.Worksheet(wksheetName).Range(2, 6, rowcount, 6).Style.NumberFormat.SetFormat("$#,##0.00;-$#,##0.00;;@");         // Receipt Amount
+                wb.Worksheet(wksheetName).Range(2, 12, rowcount, 12).Style.NumberFormat.SetFormat("$#,##0;-$#,##0;;@");             // Paid Amount
+                wb.Worksheet(wksheetName).Range(2, 25, rowcount, 25).Style.NumberFormat.SetFormat("$#,##0.000;-$#,##0.000;;@");     // Unit Amount
+                wb.Worksheet(wksheetName).Range(2, 26, rowcount, 26).Style.NumberFormat.SetFormat("#,##0.00;-#,##0.00;;@");         // Discount
+                wb.Worksheet(wksheetName).Range(2, 27, rowcount, 27).Style.NumberFormat.SetFormat("$#,##0.00;-$#,##0.00;;@");         // Amount
+                //wb.Worksheet(wksheetName).Range(2, 12, rowcount, 12).Style.DateFormat.SetFormat("dd/MM/yyyy");                      // required on
+                //wb.Worksheet(wksheetName).Range(2, 19, rowcount, 19).Style.DateFormat.SetFormat("dd/MM/yyyy");                      // completed on
+                #endregion
+
+                //wb.SaveAs(filePath);
+                MemoryStream stream = xFilm5.Controls.Excel.ExcelEx.GetStream(wb);
+
+                xFilm5.Controls.FileDownloadGateway dl = new xFilm5.Controls.FileDownloadGateway();
+                dl.Filename = filename;
+                dl.SetContentType(xFilm5.Controls.DownloadContentType.MicrosoftExcel);
+                //dl.StartFileDownload(this, filePath);
+                dl.StartStreamDownload(this, stream);
+            }
         }
     }
 }

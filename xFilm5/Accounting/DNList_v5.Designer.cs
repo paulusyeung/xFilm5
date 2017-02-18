@@ -64,6 +64,7 @@ namespace xFilm5.Accounting
             this.lblMonth = new Gizmox.WebGUI.Forms.Label();
             this.cmdRefresh = new Gizmox.WebGUI.Forms.Button();
             this.dtpSelectedDate = new Gizmox.WebGUI.Forms.DateTimePicker();
+            this.cmdExcel = new Gizmox.WebGUI.Forms.ToolStripButton();
             this.navPane.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.idxSelect)).BeginInit();
             this.idxSelect.SuspendLayout();
@@ -334,7 +335,8 @@ namespace xFilm5.Accounting
             this.cmdA5,
             this.cmd80mm,
             this.cmdEmail,
-            this.toolStripSeparator1});
+            this.toolStripSeparator1,
+            this.cmdExcel});
             this.toolStrip1.Location = new System.Drawing.Point(211, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Padding = new Gizmox.WebGUI.Forms.Padding(0, 0, 8, 0);
@@ -344,14 +346,14 @@ namespace xFilm5.Accounting
             // 
             // lblPrint
             // 
-            this.lblPrint.Name = "toolStripLabel1";
+            this.lblPrint.Name = "lblPrint";
             this.lblPrint.Size = new System.Drawing.Size(33, 13);
             this.lblPrint.Text = "Print:";
             // 
             // cmdA5
             // 
             this.cmdA5.Image = new Gizmox.WebGUI.Common.Resources.IconResourceHandle(resources.GetString("cmdA5.Image"));
-            this.cmdA5.Name = "toolStripButton1";
+            this.cmdA5.Name = "cmdA5";
             this.cmdA5.Size = new System.Drawing.Size(40, 20);
             this.cmdA5.Text = "A5";
             this.cmdA5.ToolTipText = "InkJet Printer";
@@ -359,16 +361,16 @@ namespace xFilm5.Accounting
             // cmd80mm
             // 
             this.cmd80mm.Image = new Gizmox.WebGUI.Common.Resources.IconResourceHandle(resources.GetString("cmd80mm.Image"));
-            this.cmd80mm.Name = "toolStripButton2";
-            this.cmd80mm.Size = new System.Drawing.Size(47, 17);
+            this.cmd80mm.Name = "cmd80mm";
+            this.cmd80mm.Size = new System.Drawing.Size(63, 20);
             this.cmd80mm.Text = "Receipt";
             this.cmd80mm.ToolTipText = "Receipt Printer";
             // 
             // cmdEmail
             // 
             this.cmdEmail.Image = new Gizmox.WebGUI.Common.Resources.IconResourceHandle(resources.GetString("cmdEmail.Image"));
-            this.cmdEmail.Name = "toolStripButton3";
-            this.cmdEmail.Size = new System.Drawing.Size(35, 17);
+            this.cmdEmail.Name = "cmdEmail";
+            this.cmdEmail.Size = new System.Drawing.Size(51, 20);
             this.cmdEmail.Text = "Email";
             this.cmdEmail.ToolTipText = "Send Email";
             // 
@@ -404,6 +406,15 @@ namespace xFilm5.Accounting
             this.dtpSelectedDate.Name = "dtpSelectedDate";
             this.dtpSelectedDate.Size = new System.Drawing.Size(100, 21);
             this.dtpSelectedDate.TabIndex = 1;
+            // 
+            // cmdExcel
+            // 
+            this.cmdExcel.Alignment = Gizmox.WebGUI.Forms.ToolStripItemAlignment.Right;
+            this.cmdExcel.Image = new Gizmox.WebGUI.Common.Resources.IconResourceHandle(resources.GetString("cmdExcel.Image"));
+            this.cmdExcel.Name = "toolStripButton1";
+            this.cmdExcel.Size = new System.Drawing.Size(23, 20);
+            this.cmdExcel.ToolTipText = "Export Excel";
+            this.cmdExcel.Click += new System.EventHandler(this.cmdExcel_Click);
             // 
             // DNList_v5
             // 
@@ -463,5 +474,6 @@ namespace xFilm5.Accounting
         private Gizmox.WebGUI.Forms.ToolStripButton cmd80mm;
         private Gizmox.WebGUI.Forms.ToolStripButton cmdEmail;
         private Gizmox.WebGUI.Forms.ToolStripSeparator toolStripSeparator1;
+        private Gizmox.WebGUI.Forms.ToolStripButton cmdExcel;
     }
 }

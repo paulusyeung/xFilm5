@@ -132,6 +132,9 @@
   <data name="cmdEmail.Image" xml:space="preserve">
     <value>16x16.email-blue.png</value>
   </data>
+  <data name="cmdExcel.Image" xml:space="preserve">
+    <value>16x16.16_excel.gif</value>
+  </data>
   <data name="cmdRefresh.Image" xml:space="preserve">
     <value>16x16.btn_on_lookup.gif</value>
   </data>

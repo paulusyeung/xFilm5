@@ -663,6 +663,8 @@
       <DependentUpon>DN.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\Email\EmailEx.cs" />
+    <Compile Include="Controls\Excel\DataSource.cs" />
+    <Compile Include="Controls\Excel\ExcelEx.cs" />
     <Compile Include="Controls\Export\CsvData.cs" />
     <Compile Include="Controls\Export\CsvLoader.cs" />
     <Compile Include="Controls\FileDownloadGateway.cs">
