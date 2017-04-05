@@ -512,6 +512,22 @@ namespace xFilm5.Controls
                     return result;
             }
 
+            public static bool IsFilm5(int orderId)
+            {
+                bool result = false;
+
+                OrderHeader oOrder = OrderHeader.Load(orderId);
+                if (oOrder != null)
+                {
+                    if (oOrder.ServiceType == (int)Common.Enums.OrderType.Film5)
+                    {
+                        result = true;
+                    }
+                }
+
+                return result;
+            }
+
             public static bool SetAsCompleted(List<int> orderIdList)
             {
                 bool result = false;

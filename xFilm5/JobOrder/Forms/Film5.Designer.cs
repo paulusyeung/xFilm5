@@ -116,6 +116,7 @@ namespace xFilm5.JobOrder.Forms
             this.chkVpsProofed.Size = new System.Drawing.Size(102, 21);
             this.chkVpsProofed.TabIndex = 28;
             this.chkVpsProofed.Text = "VPS Proofed";
+            this.chkVpsProofed.Visible = false;
             this.chkVpsProofed.CheckedChanged += new System.EventHandler(this.chkVpsProofed_CheckedChanged);
             // 
             // lvwVpsList
@@ -178,6 +179,7 @@ namespace xFilm5.JobOrder.Forms
             this.chkProofingWith.Size = new System.Drawing.Size(102, 21);
             this.chkProofingWith.TabIndex = 28;
             this.chkProofingWith.Text = "Proofing With:";
+            this.chkProofingWith.Visible = false;
             this.chkProofingWith.Click += new System.EventHandler(this.chkProofingWith_Click);
             // 
             // chkCip3
@@ -187,6 +189,7 @@ namespace xFilm5.JobOrder.Forms
             this.chkCip3.Size = new System.Drawing.Size(91, 21);
             this.chkCip3.TabIndex = 25;
             this.chkCip3.Text = "CIP3";
+            this.chkCip3.Visible = false;
             // 
             // gbxFooter
             // 

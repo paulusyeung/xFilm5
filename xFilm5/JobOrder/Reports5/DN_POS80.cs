@@ -7,6 +7,9 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.Sockets;
+using System.Printing;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using xFilm5.DAL;
@@ -21,15 +24,106 @@ namespace xFilm5.JobOrder.Reports5
             {
                 if (dt.Rows.Count > 0)
                 {
-                    var BytesValue = GetPrintContent(dt);
+                    var bytesValue = GetPrintContent(dt);
 
-                    PrinterUtility.PrintExtensions.Print(BytesValue, "\\\\192.168.2.188:631\\printers\\tx2"); // PrintUtilityTest.Properties.Settings.Default.PrinterPath);
+                    #region locate the local/ server printers
+                    //LocalPrintServer server = new LocalPrintServer();
+                    //var pq = server.DefaultPrintQueue;
+                    //var pqs = server.GetPrintQueues();
+                    //foreach (var p in pqs)
+                    //{
+                    //    String pname = p.Name;
+                    //}
 
-                    String finalResult = Encoding.Unicode.GetString(BytesValue);
-                    File.WriteAllBytes(String.Format(@"C:\Shared\ThermalPrinter-{0}.txt", DateTime.Now.ToString("MMdd-HHmmss")), BytesValue);
-                    xFilm5.Controls.RawPrinterHelper.SendStringToPrinter("printer name", Encoding.Default.GetString(BytesValue));
+                    //// HACK: 可以睇見所有 CUPS2 嘅 print queues
+                    //PrintServer pServer = new PrintServer(@"\\CUPS2");
+                    //var pQueues = pServer.GetPrintQueues();
+
+                    //var printers = new System.Printing.PrintServer(@"\\WIN-10pv").GetPrintQueues()
+                    //    .Where(t =>
+                    //    {
+                    //        try { return t.IsShared && !t.IsNotAvailable; }
+                    //        catch { return false; }
+                    //    })
+                    //    .Select(t => t.FullName)
+                    //    .ToArray();
+
+                    #endregion
+
+                    #region HACK: 暫時得哩個辦法 ok，use RawPrinterHelper.cs 經 local printer send 去隻 CUPS xPrinter，有反應！
+                    IntPtr pUnmanagedBytes = new IntPtr(0);
+                    int nLength = bytesValue.Length;
+                    pUnmanagedBytes = Marshal.AllocCoTaskMem(nLength);
+                    xFilm5.Controls.RawPrinterHelper.SendBytesToPrinter(@"\\http://192.168.2.188:631\tx2", pUnmanagedBytes, nLength);
+                    #endregion
+
+                    // HACK: 用 TcpClient 當係 ip printer，唔得，可能要買 networ xprinter
+                    //SendToTcpPrinter(BytesValue);
+
+                    // HACK: 個 printer name 點都唔得，試過：tx2, \\localhost\tx2, \\WIN-10pv\tx2, \\http://192.168.2.188:631\tx2
+                    //PrinterUtility.PrintExtensions.Print(BytesValue, @"\\http://192.168.2.188:631\tx2"); // PrintUtilityTest.Properties.Settings.Default.PrinterPath);
+
+                    // HACK: write to a local file for debugging
+                    //String finalResult = Encoding.Unicode.GetString(bytesValue);
+                    //File.WriteAllBytes(String.Format(@"C:\Shared\ThermalPrinter-{0}.txt", DateTime.Now.ToString("MMdd-HHmmss")), bytesValue);
+                    //xFilm5.Controls.RawPrinterHelper.SendStringToPrinter("printer name", Encoding.Default.GetString(bytesValue));
                 }
             }
+        }
+
+        static void SendToTcpPrinter(Byte[] data)
+        {
+            try
+            {
+                // Create a TcpClient.
+                // Note, for this client to work you need to have a TcpServer 
+                // connected to the same address as specified by the server, port
+                // combination.
+                String server = "192.168.2.188";
+                Int32 port = 631;
+                TcpClient client = new TcpClient(server, port);
+
+                // Translate the passed message into ASCII and store it as a Byte array.
+                //Byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
+
+                // Get a client stream for reading and writing.
+                //  Stream stream = client.GetStream();
+
+                NetworkStream stream = client.GetStream();
+
+                // Send the message to the connected TcpServer. 
+                stream.Write(data, 0, data.Length);
+
+                //Console.WriteLine("Sent: {0}", message);
+
+                // Receive the TcpServer.response.
+
+                // Buffer to store the response bytes.
+                //data = new Byte[256];
+
+                // String to store the response ASCII representation.
+                //String responseData = String.Empty;
+
+                // Read the first batch of the TcpServer response bytes.
+                //Int32 bytes = stream.Read(data, 0, data.Length);
+                //responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
+                //Console.WriteLine("Received: {0}", responseData);
+
+                // Close everything.
+                stream.Close();
+                client.Close();
+            }
+            catch (ArgumentNullException e)
+            {
+                Console.WriteLine("ArgumentNullException: {0}", e);
+            }
+            catch (SocketException e)
+            {
+                Console.WriteLine("SocketException: {0}", e);
+            }
+
+            //Console.WriteLine("\n Press Enter to continue...");
+            //Console.Read();
         }
 
         // PrinterUtility video: https://www.youtube.com/watch?v=0mC_yvT3abw
@@ -237,6 +331,8 @@ namespace xFilm5.JobOrder.Reports5
             #endregion
 
             BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Left());
+            BytesValue = PrintExtensions.AddBytes(BytesValue, SelectFont15());
+            BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(line = "選擇字庫 15 (中國)"));
             BytesValue = PrintExtensions.AddBytes(BytesValue, CutPage());
 
             return BytesValue;
@@ -261,8 +357,21 @@ namespace xFilm5.JobOrder.Reports5
             List<byte> oby = new List<byte>();
             oby.Add(Convert.ToByte(Convert.ToChar(0x1D)));
             oby.Add(Convert.ToByte('V'));
-            oby.Add((byte)66);
-            oby.Add((byte)3);
+            oby.Add((byte)1);
+            oby.Add((byte)49);
+            return oby.ToArray();
+        }
+
+        /// <summary>
+        /// Esc R 15：選擇字庫 15 (中國)
+        /// </summary>
+        /// <returns></returns>
+        private byte[] SelectFont15()
+        {
+            List<byte> oby = new List<byte>();
+            oby.Add(Convert.ToByte(Convert.ToChar(0x1B)));
+            oby.Add(Convert.ToByte('R'));
+            oby.Add((byte)15);
             return oby.ToArray();
         }
 

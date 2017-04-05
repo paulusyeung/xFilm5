@@ -250,5 +250,91 @@ namespace xFilm5.Bot.Controllers
                 }
             }
         }
+
+        [Route("film")]
+        public IHttpActionResult PostFilm([FromBody] JObject jsonData)
+        {
+            if (jsonData == null)
+            {
+                log.Error("[bot, plate] jsonData == null");
+                return NotFound();
+            }
+            else
+            {
+                int vpsPqId = jsonData["PrintQueueVpsId"].Value<int>();
+
+                using (Models.SysDb context = new Models.SysDb())
+                {
+                    Models.PrintQueue_VPS vps = context.PrintQueue_VPS.FirstOrDefault(v => v.ID == vpsPqId);
+                    if (vps != null)
+                    {
+                        #region 用 NetworkConnection: 來自於 NetworkConnection.cs 用嚟做 impersonation
+                        String serverUri = ConfigurationManager.AppSettings["Film_ServerUri"];
+                        String userName = ConfigurationManager.AppSettings["Film_UserName"];
+                        String userPassword = ConfigurationManager.AppSettings["Film_UserPassword"];
+                        String sourecPath = ConfigurationManager.AppSettings["Film_SourcePath"];
+                        String destPath = ConfigurationManager.AppSettings["Film_DestinationPath"];     // + "\\" + vps.PrintQueue.PlateSize;
+                        String filePrefix = ConfigurationManager.AppSettings["Film_FileNamePrefix"];
+
+                        var uri = new Uri(serverUri);
+                        System.Net.NetworkCredential readCredentials = new System.Net.NetworkCredential(userName, userPassword);
+                        #endregion
+
+                        using (new NetworkConnection(String.Format(@"\\{0}", uri.Host), readCredentials))
+                        {
+                            // 參考：https://bitbucket.org/nxstudio/xfilm5/wiki/xFilm5%20Plate5%20Order%20Form
+                            String destUri = serverUri + destPath;
+
+                            #region prepare the filename
+                            // VpsFileName = CupsJobId-OriginalFileName.PageNumber(color).VPS
+                            // filename = CustomerNUmber.CupsJobId-OriginalFileName.ps
+                            String filename = "";
+                            filename = vps.VpsFileName.Substring(0, vps.VpsFileName.LastIndexOf('.'));      // cut suffix
+                            filename = filename.Substring(0, filename.LastIndexOf('.'));                    // cut PageNumber(color)
+                            filename = String.Format("{0}.{1}.ps", vps.PrintQueue.ClientID.ToString(), filename);
+                            #endregion
+
+                            String filePath_Source = Path.Combine(serverUri + sourecPath, filename);
+                            String filePath_Dest = Path.Combine(destUri, filename);
+
+                            if (File.Exists(filePath_Source))
+                            {
+                                //IEnumerable<string> files = Directory.EnumerateFiles(bpFilePath_Source, "*.dll", SearchOption.AllDirectories);
+                                if (!(Directory.Exists(destUri))) Directory.CreateDirectory(destUri);
+
+                                if (!File.Exists(filePath_Dest))
+                                {
+                                    try
+                                    {
+                                        File.Copy(filePath_Source, filePath_Dest);
+                                        return Ok();
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        log.Fatal("[bot, film, Copy] \r\n", e);
+                                        return NotFound();
+                                    }
+                                }
+                                else
+                                {
+                                    log.Error(String.Format("[bot, film, dest file exist] \r\nFile Name = {0}\r\nFilePath_Source = {1}\r\nFilePath_Dest = {2}", filename, filePath_Source, filePath_Dest));
+                                    return NotFound();
+                                }
+                            }
+                            else
+                            {
+                                log.Error(String.Format("[bot, film, source file not exist] \r\nFile Name = {0}\r\nFilePath_Source = {1}\r\nFilePath_Dest = {2}", filename, filePath_Source, filePath_Dest));
+                                return NotFound();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        log.Error("[bot, plate, PrintQueue_VPS not found] \r\n" + vps.ToString());
+                        return NotFound();
+                    }
+                }
+            }
+        }
     }
 }

@@ -120,6 +120,7 @@ namespace xFilm5.Accounting
 
         private void SetAttribute()
         {
+            tvwClient.Margin = new Padding(0, 24, 0, 0);
             this.lvwAgingList.ListViewItemSorter = new ListViewItemSorter(this.lvwAgingList);
 
             toolTip1.SetToolTip(lvwAgingList, "Double click to open record");

@@ -586,8 +586,8 @@ ORDER BY [ReceiptHeaderId], [ItemDescription]
         private string BuildSqlQueryString()
         {
             DateTime selDate = dtpSelectedDate.Value;
-            var firstDay = new DateTime(selDate.Year, selDate.Month, 1);
-            var lastDay = firstDay.AddMonths(1).AddDays(-1);
+            var firstDay = new DateTime(selDate.Year, selDate.Month, 1);    // 今個月一號嘅零晨
+            var lastDay = firstDay.AddMonths(1);                            // 下個月一號嘅零晨
 
             string where = String.Empty;
             switch (_Mode)

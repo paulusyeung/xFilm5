@@ -145,7 +145,8 @@ namespace xFilm5.DAL
                 Plate,          // 有 鋅
                 Order,          // 落咗荷打
                 Receipt,        // 收咗貸
-                Invoice         // 開咗單
+                Invoice,        // 開咗單
+                Film            // 2017 追加
             }
 
             public enum DeviceType
