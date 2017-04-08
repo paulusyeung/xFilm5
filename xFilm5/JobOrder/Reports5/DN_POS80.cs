@@ -38,6 +38,8 @@ namespace xFilm5.JobOrder.Reports5
                     //// HACK: 可以睇見所有 CUPS2 嘅 print queues
                     //PrintServer pServer = new PrintServer(@"\\CUPS2");
                     //var pQueues = pServer.GetPrintQueues();
+                    //PrintServer ppServer = new PrintServer(@"\\192.168.2.222");
+                    //var ppQueues = ppServer.GetPrintQueues();
 
                     //var printers = new System.Printing.PrintServer(@"\\WIN-10pv").GetPrintQueues()
                     //    .Where(t =>
@@ -51,22 +53,51 @@ namespace xFilm5.JobOrder.Reports5
                     #endregion
 
                     #region HACK: 暫時得哩個辦法 ok，use RawPrinterHelper.cs 經 local printer send 去隻 CUPS xPrinter，有反應！
-                    IntPtr pUnmanagedBytes = new IntPtr(0);
-                    int nLength = bytesValue.Length;
-                    pUnmanagedBytes = Marshal.AllocCoTaskMem(nLength);
-                    xFilm5.Controls.RawPrinterHelper.SendBytesToPrinter(@"\\http://192.168.2.188:631\tx2", pUnmanagedBytes, nLength);
+                    //IntPtr pUnmanagedBytes = new IntPtr(0);
+                    //int nLength = bytesValue.Length;
+                    //pUnmanagedBytes = Marshal.AllocCoTaskMem(nLength);
+                    //xFilm5.Controls.RawPrinterHelper.SendBytesToPrinter(@"\\http://192.168.2.222:631\tx2", pUnmanagedBytes, nLength);
                     #endregion
 
                     // HACK: 用 TcpClient 當係 ip printer，唔得，可能要買 networ xprinter
                     //SendToTcpPrinter(BytesValue);
+                    var t = Encoding.Default.GetString(bytesValue);
+                    //t += Encoding.Default.GetString(bytesValue);
+                    xFilm5.Controls.RawPrinterHelper.SendStringToPrinter(@"\\http://192.168.2.222:631\tx2", t);
+
+                    /*
+
+                    var uri = new Uri(@"\\192.168.2.222");
+                    string userName = "dell";
+                    string userPassword = "1234";
+                    System.Net.NetworkCredential readCredentials = new System.Net.NetworkCredential(userName, userPassword);
+                    using (new NetworkConnection(String.Format(@"\\{0}", uri.Host), readCredentials))
+                    {
+                        try
+                        {
+                            PrintServer ppServer = new PrintServer(@"\\192.168.2.222");
+                            var ppQueues = ppServer.GetPrintQueues();
+
+                            xFilm5.Controls.RawPrinterHelper.SendFileToPrinter(@"\\http://192.168.2.222:631\tx2", @"C:\Shared\ThermalPrinter-0406-120118.txt");
+                            PrinterUtility.PrintExtensions.Print(bytesValue, "\\\\192.168.2.222\\tx2"); // PrintUtilityTest.Properties.Settings.Default.PrinterPath);
+                        }
+                        catch { }
+                    }
 
                     // HACK: 個 printer name 點都唔得，試過：tx2, \\localhost\tx2, \\WIN-10pv\tx2, \\http://192.168.2.188:631\tx2
-                    //PrinterUtility.PrintExtensions.Print(BytesValue, @"\\http://192.168.2.188:631\tx2"); // PrintUtilityTest.Properties.Settings.Default.PrinterPath);
-
+                    //try
+                    //    {
+                    //        PrinterUtility.PrintExtensions.Print(bytesValue, "\\\\192.168.2.222\\tx2"); // PrintUtilityTest.Properties.Settings.Default.PrinterPath);
+                    //    }
+                    //    catch { }
                     // HACK: write to a local file for debugging
-                    //String finalResult = Encoding.Unicode.GetString(bytesValue);
-                    //File.WriteAllBytes(String.Format(@"C:\Shared\ThermalPrinter-{0}.txt", DateTime.Now.ToString("MMdd-HHmmss")), bytesValue);
-                    //xFilm5.Controls.RawPrinterHelper.SendStringToPrinter("printer name", Encoding.Default.GetString(bytesValue));
+                    String finalResult = Encoding.Unicode.GetString(bytesValue);
+                    File.WriteAllBytes(String.Format(@"C:\Shared\ThermalPrinter-{0}.txt", DateTime.Now.ToString("MMdd-HHmmss")), bytesValue);
+                    xFilm5.Controls.RawPrinterHelper.SendStringToPrinter("printer name", Encoding.Default.GetString(bytesValue));
+
+                    */
+
+                    File.WriteAllBytes(String.Format(@"C:\Shared\ThermalPrinter-{0}.txt", DateTime.Now.ToString("MMdd-HHmmss")), bytesValue);
                 }
             }
         }
@@ -145,26 +176,33 @@ namespace xFilm5.JobOrder.Reports5
 
             #region Company Logo image
             //var BytesValue = GetLogo(@"C:\Shared\CompanyLogo.png");
-            var BytesValue = GetLogo("CompanyLogo.png");
-            //var BytesValue = Encoding.Unicode.GetBytes(string.Empty);
+            //var BytesValue = GetLogo("CompanyLogoBW.jpg");
+            var BytesValue = new byte[0];   // Encoding.Unicode.GetBytes(string.Empty);
             #endregion
 
             #region Company Address
             DAL.OrderHeader order = DAL.OrderHeader.Load(hdr.Field<int>("OrderHeaderId"));
             String[] address = xFilm5.Controls.Utility.Owner.GetWorkshopAddress(order.ProofingOp).Split(new String[] { @"\n" }, StringSplitOptions.None);
 
-            BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontA());
-            BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Center());
+            //BytesValue = PrintExtensions.AddBytes(BytesValue, InitPrinter());
 
-            foreach (String ln in address)
+            BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontA());
+            BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.DoubleHeight2());
+            BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Center());
+            BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Default.GetBytes(address[0] + "\n"));
+
+            BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontA());
+            BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.Nomarl());
+            BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Center());
+            for (int i = 1; i < address.Length; i++)
             {
-                BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Unicode.GetBytes(String.Format("{0}\n", ln)));
+                BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Default.GetBytes(address[i] + "\n"));
             }
             #endregion
 
             BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Separator());
 
-            #region Title
+            #region Title: DELIVERY NOTE
             BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontA());
             BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Center());
             BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.DoubleWidth2());
@@ -172,6 +210,9 @@ namespace xFilm5.JobOrder.Reports5
             BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(oDict.GetWord("delivery_note") + "\n"));
             #endregion
 
+            BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontA());
+            BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.Nomarl());
+            BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Left());
             BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Separator());
 
 
@@ -218,63 +259,100 @@ namespace xFilm5.JobOrder.Reports5
                     BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Unicode.GetBytes(line = String.Format("{0,-24}{1,-8}\n", oDict.GetWordWithColon("transaction#"), hdr.Field<String>("ReceiptNumber"))));
                     BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Unicode.GetBytes(line = String.Format("{0,-24}{1:yyyy-MM-dd HH:mm:ss}\n", oDict.GetWordWithColon("date_time"), hdr.Field<DateTime>("ReceiptDate"))));
 
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Lf());
+
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.DoubleWidth2());
                     BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(String.Format("{0}\n", oDict.GetWordWithColon("bill_to").ToUpper())));
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.Nomarl());
+
                     for (int i = 0; i < billToName.Count; i++)
                     {
-                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Unicode.GetBytes(String.Format("{0}\n", billToName[i])));
+                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(String.Format("{0}\n", billToName[i])));
                     }
                     for (int i = 0; i < billToAddr.Count; i++)
                     {
-                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Unicode.GetBytes(String.Format("{0}\n", billToAddr[i])));
+                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(String.Format("{0}\n", billToAddr[i])));
                     }
-                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(String.Format("{0} {1}\n", oDict.GetWordWithColon("tel"), billToTel)));
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(String.Format("{0} {1}\n", oDict.GetWordWithColon("tel"), billToTel)));
 
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Lf());
+
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.DoubleWidth2());
                     BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(String.Format("{0}\n", oDict.GetWordWithColon("ship_to").ToUpper())));
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.Nomarl());
+
                     for (int i = 0; i < shipToName.Count; i++)
                     {
-                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Unicode.GetBytes(String.Format("{0}\n", shipToName[i])));
+                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(String.Format("{0}\n", shipToName[i])));
                     }
                     for (int i = 0; i < shipToAddr.Count; i++)
                     {
-                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Unicode.GetBytes(String.Format("{0}\n", shipToAddr[i])));
+                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(String.Format("{0}\n", shipToAddr[i])));
                     }
-                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(String.Format("{0} {1}\n", oDict.GetWordWithColon("tel"), shipToTel)));
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(String.Format("{0} {1}\n", oDict.GetWordWithColon("tel"), shipToTel)));
 
                     BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes("\n"));
+
+                    #region items column header
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontB());
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.Nomarl());
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Left());
                     BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes("Qty                      Description                     Amount\n"));
+                    #endregion
+
                     #endregion
                     break;
                 case 2:
                 case 3:
                     #region 中文
-                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Unicode.GetBytes(String.Format("{0,-6}{1,-8}\n", oDict.GetWordWithColon("transaction#"), hdr.Field<String>("ReceiptNumber"))));
-                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Unicode.GetBytes(String.Format("{0,-6}{1:yyyy-MM-dd HH:mm:ss}\n", oDict.GetWordWithColon("date_time"), hdr.Field<DateTime>("ReceiptDate"))));
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(String.Format("{0,-6}{1,-8}\n", oDict.GetWordWithColon("transaction#"), hdr.Field<String>("ReceiptNumber"))));
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(String.Format("{0,-6}{1:yyyy-MM-dd HH:mm:ss}\n", oDict.GetWordWithColon("date_time"), hdr.Field<DateTime>("ReceiptDate"))));
 
-                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Unicode.GetBytes(String.Format("{0}\n", oDict.GetWordWithColon("bill_to"))));
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Lf());
+
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontA());
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.DoubleWidth2());
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Left());
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(String.Format("{0}\n", oDict.GetWordWithColon("bill_to"))));
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.Nomarl());
+
                     for (int i = 0; i < billToName.Count; i++)
                     {
-                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Unicode.GetBytes(String.Format("{0}\n", billToName[i])));
+                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(String.Format("{0}\n", billToName[i])));
                     }
                     for (int i = 0; i < billToAddr.Count; i++)
                     {
-                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Unicode.GetBytes(String.Format("{0}\n", billToAddr[i])));
+                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(String.Format("{0}\n", billToAddr[i])));
                     }
-                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Unicode.GetBytes(String.Format("{0} {1}\n", oDict.GetWordWithColon("tel"), billToTel)));
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(String.Format("{0} {1}\n", oDict.GetWordWithColon("tel"), billToTel)));
 
-                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes("\n"));
-                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Unicode.GetBytes(String.Format("{0}\n", oDict.GetWordWithColon("ship_to"))));
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Lf());
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontA());
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.DoubleWidth2());
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Left());
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(String.Format("{0}\n", oDict.GetWordWithColon("ship_to"))));
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.Nomarl());
+
                     for (int i = 0; i < shipToName.Count; i++)
                     {
-                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Unicode.GetBytes(String.Format("{0}\n", shipToName[i])));
+                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(String.Format("{0}\n", shipToName[i])));
                     }
                     for (int i = 0; i < shipToAddr.Count; i++)
                     {
-                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Unicode.GetBytes(String.Format("{0}\n", shipToAddr[i])));
+                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(String.Format("{0}\n", shipToAddr[i])));
                     }
-                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Unicode.GetBytes(String.Format("{0} {1}\n", oDict.GetWordWithColon("tel"), shipToTel)));
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(String.Format("{0} {1}\n", oDict.GetWordWithColon("tel"), shipToTel)));
 
-                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes("\n"));
-                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Unicode.GetBytes(String.Format("{0,-10}{1,-10}{2,2}\n", oDict.GetWord("qty"), oDict.GetWord("item_description"), oDict.GetWord("amount"))));
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Lf());
+
+                    #region items column header
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontA());
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.Nomarl());
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Left());
+
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(String.Format("{0,-19}{1,-19}{2,2}\n", oDict.GetWord("qty"), oDict.GetWord("item_description"), oDict.GetWord("amount"))));
+                    #endregion
+
                     #endregion
                     break;
             }
@@ -315,25 +393,33 @@ namespace xFilm5.JobOrder.Reports5
             BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(String.Format("{0,8:N2}\n", hdr.Field<Decimal>("ReceiptAmount"))));
             #endregion
 
+            BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontB());
+            BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Right());
+            BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.Nomarl());
             BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Separator());
 
             #region Barcode / QR Code
             BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Lf());
+            BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontA());
             BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Center());
-            BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.DoubleHeight6());
-            BytesValue = PrintExtensions.AddBytes(BytesValue, obj.BarCode.Code128((hdr.Field<String>("ReceiptNumber")).ToString()));
+            BytesValue = PrintExtensions.AddBytes(BytesValue, BarcodeHeight(162*2));        // 冇用，PrinterUtility 自己控制咗
+            BytesValue = PrintExtensions.AddBytes(BytesValue, Barcode(hdr.Field<String>("ReceiptNumber")));
 
-            BytesValue = PrintExtensions.AddBytes(BytesValue, obj.QrCode.Print((hdr.Field<String>("ReceiptNumber")).ToString(), PrinterUtility.Enums.QrCodeSize.Grande));
+            //BytesValue = PrintExtensions.AddBytes(BytesValue, obj.BarCode.Code128((hdr.Field<String>("ReceiptNumber")).ToString()));
+            //BytesValue = PrintExtensions.AddBytes(BytesValue, obj.QrCode.Print((hdr.Field<String>("ReceiptNumber")).ToString(), PrinterUtility.Enums.QrCodeSize.Medio));
+
             #endregion
 
             #region Appedix / Ad
-            //BytesValue = PrintExtensions.AddBytes(BytesValue, "-------------------Thank you for coming------------------------\n");
+            BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontB());
+            BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.Nomarl());
+            BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Center());
+            BytesValue = PrintExtensions.AddBytes(BytesValue, DateTime.Now.ToString("yyyyMMddHHmmss") + "\n");
             #endregion
 
-            BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Left());
-            BytesValue = PrintExtensions.AddBytes(BytesValue, SelectFont15());
-            BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(line = "選擇字庫 15 (中國)"));
+            BytesValue = PrintExtensions.AddBytes(BytesValue, FeedLines(10));
             BytesValue = PrintExtensions.AddBytes(BytesValue, CutPage());
+            //BytesValue = PrintExtensions.AddBytes(BytesValue, FormFeed());
 
             return BytesValue;
         }
@@ -352,13 +438,83 @@ namespace xFilm5.JobOrder.Reports5
             return result.ToList();
         }
 
+        /// <summary>
+        /// Bardcode height, n = 
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        private byte[] BarcodeHeight(int n = 162)
+        {
+            List<byte> oby = new List<byte>();
+            oby.Add((byte)29);
+            oby.Add((byte)104);
+            oby.Add((byte)n);
+            return oby.ToArray();
+        }
+
+        private byte[] Barcode(string n, int m = 4)
+        {
+            List<byte> oby = new List<byte>();
+            oby.Add((byte)29);
+            oby.Add((byte)107);
+            oby.Add((byte)m);
+
+            byte[] ascii = Encoding.ASCII.GetBytes(n);
+            foreach (byte b in ascii)
+            {
+                oby.Add(b);
+            }
+
+            oby.Add((byte)0);
+            return oby.ToArray();
+        }
+
         private byte[] CutPage()
         {
             List<byte> oby = new List<byte>();
-            oby.Add(Convert.ToByte(Convert.ToChar(0x1D)));
-            oby.Add(Convert.ToByte('V'));
+            //oby.Add(Convert.ToByte(Convert.ToChar(0x1D)));
+            //oby.Add(Convert.ToByte('V'));
+            oby.Add((byte)29);
+            oby.Add((byte)86);
             oby.Add((byte)1);
-            oby.Add((byte)49);
+            //oby.Add((byte)49);
+            return oby.ToArray();
+        }
+
+        /// <summary>
+        /// Print buffer & Feed n lines
+        /// </summary>
+        /// <returns></returns>
+        private byte[] FeedLines(int n)
+        {
+            List<byte> oby = new List<byte>();
+            oby.Add((byte)27);
+            oby.Add((byte)100);
+            oby.Add((byte)n);
+            return oby.ToArray();
+        }
+
+        /// <summary>
+        /// Print buffer and return to standard mode
+        /// </summary>
+        /// <returns></returns>
+        private byte[] FormFeed()
+        {
+            List<byte> oby = new List<byte>();
+            oby.Add((byte)12);
+            return oby.ToArray();
+        }
+
+        /// <summary>
+        /// Initialize printer
+        /// Clear print buffer and reset printer mode to Power On
+        /// </summary>
+        /// <returns></returns>
+        private byte[] InitPrinter()
+        {
+            List<byte> oby = new List<byte>();
+            oby.Add((byte)27);
+            oby.Add((byte)64);
             return oby.ToArray();
         }
 
