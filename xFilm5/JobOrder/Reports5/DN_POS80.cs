@@ -256,8 +256,8 @@ namespace xFilm5.JobOrder.Reports5
             {
                 case 1:
                     #region 英文
-                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Unicode.GetBytes(line = String.Format("{0,-24}{1,-8}\n", oDict.GetWordWithColon("transaction#"), hdr.Field<String>("ReceiptNumber"))));
-                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Unicode.GetBytes(line = String.Format("{0,-24}{1:yyyy-MM-dd HH:mm:ss}\n", oDict.GetWordWithColon("date_time"), hdr.Field<DateTime>("ReceiptDate"))));
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(line = String.Format("{0,-24}{1,-8}\n", oDict.GetWordWithColon("transaction#"), hdr.Field<String>("ReceiptNumber"))));
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(line = String.Format("{0,-24}{1:yyyy-MM-dd HH:mm:ss}\n", oDict.GetWordWithColon("date_time"), hdr.Field<DateTime>("ReceiptDate"))));
 
                     BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Lf());
 
@@ -417,9 +417,9 @@ namespace xFilm5.JobOrder.Reports5
             BytesValue = PrintExtensions.AddBytes(BytesValue, DateTime.Now.ToString("yyyyMMddHHmmss") + "\n");
             #endregion
 
-            BytesValue = PrintExtensions.AddBytes(BytesValue, FeedLines(10));
+            //BytesValue = PrintExtensions.AddBytes(BytesValue, FeedLines(10));
             BytesValue = PrintExtensions.AddBytes(BytesValue, CutPage());
-            //BytesValue = PrintExtensions.AddBytes(BytesValue, FormFeed());
+            BytesValue = PrintExtensions.AddBytes(BytesValue, FormFeed());
 
             return BytesValue;
         }
@@ -476,8 +476,8 @@ namespace xFilm5.JobOrder.Reports5
             //oby.Add(Convert.ToByte('V'));
             oby.Add((byte)29);
             oby.Add((byte)86);
-            oby.Add((byte)1);
-            //oby.Add((byte)49);
+            oby.Add((byte)66);
+            oby.Add((byte)0);
             return oby.ToArray();
         }
 
