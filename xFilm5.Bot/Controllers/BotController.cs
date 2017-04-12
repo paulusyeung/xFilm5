@@ -49,38 +49,52 @@ namespace xFilm5.Bot.Controllers
                         using (new NetworkConnection(String.Format(@"\\{0}", uri.Host), readCredentials))
                         {
                             // 參考：https://bitbucket.org/nxstudio/xfilm5/wiki/xFilm5%20Plate5%20Order%20Form
-                            String fileName = String.Format("{0}.{1}.{2}.tif", filePrefix, vps.PrintQueue.ClientID.ToString(), vps.VpsFileName.Substring(0, vps.VpsFileName.Length - 4));
-                            String filePath_Source = Path.Combine(serverUri + sourecPath, fileName);
-                            String filePath_Dest = Path.Combine(serverUri + destPath, fileName);
 
-                            if (File.Exists(filePath_Source))
+                            // 2017.04.11 paulus: 要用 wildcard 抄
+                            //String fileName = String.Format("{0}.{1}.{2}.tif", filePrefix, vps.PrintQueue.ClientID.ToString(), vps.VpsFileName.Substring(0, vps.VpsFileName.Length - 4));
+
+
+                            String aliasname = vps.VpsFileName.Substring(0, vps.VpsFileName.Length - 4);    // ignor suffix (file type)
+                            aliasname = aliasname.Substring(0, aliasname.LastIndexOf('('));                 // ignor "(color)"
+                            String fileName = String.Format("{0}.{1}.{2}*", filePrefix, vps.PrintQueue.ClientID.ToString(), aliasname);     // wildcard
+
+                            //String source = Path.Combine(@"\\192.168.12.230\DirectPrint\EfiProof", "*" + aliasname + "*");
+                            //FileInfo[] files = Helper.FileHelper.FileUtils.GetFilesMatchWildCard(source, "MonAgent", "nx-9602");
+
+                            //String filePath_Source = Path.Combine(serverUri + sourecPath, fileName);
+                            //String filePath_Dest = Path.Combine(serverUri + destPath, ".");
+
+                            DirectoryInfo info = new DirectoryInfo(serverUri + sourecPath);
+                            if (info.Exists)
                             {
-                                //IEnumerable<string> files = Directory.EnumerateFiles(bpFilePath_Source, "*.dll", SearchOption.AllDirectories);
-
-                                //if (!(Directory.Exists(filePath_Dest))) Directory.CreateDirectory(filePath_Dest);
-
-                                //if (!File.Exists(filePath_Dest))
-                                //{
-                                try
+                                FileInfo[] files = info.GetFiles(fileName);
+                                if (files.Length > 0)
                                 {
-                                    File.Copy(filePath_Source, filePath_Dest, true);
-                                    return Ok();
+                                    try
+                                    {
+                                        foreach (FileInfo item in files)
+                                        {
+                                            String filePath_Source = item.FullName;
+                                            String filePath_Dest = Path.Combine(serverUri + destPath, item.Name);
+                                            File.Copy(filePath_Source, filePath_Dest, true);
+                                        }
+                                        return Ok();
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        log.Fatal("[bot, blueprint, Copy] \r\n", e);
+                                        return NotFound();
+                                    }
                                 }
-                                catch (Exception e)
+                                else
                                 {
-                                    log.Fatal("[bot, blueprint, Copy] \r\n", e);
+                                    log.Error(String.Format("[bot, blueprint, source file not exist] \r\nFile Name = {0}\r\nFilePath_Source = {1}\\{2}", fileName, serverUri, sourecPath));
                                     return NotFound();
                                 }
-                                //}
-                                //else
-                                //{
-                                //    log.Error(String.Format("[bot, blueprint, dest file exist] \r\nFile Name = {0}\r\nFilePath_Source = {1}\r\nFilePath_Dest = {2}", fileName, filePath_Source, filePath_Dest));
-                                //    return NotFound();
-                                //}
                             }
                             else
                             {
-                                log.Error(String.Format("[bot, blueprint, source file not exist] \r\nFile Name = {0}\r\nFilePath_Source = {1}\r\nFilePath_Dest = {2}", fileName, filePath_Source, filePath_Dest));
+                                log.Error(String.Format("[bot, blueprint, source directory not exist] \r\nFile Name = {0}\r\nFilePath_Source = {1}\\{2}", fileName, serverUri, sourecPath));
                                 return NotFound();
                             }
                         }

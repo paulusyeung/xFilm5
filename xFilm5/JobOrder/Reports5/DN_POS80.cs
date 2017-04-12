@@ -38,8 +38,26 @@ namespace xFilm5.JobOrder.Reports5
                     //// HACK: 可以睇見所有 CUPS2 嘅 print queues
                     //PrintServer pServer = new PrintServer(@"\\CUPS2");
                     //var pQueues = pServer.GetPrintQueues();
-                    //PrintServer ppServer = new PrintServer(@"\\192.168.2.222");
+                    //PrintServer ppServer = new PrintServer(@"\\192.168.2.223");
                     //var ppQueues = ppServer.GetPrintQueues();
+
+                    var uri = new Uri(@"\\192.168.2.223");
+                    string userName = "pi";
+                    string userPassword = "nx-9602";
+                    System.Net.NetworkCredential readCredentials = new System.Net.NetworkCredential(userName, userPassword);
+                    using (new NetworkConnection(String.Format(@"\\{0}", uri.Host), readCredentials))
+                    {
+                        try
+                        {
+                            PrintServer ppServer = new PrintServer(@"\\192.168.2.223");
+                            var ppQueues = ppServer.GetPrintQueues();
+
+                            xFilm5.Controls.RawPrinterHelper.SendStringToPrinter(@"\\192.168.2.223\kt-xp80c", Encoding.Default.GetString(bytesValue));
+                            //PrinterUtility.PrintExtensions.Print(bytesValue, "\\\\192.168.2.222\\tx2"); // PrintUtilityTest.Properties.Settings.Default.PrinterPath);
+                        }
+                        catch { }
+                    }
+
 
                     //var printers = new System.Printing.PrintServer(@"\\WIN-10pv").GetPrintQueues()
                     //    .Where(t =>
@@ -63,7 +81,7 @@ namespace xFilm5.JobOrder.Reports5
                     //SendToTcpPrinter(BytesValue);
                     var t = Encoding.Default.GetString(bytesValue);
                     //t += Encoding.Default.GetString(bytesValue);
-                    xFilm5.Controls.RawPrinterHelper.SendStringToPrinter(@"\\http://192.168.2.222:631\tx2", t);
+                    xFilm5.Controls.RawPrinterHelper.SendStringToPrinter(@"\\http://192.168.2.223:631\tx01", t);
 
                     /*
 
@@ -291,7 +309,7 @@ namespace xFilm5.JobOrder.Reports5
                     }
                     BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(String.Format("{0} {1}\n", oDict.GetWordWithColon("tel"), shipToTel)));
 
-                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes("\n"));
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Lf());
 
                     #region items column header
                     BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontB());
@@ -327,6 +345,7 @@ namespace xFilm5.JobOrder.Reports5
                     BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(String.Format("{0} {1}\n", oDict.GetWordWithColon("tel"), billToTel)));
 
                     BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Lf());
+
                     BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontA());
                     BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.DoubleWidth2());
                     BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Left());

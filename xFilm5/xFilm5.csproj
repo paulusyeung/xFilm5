@@ -778,6 +778,7 @@
     <Compile Include="Desktop.designer.cs">
       <DependentUpon>Desktop.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helper\FileHelper.cs" />
     <Compile Include="Help\About.cs">
       <SubType>Form</SubType>
     </Compile>
