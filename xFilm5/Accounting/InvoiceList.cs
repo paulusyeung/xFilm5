@@ -504,7 +504,17 @@ ORDER BY [InvoiceNumber] DESC
                 _InvoiceId = Convert.ToInt32(lvwInvoiceList.SelectedItem.SubItems[6].ToString());
                 xFilm5.JobOrder.Billing invoice = new xFilm5.JobOrder.Billing();
                 invoice.InvoiceId = _InvoiceId;
-                invoice.EditMode = Common.Enums.EditMode.Read;
+
+                // 2017.04.13 paulus: 如果 posted, admin 可以改單
+                if (xFilm5.Controls.Utility.User.UserRole() == (int)DAL.Common.Enums.UserRole.Admin)
+                {
+                    invoice.EditMode = Common.Enums.EditMode.Edit;
+                }
+                else
+                {
+                    invoice.EditMode = Common.Enums.EditMode.Read;
+                }
+
                 invoice.Show();
             }
         }
