@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Security.Principal;
 using System.Web.Http;
+using xFilm5.Bot.Models;
 
 namespace xFilm5.Bot.Controllers
 {
@@ -29,7 +30,7 @@ namespace xFilm5.Bot.Controllers
             {
                 int vpsPqId = jsonData["PrintQueueVpsId"].Value<int>();
 
-                using (Models.SysDb context = new Models.SysDb())
+                using (var context = new xFilm5Entities())
                 {
                     Models.PrintQueue_VPS vps = context.PrintQueue_VPS.FirstOrDefault(v => v.ID == vpsPqId);
                     if (vps != null)
@@ -78,6 +79,7 @@ namespace xFilm5.Bot.Controllers
                                             String filePath_Dest = Path.Combine(serverUri + destPath, item.Name);
                                             File.Copy(filePath_Source, filePath_Dest, true);
                                         }
+                                        log.Info(String.Format("[bot, blueprint, copied] \r\nFile Name = {0}\r\nFilePath_Source = {1}\\{2}", fileName, serverUri, sourecPath));
                                         return Ok();
                                     }
                                     catch (Exception e)
@@ -120,7 +122,7 @@ namespace xFilm5.Bot.Controllers
             {
                 int vpsPqId = jsonData["PrintQueueVpsId"].Value<int>();
 
-                using (Models.SysDb context = new Models.SysDb())
+                using (var context = new xFilm5Entities())
                 {
                     Models.PrintQueue_VPS vps = context.PrintQueue_VPS.FirstOrDefault(v => v.ID == vpsPqId);
                     if (vps != null)
@@ -159,6 +161,7 @@ namespace xFilm5.Bot.Controllers
                                     try
                                     {
                                         File.Copy(filePath_Source, filePath_Dest);
+                                        log.Info(String.Format("[bot, plate, copied] \r\nFile Name = {0}\r\nFilePath_Source = {1}\r\nFilePath_Dest = {2}", fileName, filePath_Source, filePath_Dest));
                                         return Ok();
                                     }
                                     catch (Exception e)
@@ -201,7 +204,7 @@ namespace xFilm5.Bot.Controllers
             {
                 int vpsPqId = jsonData["PrintQueueVpsId"].Value<int>();
 
-                using (Models.SysDb context = new Models.SysDb())
+                using (var context = new xFilm5Entities())
                 {
                     Models.PrintQueue_VPS vps = context.PrintQueue_VPS.FirstOrDefault(v => v.ID == vpsPqId);
                     if (vps != null)
@@ -236,6 +239,7 @@ namespace xFilm5.Bot.Controllers
                                     try
                                     {
                                         File.Copy(filePath_Source, filePath_Dest);
+                                        log.Info(String.Format("[bot, cip3, copied] \r\nFile Name = {0}\r\nFilePath_Source = {1}\r\nFilePath_Dest = {2}", fileName, filePath_Source, filePath_Dest));
                                         return Ok();
                                     }
                                     catch (Exception e)
@@ -278,7 +282,7 @@ namespace xFilm5.Bot.Controllers
             {
                 int vpsPqId = jsonData["PrintQueueVpsId"].Value<int>();
 
-                using (Models.SysDb context = new Models.SysDb())
+                using (var context = new xFilm5Entities())
                 {
                     Models.PrintQueue_VPS vps = context.PrintQueue_VPS.FirstOrDefault(v => v.ID == vpsPqId);
                     if (vps != null)
@@ -322,6 +326,7 @@ namespace xFilm5.Bot.Controllers
                                     try
                                     {
                                         File.Copy(filePath_Source, filePath_Dest);
+                                        log.Error(String.Format("[bot, film, copied] \r\nFile Name = {0}\r\nFilePath_Source = {1}\r\nFilePath_Dest = {2}", filename, filePath_Source, filePath_Dest));
                                         return Ok();
                                     }
                                     catch (Exception e)
@@ -346,6 +351,49 @@ namespace xFilm5.Bot.Controllers
                     else
                     {
                         log.Error("[bot, plate, PrintQueue_VPS not found] \r\n" + vps.ToString());
+                        return NotFound();
+                    }
+                }
+            }
+        }
+
+        [Route("xprinter")]
+        public IHttpActionResult PostXprinter([FromBody] JObject jsonData)
+        {
+            if (jsonData == null)
+            {
+                log.Error("[bot, xprinter] jsonData == null");
+                return NotFound();
+            }
+            else
+            {
+                int receiptId = jsonData["ReceiptId"].Value<int>();
+                int languageId = jsonData["LanguageId"].Value<int>();
+                string printerName = jsonData["PrinterName"].Value<string>();
+
+                using (var context = new xFilm5Entities())
+                {
+                    Models.PrintQueue_VPS vps = context.PrintQueue_VPS.FirstOrDefault(v => v.ID == receiptId);
+                    var hasRows = context.vwReceiptDetailsList.Where(x => x.ReceiptHeaderId == receiptId).Any();
+                    if (hasRows)
+                    {
+                        try
+                        {
+                            var xp80 = new PrinterHelper();
+                            xp80.Print(receiptId, languageId, printerName);
+
+                            log.Info(String.Format("[bot, xprinter, receipt printed] \r\nReceipt Number = {0}\r\nLanguage Id = {1}\r\nPrinter Name = {2}", receiptId.ToString(), languageId.ToString(), printerName));
+                            return Ok();
+                        }
+                        catch (Exception ex)
+                        {
+                            log.Error(String.Format("[bot, xprinter, print error] \r\nExceptional Error = {0}", ex.ToString()));
+                            return NotFound();
+                        }
+                    }
+                    else
+                    {
+                        log.Error("[bot, xprinter, Receipt not found] \r\n" + vps.ToString());
                         return NotFound();
                     }
                 }

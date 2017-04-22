@@ -17,7 +17,6 @@ namespace xFilm5.Bot.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PrintQueue()
         {
-            this.OrderPkPrintQs = new HashSet<OrderPkPrintQ>();
             this.PrintQueue_VPS = new HashSet<PrintQueue_VPS>();
             this.PrintQueue_LifeCycle = new HashSet<PrintQueue_LifeCycle>();
         }
@@ -40,8 +39,6 @@ namespace xFilm5.Bot.Models
     
         public virtual Client Client { get; set; }
         public virtual OrderHeader OrderHeader { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrderPkPrintQ> OrderPkPrintQs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PrintQueue_VPS> PrintQueue_VPS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

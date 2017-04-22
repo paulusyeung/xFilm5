@@ -16,7 +16,7 @@ namespace xFilm5.Bot.Models
     {
         public int ReceiptDetailId { get; set; }
         public int ReceiptHeaderId { get; set; }
-        public Nullable<int> OrderPkPrintQId { get; set; }
+        public Nullable<int> OrderPkPrintQueueVpsId { get; set; }
         public string BillingCode { get; set; }
         public string Description { get; set; }
         public Nullable<short> Qty { get; set; }
@@ -24,7 +24,7 @@ namespace xFilm5.Bot.Models
         public Nullable<decimal> Discount { get; set; }
         public Nullable<decimal> Amount { get; set; }
     
-        public virtual OrderPkPrintQ OrderPkPrintQ { get; set; }
+        public virtual OrderPkPrintQueueVps OrderPkPrintQueueVps { get; set; }
         public virtual ReceiptHeader ReceiptHeader { get; set; }
     }
 }

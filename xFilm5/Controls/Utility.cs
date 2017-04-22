@@ -121,6 +121,20 @@ namespace xFilm5.Controls
                     return ConfigurationManager.AppSettings["SparkPost_TemplateId_INV"] != null ? ConfigurationManager.AppSettings["SparkPost_TemplateId_INV"] : "";
                 }
             }
+            public static string Xprinter_KT
+            {
+                get
+                {
+                    return ConfigurationManager.AppSettings["Xprinter_KT"] != null ? ConfigurationManager.AppSettings["Xprinter_KT"] : "";
+                }
+            }
+            public static string Xprinter_TW
+            {
+                get
+                {
+                    return ConfigurationManager.AppSettings["Xprinter_TW"] != null ? ConfigurationManager.AppSettings["Xprinter_TW"] : "";
+                }
+            }
         }
 
         public class Owner

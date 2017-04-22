@@ -17,7 +17,7 @@ namespace xFilm5.Bot.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public T_Status()
         {
-            this.OrderHeaders = new HashSet<OrderHeader>();
+            this.OrderHeader = new HashSet<OrderHeader>();
         }
     
         public int ID { get; set; }
@@ -25,6 +25,6 @@ namespace xFilm5.Bot.Models
         public Nullable<int> Phase { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrderHeader> OrderHeaders { get; set; }
+        public virtual ICollection<OrderHeader> OrderHeader { get; set; }
     }
 }

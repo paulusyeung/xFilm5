@@ -17,7 +17,7 @@ namespace xFilm5.Bot.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public T_BillingCode_Item()
         {
-            this.ClientPricings = new HashSet<ClientPricing>();
+            this.ClientPricing = new HashSet<ClientPricing>();
         }
     
         public int ID { get; set; }
@@ -30,7 +30,7 @@ namespace xFilm5.Bot.Models
         public bool Retired { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ClientPricing> ClientPricings { get; set; }
+        public virtual ICollection<ClientPricing> ClientPricing { get; set; }
         public virtual T_BillingCode_Dept T_BillingCode_Dept { get; set; }
     }
 }

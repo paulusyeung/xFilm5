@@ -4,9 +4,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Printing;
 using System.Runtime.InteropServices;
@@ -26,7 +28,9 @@ namespace xFilm5.JobOrder.Reports5
                 {
                     var bytesValue = GetPrintContent(dt);
 
-                    #region locate the local/ server printers
+                    #region
+
+                    #region 先用 local add 咗隻 cups printer，用以下嘅 loop 嚟搵出佢個 printer name
                     //LocalPrintServer server = new LocalPrintServer();
                     //var pq = server.DefaultPrintQueue;
                     //var pqs = server.GetPrintQueues();
@@ -34,31 +38,61 @@ namespace xFilm5.JobOrder.Reports5
                     //{
                     //    String pname = p.Name;
                     //}
+                    #endregion
 
-                    //// HACK: 可以睇見所有 CUPS2 嘅 print queues
-                    //PrintServer pServer = new PrintServer(@"\\CUPS2");
+                    //PrintServer pServer = new PrintServer(@"\\192.168.12.130", PrintSystemDesiredAccess.EnumerateServer);
                     //var pQueues = pServer.GetPrintQueues();
-                    //PrintServer ppServer = new PrintServer(@"\\192.168.2.223");
-                    //var ppQueues = ppServer.GetPrintQueues();
 
-                    var uri = new Uri(@"\\192.168.2.223");
-                    string userName = "pi";
+                    //string printerName = @"\\http://192.168.2.92:631\KT-XP80C";     // 我懷疑哩個 syntax 係因為安裝咗 samba
+                    string printerName = @"\\192.168.12.130\KT-XP80C";     // 我懷疑哩個 syntax 係因為安裝咗 samba
+
+
+                    #region HACK: 通常喺哩度就可以 send 去俾隻 printer，不過曾經試過要 login (RaspberryPi)，估計係同隻 CUPS 嘅設定有關
+                    var t = Encoding.Default.GetString(bytesValue);
+                    //t += Encoding.Default.GetString(bytesValue);      // 印兩張相同嘅單
+                    xFilm5.Controls.RawPrinterHelper.SendStringToPrinter(printerName, t);
+                    #endregion
+
+                    #region HACK: 可以睇見所有 CUPS2 嘅 print queues，不過就唔一定睇到隻 OrangePi/ RaspberryPi
+                    //try
+                    //{
+                    //    PrintServer pServer = new PrintServer(@"\\CUPS2", PrintSystemDesiredAccess.EnumerateServer);
+                    //    var pQueues = pServer.GetPrintQueues();
+                    //    PrintServer ppServer = new PrintServer(@"\\kt-printserver\", PrintSystemDesiredAccess.EnumerateServer);
+                    //    var ppQueues = ppServer.GetPrintQueues();
+                    //}
+                    //catch { }
+                    #endregion
+
+                    #region HACK: 如果要 login credential 先可以打印
+                    string hostname = "kt.pserver.xfilm5";   // 修改 C:\Windows\System32\drivers\etc\hosts
+
+                    var uri = new Uri(@"\\192.168.2.92");
+                    string userName = "root";
                     string userPassword = "nx-9602";
                     System.Net.NetworkCredential readCredentials = new System.Net.NetworkCredential(userName, userPassword);
+
                     using (new NetworkConnection(String.Format(@"\\{0}", uri.Host), readCredentials))
                     {
                         try
                         {
-                            PrintServer ppServer = new PrintServer(@"\\192.168.2.223");
-                            var ppQueues = ppServer.GetPrintQueues();
+                            #region 有網友教用 net command 去 login 先，不過我試咗，Win32 Errors 係冇效嘅
+                            //var p = new Process();
+                            //p.StartInfo.FileName = "net";
+                            //p.StartInfo.Arguments = "use \\\\kt-printserver nx-9602 /user:domain\\root";
+                            //p.StartInfo.CreateNoWindow = true;
+                            //p.Start();
+                            //p.WaitForExit();
+                            #endregion
 
-                            xFilm5.Controls.RawPrinterHelper.SendStringToPrinter(@"\\192.168.2.223\kt-xp80c", Encoding.Default.GetString(bytesValue));
+                            //xFilm5.Controls.RawPrinterHelper.SendStringToPrinter(@"\\192.168.2.92\kt-xp80c", Encoding.Default.GetString(bytesValue));                     // 隻 RaspberryPi 用哩個 syntax
                             //PrinterUtility.PrintExtensions.Print(bytesValue, "\\\\192.168.2.222\\tx2"); // PrintUtilityTest.Properties.Settings.Default.PrinterPath);
                         }
                         catch { }
                     }
+                    #endregion
 
-
+                    #region 用 LinQ 搵 printer name
                     //var printers = new System.Printing.PrintServer(@"\\WIN-10pv").GetPrintQueues()
                     //    .Where(t =>
                     //    {
@@ -67,10 +101,11 @@ namespace xFilm5.JobOrder.Reports5
                     //    })
                     //    .Select(t => t.FullName)
                     //    .ToArray();
+                    #endregion
 
                     #endregion
 
-                    #region HACK: 暫時得哩個辦法 ok，use RawPrinterHelper.cs 經 local printer send 去隻 CUPS xPrinter，有反應！
+                    #region HACK: 取消（暫時得哩個辦法 ok，use RawPrinterHelper.cs 經 local printer send 去隻 CUPS xPrinter，有反應！）
                     //IntPtr pUnmanagedBytes = new IntPtr(0);
                     //int nLength = bytesValue.Length;
                     //pUnmanagedBytes = Marshal.AllocCoTaskMem(nLength);
@@ -79,10 +114,8 @@ namespace xFilm5.JobOrder.Reports5
 
                     // HACK: 用 TcpClient 當係 ip printer，唔得，可能要買 networ xprinter
                     //SendToTcpPrinter(BytesValue);
-                    var t = Encoding.Default.GetString(bytesValue);
-                    //t += Encoding.Default.GetString(bytesValue);
-                    xFilm5.Controls.RawPrinterHelper.SendStringToPrinter(@"\\http://192.168.2.223:631\tx01", t);
 
+                    #region 保留做參考
                     /*
 
                     var uri = new Uri(@"\\192.168.2.222");
@@ -114,8 +147,10 @@ namespace xFilm5.JobOrder.Reports5
                     xFilm5.Controls.RawPrinterHelper.SendStringToPrinter("printer name", Encoding.Default.GetString(bytesValue));
 
                     */
+                    #endregion
 
-                    File.WriteAllBytes(String.Format(@"C:\Shared\ThermalPrinter-{0}.txt", DateTime.Now.ToString("MMdd-HHmmss")), bytesValue);
+                    // backup as file (for debugging)
+                    //File.WriteAllBytes(String.Format(@"C:\Shared\ThermalPrinter-{0}.txt", DateTime.Now.ToString("MMdd-HHmmss")), bytesValue);
                 }
             }
         }

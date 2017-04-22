@@ -18,7 +18,7 @@ namespace xFilm5.Bot.Models
         public Acct_INMaster()
         {
             this.Acct_INDetails = new HashSet<Acct_INDetails>();
-            this.ReceiptHeaders = new HashSet<ReceiptHeader>();
+            this.ReceiptHeader = new HashSet<ReceiptHeader>();
         }
     
         public int ID { get; set; }
@@ -42,7 +42,7 @@ namespace xFilm5.Bot.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Acct_INDetails> Acct_INDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ReceiptHeader> ReceiptHeaders { get; set; }
+        public virtual ICollection<ReceiptHeader> ReceiptHeader { get; set; }
         public virtual Client Client { get; set; }
         public virtual OrderHeader OrderHeader { get; set; }
         public virtual T_PaymentType T_PaymentType { get; set; }

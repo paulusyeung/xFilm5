@@ -908,8 +908,10 @@ WHERE Rn = 1
                     DataRow row = (DataRow)drv.Row;
                     int receiptId = (int)row["ReceiptHeaderId"];
 
-                    JobOrder.Reports5.DN_POS80 pos80 = new JobOrder.Reports5.DN_POS80();
-                    pos80.Print(receiptId);
+                    //JobOrder.Reports5.DN_POS80 pos80 = new JobOrder.Reports5.DN_POS80();
+                    //pos80.Print(receiptId);
+
+                    Helper.BotHelper.PostXprinter(receiptId);
                 }
             }
         }

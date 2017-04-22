@@ -51,6 +51,7 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Gizmox.WebGUI.Common, Version=4.5.25701.0, Culture=neutral, PublicKeyToken=263fa4ef694acff6, processorArchitecture=MSIL" />
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -64,10 +65,18 @@
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="nxStudio">
+      <HintPath>..\..\..\Program Files\Common Files\nxStudio\nxStudio.dll</HintPath>
+    </Reference>
+    <Reference Include="PrinterUtility, Version=1.0.1.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PrinterUtility.1.1.2\lib\PrinterUtility.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
       <HintPath>..\packages\Swashbuckle.Core.5.5.3\lib\net40\Swashbuckle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -80,6 +89,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -110,8 +120,8 @@
     <Content Include="Global.asax" />
     <Content Include="Models\xFilm5Model.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>xFilm5Model.Context.cs</LastGenOutput>
       <DependentUpon>xFilm5Model.edmx</DependentUpon>
+      <LastGenOutput>xFilm5Model.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Models\xFilm5Model.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -119,12 +129,17 @@
       <LastGenOutput>xFilm5Model.cs</LastGenOutput>
     </Content>
     <Content Include="Web.config" />
+    <Content Include="WordDict.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="Controllers\BotController.cs" />
     <Compile Include="DirectoryHelper.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -155,7 +170,7 @@
     <Compile Include="Models\OrderHeader.cs">
       <DependentUpon>xFilm5Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\OrderPkPrintQ.cs">
+    <Compile Include="Models\OrderPkPrintQueueVps.cs">
       <DependentUpon>xFilm5Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Order_Details.cs">
@@ -251,6 +266,9 @@
     <Compile Include="Models\UserPreference.cs">
       <DependentUpon>xFilm5Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\vwReceiptDetailsList.cs">
+      <DependentUpon>xFilm5Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\xFilm5Model.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -273,10 +291,14 @@
       <DependentUpon>xFilm5Model.tt</DependentUpon>
     </Compile>
     <Compile Include="NetworkConnection.cs" />
+    <Compile Include="PrinterHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RawPrinterHelper.cs" />
+    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="log4net.config" />
     <EntityDeploy Include="Models\xFilm5Model.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>xFilm5Model.Designer.cs</LastGenOutput>
@@ -284,7 +306,6 @@
     <Content Include="Models\xFilm5Model.edmx.diagram">
       <DependentUpon>xFilm5Model.edmx</DependentUpon>
     </Content>
-    <Content Include="log4net.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

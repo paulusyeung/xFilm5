@@ -1,0 +1,1331 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <keyword key="white_space">
+    <en>
+    </en>
+    <chs>
+    </chs>
+    <cht>
+    </cht>
+  </keyword>
+  <keyword key="logon_user">
+    <en>Logon User</en>
+    <chs>用 户</chs>
+    <cht>用 戶</cht>
+  </keyword>
+  <keyword key="password">
+    <en>Password</en>
+    <chs>密 码</chs>
+    <cht>密 碼</cht>
+  </keyword>
+  <keyword key="logon">
+    <en>Logon</en>
+    <chs>登陆</chs>
+    <cht>登入</cht>
+  </keyword>
+  <keyword key="file">
+    <en>File</en>
+    <chs>文件</chs>
+    <cht>檔案</cht>
+  </keyword>
+  <keyword key="exit">
+    <en>Exit</en>
+    <chs>退出</chs>
+    <cht>結束</cht>
+  </keyword>
+  <keyword key="view">
+    <en>View</en>
+    <chs>视图</chs>
+    <cht>檢視</cht>
+  </keyword>
+  <keyword key="english">
+    <en>English</en>
+    <chs>英文</chs>
+    <cht>英文</cht>
+  </keyword>
+  <keyword key="simplifiedchinese">
+    <en>Simplified Chinese</en>
+    <chs>简体中文</chs>
+    <cht>簡體中文</cht>
+  </keyword>
+  <keyword key="traditionalchinese">
+    <en>Tranditional Chinese</en>
+    <chs>繁体中文</chs>
+    <cht>繁體中文</cht>
+  </keyword>
+  <keyword key="vista">
+    <en>Vista Theme</en>
+    <chs>Vista 风格</chs>
+    <cht>Vista 風格</cht>
+  </keyword>
+  <keyword key="black">
+    <en>Black Theme</en>
+    <chs>Black 风格</chs>
+    <cht>Black 風格</cht>
+  </keyword>
+  <keyword key="winxp">
+    <en>WinXP Theme</en>
+    <chs>WinXP 风格</chs>
+    <cht>WinXP 風格</cht>
+  </keyword>
+  <keyword key="help">
+    <en>Help</en>
+    <chs>帮助</chs>
+    <cht>說明</cht>
+  </keyword>
+  <keyword key="about">
+    <en>About</en>
+    <chs>关於</chs>
+    <cht>關於</cht>
+  </keyword>
+  <keyword key="joborder">
+    <en>Job Order</en>
+    <chs>订单</chs>
+    <cht>訂單</cht>
+  </keyword>
+  <keyword key="admin">
+    <en>Admin</en>
+    <chs>管理</chs>
+    <cht>管理</cht>
+  </keyword>
+  <keyword key="accounting">
+    <en>Accounting</en>
+    <chs>会计</chs>
+    <cht>會計</cht>
+  </keyword>
+  <keyword key="settings">
+    <en>Settings</en>
+    <chs>设置</chs>
+    <cht>設定</cht>
+  </keyword>
+  <keyword key="receivables">
+    <en>Receivables</en>
+    <chs>应收账</chs>
+    <cht>應收賬</cht>
+  </keyword>
+  <keyword key="invoice_list">
+    <en>Invoice List</en>
+    <chs>发票记录</chs>
+    <cht>發票記錄</cht>
+  </keyword>
+  <keyword key="order_list">
+    <en>Order List</en>
+    <chs>订单记录</chs>
+    <cht>訂單記錄</cht>
+  </keyword>
+  <keyword key="analysis">
+    <en>Analysis</en>
+    <chs>营运分析</chs>
+    <cht>營運分析</cht>
+  </keyword>
+  <keyword key="sales_by_customer">
+    <en>Sales By Customer</en>
+    <chs>营业额(客户)</chs>
+    <cht>營業額(客戶)</cht>
+  </keyword>
+  <keyword key="sales_by_product">
+    <en>Sales By Product</en>
+    <chs>营业额(产品)</chs>
+    <cht>營業額(產品)</cht>
+  </keyword>
+  <keyword key="revenue_by_branch">
+    <en>Revenue By Branch</en>
+    <chs>营业额(分店)</chs>
+    <cht>營業額(分店)</cht>
+  </keyword>
+  <keyword key="client_trend">
+    <en>Client Trend</en>
+    <chs>上客趋势</chs>
+    <cht>上客趨勢</cht>
+  </keyword>
+  <keyword key="queuing">
+    <en>Queuing</en>
+    <chs>未处理订单</chs>
+    <cht>未處理訂單</cht>
+  </keyword>
+  <keyword key="retouch">
+    <en>Retouch</en>
+    <chs>输出前处理</chs>
+    <cht>輸出前處理</cht>
+  </keyword>
+  <keyword key="printing">
+    <en>Printing</en>
+    <chs>打印</chs>
+    <cht>打印</cht>
+  </keyword>
+  <keyword key="proofing">
+    <en>Proofing</en>
+    <chs>打稿</chs>
+    <cht>打稿</cht>
+  </keyword>
+  <keyword key="ready">
+    <en>Ready</en>
+    <chs>成品</chs>
+    <cht>成品</cht>
+  </keyword>
+  <keyword key="dispatch">
+    <en>Dispatch</en>
+    <chs>發送</chs>
+    <cht>發送</cht>
+  </keyword>
+  <keyword key="completed">
+    <en>Completed</en>
+    <chs>已完成订单</chs>
+    <cht>已完成訂單</cht>
+  </keyword>
+  <keyword key="sales">
+    <en>Sales</en>
+    <chs>营业部</chs>
+    <cht>營業部</cht>
+  </keyword>
+  <keyword key="prospect">
+    <en>Prospect</en>
+    <chs>潜在客户资料</chs>
+    <cht>潛在客戶資料</cht>
+  </keyword>
+  <keyword key="client">
+    <en>Client</en>
+    <chs>客户</chs>
+    <cht>客戶</cht>
+  </keyword>
+  <keyword key="client_info">
+    <en>Client Info</en>
+    <chs>客户资料</chs>
+    <cht>客戶資料</cht>
+  </keyword>
+  <keyword key="price_list">
+    <en>Price List</en>
+    <chs>价目表</chs>
+    <cht>價目表</cht>
+  </keyword>
+  <keyword key="support">
+    <en>Support</en>
+    <chs>技术支援</chs>
+    <cht>技術支援</cht>
+  </keyword>
+  <keyword key="dropbox">
+    <en>DropBox</en>
+    <chs>来稿箱</chs>
+    <cht>來稿箱</cht>
+  </keyword>
+  <keyword key="staff">
+    <en>Staff</en>
+    <chs>职员资料</chs>
+    <cht>職員資料</cht>
+  </keyword>
+  <keyword key="system_parameters">
+    <en>System Parameters</en>
+    <chs>系统参数</chs>
+    <cht>系統參數</cht>
+  </keyword>
+  <keyword key="my_order">
+    <en>My Order</en>
+    <chs>我的订单</chs>
+    <cht>我的訂單</cht>
+  </keyword>
+  <keyword key="my_dropbox">
+    <en>My DropBox</en>
+    <chs>我的来稿箱</chs>
+    <cht>我的來稿箱</cht>
+  </keyword>
+  <keyword key="address_book">
+    <en>Address Book</en>
+    <chs>地址簿</chs>
+    <cht>地址簿</cht>
+  </keyword>
+  <keyword key="address">
+    <en>Address</en>
+    <chs>地址</chs>
+    <cht>地址</cht>
+  </keyword>
+  <keyword key="user">
+    <en>User</en>
+    <chs>用户资料</chs>
+    <cht>用戶資料</cht>
+  </keyword>
+  <keyword key="billing">
+    <en>Billing</en>
+    <chs>帐目</chs>
+    <cht>帳目</cht>
+  </keyword>
+  <keyword key="outstanding">
+    <en>Outstanding</en>
+    <chs>未付发票</chs>
+    <cht>未付發票</cht>
+  </keyword>
+  <keyword key="addnew">
+    <en>Add New</en>
+    <chs>新増</chs>
+    <cht>新增</cht>
+  </keyword>
+  <keyword key="search">
+    <en>Search</en>
+    <chs>搜索</chs>
+    <cht>搜索</cht>
+  </keyword>
+  <keyword key="upload_file">
+    <en>Upload File</en>
+    <chs>上传档案</chs>
+    <cht>上傳檔案</cht>
+  </keyword>
+  <keyword key="direct_print">
+    <en>Direct Print</en>
+    <chs>iDPS</chs>
+    <cht>iDPS</cht>
+  </keyword>
+  <keyword key="ps_file">
+    <en>PS File</en>
+    <chs>PS 档案</chs>
+    <cht>PS 檔案</cht>
+  </keyword>
+  <keyword key="plate">
+    <en>Plate</en>
+    <chs>锌板输出</chs>
+    <cht>鋅板輸出</cht>
+  </keyword>
+  <keyword key="lookup">
+    <en>Lookup</en>
+    <chs>查找</chs>
+    <cht>查詢</cht>
+  </keyword>
+  <keyword key="views">
+    <en>Views</en>
+    <chs>查看</chs>
+    <cht>查看</cht>
+  </keyword>
+  <keyword key="icon_view">
+    <en>Icon</en>
+    <chs>图标</chs>
+    <cht>圖標</cht>
+  </keyword>
+  <keyword key="tile_view">
+    <en>Tile</en>
+    <chs>平铺</chs>
+    <cht>平鋪</cht>
+  </keyword>
+  <keyword key="list_view">
+    <en>List</en>
+    <chs>列表</chs>
+    <cht>列表</cht>
+  </keyword>
+  <keyword key="details_view">
+    <en>Details</en>
+    <chs>详细信息</chs>
+    <cht>詳細信息</cht>
+  </keyword>
+  <keyword key="small_image">
+    <en>Small</en>
+    <chs>小</chs>
+    <cht>小</cht>
+  </keyword>
+  <keyword key="medium_image">
+    <en>Medium</en>
+    <chs>中</chs>
+    <cht>中</cht>
+  </keyword>
+  <keyword key="large_image">
+    <en>Large</en>
+    <chs>大</chs>
+    <cht>大</cht>
+  </keyword>
+  <keyword key="details_image">
+    <en>Details</en>
+    <chs>详细</chs>
+    <cht>詳細</cht>
+  </keyword>
+  <keyword key="refresh">
+    <en>Refresh</en>
+    <chs>刷新</chs>
+    <cht>刷新</cht>
+  </keyword>
+  <keyword key="preference">
+    <en>Preference</en>
+    <chs>偏好设置</chs>
+    <cht>偏好設置</cht>
+  </keyword>
+  <keyword key="order_type">
+    <en>Order Type</en>
+    <chs>订单种类</chs>
+    <cht>訂單種類</cht>
+  </keyword>
+  <keyword key="comment">
+    <en>Comments</en>
+    <chs>注释</chs>
+    <cht>註釋</cht>
+  </keyword>
+  <keyword key="invoice">
+    <en>Invoice</en>
+    <chs>发票</chs>
+    <cht>發票</cht>
+  </keyword>
+  <keyword key="log_file">
+    <en>Log File</en>
+    <chs>工序纪录</chs>
+    <cht>工序紀錄</cht>
+  </keyword>
+  <keyword key="ln">
+    <en>#</en>
+    <chs>行</chs>
+    <cht>行</cht>
+  </keyword>
+  <keyword key="order_id">
+    <en>Order ID</en>
+    <chs>订单号码</chs>
+    <cht>訂單號碼</cht>
+  </keyword>
+  <keyword key="client_name">
+    <en>Client Name</en>
+    <chs>客户名称</chs>
+    <cht>客戶名稱</cht>
+  </keyword>
+  <keyword key="client_code">
+    <en>Client Code</en>
+    <chs>客户编号</chs>
+    <cht>客戶編號</cht>
+  </keyword>
+  <keyword key="attachment">
+    <en>Attachment</en>
+    <chs>附件</chs>
+    <cht>附件</cht>
+  </keyword>
+  <keyword key="remarks">
+    <en>Remarks</en>
+    <chs>备注</chs>
+    <cht>備註</cht>
+  </keyword>
+  <keyword key="received_on">
+    <en>Received On</en>
+    <chs>下单日期</chs>
+    <cht>下單日期</cht>
+  </keyword>
+  <keyword key="ordered_by">
+    <en>Ordered By</en>
+    <chs>下单人</chs>
+    <cht>下單人</cht>
+  </keyword>
+  <keyword key="prepress_op">
+    <en>Prepress Op</en>
+    <chs>印前处理人</chs>
+    <cht>印前處理人</cht>
+  </keyword>
+  <keyword key="retouch_by">
+    <en>Retouch By</en>
+    <chs>输出前处理人</chs>
+    <cht>輸出前處理人</cht>
+  </keyword>
+  <keyword key="workshop">
+    <en>Workshop</en>
+    <chs>工场</chs>
+    <cht>工場</cht>
+  </keyword>
+  <keyword key="checked">
+    <en>Checked</en>
+    <chs>验货</chs>
+    <cht>驗貨</cht>
+  </keyword>
+  <keyword key="fill">
+    <en>fill</en>
+    <chs>填写发票</chs>
+    <cht>填寫發票</cht>
+  </keyword>
+  <keyword key="proofing_(out)">
+    <en>Proofing (Out)</en>
+    <chs>待送出的打稿订单</chs>
+    <cht>待送出的打稿訂單</cht>
+  </keyword>
+  <keyword key="proofing_(in)">
+    <en>Proofing (In)</en>
+    <chs>待收回的打稿订单</chs>
+    <cht>待收回的打稿訂單</cht>
+  </keyword>
+  <keyword key="download">
+    <en>Download</en>
+    <chs>下载</chs>
+    <cht>下載</cht>
+  </keyword>
+  <keyword key="completed_on">
+    <en>Completed On</en>
+    <chs>完成日期</chs>
+    <cht>完成日期</cht>
+  </keyword>
+  <keyword key="invoice_number">
+    <en>Invoice Number</en>
+    <chs>发票号码</chs>
+    <cht>發票號碼</cht>
+  </keyword>
+  <keyword key="invoice_date">
+    <en>Invoice Date</en>
+    <chs>发票日期</chs>
+    <cht>發票日期</cht>
+  </keyword>
+  <keyword key="invoice_amount">
+    <en>Invoice Amount</en>
+    <chs>发票金额</chs>
+    <cht>發票金額</cht>
+  </keyword>
+  <keyword key="invoice_item">
+    <en>Invoice Item</en>
+    <chs>发票单项</chs>
+    <cht>發票單項</cht>
+  </keyword>
+  <keyword key="paid">
+    <en>Paid</en>
+    <chs>已付</chs>
+    <cht>已付</cht>
+  </keyword>
+  <keyword key="file_name">
+    <en>File Name</en>
+    <chs>档案名称</chs>
+    <cht>檔案名稱</cht>
+  </keyword>
+  <keyword key="file_size">
+    <en>File Size</en>
+    <chs>档案大小</chs>
+    <cht>檔案大小</cht>
+  </keyword>
+  <keyword key="file_type">
+    <en>File Type</en>
+    <chs>档案种类</chs>
+    <cht>檔案種類</cht>
+  </keyword>
+  <keyword key="modified_on">
+    <en>Modified On</en>
+    <chs>修改日期</chs>
+    <cht>修改日期</cht>
+  </keyword>
+  <keyword key="download_file">
+    <en>Download File</en>
+    <chs>下载档案</chs>
+    <cht>下載檔案</cht>
+  </keyword>
+  <keyword key="delete_file">
+    <en>Delete File</en>
+    <chs>删除档案</chs>
+    <cht>刪除檔案</cht>
+  </keyword>
+  <keyword key="address_name">
+    <en>Company Name</en>
+    <chs>公司名称</chs>
+    <cht>公司名稱</cht>
+  </keyword>
+  <keyword key="tel">
+    <en>Tel</en>
+    <chs>电话</chs>
+    <cht>電話</cht>
+  </keyword>
+  <keyword key="fax">
+    <en>Fax</en>
+    <chs>传真</chs>
+    <cht>傳真</cht>
+  </keyword>
+  <keyword key="contact">
+    <en>Contact</en>
+    <chs>联络人</chs>
+    <cht>聯絡人</cht>
+  </keyword>
+  <keyword key="mobile">
+    <en>Mobile</en>
+    <chs>手机</chs>
+    <cht>手機</cht>
+  </keyword>
+  <keyword key="created_on">
+    <en>Created On</en>
+    <chs>创建于</chs>
+    <cht>創建於</cht>
+  </keyword>
+  <keyword key="created_by">
+    <en>Created By</en>
+    <chs>创建人</chs>
+    <cht>創建人</cht>
+  </keyword>
+  <keyword key="full_name">
+    <en>Full Name</en>
+    <chs>姓名</chs>
+    <cht>姓名</cht>
+  </keyword>
+  <keyword key="email">
+    <en>Email</en>
+    <chs>电邮</chs>
+    <cht>電郵</cht>
+  </keyword>
+  <keyword key="cheque">
+    <en>Cheque</en>
+    <chs>支票缴付</chs>
+    <cht>支票繳付</cht>
+  </keyword>
+  <keyword key="total_amount">
+    <en>Total Amount</en>
+    <chs>金额总数</chs>
+    <cht>金額總數</cht>
+  </keyword>
+  <keyword key="total_due">
+    <en>Total Due</en>
+    <chs>未付金额总数</chs>
+    <cht>未付金額總數</cht>
+  </keyword>
+  <keyword key="month">
+    <en>Month</en>
+    <chs>月份</chs>
+    <cht>月份</cht>
+  </keyword>
+  <keyword key="current_month">
+    <en>Current Month</en>
+    <chs>当月金额</chs>
+    <cht>當月金額</cht>
+  </keyword>
+  <keyword key="last_month">
+    <en>Last Month</en>
+    <chs>上月金额</chs>
+    <cht>上月金額</cht>
+  </keyword>
+  <keyword key="2_months">
+    <en>2_months</en>
+    <chs>2 个月金额</chs>
+    <cht>2 個月金額</cht>
+  </keyword>
+  <keyword key="3_months">
+    <en>3_months</en>
+    <chs>3 个月以上</chs>
+    <cht>3 個月以上</cht>
+  </keyword>
+  <keyword key="selection">
+    <en>Selection</en>
+    <chs>选项</chs>
+    <cht>選項</cht>
+  </keyword>
+  <keyword key="selected">
+    <en>Selected</en>
+    <chs>选取</chs>
+    <cht>選取</cht>
+  </keyword>
+  <keyword key="from">
+    <en>From</en>
+    <chs>起</chs>
+    <cht>起</cht>
+  </keyword>
+  <keyword key="to">
+    <en>To</en>
+    <chs>止</chs>
+    <cht>止</cht>
+  </keyword>
+  <keyword key="ordered_on">
+    <en>Ordered On</en>
+    <chs>下单日期</chs>
+    <cht>下單日期</cht>
+  </keyword>
+  <keyword key="save">
+    <en>Save</en>
+    <chs>保存</chs>
+    <cht>存檔</cht>
+  </keyword>
+  <keyword key="save_close">
+    <en>Save %26 Close</en>
+    <chs>保存并关闭</chs>
+    <cht>存檔並關閉</cht>
+  </keyword>
+  <keyword key="save_new">
+    <en>Save %26 New</en>
+    <chs>保存并新增</chs>
+    <cht>存檔並新增</cht>
+  </keyword>
+  <keyword key="save_dup">
+    <en>Save %26 Dup</en>
+    <chs>保存并复制</chs>
+    <cht>存檔並複制</cht>
+  </keyword>
+  <keyword key="save_next">
+    <en>Save %26 Next</en>
+    <chs>保存并复制</chs>
+    <cht>存檔並複製</cht>
+  </keyword>
+  <keyword key="delete">
+    <en>Delete</en>
+    <chs>删除</chs>
+    <cht>刪除</cht>
+  </keyword>
+  <keyword key="pager">
+    <en>Pager</en>
+    <chs>传呼机</chs>
+    <cht>傳呼機</cht>
+  </keyword>
+  <keyword key="user_name">
+    <en>User Name</en>
+    <chs>用户名称</chs>
+    <cht>用戶名稱</cht>
+  </keyword>
+  <keyword key="updated_on">
+    <en>Updated On</en>
+    <chs>更新于</chs>
+    <cht>更新於</cht>
+  </keyword>
+  <keyword key="workflow">
+    <en>Status</en>
+    <chs>工序</chs>
+    <cht>工序</cht>
+  </keyword>
+  <keyword key="updated_by">
+    <en>Updated By</en>
+    <chs>处理人</chs>
+    <cht>處理人</cht>
+  </keyword>
+  <keyword key="priority">
+    <en>Priority</en>
+    <chs>优先次序</chs>
+    <cht>優先次序</cht>
+  </keyword>
+  <keyword key="others">
+    <en>Others</en>
+    <chs>其他</chs>
+    <cht>其他</cht>
+  </keyword>
+  <keyword key="standard_size">
+    <en>Standard Size</en>
+    <chs>基本大小</chs>
+    <cht>基本大小</cht>
+  </keyword>
+  <keyword key="other_size">
+    <en>Other Size</en>
+    <chs>其他大小</chs>
+    <cht>其他大小</cht>
+  </keyword>
+  <keyword key="positive">
+    <en>Positive</en>
+    <chs>阳片</chs>
+    <cht>陽片</cht>
+  </keyword>
+  <keyword key="negative">
+    <en>Negative</en>
+    <chs>陰片</chs>
+    <cht>陰片</cht>
+  </keyword>
+  <keyword key="emulsion_up">
+    <en>Emulsion Up</en>
+    <chs>药膜向上</chs>
+    <cht>藥膜向上</cht>
+  </keyword>
+  <keyword key="emulsion_down">
+    <en>Emulsion Down</en>
+    <chs>药膜向下</chs>
+    <cht>藥膜向下</cht>
+  </keyword>
+  <keyword key="print_composite">
+    <en>Composite</en>
+    <chs>混合列印</chs>
+    <cht>混合列印</cht>
+  </keyword>
+  <keyword key="black_plate_only">
+    <en>Black Plate Only</en>
+    <chs>只印黑片</chs>
+    <cht>只印黑片</cht>
+  </keyword>
+  <keyword key="proofing_with">
+    <en>Proofing With</en>
+    <chs>打稿，用</chs>
+    <cht>打稿，用</cht>
+  </keyword>
+  <keyword key="extra_paper">
+    <en>extra</en>
+    <chs>加纸</chs>
+    <cht>加紙</cht>
+  </keyword>
+  <keyword key="seperation">
+    <en>Seperation</en>
+    <chs>分色片</chs>
+    <cht>分色片</cht>
+  </keyword>
+  <keyword key="die_cut">
+    <en>Die-cut</en>
+    <chs>刀模菲林</chs>
+    <cht>刀模菲林</cht>
+  </keyword>
+  <keyword key="proof_in_black">
+    <en>Proof in Black</en>
+    <chs>打黑版</chs>
+    <cht>打黑版</cht>
+  </keyword>
+  <keyword key="proof_in_magenta">
+    <en>Proof in Magenta</en>
+    <chs>打红版</chs>
+    <cht>打紅版</cht>
+  </keyword>
+  <keyword key="proof_in_cyan">
+    <en>Proof in Cyan</en>
+    <chs>打蓝版</chs>
+    <cht>打藍版</cht>
+  </keyword>
+  <keyword key="spot_color">
+    <en>Spot Color</en>
+    <chs>专色</chs>
+    <cht>專色</cht>
+  </keyword>
+  <keyword key="black_overprint">
+    <en>Black Overprint</en>
+    <chs>黑色叠印</chs>
+    <cht>黑色疊印</cht>
+  </keyword>
+  <keyword key="crop_marks">
+    <en>Crop Marks</en>
+    <chs>裁切线</chs>
+    <cht>裁切線</cht>
+  </keyword>
+  <keyword key="registration_marks">
+    <en>Registration Marks</en>
+    <chs>套准记号</chs>
+    <cht>套準記號</cht>
+  </keyword>
+  <keyword key="total_pages">
+    <en>Total Pages</en>
+    <chs>总页数</chs>
+    <cht>總頁數</cht>
+  </keyword>
+  <keyword key="total_films">
+    <en>Total Films</en>
+    <chs>总菲林片数</chs>
+    <cht>總菲林片數</cht>
+  </keyword>
+  <keyword key="pick_up">
+    <en>Pick Up</en>
+    <chs>来取</chs>
+    <cht>來取</cht>
+  </keyword>
+  <keyword key="deliver_to">
+    <en>Deliver To</en>
+    <chs>送货</chs>
+    <cht>送貨</cht>
+  </keyword>
+  <keyword key="pages">
+    <en>Pages</en>
+    <chs>页</chs>
+    <cht>頁</cht>
+  </keyword>
+  <keyword key="pcs">
+    <en>PCS</en>
+    <chs>张</chs>
+    <cht>張</cht>
+  </keyword>
+  <keyword key="cancel">
+    <en>Cancel</en>
+    <chs>取消</chs>
+    <cht>取消</cht>
+  </keyword>
+  <keyword key="cancelled">
+    <en>Cancelled</en>
+    <chs>已取消</chs>
+    <cht>已取消</cht>
+  </keyword>
+  <keyword key="billing_address">
+    <en>Billing Address</en>
+    <chs>开单</chs>
+    <cht>開單</cht>
+  </keyword>
+  <keyword key="delivery_address">
+    <en>Delivery Address</en>
+    <chs>送交</chs>
+    <cht>送交</cht>
+  </keyword>
+  <keyword key="paid_by">
+    <en>Paid By</en>
+    <chs>付款方式</chs>
+    <cht>付款方式</cht>
+  </keyword>
+  <keyword key="item_code">
+    <en>Item Code</en>
+    <chs>代码</chs>
+    <cht>代碼</cht>
+  </keyword>
+  <keyword key="item_description">
+    <en>Item Description</en>
+    <chs>名称</chs>
+    <cht>名稱</cht>
+  </keyword>
+  <keyword key="qty">
+    <en>Qty</en>
+    <chs>数量</chs>
+    <cht>數量</cht>
+  </keyword>
+  <keyword key="unit_amount">
+    <en>Unit Amount</en>
+    <chs>单价</chs>
+    <cht>單價</cht>
+  </keyword>
+  <keyword key="discount">
+    <en>Discount</en>
+    <chs>折扣</chs>
+    <cht>折扣</cht>
+  </keyword>
+  <keyword key="amount">
+    <en>Amount</en>
+    <chs>金额</chs>
+    <cht>金額</cht>
+  </keyword>
+  <keyword key="item_id">
+    <en>ID</en>
+    <chs>代号</chs>
+    <cht>代號</cht>
+  </keyword>
+  <keyword key="item_qty">
+    <en>Qty</en>
+    <chs>数量</chs>
+    <cht>數量</cht>
+  </keyword>
+  <keyword key="item_discount">
+    <en>Discount</en>
+    <chs>折扣</chs>
+    <cht>折扣</cht>
+  </keyword>
+  <keyword key="item_amount">
+    <en>Amount</en>
+    <chs>单价</chs>
+    <cht>單價</cht>
+  </keyword>
+  <keyword key="payment">
+    <en>Payment</en>
+    <chs>缴付</chs>
+    <cht>繳付</cht>
+  </keyword>
+  <keyword key="paid_on">
+    <en>Paid On</en>
+    <chs>缴付日期</chs>
+    <cht>繳付日期</cht>
+  </keyword>
+  <keyword key="reference">
+    <en>Reference</en>
+    <chs>参考</chs>
+    <cht>參考</cht>
+  </keyword>
+  <keyword key="post">
+    <en>Post</en>
+    <chs>确认</chs>
+    <cht>確認</cht>
+  </keyword>
+  <keyword key="print">
+    <en>Print</en>
+    <chs>打印</chs>
+    <cht>打印</cht>
+  </keyword>
+  <keyword key="show_order">
+    <en>Show Order</en>
+    <chs>显示工单</chs>
+    <cht>顯示工單</cht>
+  </keyword>
+  <keyword key="id">
+    <en>ID</en>
+    <chs>ID</chs>
+    <cht>ID</cht>
+  </keyword>
+  <keyword key="branch">
+    <en>Branch</en>
+    <chs>分店</chs>
+    <cht>分店</cht>
+  </keyword>
+  <keyword key="credit">
+    <en>Credit</en>
+    <chs>放帐</chs>
+    <cht>數期</cht>
+  </keyword>
+  <keyword key="unit_price">
+    <en>Unit Price</en>
+    <chs>单价</chs>
+    <cht>單價</cht>
+  </keyword>
+  <keyword key="unit">
+    <en>Unit</en>
+    <chs>单位</chs>
+    <cht>單位</cht>
+  </keyword>
+  <keyword key="statement">
+    <en>Statement</en>
+    <chs>月结单</chs>
+    <cht>月結單</cht>
+  </keyword>
+  <keyword key="security_level">
+    <en>User Role</en>
+    <chs>用户权限</chs>
+    <cht>用戶權限</cht>
+  </keyword>
+  <keyword key="sms">
+    <en>SMS</en>
+    <chs>短讯号码</chs>
+    <cht>短訊號碼</cht>
+  </keyword>
+  <keyword key="sms_language">
+    <en>SMS Language</en>
+    <chs>短讯语言</chs>
+    <cht>短訊語言</cht>
+  </keyword>
+  <keyword key="days">
+    <en>Days</en>
+    <chs>日</chs>
+    <cht>日</cht>
+  </keyword>
+  <keyword key="payment_terms">
+    <en>Payment Terms</en>
+    <chs>付款折扣</chs>
+    <cht>付款折扣</cht>
+  </keyword>
+  <keyword key="percent_discount">
+    <en>% Discount</en>
+    <chs>% 折扣</chs>
+    <cht>% 折扣</cht>
+  </keyword>
+  <keyword key="payment_type">
+    <en>Payment Type</en>
+    <chs>缴付方式</chs>
+    <cht>繳付方式</cht>
+  </keyword>
+  <keyword key="used_in_billing">
+    <en>Used in Billing</en>
+    <chs>开发票时用</chs>
+    <cht>開發票時用</cht>
+  </keyword>
+  <keyword key="pin">
+    <en>PIN</en>
+    <chs>有效码</chs>
+    <cht>有效碼</cht>
+  </keyword>
+  <keyword key="used_in_dropbox">
+    <en>Used in Dropbox</en>
+    <chs>用于来稿箱</chs>
+    <cht>用於來稿箱</cht>
+  </keyword>
+  <keyword key="promote">
+    <en>Promote</en>
+    <chs>升呢</chs>
+    <cht>升呢</cht>
+  </keyword>
+  <keyword key="product">
+    <en>Product</en>
+    <chs>产品</chs>
+    <cht>產品</cht>
+  </keyword>
+  <keyword key="category">
+    <en>Category</en>
+    <chs>产品分类</chs>
+    <cht>產品分類</cht>
+  </keyword>
+  <keyword key="draft">
+    <en>Draft</en>
+    <chs>草稿</chs>
+    <cht>草稿</cht>
+  </keyword>
+  <keyword key="regular">
+    <en>Regular</en>
+    <chs>一般</chs>
+    <cht>一般</cht>
+  </keyword>
+  <keyword key="express">
+    <en>Express</en>
+    <chs>急件</chs>
+    <cht>急件</cht>
+  </keyword>
+  <keyword key="rush">
+    <en>Rush</en>
+    <chs>特急</chs>
+    <cht>特急</cht>
+  </keyword>
+  <keyword key="art_paper">
+    <en>Art Paper</en>
+    <chs>铜版纸 (157克)</chs>
+    <cht>粉紙 (157gsm)</cht>
+  </keyword>
+  <keyword key="woodfree_paper">
+    <en>Woodfree Paper</en>
+    <chs>书写纸 (120克)</chs>
+    <cht>書紙 (120gsm)</cht>
+  </keyword>
+  <keyword key="coated_gray_card">
+    <en>Coated Gray Card</en>
+    <chs>灰卡纸 (350克)</chs>
+    <cht>粉灰咭 (350gsm)</cht>
+  </keyword>
+  <keyword key="art_card">
+    <en>Art Card</en>
+    <chs>白卡纸 (250克)</chs>
+    <cht>白咭紙 (250gsm)</cht>
+  </keyword>
+  <keyword key="newsprint">
+    <en>Newsprint</en>
+    <chs>新闻纸 (80克)</chs>
+    <cht>報紙 (80gsm)</cht>
+  </keyword>
+  <keyword key="customer_supplies">
+    <en>Customer Supplies</en>
+    <chs>自来纸</chs>
+    <cht>自來紙</cht>
+  </keyword>
+  <keyword key="gripper_distance">
+    <en>Gripper Distance</en>
+    <chs>牙口距离</chs>
+    <cht>牙口距離</cht>
+  </keyword>
+  <keyword key="gripper_edge">
+    <en>Gripper Edge</en>
+    <chs>牙口方向</chs>
+    <cht>牙口方向</cht>
+  </keyword>
+  <keyword key="gripper_edge_head">
+    <en>Head</en>
+    <chs>咬头</chs>
+    <cht>咬頭</cht>
+  </keyword>
+  <keyword key="gripper_edge_heel">
+    <en>Heel</en>
+    <chs>咬腳</chs>
+    <cht>咬腳</cht>
+  </keyword>
+  <keyword key="imposition">
+    <en>Imposition</en>
+    <chs>拼版</chs>
+    <cht>拼版</cht>
+  </keyword>
+  <keyword key="book">
+    <en>Book</en>
+    <chs>书版</chs>
+    <cht>書版</cht>
+  </keyword>
+  <keyword key="digital_proof">
+    <en>Digital Proof</en>
+    <chs>数码打稿</chs>
+    <cht>數碼打稿</cht>
+  </keyword>
+  <keyword key="glossy_paper">
+    <en>Glossy Paper</en>
+    <chs>光面纸</chs>
+    <cht>相紙</cht>
+  </keyword>
+  <keyword key="blueprints">
+    <en>Blueprint</en>
+    <chs>蓝纸</chs>
+    <cht>藍紙</cht>
+  </keyword>
+  <keyword key="suspend">
+    <en>Suspend</en>
+    <chs>暂停</chs>
+    <cht>暫停</cht>
+  </keyword>
+  <keyword key="unsuspend">
+    <en>Unsuspend</en>
+    <chs>重启</chs>
+    <cht>重啟</cht>
+  </keyword>
+  <keyword key="export">
+    <en>Export</en>
+    <chs>导出</chs>
+    <cht>導出</cht>
+  </keyword>
+  <keyword key="export_email">
+    <en>Email List</en>
+    <chs>电邮资料</chs>
+    <cht>電郵資料</cht>
+  </keyword>
+  <keyword key="export_lite">
+    <en>Short Info</en>
+    <chs>简短资料</chs>
+    <cht>簡短資料</cht>
+  </keyword>
+  <keyword key="export_details">
+    <en>Detail Info</en>
+    <chs>详细资料</chs>
+    <cht>詳細資料</cht>
+  </keyword>
+  <keyword key="msg_the_selected_item(s)">
+    <en>the selected item(s)</en>
+    <chs>所选项目</chs>
+    <cht>所選項目</cht>
+  </keyword>
+  <keyword key="msg_uploadervwg">
+    <en>select or drag file here</en>
+    <chs>选出档案或是拖拉档案至此</chs>
+    <cht>選出檔案或是拖拉檔案至此</cht>
+  </keyword>
+  <keyword key="popup">
+    <en>Popup</en>
+    <chs>弹窗</chs>
+    <cht>彈窗</cht>
+  </keyword>
+  <keyword key="export_to_excel">
+    <en>Export to Excel</en>
+    <chs>导出 </chs>
+    <cht>導出 Excel</cht>
+  </keyword>
+  <keyword key="print_order">
+    <en>Print Order</en>
+    <chs>打印订单</chs>
+    <cht>打印訂單</cht>
+  </keyword>
+  <keyword key="printed_on">
+    <en>Printed On</en>
+    <chs>输出日期</chs>
+    <cht>輸出日期</cht>
+  </keyword>
+  <keyword key="vps_proofed">
+    <en>VPS Proofed</en>
+    <chs>己确认 VPS</chs>
+    <cht>己確認 VPS</cht>
+  </keyword>
+  <keyword key="plate_size">
+    <en>Plate Size</en>
+    <chs>锌板尺寸</chs>
+    <cht>鋅板呎吋</cht>
+  </keyword>
+  <keyword key="film_size">
+    <en>Film Size</en>
+    <chs>菲林尺寸</chs>
+    <cht>菲林呎吋</cht>
+  </keyword>
+  <keyword key="size">
+    <en>Size</en>
+    <chs>尺寸</chs>
+    <cht>呎吋</cht>
+  </keyword>
+  <keyword key="film">
+    <en>Film</en>
+    <chs>菲林输出</chs>
+    <cht>菲林輸出</cht>
+  </keyword>
+  <keyword key="vps">
+    <en>VPS</en>
+    <chs>VPS 输出</chs>
+    <cht>VPS 輸出</cht>
+  </keyword>
+  <keyword key="vip_price">
+    <en>VIP Price</en>
+    <chs>VIP 价格</chs>
+    <cht>VIP 價格</cht>
+  </keyword>
+  <keyword key="vip_discount">
+    <en>VIP Discount</en>
+    <chs>VIP 折扣</chs>
+    <cht>VIP 折扣</cht>
+  </keyword>
+  <keyword key="alias">
+    <en>Alias</en>
+    <chs>昵称</chs>
+    <cht>暱稱</cht>
+  </keyword>
+  <keyword key="paid_monthly">
+    <en>Monthly</en>
+    <chs>月结</chs>
+    <cht>月結</cht>
+  </keyword>
+  <keyword key="paid_cash">
+    <en>Cash</en>
+    <chs>现金</chs>
+    <cht>現金</cht>
+  </keyword>
+  <keyword key="date">
+    <en>Date</en>
+    <chs>日期</chs>
+    <cht>日期</cht>
+  </keyword>
+  <keyword key="number">
+    <en>Number</en>
+    <chs>单号</chs>
+    <cht>單號</cht>
+  </keyword>
+  <keyword key="delivery_note">
+    <en>Delivery Note</en>
+    <chs>送货单</chs>
+    <cht>送貨單</cht>
+  </keyword>
+  <keyword key="delivery_note_number">
+    <en>DN#</en>
+    <chs>送货单#</chs>
+    <cht>送貨單#</cht>
+  </keyword>
+  <keyword key="transaction#">
+    <en>Transaction #</en>
+    <chs>票据号码</chs>
+    <cht>票據號碼</cht>
+  </keyword>
+  <keyword key="date_time">
+    <en>Date Time</en>
+    <chs>票据日期</chs>
+    <cht>票據日期</cht>
+  </keyword>
+  <keyword key="bill_to">
+    <en>Bill To</en>
+    <chs>收单地址</chs>
+    <cht>收單地址</cht>
+  </keyword>
+  <keyword key="ship_to">
+    <en>Ship To</en>
+    <chs>收货地址</chs>
+    <cht>收貨地址</cht>
+  </keyword>
+  <keyword key="invoice_#">
+    <en>Invoice #</en>
+    <chs>发票号码</chs>
+    <cht>發票號碼</cht>
+  </keyword>
+  <keyword key="qry_curremt_month">
+    <en>Current Month</en>
+    <chs>当月</chs>
+    <cht>本月</cht>
+  </keyword>
+  <keyword key="qry_last_month">
+    <en>Last Month</en>
+    <chs>上个月</chs>
+    <cht>上個月</cht>
+  </keyword>
+  <keyword key="qry_previous_month">
+    <en>Previous Month</en>
+    <chs>再上个月</chs>
+    <cht>再上個月</cht>
+  </keyword>
+  <keyword key="delivery_note_list">
+    <en>Delivery Note List</en>
+    <chs>送货单记录</chs>
+    <cht>送貨單記錄</cht>
+  </keyword>
+  <keyword key="a5">
+    <en>A5</en>
+    <chs>A5</chs>
+    <cht>A5</cht>
+  </keyword>
+  <keyword key="inkjet_printer">
+    <en>InkJet Printer</en>
+    <chs>喷墨打印机</chs>
+    <cht>噴墨打印機</cht>
+  </keyword>
+  <keyword key="receipt">
+    <en>Receipt</en>
+    <chs>小票据</chs>
+    <cht>小票據</cht>
+  </keyword>
+  <keyword key="receipt_printer">
+    <en>Receipt Printer</en>
+    <chs>票据打印机</chs>
+    <cht>票據打印機</cht>
+  </keyword>
+  <keyword key="recipient">
+    <en>Recipient</en>
+    <chs>收件人</chs>
+    <cht>收件人</cht>
+  </keyword>
+  <keyword key="send_email">
+    <en>Send Email</en>
+    <chs>发成电邮</chs>
+    <cht>發成電郵</cht>
+  </keyword>
+  <keyword key="send_out_email">
+    <en>Send out email</en>
+    <chs>发出电邮</chs>
+    <cht>發出電郵</cht>
+  </keyword>
+  <keyword key="done">
+    <en>Done</en>
+    <chs>完成</chs>
+    <cht>完成</cht>
+  </keyword>
+  <keyword key="error_found">
+    <en>Error found...</en>
+    <chs>发生问题...</chs>
+    <cht>發生問題...</cht>
+  </keyword>
+  <keyword key="error_invalid_email">
+    <en>Invalid Email</en>
+    <chs>电邮格式有问题</chs>
+    <cht>電郵格式有問題</cht>
+  </keyword>
+</root>

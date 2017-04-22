@@ -20,10 +20,10 @@ namespace xFilm5.Bot.Models
             this.Acct_INMaster = new HashSet<Acct_INMaster>();
             this.Client_AddressBook = new HashSet<Client_AddressBook>();
             this.Client_User = new HashSet<Client_User>();
-            this.ClientPricings = new HashSet<ClientPricing>();
-            this.OrderHeaders = new HashSet<OrderHeader>();
-            this.PrintQueues = new HashSet<PrintQueue>();
-            this.ReceiptHeaders = new HashSet<ReceiptHeader>();
+            this.ClientPricing = new HashSet<ClientPricing>();
+            this.OrderHeader = new HashSet<OrderHeader>();
+            this.PrintQueue = new HashSet<PrintQueue>();
+            this.ReceiptHeader = new HashSet<ReceiptHeader>();
         }
     
         public int ID { get; set; }
@@ -43,12 +43,12 @@ namespace xFilm5.Bot.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Client_User> Client_User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ClientPricing> ClientPricings { get; set; }
+        public virtual ICollection<ClientPricing> ClientPricing { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrderHeader> OrderHeaders { get; set; }
+        public virtual ICollection<OrderHeader> OrderHeader { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PrintQueue> PrintQueues { get; set; }
+        public virtual ICollection<PrintQueue> PrintQueue { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ReceiptHeader> ReceiptHeaders { get; set; }
+        public virtual ICollection<ReceiptHeader> ReceiptHeader { get; set; }
     }
 }

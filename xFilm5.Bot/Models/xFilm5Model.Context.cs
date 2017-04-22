@@ -13,10 +13,10 @@ namespace xFilm5.Bot.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class SysDb : DbContext
+    public partial class xFilm5Entities : DbContext
     {
-        public SysDb()
-            : base("name=SysDb")
+        public xFilm5Entities()
+            : base("name=xFilm5Entities")
         {
         }
     
@@ -27,23 +27,23 @@ namespace xFilm5.Bot.Models
     
         public virtual DbSet<Acct_INDetails> Acct_INDetails { get; set; }
         public virtual DbSet<Acct_INMaster> Acct_INMaster { get; set; }
-        public virtual DbSet<Client> Clients { get; set; }
+        public virtual DbSet<Client> Client { get; set; }
         public virtual DbSet<Client_AddressBook> Client_AddressBook { get; set; }
         public virtual DbSet<Client_User> Client_User { get; set; }
-        public virtual DbSet<ClientPricing> ClientPricings { get; set; }
+        public virtual DbSet<ClientPricing> ClientPricing { get; set; }
         public virtual DbSet<Order_Details> Order_Details { get; set; }
         public virtual DbSet<Order_Internal> Order_Internal { get; set; }
         public virtual DbSet<Order_Journal> Order_Journal { get; set; }
-        public virtual DbSet<OrderComment> OrderComments { get; set; }
-        public virtual DbSet<OrderHeader> OrderHeaders { get; set; }
-        public virtual DbSet<OrderPkPrintQ> OrderPkPrintQs { get; set; }
-        public virtual DbSet<PosTx> PosTxes { get; set; }
-        public virtual DbSet<PrintQueue> PrintQueues { get; set; }
+        public virtual DbSet<OrderComment> OrderComment { get; set; }
+        public virtual DbSet<OrderHeader> OrderHeader { get; set; }
+        public virtual DbSet<OrderPkPrintQueueVps> OrderPkPrintQueueVps { get; set; }
+        public virtual DbSet<PosTx> PosTx { get; set; }
+        public virtual DbSet<PrintQueue> PrintQueue { get; set; }
         public virtual DbSet<PrintQueue_LifeCycle> PrintQueue_LifeCycle { get; set; }
         public virtual DbSet<PrintQueue_VPS> PrintQueue_VPS { get; set; }
-        public virtual DbSet<ReceiptDetail> ReceiptDetails { get; set; }
-        public virtual DbSet<ReceiptHeader> ReceiptHeaders { get; set; }
-        public virtual DbSet<Staff> Staffs { get; set; }
+        public virtual DbSet<ReceiptDetail> ReceiptDetail { get; set; }
+        public virtual DbSet<ReceiptHeader> ReceiptHeader { get; set; }
+        public virtual DbSet<Staff> Staff { get; set; }
         public virtual DbSet<T_BillingCode_Dept> T_BillingCode_Dept { get; set; }
         public virtual DbSet<T_BillingCode_Item> T_BillingCode_Item { get; set; }
         public virtual DbSet<T_DeliveryMethod> T_DeliveryMethod { get; set; }
@@ -61,12 +61,13 @@ namespace xFilm5.Bot.Models
         public virtual DbSet<T_SoftwareVersion> T_SoftwareVersion { get; set; }
         public virtual DbSet<T_Status> T_Status { get; set; }
         public virtual DbSet<T_Workflow> T_Workflow { get; set; }
-        public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<UserAuth> UserAuths { get; set; }
-        public virtual DbSet<UserNotification> UserNotifications { get; set; }
-        public virtual DbSet<UserPreference> UserPreferences { get; set; }
+        public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<UserAuth> UserAuth { get; set; }
+        public virtual DbSet<UserNotification> UserNotification { get; set; }
+        public virtual DbSet<UserPreference> UserPreference { get; set; }
         public virtual DbSet<X_Counter> X_Counter { get; set; }
         public virtual DbSet<Z_WebColor> Z_WebColor { get; set; }
         public virtual DbSet<Log4Net> Log4Net { get; set; }
+        public virtual DbSet<vwReceiptDetailsList> vwReceiptDetailsList { get; set; }
     }
 }

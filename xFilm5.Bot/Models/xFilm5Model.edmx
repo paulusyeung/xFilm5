@@ -4,14 +4,14 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="xFilm5.Bot.Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="xFilm5Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Acct_INDetails">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="INMasterID" Type="int" Nullable="false" />
-          <Property Name="OrderPkPrintQId" Type="int" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="int" />
           <Property Name="BillingCode" Type="nvarchar" MaxLength="16" />
           <Property Name="Description" Type="nvarchar" MaxLength="255" />
           <Property Name="Qty" Type="smallint" />
@@ -98,6 +98,7 @@
           <Property Name="Alias" Type="nvarchar" MaxLength="255" />
           <Property Name="Tag" Type="nvarchar" MaxLength="64" />
           <Property Name="UnitPrice" Type="money" Nullable="false" />
+          <Property Name="Discount" Type="decimal" Precision="5" Scale="2" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="CreatedOn" Type="datetime" Nullable="false" />
           <Property Name="CreatedBy" Type="int" Nullable="false" />
@@ -253,15 +254,26 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           <Property Name="PaidOn" Type="datetime" />
           <Property Name="PaidRef" Type="nvarchar" MaxLength="32" />
         </EntityType>
-        <EntityType Name="OrderPkPrintQ">
+        <EntityType Name="OrderPkPrintQueueVps">
           <Key>
-            <PropertyRef Name="OrderPkPrintQId" />
+            <PropertyRef Name="OrderPkPrintQueueVpsId" />
           </Key>
-          <Property Name="OrderPkPrintQId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="OrderHeaderId" Type="int" Nullable="false" />
-          <Property Name="PrintQueueId" Type="int" Nullable="false" />
-          <Property Name="PrintQSubitemType" Type="int" Nullable="false" />
-          <Property Name="Qty" Type="decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderHeaderId" Type="int" />
+          <Property Name="PrintQueueVpsId" Type="int" />
+          <Property Name="CheckedPlate" Type="bit" Nullable="false" />
+          <Property Name="CheckedCip3" Type="bit" Nullable="false" />
+          <Property Name="CheckedBlueprint" Type="bit" Nullable="false" />
+          <Property Name="IsReady" Type="bit" Nullable="false" />
+          <Property Name="IsReceived" Type="bit" Nullable="false" />
+          <Property Name="IsBilled" Type="bit" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" Nullable="false" />
+          <Property Name="ModifiedOn" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="Retired" Type="bit" Nullable="false" />
+          <Property Name="RetiredOn" Type="datetime" />
+          <Property Name="RetiredBy" Type="int" />
         </EntityType>
         <EntityType Name="PosTx">
           <Key>
@@ -332,7 +344,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           </Key>
           <Property Name="ReceiptDetailId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ReceiptHeaderId" Type="int" Nullable="false" />
-          <Property Name="OrderPkPrintQId" Type="int" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="int" />
           <Property Name="BillingCode" Type="nvarchar" MaxLength="16" />
           <Property Name="Description" Type="nvarchar" MaxLength="255" />
           <Property Name="Qty" Type="smallint" />
@@ -570,18 +582,49 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           <Property Name="Code" Type="nvarchar" MaxLength="6" />
           <Property Name="Name" Type="nvarchar" MaxLength="32" />
         </EntityType>
-        <Association Name="FK__PrintQueu__Print__1CDC41A7">
-          <End Role="PrintQueue_VPS" Type="Self.PrintQueue_VPS" Multiplicity="0..1" />
-          <End Role="PrintQueue_LifeCycle" Type="Self.PrintQueue_LifeCycle" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PrintQueue_VPS">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="PrintQueue_LifeCycle">
-              <PropertyRef Name="PrintQueueVpsId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vwReceiptDetailsList">
+          <Key>
+            <PropertyRef Name="ClientId" />
+            <PropertyRef Name="ReceiptHeaderId" />
+            <PropertyRef Name="ReceiptDetailId" />
+            <PropertyRef Name="OrderPkPrintQueueVpsId" />
+          </Key>
+          <Property Name="ClientId" Type="int" Nullable="false" />
+          <Property Name="ClientName" Type="nvarchar" MaxLength="128" />
+          <Property Name="ClientAddress" Type="nvarchar" MaxLength="255" />
+          <Property Name="ClientTel" Type="nvarchar" MaxLength="32" />
+          <Property Name="ClientFax" Type="nvarchar" MaxLength="32" />
+          <Property Name="ReceiptHeaderId" Type="int" Nullable="false" />
+          <Property Name="ReceiptNumber" Type="nvarchar" MaxLength="16" />
+          <Property Name="ReceiptDate" Type="datetime" />
+          <Property Name="ReceiptAmount" Type="money" />
+          <Property Name="PaymentType" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="INMasterId" Type="int" />
+          <Property Name="ClientUserId" Type="int" />
+          <Property Name="ClientUserName" Type="nvarchar" MaxLength="64" />
+          <Property Name="Paid" Type="bit" Nullable="false" />
+          <Property Name="PaidOn" Type="datetime" />
+          <Property Name="PaidAmount" Type="money" Nullable="false" />
+          <Property Name="PaidRef" Type="nvarchar" MaxLength="128" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="255" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="64" />
+          <Property Name="ModifiedOn" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedBy" Type="nvarchar" MaxLength="64" />
+          <Property Name="ReceiptDetailId" Type="int" Nullable="false" />
+          <Property Name="ItemCode" Type="nvarchar" MaxLength="16" />
+          <Property Name="ItemDescription" Type="nvarchar" MaxLength="255" />
+          <Property Name="ItemQty" Type="smallint" />
+          <Property Name="ItemUoM" Type="nvarchar" MaxLength="32" />
+          <Property Name="ItemUnitAmt" Type="money" />
+          <Property Name="ItemDiscount" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="ItemAmount" Type="money" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="int" Nullable="false" />
+          <Property Name="OrderHeaderId" Type="int" />
+        </EntityType>
         <Association Name="FK_Acct_INMaster_Acct_INDetails">
           <End Role="Acct_INMaster" Type="Self.Acct_INMaster" Multiplicity="1" />
           <End Role="Acct_INDetails" Type="Self.Acct_INDetails" Multiplicity="*" />
@@ -786,14 +829,14 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_OrderHeader_OrderPkPrintQ">
-          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="1" />
-          <End Role="OrderPkPrintQ" Type="Self.OrderPkPrintQ" Multiplicity="*" />
+        <Association Name="FK_OrderHeader_OrderPkPrintQueuVps">
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="0..1" />
+          <End Role="OrderPkPrintQueueVps" Type="Self.OrderPkPrintQueueVps" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="OrderHeader">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="OrderPkPrintQ">
+            <Dependent Role="OrderPkPrintQueueVps">
               <PropertyRef Name="OrderHeaderId" />
             </Dependent>
           </ReferentialConstraint>
@@ -810,39 +853,27 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_OrderPkPrintQ_INDetails">
-          <End Role="OrderPkPrintQ" Type="Self.OrderPkPrintQ" Multiplicity="0..1" />
+        <Association Name="FK_OrderPkPrintQueueVps_INDetails">
+          <End Role="OrderPkPrintQueueVps" Type="Self.OrderPkPrintQueueVps" Multiplicity="0..1" />
           <End Role="Acct_INDetails" Type="Self.Acct_INDetails" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="OrderPkPrintQ">
-              <PropertyRef Name="OrderPkPrintQId" />
+            <Principal Role="OrderPkPrintQueueVps">
+              <PropertyRef Name="OrderPkPrintQueueVpsId" />
             </Principal>
             <Dependent Role="Acct_INDetails">
-              <PropertyRef Name="OrderPkPrintQId" />
+              <PropertyRef Name="OrderPkPrintQueueVpsId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_OrderPkPrintQ_ReceiptDetail">
-          <End Role="OrderPkPrintQ" Type="Self.OrderPkPrintQ" Multiplicity="0..1" />
+        <Association Name="FK_OrderPkPrintQueueVps_ReceiptDetail">
+          <End Role="OrderPkPrintQueueVps" Type="Self.OrderPkPrintQueueVps" Multiplicity="0..1" />
           <End Role="ReceiptDetail" Type="Self.ReceiptDetail" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="OrderPkPrintQ">
-              <PropertyRef Name="OrderPkPrintQId" />
+            <Principal Role="OrderPkPrintQueueVps">
+              <PropertyRef Name="OrderPkPrintQueueVpsId" />
             </Principal>
             <Dependent Role="ReceiptDetail">
-              <PropertyRef Name="OrderPkPrintQId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PrintQueue_OrderPkPrintQ">
-          <End Role="PrintQueue" Type="Self.PrintQueue" Multiplicity="1" />
-          <End Role="OrderPkPrintQ" Type="Self.OrderPkPrintQ" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PrintQueue">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="OrderPkPrintQ">
-              <PropertyRef Name="PrintQueueId" />
+              <PropertyRef Name="OrderPkPrintQueueVpsId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -867,6 +898,30 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </Principal>
             <Dependent Role="PrintQueue_LifeCycle">
               <PropertyRef Name="PrintQueueId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PrintQueueVps_OrderPkPrintQueuVps">
+          <End Role="PrintQueue_VPS" Type="Self.PrintQueue_VPS" Multiplicity="0..1" />
+          <End Role="OrderPkPrintQueueVps" Type="Self.OrderPkPrintQueueVps" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PrintQueue_VPS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderPkPrintQueueVps">
+              <PropertyRef Name="PrintQueueVpsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PrintQueueVPS_PrintQueueLifeCycle">
+          <End Role="PrintQueue_VPS" Type="Self.PrintQueue_VPS" Multiplicity="0..1" />
+          <End Role="PrintQueue_LifeCycle" Type="Self.PrintQueue_LifeCycle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PrintQueue_VPS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PrintQueue_LifeCycle">
+              <PropertyRef Name="PrintQueueVpsId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1074,7 +1129,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="xFilm5BotModelsStoreContainer">
+        <EntityContainer Name="xFilm5ModelStoreContainer">
           <EntitySet Name="Acct_INDetails" EntityType="Self.Acct_INDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Acct_INMaster" EntityType="Self.Acct_INMaster" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
@@ -1086,7 +1141,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           <EntitySet Name="Order_Journal" EntityType="Self.Order_Journal" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderComment" EntityType="Self.OrderComment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderHeader" EntityType="Self.OrderHeader" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="OrderPkPrintQ" EntityType="Self.OrderPkPrintQ" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderPkPrintQueueVps" EntityType="Self.OrderPkPrintQueueVps" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PosTx" EntityType="Self.PosTx" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PrintQueue" EntityType="Self.PrintQueue" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PrintQueue_LifeCycle" EntityType="Self.PrintQueue_LifeCycle" Schema="dbo" store:Type="Tables" />
@@ -1128,10 +1183,43 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
     [Log4Net].[Exception] AS [Exception]
     FROM [dbo].[Log4Net] AS [Log4Net]</DefiningQuery>
           </EntitySet>
-          <AssociationSet Name="FK__PrintQueu__Print__1CDC41A7" Association="Self.FK__PrintQueu__Print__1CDC41A7">
-            <End Role="PrintQueue_VPS" EntitySet="PrintQueue_VPS" />
-            <End Role="PrintQueue_LifeCycle" EntitySet="PrintQueue_LifeCycle" />
-          </AssociationSet>
+          <EntitySet Name="vwReceiptDetailsList" EntityType="Self.vwReceiptDetailsList" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vwReceiptDetailsList].[ClientId] AS [ClientId], 
+    [vwReceiptDetailsList].[ClientName] AS [ClientName], 
+    [vwReceiptDetailsList].[ClientAddress] AS [ClientAddress], 
+    [vwReceiptDetailsList].[ClientTel] AS [ClientTel], 
+    [vwReceiptDetailsList].[ClientFax] AS [ClientFax], 
+    [vwReceiptDetailsList].[ReceiptHeaderId] AS [ReceiptHeaderId], 
+    [vwReceiptDetailsList].[ReceiptNumber] AS [ReceiptNumber], 
+    [vwReceiptDetailsList].[ReceiptDate] AS [ReceiptDate], 
+    [vwReceiptDetailsList].[ReceiptAmount] AS [ReceiptAmount], 
+    [vwReceiptDetailsList].[PaymentType] AS [PaymentType], 
+    [vwReceiptDetailsList].[INMasterId] AS [INMasterId], 
+    [vwReceiptDetailsList].[ClientUserId] AS [ClientUserId], 
+    [vwReceiptDetailsList].[ClientUserName] AS [ClientUserName], 
+    [vwReceiptDetailsList].[Paid] AS [Paid], 
+    [vwReceiptDetailsList].[PaidOn] AS [PaidOn], 
+    [vwReceiptDetailsList].[PaidAmount] AS [PaidAmount], 
+    [vwReceiptDetailsList].[PaidRef] AS [PaidRef], 
+    [vwReceiptDetailsList].[Remarks] AS [Remarks], 
+    [vwReceiptDetailsList].[Status] AS [Status], 
+    [vwReceiptDetailsList].[CreatedOn] AS [CreatedOn], 
+    [vwReceiptDetailsList].[CreatedBy] AS [CreatedBy], 
+    [vwReceiptDetailsList].[ModifiedOn] AS [ModifiedOn], 
+    [vwReceiptDetailsList].[ModifiedBy] AS [ModifiedBy], 
+    [vwReceiptDetailsList].[ReceiptDetailId] AS [ReceiptDetailId], 
+    [vwReceiptDetailsList].[ItemCode] AS [ItemCode], 
+    [vwReceiptDetailsList].[ItemDescription] AS [ItemDescription], 
+    [vwReceiptDetailsList].[ItemQty] AS [ItemQty], 
+    [vwReceiptDetailsList].[ItemUoM] AS [ItemUoM], 
+    [vwReceiptDetailsList].[ItemUnitAmt] AS [ItemUnitAmt], 
+    [vwReceiptDetailsList].[ItemDiscount] AS [ItemDiscount], 
+    [vwReceiptDetailsList].[ItemAmount] AS [ItemAmount], 
+    [vwReceiptDetailsList].[OrderPkPrintQueueVpsId] AS [OrderPkPrintQueueVpsId], 
+    [vwReceiptDetailsList].[OrderHeaderId] AS [OrderHeaderId]
+    FROM [dbo].[vwReceiptDetailsList] AS [vwReceiptDetailsList]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_Acct_INMaster_Acct_INDetails" Association="Self.FK_Acct_INMaster_Acct_INDetails">
             <End Role="Acct_INMaster" EntitySet="Acct_INMaster" />
             <End Role="Acct_INDetails" EntitySet="Acct_INDetails" />
@@ -1200,25 +1288,21 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             <End Role="OrderHeader" EntitySet="OrderHeader" />
             <End Role="OrderComment" EntitySet="OrderComment" />
           </AssociationSet>
-          <AssociationSet Name="FK_OrderHeader_OrderPkPrintQ" Association="Self.FK_OrderHeader_OrderPkPrintQ">
+          <AssociationSet Name="FK_OrderHeader_OrderPkPrintQueuVps" Association="Self.FK_OrderHeader_OrderPkPrintQueuVps">
             <End Role="OrderHeader" EntitySet="OrderHeader" />
-            <End Role="OrderPkPrintQ" EntitySet="OrderPkPrintQ" />
+            <End Role="OrderPkPrintQueueVps" EntitySet="OrderPkPrintQueueVps" />
           </AssociationSet>
           <AssociationSet Name="FK_OrderHeader_PrintQueue" Association="Self.FK_OrderHeader_PrintQueue">
             <End Role="OrderHeader" EntitySet="OrderHeader" />
             <End Role="PrintQueue" EntitySet="PrintQueue" />
           </AssociationSet>
-          <AssociationSet Name="FK_OrderPkPrintQ_INDetails" Association="Self.FK_OrderPkPrintQ_INDetails">
-            <End Role="OrderPkPrintQ" EntitySet="OrderPkPrintQ" />
+          <AssociationSet Name="FK_OrderPkPrintQueueVps_INDetails" Association="Self.FK_OrderPkPrintQueueVps_INDetails">
+            <End Role="OrderPkPrintQueueVps" EntitySet="OrderPkPrintQueueVps" />
             <End Role="Acct_INDetails" EntitySet="Acct_INDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK_OrderPkPrintQ_ReceiptDetail" Association="Self.FK_OrderPkPrintQ_ReceiptDetail">
-            <End Role="OrderPkPrintQ" EntitySet="OrderPkPrintQ" />
+          <AssociationSet Name="FK_OrderPkPrintQueueVps_ReceiptDetail" Association="Self.FK_OrderPkPrintQueueVps_ReceiptDetail">
+            <End Role="OrderPkPrintQueueVps" EntitySet="OrderPkPrintQueueVps" />
             <End Role="ReceiptDetail" EntitySet="ReceiptDetail" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PrintQueue_OrderPkPrintQ" Association="Self.FK_PrintQueue_OrderPkPrintQ">
-            <End Role="PrintQueue" EntitySet="PrintQueue" />
-            <End Role="OrderPkPrintQ" EntitySet="OrderPkPrintQ" />
           </AssociationSet>
           <AssociationSet Name="FK_PrintQueue_PrintQueue_VPS" Association="Self.FK_PrintQueue_PrintQueue_VPS">
             <End Role="PrintQueue" EntitySet="PrintQueue" />
@@ -1226,6 +1310,14 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           </AssociationSet>
           <AssociationSet Name="FK_PrintQueue_PrintQueueLifeCycle" Association="Self.FK_PrintQueue_PrintQueueLifeCycle">
             <End Role="PrintQueue" EntitySet="PrintQueue" />
+            <End Role="PrintQueue_LifeCycle" EntitySet="PrintQueue_LifeCycle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PrintQueueVps_OrderPkPrintQueuVps" Association="Self.FK_PrintQueueVps_OrderPkPrintQueuVps">
+            <End Role="PrintQueue_VPS" EntitySet="PrintQueue_VPS" />
+            <End Role="OrderPkPrintQueueVps" EntitySet="OrderPkPrintQueueVps" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PrintQueueVPS_PrintQueueLifeCycle" Association="Self.FK_PrintQueueVPS_PrintQueueLifeCycle">
+            <End Role="PrintQueue_VPS" EntitySet="PrintQueue_VPS" />
             <End Role="PrintQueue_LifeCycle" EntitySet="PrintQueue_LifeCycle" />
           </AssociationSet>
           <AssociationSet Name="FK_ReceiptHeader_ReceiptDetail" Association="Self.FK_ReceiptHeader_ReceiptDetail">
@@ -1301,14 +1393,14 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="xFilm5.Bot.Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="xFilm5Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Acct_INDetails">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="INMasterID" Type="Int32" Nullable="false" />
-          <Property Name="OrderPkPrintQId" Type="Int32" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="Int32" />
           <Property Name="BillingCode" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
           <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Qty" Type="Int16" />
@@ -1316,7 +1408,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           <Property Name="Discount" Type="Decimal" Precision="5" Scale="2" />
           <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
           <NavigationProperty Name="Acct_INMaster" Relationship="Self.FK_Acct_INMaster_Acct_INDetails" FromRole="Acct_INDetails" ToRole="Acct_INMaster" />
-          <NavigationProperty Name="OrderPkPrintQ" Relationship="Self.FK_OrderPkPrintQ_INDetails" FromRole="Acct_INDetails" ToRole="OrderPkPrintQ" />
+          <NavigationProperty Name="OrderPkPrintQueueVps" Relationship="Self.FK_OrderPkPrintQueueVps_INDetails" FromRole="Acct_INDetails" ToRole="OrderPkPrintQueueVps" />
         </EntityType>
         <EntityType Name="Acct_INMaster">
           <Key>
@@ -1340,7 +1432,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           <Property Name="LastModifiedOn" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="Int16" />
           <NavigationProperty Name="Acct_INDetails" Relationship="Self.FK_Acct_INMaster_Acct_INDetails" FromRole="Acct_INMaster" ToRole="Acct_INDetails" />
-          <NavigationProperty Name="ReceiptHeaders" Relationship="Self.FK_Acct_INMaster_ReceiptHeader" FromRole="Acct_INMaster" ToRole="ReceiptHeader" />
+          <NavigationProperty Name="ReceiptHeader" Relationship="Self.FK_Acct_INMaster_ReceiptHeader" FromRole="Acct_INMaster" ToRole="ReceiptHeader" />
           <NavigationProperty Name="Client" Relationship="Self.FK_Client_Acct_INMaster" FromRole="Acct_INMaster" ToRole="Client" />
           <NavigationProperty Name="OrderHeader" Relationship="Self.FK_OrderHeader_Acct_INMaster" FromRole="Acct_INMaster" ToRole="OrderHeader" />
           <NavigationProperty Name="T_PaymentType" Relationship="Self.FK_T_PaymentType_Acct_INMaster" FromRole="Acct_INMaster" ToRole="T_PaymentType" />
@@ -1361,10 +1453,10 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           <NavigationProperty Name="Acct_INMaster" Relationship="Self.FK_Client_Acct_INMaster" FromRole="Client" ToRole="Acct_INMaster" />
           <NavigationProperty Name="Client_AddressBook" Relationship="Self.FK_Client_Client_AddressBook" FromRole="Client" ToRole="Client_AddressBook" />
           <NavigationProperty Name="Client_User" Relationship="Self.FK_Client_Client_User" FromRole="Client" ToRole="Client_User" />
-          <NavigationProperty Name="ClientPricings" Relationship="Self.FK_Client_ClientPricing" FromRole="Client" ToRole="ClientPricing" />
-          <NavigationProperty Name="OrderHeaders" Relationship="Self.FK_Client_OrderHeader" FromRole="Client" ToRole="OrderHeader" />
-          <NavigationProperty Name="PrintQueues" Relationship="Self.FK_Client_PrintQueue" FromRole="Client" ToRole="PrintQueue" />
-          <NavigationProperty Name="ReceiptHeaders" Relationship="Self.FK_Client_ReceiptHeader" FromRole="Client" ToRole="ReceiptHeader" />
+          <NavigationProperty Name="ClientPricing" Relationship="Self.FK_Client_ClientPricing" FromRole="Client" ToRole="ClientPricing" />
+          <NavigationProperty Name="OrderHeader" Relationship="Self.FK_Client_OrderHeader" FromRole="Client" ToRole="OrderHeader" />
+          <NavigationProperty Name="PrintQueue" Relationship="Self.FK_Client_PrintQueue" FromRole="Client" ToRole="PrintQueue" />
+          <NavigationProperty Name="ReceiptHeader" Relationship="Self.FK_Client_ReceiptHeader" FromRole="Client" ToRole="ReceiptHeader" />
         </EntityType>
         <EntityType Name="Client_AddressBook">
           <Key>
@@ -1400,8 +1492,8 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           <Property Name="LastVisit" Type="DateTime" Precision="3" />
           <Property Name="Branch" Type="Int32" />
           <NavigationProperty Name="Client" Relationship="Self.FK_Client_Client_User" FromRole="Client_User" ToRole="Client" />
-          <NavigationProperty Name="OrderHeaders" Relationship="Self.FK_Client_User_OrderHeader" FromRole="Client_User" ToRole="OrderHeader" />
-          <NavigationProperty Name="ReceiptHeaders" Relationship="Self.FK_Client_User_ReceiptHeader" FromRole="Client_User" ToRole="ReceiptHeader" />
+          <NavigationProperty Name="OrderHeader" Relationship="Self.FK_Client_User_OrderHeader" FromRole="Client_User" ToRole="OrderHeader" />
+          <NavigationProperty Name="ReceiptHeader" Relationship="Self.FK_Client_User_ReceiptHeader" FromRole="Client_User" ToRole="ReceiptHeader" />
         </EntityType>
         <EntityType Name="ClientPricing">
           <Key>
@@ -1413,6 +1505,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           <Property Name="Alias" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Tag" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
           <Property Name="UnitPrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Discount" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreatedBy" Type="Int32" Nullable="false" />
@@ -1565,26 +1658,37 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           <NavigationProperty Name="Order_Details" Relationship="Self.FK_OrderHeader_Order_Details" FromRole="OrderHeader" ToRole="Order_Details" />
           <NavigationProperty Name="Order_Internal" Relationship="Self.FK_OrderHeader_Order_Internal" FromRole="OrderHeader" ToRole="Order_Internal" />
           <NavigationProperty Name="Order_Journal" Relationship="Self.FK_OrderHeader_Order_Journal" FromRole="OrderHeader" ToRole="Order_Journal" />
-          <NavigationProperty Name="OrderComments" Relationship="Self.FK_OrderHeader_OrderComment" FromRole="OrderHeader" ToRole="OrderComment" />
-          <NavigationProperty Name="OrderPkPrintQs" Relationship="Self.FK_OrderHeader_OrderPkPrintQ" FromRole="OrderHeader" ToRole="OrderPkPrintQ" />
-          <NavigationProperty Name="PrintQueues" Relationship="Self.FK_OrderHeader_PrintQueue" FromRole="OrderHeader" ToRole="PrintQueue" />
+          <NavigationProperty Name="OrderComment" Relationship="Self.FK_OrderHeader_OrderComment" FromRole="OrderHeader" ToRole="OrderComment" />
+          <NavigationProperty Name="OrderPkPrintQueueVps" Relationship="Self.FK_OrderHeader_OrderPkPrintQueuVps" FromRole="OrderHeader" ToRole="OrderPkPrintQueueVps" />
+          <NavigationProperty Name="PrintQueue" Relationship="Self.FK_OrderHeader_PrintQueue" FromRole="OrderHeader" ToRole="PrintQueue" />
           <NavigationProperty Name="T_Priority" Relationship="Self.FK_T_Priority_OrderHeader" FromRole="OrderHeader" ToRole="T_Priority" />
           <NavigationProperty Name="T_Service" Relationship="Self.FK_T_Service_OrderHeader" FromRole="OrderHeader" ToRole="T_Service" />
           <NavigationProperty Name="T_Status" Relationship="Self.FK_T_Status_OrderHeader" FromRole="OrderHeader" ToRole="T_Status" />
         </EntityType>
-        <EntityType Name="OrderPkPrintQ">
+        <EntityType Name="OrderPkPrintQueueVps">
           <Key>
-            <PropertyRef Name="OrderPkPrintQId" />
+            <PropertyRef Name="OrderPkPrintQueueVpsId" />
           </Key>
-          <Property Name="OrderPkPrintQId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OrderHeaderId" Type="Int32" Nullable="false" />
-          <Property Name="PrintQueueId" Type="Int32" Nullable="false" />
-          <Property Name="PrintQSubitemType" Type="Int32" Nullable="false" />
-          <Property Name="Qty" Type="Decimal" Precision="18" Scale="4" Nullable="false" />
-          <NavigationProperty Name="Acct_INDetails" Relationship="Self.FK_OrderPkPrintQ_INDetails" FromRole="OrderPkPrintQ" ToRole="Acct_INDetails" />
-          <NavigationProperty Name="OrderHeader" Relationship="Self.FK_OrderHeader_OrderPkPrintQ" FromRole="OrderPkPrintQ" ToRole="OrderHeader" />
-          <NavigationProperty Name="ReceiptDetails" Relationship="Self.FK_OrderPkPrintQ_ReceiptDetail" FromRole="OrderPkPrintQ" ToRole="ReceiptDetail" />
-          <NavigationProperty Name="PrintQueue" Relationship="Self.FK_PrintQueue_OrderPkPrintQ" FromRole="OrderPkPrintQ" ToRole="PrintQueue" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderHeaderId" Type="Int32" />
+          <Property Name="PrintQueueVpsId" Type="Int32" />
+          <Property Name="CheckedPlate" Type="Boolean" Nullable="false" />
+          <Property Name="CheckedCip3" Type="Boolean" Nullable="false" />
+          <Property Name="CheckedBlueprint" Type="Boolean" Nullable="false" />
+          <Property Name="IsReady" Type="Boolean" Nullable="false" />
+          <Property Name="IsReceived" Type="Boolean" Nullable="false" />
+          <Property Name="IsBilled" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+          <Property Name="ModifiedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="Retired" Type="Boolean" Nullable="false" />
+          <Property Name="RetiredOn" Type="DateTime" Precision="3" />
+          <Property Name="RetiredBy" Type="Int32" />
+          <NavigationProperty Name="Acct_INDetails" Relationship="Self.FK_OrderPkPrintQueueVps_INDetails" FromRole="OrderPkPrintQueueVps" ToRole="Acct_INDetails" />
+          <NavigationProperty Name="OrderHeader" Relationship="Self.FK_OrderHeader_OrderPkPrintQueuVps" FromRole="OrderPkPrintQueueVps" ToRole="OrderHeader" />
+          <NavigationProperty Name="ReceiptDetail" Relationship="Self.FK_OrderPkPrintQueueVps_ReceiptDetail" FromRole="OrderPkPrintQueueVps" ToRole="ReceiptDetail" />
+          <NavigationProperty Name="PrintQueue_VPS" Relationship="Self.FK_PrintQueueVps_OrderPkPrintQueuVps" FromRole="OrderPkPrintQueueVps" ToRole="PrintQueue_VPS" />
         </EntityType>
         <EntityType Name="PosTx">
           <Key>
@@ -1622,7 +1726,6 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           <Property Name="RetiredBy" Type="Int32" />
           <NavigationProperty Name="Client" Relationship="Self.FK_Client_PrintQueue" FromRole="PrintQueue" ToRole="Client" />
           <NavigationProperty Name="OrderHeader" Relationship="Self.FK_OrderHeader_PrintQueue" FromRole="PrintQueue" ToRole="OrderHeader" />
-          <NavigationProperty Name="OrderPkPrintQs" Relationship="Self.FK_PrintQueue_OrderPkPrintQ" FromRole="PrintQueue" ToRole="OrderPkPrintQ" />
           <NavigationProperty Name="PrintQueue_VPS" Relationship="Self.FK_PrintQueue_PrintQueue_VPS" FromRole="PrintQueue" ToRole="PrintQueue_VPS" />
           <NavigationProperty Name="PrintQueue_LifeCycle" Relationship="Self.FK_PrintQueue_PrintQueueLifeCycle" FromRole="PrintQueue" ToRole="PrintQueue_LifeCycle" />
         </EntityType>
@@ -1638,7 +1741,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreatedBy" Type="Int32" Nullable="false" />
           <NavigationProperty Name="PrintQueue" Relationship="Self.FK_PrintQueue_PrintQueueLifeCycle" FromRole="PrintQueue_LifeCycle" ToRole="PrintQueue" />
-          <NavigationProperty Name="PrintQueue_VPS" Relationship="Self.FK__PrintQueu__Print__1CDC41A7" FromRole="PrintQueue_LifeCycle" ToRole="PrintQueue_VPS" />
+          <NavigationProperty Name="PrintQueue_VPS" Relationship="Self.FK_PrintQueueVPS_PrintQueueLifeCycle" FromRole="PrintQueue_LifeCycle" ToRole="PrintQueue_VPS" />
         </EntityType>
         <EntityType Name="PrintQueue_VPS">
           <Key>
@@ -1655,8 +1758,9 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           <Property Name="Retired" Type="Boolean" />
           <Property Name="RetiredOn" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="RetiredBy" Type="Int32" />
+          <NavigationProperty Name="OrderPkPrintQueueVps" Relationship="Self.FK_PrintQueueVps_OrderPkPrintQueuVps" FromRole="PrintQueue_VPS" ToRole="OrderPkPrintQueueVps" />
           <NavigationProperty Name="PrintQueue" Relationship="Self.FK_PrintQueue_PrintQueue_VPS" FromRole="PrintQueue_VPS" ToRole="PrintQueue" />
-          <NavigationProperty Name="PrintQueue_LifeCycle" Relationship="Self.FK__PrintQueu__Print__1CDC41A7" FromRole="PrintQueue_VPS" ToRole="PrintQueue_LifeCycle" />
+          <NavigationProperty Name="PrintQueue_LifeCycle" Relationship="Self.FK_PrintQueueVPS_PrintQueueLifeCycle" FromRole="PrintQueue_VPS" ToRole="PrintQueue_LifeCycle" />
         </EntityType>
         <EntityType Name="ReceiptDetail">
           <Key>
@@ -1664,14 +1768,14 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           </Key>
           <Property Name="ReceiptDetailId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ReceiptHeaderId" Type="Int32" Nullable="false" />
-          <Property Name="OrderPkPrintQId" Type="Int32" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="Int32" />
           <Property Name="BillingCode" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
           <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Qty" Type="Int16" />
           <Property Name="UnitAmount" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="Discount" Type="Decimal" Precision="5" Scale="2" />
           <Property Name="Amount" Type="Decimal" Precision="19" Scale="4" />
-          <NavigationProperty Name="OrderPkPrintQ" Relationship="Self.FK_OrderPkPrintQ_ReceiptDetail" FromRole="ReceiptDetail" ToRole="OrderPkPrintQ" />
+          <NavigationProperty Name="OrderPkPrintQueueVps" Relationship="Self.FK_OrderPkPrintQueueVps_ReceiptDetail" FromRole="ReceiptDetail" ToRole="OrderPkPrintQueueVps" />
           <NavigationProperty Name="ReceiptHeader" Relationship="Self.FK_ReceiptHeader_ReceiptDetail" FromRole="ReceiptDetail" ToRole="ReceiptHeader" />
         </EntityType>
         <EntityType Name="ReceiptHeader">
@@ -1699,7 +1803,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           <NavigationProperty Name="Acct_INMaster" Relationship="Self.FK_Acct_INMaster_ReceiptHeader" FromRole="ReceiptHeader" ToRole="Acct_INMaster" />
           <NavigationProperty Name="Client" Relationship="Self.FK_Client_ReceiptHeader" FromRole="ReceiptHeader" ToRole="Client" />
           <NavigationProperty Name="Client_User" Relationship="Self.FK_Client_User_ReceiptHeader" FromRole="ReceiptHeader" ToRole="Client_User" />
-          <NavigationProperty Name="ReceiptDetails" Relationship="Self.FK_ReceiptHeader_ReceiptDetail" FromRole="ReceiptHeader" ToRole="ReceiptDetail" />
+          <NavigationProperty Name="ReceiptDetail" Relationship="Self.FK_ReceiptHeader_ReceiptDetail" FromRole="ReceiptHeader" ToRole="ReceiptDetail" />
           <NavigationProperty Name="T_PaymentType" Relationship="Self.FK_T_PaymentType_ReceiptHeader" FromRole="ReceiptHeader" ToRole="T_PaymentType" />
         </EntityType>
         <EntityType Name="Staff">
@@ -1731,7 +1835,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           <Property Name="UoM" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
           <Property Name="UnitPrice" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="Retired" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="ClientPricings" Relationship="Self.FK_BillingItem_ClientPricing" FromRole="T_BillingCode_Item" ToRole="ClientPricing" />
+          <NavigationProperty Name="ClientPricing" Relationship="Self.FK_BillingItem_ClientPricing" FromRole="T_BillingCode_Item" ToRole="ClientPricing" />
           <NavigationProperty Name="T_BillingCode_Dept" Relationship="Self.FK_T_BillingCode_Dept_T_BillingCode_Item" FromRole="T_BillingCode_Item" ToRole="T_BillingCode_Dept" />
         </EntityType>
         <EntityType Name="T_DeliveryMethod">
@@ -1787,7 +1891,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           <Property Name="ID" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Acct_INMaster" Relationship="Self.FK_T_PaymentType_Acct_INMaster" FromRole="T_PaymentType" ToRole="Acct_INMaster" />
-          <NavigationProperty Name="ReceiptHeaders" Relationship="Self.FK_T_PaymentType_ReceiptHeader" FromRole="T_PaymentType" ToRole="ReceiptHeader" />
+          <NavigationProperty Name="ReceiptHeader" Relationship="Self.FK_T_PaymentType_ReceiptHeader" FromRole="T_PaymentType" ToRole="ReceiptHeader" />
         </EntityType>
         <EntityType Name="T_Platform">
           <Key>
@@ -1803,7 +1907,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="OrderHeaders" Relationship="Self.FK_T_Priority_OrderHeader" FromRole="T_Priority" ToRole="OrderHeader" />
+          <NavigationProperty Name="OrderHeader" Relationship="Self.FK_T_Priority_OrderHeader" FromRole="T_Priority" ToRole="OrderHeader" />
         </EntityType>
         <EntityType Name="T_ProofingMaterial">
           <Key>
@@ -1818,7 +1922,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="OrderHeaders" Relationship="Self.FK_T_Service_OrderHeader" FromRole="T_Service" ToRole="OrderHeader" />
+          <NavigationProperty Name="OrderHeader" Relationship="Self.FK_T_Service_OrderHeader" FromRole="T_Service" ToRole="OrderHeader" />
         </EntityType>
         <EntityType Name="T_Software">
           <Key>
@@ -1844,7 +1948,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           <Property Name="ID" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
           <Property Name="Phase" Type="Int32" />
-          <NavigationProperty Name="OrderHeaders" Relationship="Self.FK_T_Status_OrderHeader" FromRole="T_Status" ToRole="OrderHeader" />
+          <NavigationProperty Name="OrderHeader" Relationship="Self.FK_T_Status_OrderHeader" FromRole="T_Status" ToRole="OrderHeader" />
         </EntityType>
         <EntityType Name="T_Workflow">
           <Key>
@@ -1874,9 +1978,9 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           <Property Name="Retired" Type="Boolean" Nullable="false" />
           <Property Name="RetiredOn" Type="DateTime" Precision="3" />
           <Property Name="RetiredBy" Type="Int32" />
-          <NavigationProperty Name="UserAuths" Relationship="Self.FK_User_UserAuth" FromRole="User" ToRole="UserAuth" />
-          <NavigationProperty Name="UserNotifications" Relationship="Self.FK_User_UserNotification" FromRole="User" ToRole="UserNotification" />
-          <NavigationProperty Name="UserPreferences" Relationship="Self.FK_User_UserPreference" FromRole="User" ToRole="UserPreference" />
+          <NavigationProperty Name="UserAuth" Relationship="Self.FK_User_UserAuth" FromRole="User" ToRole="UserAuth" />
+          <NavigationProperty Name="UserNotification" Relationship="Self.FK_User_UserNotification" FromRole="User" ToRole="UserNotification" />
+          <NavigationProperty Name="UserPreference" Relationship="Self.FK_User_UserPreference" FromRole="User" ToRole="UserPreference" />
         </EntityType>
         <EntityType Name="UserAuth">
           <Key>
@@ -1949,6 +2053,47 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           <Property Name="Message" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Exception" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="vwReceiptDetailsList">
+          <Key>
+            <PropertyRef Name="ClientId" />
+            <PropertyRef Name="ReceiptHeaderId" />
+            <PropertyRef Name="ReceiptDetailId" />
+            <PropertyRef Name="OrderPkPrintQueueVpsId" />
+          </Key>
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="ClientName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ClientAddress" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ClientTel" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="ClientFax" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiptHeaderId" Type="Int32" Nullable="false" />
+          <Property Name="ReceiptNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiptDate" Type="DateTime" Precision="3" />
+          <Property Name="ReceiptAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="PaymentType" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="INMasterId" Type="Int32" />
+          <Property Name="ClientUserId" Type="Int32" />
+          <Property Name="ClientUserName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Paid" Type="Boolean" Nullable="false" />
+          <Property Name="PaidOn" Type="DateTime" Precision="3" />
+          <Property Name="PaidAmount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="PaidRef" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Remarks" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="ModifiedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedBy" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiptDetailId" Type="Int32" Nullable="false" />
+          <Property Name="ItemCode" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="ItemDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ItemQty" Type="Int16" />
+          <Property Name="ItemUoM" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="ItemUnitAmt" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ItemDiscount" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="ItemAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="Int32" Nullable="false" />
+          <Property Name="OrderHeaderId" Type="Int32" />
+        </EntityType>
         <Association Name="FK_Acct_INMaster_Acct_INDetails">
           <End Role="Acct_INMaster" Type="Self.Acct_INMaster" Multiplicity="1" />
           <End Role="Acct_INDetails" Type="Self.Acct_INDetails" Multiplicity="*" />
@@ -1961,15 +2106,15 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_OrderPkPrintQ_INDetails">
-          <End Role="OrderPkPrintQ" Type="Self.OrderPkPrintQ" Multiplicity="0..1" />
+        <Association Name="FK_OrderPkPrintQueueVps_INDetails">
+          <End Role="OrderPkPrintQueueVps" Type="Self.OrderPkPrintQueueVps" Multiplicity="0..1" />
           <End Role="Acct_INDetails" Type="Self.Acct_INDetails" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="OrderPkPrintQ">
-              <PropertyRef Name="OrderPkPrintQId" />
+            <Principal Role="OrderPkPrintQueueVps">
+              <PropertyRef Name="OrderPkPrintQueueVpsId" />
             </Principal>
             <Dependent Role="Acct_INDetails">
-              <PropertyRef Name="OrderPkPrintQId" />
+              <PropertyRef Name="OrderPkPrintQueueVpsId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2237,14 +2382,14 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_OrderHeader_OrderPkPrintQ">
-          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="1" />
-          <End Role="OrderPkPrintQ" Type="Self.OrderPkPrintQ" Multiplicity="*" />
+        <Association Name="FK_OrderHeader_OrderPkPrintQueuVps">
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="0..1" />
+          <End Role="OrderPkPrintQueueVps" Type="Self.OrderPkPrintQueueVps" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="OrderHeader">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="OrderPkPrintQ">
+            <Dependent Role="OrderPkPrintQueueVps">
               <PropertyRef Name="OrderHeaderId" />
             </Dependent>
           </ReferentialConstraint>
@@ -2297,27 +2442,27 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_OrderPkPrintQ_ReceiptDetail">
-          <End Role="OrderPkPrintQ" Type="Self.OrderPkPrintQ" Multiplicity="0..1" />
+        <Association Name="FK_OrderPkPrintQueueVps_ReceiptDetail">
+          <End Role="OrderPkPrintQueueVps" Type="Self.OrderPkPrintQueueVps" Multiplicity="0..1" />
           <End Role="ReceiptDetail" Type="Self.ReceiptDetail" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="OrderPkPrintQ">
-              <PropertyRef Name="OrderPkPrintQId" />
+            <Principal Role="OrderPkPrintQueueVps">
+              <PropertyRef Name="OrderPkPrintQueueVpsId" />
             </Principal>
             <Dependent Role="ReceiptDetail">
-              <PropertyRef Name="OrderPkPrintQId" />
+              <PropertyRef Name="OrderPkPrintQueueVpsId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PrintQueue_OrderPkPrintQ">
-          <End Role="PrintQueue" Type="Self.PrintQueue" Multiplicity="1" />
-          <End Role="OrderPkPrintQ" Type="Self.OrderPkPrintQ" Multiplicity="*" />
+        <Association Name="FK_PrintQueueVps_OrderPkPrintQueuVps">
+          <End Role="PrintQueue_VPS" Type="Self.PrintQueue_VPS" Multiplicity="0..1" />
+          <End Role="OrderPkPrintQueueVps" Type="Self.OrderPkPrintQueueVps" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="PrintQueue">
+            <Principal Role="PrintQueue_VPS">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="OrderPkPrintQ">
-              <PropertyRef Name="PrintQueueId" />
+            <Dependent Role="OrderPkPrintQueueVps">
+              <PropertyRef Name="PrintQueueVpsId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2345,7 +2490,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PrintQueu__Print__1CDC41A7">
+        <Association Name="FK_PrintQueueVPS_PrintQueueLifeCycle">
           <End Role="PrintQueue_VPS" Type="Self.PrintQueue_VPS" Multiplicity="0..1" />
           <End Role="PrintQueue_LifeCycle" Type="Self.PrintQueue_LifeCycle" Multiplicity="*" />
           <ReferentialConstraint>
@@ -2453,26 +2598,26 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="SysDb" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="xFilm5Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Acct_INDetails" EntityType="Self.Acct_INDetails" />
           <EntitySet Name="Acct_INMaster" EntityType="Self.Acct_INMaster" />
-          <EntitySet Name="Clients" EntityType="Self.Client" />
+          <EntitySet Name="Client" EntityType="Self.Client" />
           <EntitySet Name="Client_AddressBook" EntityType="Self.Client_AddressBook" />
           <EntitySet Name="Client_User" EntityType="Self.Client_User" />
-          <EntitySet Name="ClientPricings" EntityType="Self.ClientPricing" />
+          <EntitySet Name="ClientPricing" EntityType="Self.ClientPricing" />
           <EntitySet Name="Order_Details" EntityType="Self.Order_Details" />
           <EntitySet Name="Order_Internal" EntityType="Self.Order_Internal" />
           <EntitySet Name="Order_Journal" EntityType="Self.Order_Journal" />
-          <EntitySet Name="OrderComments" EntityType="Self.OrderComment" />
-          <EntitySet Name="OrderHeaders" EntityType="Self.OrderHeader" />
-          <EntitySet Name="OrderPkPrintQs" EntityType="Self.OrderPkPrintQ" />
-          <EntitySet Name="PosTxes" EntityType="Self.PosTx" />
-          <EntitySet Name="PrintQueues" EntityType="Self.PrintQueue" />
+          <EntitySet Name="OrderComment" EntityType="Self.OrderComment" />
+          <EntitySet Name="OrderHeader" EntityType="Self.OrderHeader" />
+          <EntitySet Name="OrderPkPrintQueueVps" EntityType="Self.OrderPkPrintQueueVps" />
+          <EntitySet Name="PosTx" EntityType="Self.PosTx" />
+          <EntitySet Name="PrintQueue" EntityType="Self.PrintQueue" />
           <EntitySet Name="PrintQueue_LifeCycle" EntityType="Self.PrintQueue_LifeCycle" />
           <EntitySet Name="PrintQueue_VPS" EntityType="Self.PrintQueue_VPS" />
-          <EntitySet Name="ReceiptDetails" EntityType="Self.ReceiptDetail" />
-          <EntitySet Name="ReceiptHeaders" EntityType="Self.ReceiptHeader" />
-          <EntitySet Name="Staffs" EntityType="Self.Staff" />
+          <EntitySet Name="ReceiptDetail" EntityType="Self.ReceiptDetail" />
+          <EntitySet Name="ReceiptHeader" EntityType="Self.ReceiptHeader" />
+          <EntitySet Name="Staff" EntityType="Self.Staff" />
           <EntitySet Name="T_BillingCode_Dept" EntityType="Self.T_BillingCode_Dept" />
           <EntitySet Name="T_BillingCode_Item" EntityType="Self.T_BillingCode_Item" />
           <EntitySet Name="T_DeliveryMethod" EntityType="Self.T_DeliveryMethod" />
@@ -2490,31 +2635,32 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
           <EntitySet Name="T_SoftwareVersion" EntityType="Self.T_SoftwareVersion" />
           <EntitySet Name="T_Status" EntityType="Self.T_Status" />
           <EntitySet Name="T_Workflow" EntityType="Self.T_Workflow" />
-          <EntitySet Name="Users" EntityType="Self.User" />
-          <EntitySet Name="UserAuths" EntityType="Self.UserAuth" />
-          <EntitySet Name="UserNotifications" EntityType="Self.UserNotification" />
-          <EntitySet Name="UserPreferences" EntityType="Self.UserPreference" />
+          <EntitySet Name="User" EntityType="Self.User" />
+          <EntitySet Name="UserAuth" EntityType="Self.UserAuth" />
+          <EntitySet Name="UserNotification" EntityType="Self.UserNotification" />
+          <EntitySet Name="UserPreference" EntityType="Self.UserPreference" />
           <EntitySet Name="X_Counter" EntityType="Self.X_Counter" />
           <EntitySet Name="Z_WebColor" EntityType="Self.Z_WebColor" />
           <EntitySet Name="Log4Net" EntityType="Self.Log4Net" />
+          <EntitySet Name="vwReceiptDetailsList" EntityType="Self.vwReceiptDetailsList" />
           <AssociationSet Name="FK_Acct_INMaster_Acct_INDetails" Association="Self.FK_Acct_INMaster_Acct_INDetails">
             <End Role="Acct_INMaster" EntitySet="Acct_INMaster" />
             <End Role="Acct_INDetails" EntitySet="Acct_INDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK_OrderPkPrintQ_INDetails" Association="Self.FK_OrderPkPrintQ_INDetails">
-            <End Role="OrderPkPrintQ" EntitySet="OrderPkPrintQs" />
+          <AssociationSet Name="FK_OrderPkPrintQueueVps_INDetails" Association="Self.FK_OrderPkPrintQueueVps_INDetails">
+            <End Role="OrderPkPrintQueueVps" EntitySet="OrderPkPrintQueueVps" />
             <End Role="Acct_INDetails" EntitySet="Acct_INDetails" />
           </AssociationSet>
           <AssociationSet Name="FK_Acct_INMaster_ReceiptHeader" Association="Self.FK_Acct_INMaster_ReceiptHeader">
             <End Role="Acct_INMaster" EntitySet="Acct_INMaster" />
-            <End Role="ReceiptHeader" EntitySet="ReceiptHeaders" />
+            <End Role="ReceiptHeader" EntitySet="ReceiptHeader" />
           </AssociationSet>
           <AssociationSet Name="FK_Client_Acct_INMaster" Association="Self.FK_Client_Acct_INMaster">
-            <End Role="Client" EntitySet="Clients" />
+            <End Role="Client" EntitySet="Client" />
             <End Role="Acct_INMaster" EntitySet="Acct_INMaster" />
           </AssociationSet>
           <AssociationSet Name="FK_OrderHeader_Acct_INMaster" Association="Self.FK_OrderHeader_Acct_INMaster">
-            <End Role="OrderHeader" EntitySet="OrderHeaders" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
             <End Role="Acct_INMaster" EntitySet="Acct_INMaster" />
           </AssociationSet>
           <AssociationSet Name="FK_T_PaymentType_Acct_INMaster" Association="Self.FK_T_PaymentType_Acct_INMaster">
@@ -2522,43 +2668,43 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             <End Role="Acct_INMaster" EntitySet="Acct_INMaster" />
           </AssociationSet>
           <AssociationSet Name="FK_Client_Client_AddressBook" Association="Self.FK_Client_Client_AddressBook">
-            <End Role="Client" EntitySet="Clients" />
+            <End Role="Client" EntitySet="Client" />
             <End Role="Client_AddressBook" EntitySet="Client_AddressBook" />
           </AssociationSet>
           <AssociationSet Name="FK_Client_Client_User" Association="Self.FK_Client_Client_User">
-            <End Role="Client" EntitySet="Clients" />
+            <End Role="Client" EntitySet="Client" />
             <End Role="Client_User" EntitySet="Client_User" />
           </AssociationSet>
           <AssociationSet Name="FK_Client_ClientPricing" Association="Self.FK_Client_ClientPricing">
-            <End Role="Client" EntitySet="Clients" />
-            <End Role="ClientPricing" EntitySet="ClientPricings" />
+            <End Role="Client" EntitySet="Client" />
+            <End Role="ClientPricing" EntitySet="ClientPricing" />
           </AssociationSet>
           <AssociationSet Name="FK_Client_OrderHeader" Association="Self.FK_Client_OrderHeader">
-            <End Role="Client" EntitySet="Clients" />
-            <End Role="OrderHeader" EntitySet="OrderHeaders" />
+            <End Role="Client" EntitySet="Client" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
           </AssociationSet>
           <AssociationSet Name="FK_Client_PrintQueue" Association="Self.FK_Client_PrintQueue">
-            <End Role="Client" EntitySet="Clients" />
-            <End Role="PrintQueue" EntitySet="PrintQueues" />
+            <End Role="Client" EntitySet="Client" />
+            <End Role="PrintQueue" EntitySet="PrintQueue" />
           </AssociationSet>
           <AssociationSet Name="FK_Client_ReceiptHeader" Association="Self.FK_Client_ReceiptHeader">
-            <End Role="Client" EntitySet="Clients" />
-            <End Role="ReceiptHeader" EntitySet="ReceiptHeaders" />
+            <End Role="Client" EntitySet="Client" />
+            <End Role="ReceiptHeader" EntitySet="ReceiptHeader" />
           </AssociationSet>
           <AssociationSet Name="FK_Client_User_OrderHeader" Association="Self.FK_Client_User_OrderHeader">
             <End Role="Client_User" EntitySet="Client_User" />
-            <End Role="OrderHeader" EntitySet="OrderHeaders" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
           </AssociationSet>
           <AssociationSet Name="FK_Client_User_ReceiptHeader" Association="Self.FK_Client_User_ReceiptHeader">
             <End Role="Client_User" EntitySet="Client_User" />
-            <End Role="ReceiptHeader" EntitySet="ReceiptHeaders" />
+            <End Role="ReceiptHeader" EntitySet="ReceiptHeader" />
           </AssociationSet>
           <AssociationSet Name="FK_BillingItem_ClientPricing" Association="Self.FK_BillingItem_ClientPricing">
             <End Role="T_BillingCode_Item" EntitySet="T_BillingCode_Item" />
-            <End Role="ClientPricing" EntitySet="ClientPricings" />
+            <End Role="ClientPricing" EntitySet="ClientPricing" />
           </AssociationSet>
           <AssociationSet Name="FK_OrderHeader_Order_Details" Association="Self.FK_OrderHeader_Order_Details">
-            <End Role="OrderHeader" EntitySet="OrderHeaders" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
             <End Role="Order_Details" EntitySet="Order_Details" />
           </AssociationSet>
           <AssociationSet Name="FK_T_DeliveryMethod_Order_Details" Association="Self.FK_T_DeliveryMethod_Order_Details">
@@ -2578,11 +2724,11 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             <End Role="Order_Details" EntitySet="Order_Details" />
           </AssociationSet>
           <AssociationSet Name="FK_OrderHeader_Order_Internal" Association="Self.FK_OrderHeader_Order_Internal">
-            <End Role="OrderHeader" EntitySet="OrderHeaders" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
             <End Role="Order_Internal" EntitySet="Order_Internal" />
           </AssociationSet>
           <AssociationSet Name="FK_OrderHeader_Order_Journal" Association="Self.FK_OrderHeader_Order_Journal">
-            <End Role="OrderHeader" EntitySet="OrderHeaders" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
             <End Role="Order_Journal" EntitySet="Order_Journal" />
           </AssociationSet>
           <AssociationSet Name="FK_T_Workflow_Order_Journal" Association="Self.FK_T_Workflow_Order_Journal">
@@ -2590,56 +2736,56 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             <End Role="Order_Journal" EntitySet="Order_Journal" />
           </AssociationSet>
           <AssociationSet Name="FK_OrderHeader_OrderComment" Association="Self.FK_OrderHeader_OrderComment">
-            <End Role="OrderHeader" EntitySet="OrderHeaders" />
-            <End Role="OrderComment" EntitySet="OrderComments" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+            <End Role="OrderComment" EntitySet="OrderComment" />
           </AssociationSet>
-          <AssociationSet Name="FK_OrderHeader_OrderPkPrintQ" Association="Self.FK_OrderHeader_OrderPkPrintQ">
-            <End Role="OrderHeader" EntitySet="OrderHeaders" />
-            <End Role="OrderPkPrintQ" EntitySet="OrderPkPrintQs" />
+          <AssociationSet Name="FK_OrderHeader_OrderPkPrintQueuVps" Association="Self.FK_OrderHeader_OrderPkPrintQueuVps">
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+            <End Role="OrderPkPrintQueueVps" EntitySet="OrderPkPrintQueueVps" />
           </AssociationSet>
           <AssociationSet Name="FK_OrderHeader_PrintQueue" Association="Self.FK_OrderHeader_PrintQueue">
-            <End Role="OrderHeader" EntitySet="OrderHeaders" />
-            <End Role="PrintQueue" EntitySet="PrintQueues" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+            <End Role="PrintQueue" EntitySet="PrintQueue" />
           </AssociationSet>
           <AssociationSet Name="FK_T_Priority_OrderHeader" Association="Self.FK_T_Priority_OrderHeader">
             <End Role="T_Priority" EntitySet="T_Priority" />
-            <End Role="OrderHeader" EntitySet="OrderHeaders" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
           </AssociationSet>
           <AssociationSet Name="FK_T_Service_OrderHeader" Association="Self.FK_T_Service_OrderHeader">
             <End Role="T_Service" EntitySet="T_Service" />
-            <End Role="OrderHeader" EntitySet="OrderHeaders" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
           </AssociationSet>
           <AssociationSet Name="FK_T_Status_OrderHeader" Association="Self.FK_T_Status_OrderHeader">
             <End Role="T_Status" EntitySet="T_Status" />
-            <End Role="OrderHeader" EntitySet="OrderHeaders" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
           </AssociationSet>
-          <AssociationSet Name="FK_OrderPkPrintQ_ReceiptDetail" Association="Self.FK_OrderPkPrintQ_ReceiptDetail">
-            <End Role="OrderPkPrintQ" EntitySet="OrderPkPrintQs" />
-            <End Role="ReceiptDetail" EntitySet="ReceiptDetails" />
+          <AssociationSet Name="FK_OrderPkPrintQueueVps_ReceiptDetail" Association="Self.FK_OrderPkPrintQueueVps_ReceiptDetail">
+            <End Role="OrderPkPrintQueueVps" EntitySet="OrderPkPrintQueueVps" />
+            <End Role="ReceiptDetail" EntitySet="ReceiptDetail" />
           </AssociationSet>
-          <AssociationSet Name="FK_PrintQueue_OrderPkPrintQ" Association="Self.FK_PrintQueue_OrderPkPrintQ">
-            <End Role="PrintQueue" EntitySet="PrintQueues" />
-            <End Role="OrderPkPrintQ" EntitySet="OrderPkPrintQs" />
+          <AssociationSet Name="FK_PrintQueueVps_OrderPkPrintQueuVps" Association="Self.FK_PrintQueueVps_OrderPkPrintQueuVps">
+            <End Role="PrintQueue_VPS" EntitySet="PrintQueue_VPS" />
+            <End Role="OrderPkPrintQueueVps" EntitySet="OrderPkPrintQueueVps" />
           </AssociationSet>
           <AssociationSet Name="FK_PrintQueue_PrintQueue_VPS" Association="Self.FK_PrintQueue_PrintQueue_VPS">
-            <End Role="PrintQueue" EntitySet="PrintQueues" />
+            <End Role="PrintQueue" EntitySet="PrintQueue" />
             <End Role="PrintQueue_VPS" EntitySet="PrintQueue_VPS" />
           </AssociationSet>
           <AssociationSet Name="FK_PrintQueue_PrintQueueLifeCycle" Association="Self.FK_PrintQueue_PrintQueueLifeCycle">
-            <End Role="PrintQueue" EntitySet="PrintQueues" />
+            <End Role="PrintQueue" EntitySet="PrintQueue" />
             <End Role="PrintQueue_LifeCycle" EntitySet="PrintQueue_LifeCycle" />
           </AssociationSet>
-          <AssociationSet Name="FK__PrintQueu__Print__1CDC41A7" Association="Self.FK__PrintQueu__Print__1CDC41A7">
+          <AssociationSet Name="FK_PrintQueueVPS_PrintQueueLifeCycle" Association="Self.FK_PrintQueueVPS_PrintQueueLifeCycle">
             <End Role="PrintQueue_VPS" EntitySet="PrintQueue_VPS" />
             <End Role="PrintQueue_LifeCycle" EntitySet="PrintQueue_LifeCycle" />
           </AssociationSet>
           <AssociationSet Name="FK_ReceiptHeader_ReceiptDetail" Association="Self.FK_ReceiptHeader_ReceiptDetail">
-            <End Role="ReceiptHeader" EntitySet="ReceiptHeaders" />
-            <End Role="ReceiptDetail" EntitySet="ReceiptDetails" />
+            <End Role="ReceiptHeader" EntitySet="ReceiptHeader" />
+            <End Role="ReceiptDetail" EntitySet="ReceiptDetail" />
           </AssociationSet>
           <AssociationSet Name="FK_T_PaymentType_ReceiptHeader" Association="Self.FK_T_PaymentType_ReceiptHeader">
             <End Role="T_PaymentType" EntitySet="T_PaymentType" />
-            <End Role="ReceiptHeader" EntitySet="ReceiptHeaders" />
+            <End Role="ReceiptHeader" EntitySet="ReceiptHeader" />
           </AssociationSet>
           <AssociationSet Name="FK_T_BillingCode_Dept_T_BillingCode_Item" Association="Self.FK_T_BillingCode_Dept_T_BillingCode_Item">
             <End Role="T_BillingCode_Dept" EntitySet="T_BillingCode_Dept" />
@@ -2654,16 +2800,16 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             <End Role="T_SoftwareVersion" EntitySet="T_SoftwareVersion" />
           </AssociationSet>
           <AssociationSet Name="FK_User_UserAuth" Association="Self.FK_User_UserAuth">
-            <End Role="User" EntitySet="Users" />
-            <End Role="UserAuth" EntitySet="UserAuths" />
+            <End Role="User" EntitySet="User" />
+            <End Role="UserAuth" EntitySet="UserAuth" />
           </AssociationSet>
           <AssociationSet Name="FK_User_UserNotification" Association="Self.FK_User_UserNotification">
-            <End Role="User" EntitySet="Users" />
-            <End Role="UserNotification" EntitySet="UserNotifications" />
+            <End Role="User" EntitySet="User" />
+            <End Role="UserNotification" EntitySet="UserNotification" />
           </AssociationSet>
           <AssociationSet Name="FK_User_UserPreference" Association="Self.FK_User_UserPreference">
-            <End Role="User" EntitySet="Users" />
-            <End Role="UserPreference" EntitySet="UserPreferences" />
+            <End Role="User" EntitySet="User" />
+            <End Role="UserPreference" EntitySet="UserPreference" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -2671,13 +2817,13 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="xFilm5BotModelsStoreContainer" CdmEntityContainer="SysDb">
+        <EntityContainerMapping StorageEntityContainer="xFilm5ModelStoreContainer" CdmEntityContainer="xFilm5Entities">
           <EntitySetMapping Name="Acct_INDetails">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.Acct_INDetails">
+            <EntityTypeMapping TypeName="xFilm5Model.Acct_INDetails">
               <MappingFragment StoreEntitySet="Acct_INDetails">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="INMasterID" ColumnName="INMasterID" />
-                <ScalarProperty Name="OrderPkPrintQId" ColumnName="OrderPkPrintQId" />
+                <ScalarProperty Name="OrderPkPrintQueueVpsId" ColumnName="OrderPkPrintQueueVpsId" />
                 <ScalarProperty Name="BillingCode" ColumnName="BillingCode" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Qty" ColumnName="Qty" />
@@ -2688,7 +2834,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Acct_INMaster">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.Acct_INMaster">
+            <EntityTypeMapping TypeName="xFilm5Model.Acct_INMaster">
               <MappingFragment StoreEntitySet="Acct_INMaster">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="InvoiceNumber" ColumnName="InvoiceNumber" />
@@ -2710,8 +2856,8 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Clients">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.Client">
+          <EntitySetMapping Name="Client">
+            <EntityTypeMapping TypeName="xFilm5Model.Client">
               <MappingFragment StoreEntitySet="Client">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -2726,7 +2872,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Client_AddressBook">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.Client_AddressBook">
+            <EntityTypeMapping TypeName="xFilm5Model.Client_AddressBook">
               <MappingFragment StoreEntitySet="Client_AddressBook">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
@@ -2745,7 +2891,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Client_User">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.Client_User">
+            <EntityTypeMapping TypeName="xFilm5Model.Client_User">
               <MappingFragment StoreEntitySet="Client_User">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
@@ -2760,8 +2906,8 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ClientPricings">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.ClientPricing">
+          <EntitySetMapping Name="ClientPricing">
+            <EntityTypeMapping TypeName="xFilm5Model.ClientPricing">
               <MappingFragment StoreEntitySet="ClientPricing">
                 <ScalarProperty Name="PricingId" ColumnName="PricingId" />
                 <ScalarProperty Name="ClientId" ColumnName="ClientId" />
@@ -2769,6 +2915,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
                 <ScalarProperty Name="Alias" ColumnName="Alias" />
                 <ScalarProperty Name="Tag" ColumnName="Tag" />
                 <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
@@ -2781,7 +2928,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Order_Details">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.Order_Details">
+            <EntityTypeMapping TypeName="xFilm5Model.Order_Details">
               <MappingFragment StoreEntitySet="Order_Details">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
@@ -2836,7 +2983,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Order_Internal">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.Order_Internal">
+            <EntityTypeMapping TypeName="xFilm5Model.Order_Internal">
               <MappingFragment StoreEntitySet="Order_Internal">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
@@ -2870,7 +3017,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Order_Journal">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.Order_Journal">
+            <EntityTypeMapping TypeName="xFilm5Model.Order_Journal">
               <MappingFragment StoreEntitySet="Order_Journal">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
@@ -2880,8 +3027,8 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="OrderComments">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.OrderComment">
+          <EntitySetMapping Name="OrderComment">
+            <EntityTypeMapping TypeName="xFilm5Model.OrderComment">
               <MappingFragment StoreEntitySet="OrderComment">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Comment" ColumnName="Comment" />
@@ -2889,8 +3036,8 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="OrderHeaders">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.OrderHeader">
+          <EntitySetMapping Name="OrderHeader">
+            <EntityTypeMapping TypeName="xFilm5Model.OrderHeader">
               <MappingFragment StoreEntitySet="OrderHeader">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
@@ -2912,19 +3059,30 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="OrderPkPrintQs">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.OrderPkPrintQ">
-              <MappingFragment StoreEntitySet="OrderPkPrintQ">
-                <ScalarProperty Name="OrderPkPrintQId" ColumnName="OrderPkPrintQId" />
+          <EntitySetMapping Name="OrderPkPrintQueueVps">
+            <EntityTypeMapping TypeName="xFilm5Model.OrderPkPrintQueueVps">
+              <MappingFragment StoreEntitySet="OrderPkPrintQueueVps">
+                <ScalarProperty Name="OrderPkPrintQueueVpsId" ColumnName="OrderPkPrintQueueVpsId" />
                 <ScalarProperty Name="OrderHeaderId" ColumnName="OrderHeaderId" />
-                <ScalarProperty Name="PrintQueueId" ColumnName="PrintQueueId" />
-                <ScalarProperty Name="PrintQSubitemType" ColumnName="PrintQSubitemType" />
-                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="PrintQueueVpsId" ColumnName="PrintQueueVpsId" />
+                <ScalarProperty Name="CheckedPlate" ColumnName="CheckedPlate" />
+                <ScalarProperty Name="CheckedCip3" ColumnName="CheckedCip3" />
+                <ScalarProperty Name="CheckedBlueprint" ColumnName="CheckedBlueprint" />
+                <ScalarProperty Name="IsReady" ColumnName="IsReady" />
+                <ScalarProperty Name="IsReceived" ColumnName="IsReceived" />
+                <ScalarProperty Name="IsBilled" ColumnName="IsBilled" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="Retired" ColumnName="Retired" />
+                <ScalarProperty Name="RetiredOn" ColumnName="RetiredOn" />
+                <ScalarProperty Name="RetiredBy" ColumnName="RetiredBy" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PosTxes">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.PosTx">
+          <EntitySetMapping Name="PosTx">
+            <EntityTypeMapping TypeName="xFilm5Model.PosTx">
               <MappingFragment StoreEntitySet="PosTx">
                 <ScalarProperty Name="TxID" ColumnName="TxID" />
                 <ScalarProperty Name="TxDate" ColumnName="TxDate" />
@@ -2939,8 +3097,8 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PrintQueues">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.PrintQueue">
+          <EntitySetMapping Name="PrintQueue">
+            <EntityTypeMapping TypeName="xFilm5Model.PrintQueue">
               <MappingFragment StoreEntitySet="PrintQueue">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
@@ -2961,7 +3119,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PrintQueue_LifeCycle">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.PrintQueue_LifeCycle">
+            <EntityTypeMapping TypeName="xFilm5Model.PrintQueue_LifeCycle">
               <MappingFragment StoreEntitySet="PrintQueue_LifeCycle">
                 <ScalarProperty Name="LifeCycleId" ColumnName="LifeCycleId" />
                 <ScalarProperty Name="PrintQueueId" ColumnName="PrintQueueId" />
@@ -2974,7 +3132,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PrintQueue_VPS">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.PrintQueue_VPS">
+            <EntityTypeMapping TypeName="xFilm5Model.PrintQueue_VPS">
               <MappingFragment StoreEntitySet="PrintQueue_VPS">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="PrintQueueID" ColumnName="PrintQueueID" />
@@ -2990,12 +3148,12 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ReceiptDetails">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.ReceiptDetail">
+          <EntitySetMapping Name="ReceiptDetail">
+            <EntityTypeMapping TypeName="xFilm5Model.ReceiptDetail">
               <MappingFragment StoreEntitySet="ReceiptDetail">
                 <ScalarProperty Name="ReceiptDetailId" ColumnName="ReceiptDetailId" />
                 <ScalarProperty Name="ReceiptHeaderId" ColumnName="ReceiptHeaderId" />
-                <ScalarProperty Name="OrderPkPrintQId" ColumnName="OrderPkPrintQId" />
+                <ScalarProperty Name="OrderPkPrintQueueVpsId" ColumnName="OrderPkPrintQueueVpsId" />
                 <ScalarProperty Name="BillingCode" ColumnName="BillingCode" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Qty" ColumnName="Qty" />
@@ -3005,8 +3163,8 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ReceiptHeaders">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.ReceiptHeader">
+          <EntitySetMapping Name="ReceiptHeader">
+            <EntityTypeMapping TypeName="xFilm5Model.ReceiptHeader">
               <MappingFragment StoreEntitySet="ReceiptHeader">
                 <ScalarProperty Name="ReceiptHeaderId" ColumnName="ReceiptHeaderId" />
                 <ScalarProperty Name="ReceiptNumber" ColumnName="ReceiptNumber" />
@@ -3029,8 +3187,8 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Staffs">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.Staff">
+          <EntitySetMapping Name="Staff">
+            <EntityTypeMapping TypeName="xFilm5Model.Staff">
               <MappingFragment StoreEntitySet="Staff">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
@@ -3039,7 +3197,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_BillingCode_Dept">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.T_BillingCode_Dept">
+            <EntityTypeMapping TypeName="xFilm5Model.T_BillingCode_Dept">
               <MappingFragment StoreEntitySet="T_BillingCode_Dept">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
@@ -3048,7 +3206,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_BillingCode_Item">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.T_BillingCode_Item">
+            <EntityTypeMapping TypeName="xFilm5Model.T_BillingCode_Item">
               <MappingFragment StoreEntitySet="T_BillingCode_Item">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="DeptID" ColumnName="DeptID" />
@@ -3062,7 +3220,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_DeliveryMethod">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.T_DeliveryMethod">
+            <EntityTypeMapping TypeName="xFilm5Model.T_DeliveryMethod">
               <MappingFragment StoreEntitySet="T_DeliveryMethod">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3070,7 +3228,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_FriendlyService">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.T_FriendlyService">
+            <EntityTypeMapping TypeName="xFilm5Model.T_FriendlyService">
               <MappingFragment StoreEntitySet="T_FriendlyService">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3078,7 +3236,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_JobTitle">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.T_JobTitle">
+            <EntityTypeMapping TypeName="xFilm5Model.T_JobTitle">
               <MappingFragment StoreEntitySet="T_JobTitle">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3086,7 +3244,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_LSR">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.T_LSR">
+            <EntityTypeMapping TypeName="xFilm5Model.T_LSR">
               <MappingFragment StoreEntitySet="T_LSR">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3094,7 +3252,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_Media">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.T_Media">
+            <EntityTypeMapping TypeName="xFilm5Model.T_Media">
               <MappingFragment StoreEntitySet="T_Media">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3102,7 +3260,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_PaperSize">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.T_PaperSize">
+            <EntityTypeMapping TypeName="xFilm5Model.T_PaperSize">
               <MappingFragment StoreEntitySet="T_PaperSize">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3110,7 +3268,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_PaymentType">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.T_PaymentType">
+            <EntityTypeMapping TypeName="xFilm5Model.T_PaymentType">
               <MappingFragment StoreEntitySet="T_PaymentType">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3118,7 +3276,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_Platform">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.T_Platform">
+            <EntityTypeMapping TypeName="xFilm5Model.T_Platform">
               <MappingFragment StoreEntitySet="T_Platform">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3126,7 +3284,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_Priority">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.T_Priority">
+            <EntityTypeMapping TypeName="xFilm5Model.T_Priority">
               <MappingFragment StoreEntitySet="T_Priority">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3134,7 +3292,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_ProofingMaterial">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.T_ProofingMaterial">
+            <EntityTypeMapping TypeName="xFilm5Model.T_ProofingMaterial">
               <MappingFragment StoreEntitySet="T_ProofingMaterial">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3142,7 +3300,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_Service">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.T_Service">
+            <EntityTypeMapping TypeName="xFilm5Model.T_Service">
               <MappingFragment StoreEntitySet="T_Service">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3150,7 +3308,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_Software">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.T_Software">
+            <EntityTypeMapping TypeName="xFilm5Model.T_Software">
               <MappingFragment StoreEntitySet="T_Software">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3158,7 +3316,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_SoftwareVersion">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.T_SoftwareVersion">
+            <EntityTypeMapping TypeName="xFilm5Model.T_SoftwareVersion">
               <MappingFragment StoreEntitySet="T_SoftwareVersion">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="SoftwareID" ColumnName="SoftwareID" />
@@ -3167,7 +3325,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_Status">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.T_Status">
+            <EntityTypeMapping TypeName="xFilm5Model.T_Status">
               <MappingFragment StoreEntitySet="T_Status">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3176,7 +3334,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="T_Workflow">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.T_Workflow">
+            <EntityTypeMapping TypeName="xFilm5Model.T_Workflow">
               <MappingFragment StoreEntitySet="T_Workflow">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="JobTitle" ColumnName="JobTitle" />
@@ -3184,8 +3342,8 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.User">
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="xFilm5Model.User">
               <MappingFragment StoreEntitySet="User">
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="UserType" ColumnName="UserType" />
@@ -3204,8 +3362,8 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="UserAuths">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.UserAuth">
+          <EntitySetMapping Name="UserAuth">
+            <EntityTypeMapping TypeName="xFilm5Model.UserAuth">
               <MappingFragment StoreEntitySet="UserAuth">
                 <ScalarProperty Name="AuthId" ColumnName="AuthId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
@@ -3216,8 +3374,8 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="UserNotifications">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.UserNotification">
+          <EntitySetMapping Name="UserNotification">
+            <EntityTypeMapping TypeName="xFilm5Model.UserNotification">
               <MappingFragment StoreEntitySet="UserNotification">
                 <ScalarProperty Name="NotifyId" ColumnName="NotifyId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
@@ -3228,8 +3386,8 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="UserPreferences">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.UserPreference">
+          <EntitySetMapping Name="UserPreference">
+            <EntityTypeMapping TypeName="xFilm5Model.UserPreference">
               <MappingFragment StoreEntitySet="UserPreference">
                 <ScalarProperty Name="PreferenceId" ColumnName="PreferenceId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
@@ -3240,7 +3398,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="X_Counter">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.X_Counter">
+            <EntityTypeMapping TypeName="xFilm5Model.X_Counter">
               <MappingFragment StoreEntitySet="X_Counter">
                 <ScalarProperty Name="CounterID" ColumnName="CounterID" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
@@ -3252,7 +3410,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Z_WebColor">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.Z_WebColor">
+            <EntityTypeMapping TypeName="xFilm5Model.Z_WebColor">
               <MappingFragment StoreEntitySet="Z_WebColor">
                 <ScalarProperty Name="ColorID" ColumnName="ColorID" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
@@ -3261,7 +3419,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Log4Net">
-            <EntityTypeMapping TypeName="xFilm5.Bot.Models.Log4Net">
+            <EntityTypeMapping TypeName="xFilm5Model.Log4Net">
               <MappingFragment StoreEntitySet="Log4Net">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
@@ -3270,6 +3428,45 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
                 <ScalarProperty Name="Logger" ColumnName="Logger" />
                 <ScalarProperty Name="Message" ColumnName="Message" />
                 <ScalarProperty Name="Exception" ColumnName="Exception" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vwReceiptDetailsList">
+            <EntityTypeMapping TypeName="xFilm5Model.vwReceiptDetailsList">
+              <MappingFragment StoreEntitySet="vwReceiptDetailsList">
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="ClientAddress" ColumnName="ClientAddress" />
+                <ScalarProperty Name="ClientTel" ColumnName="ClientTel" />
+                <ScalarProperty Name="ClientFax" ColumnName="ClientFax" />
+                <ScalarProperty Name="ReceiptHeaderId" ColumnName="ReceiptHeaderId" />
+                <ScalarProperty Name="ReceiptNumber" ColumnName="ReceiptNumber" />
+                <ScalarProperty Name="ReceiptDate" ColumnName="ReceiptDate" />
+                <ScalarProperty Name="ReceiptAmount" ColumnName="ReceiptAmount" />
+                <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
+                <ScalarProperty Name="INMasterId" ColumnName="INMasterId" />
+                <ScalarProperty Name="ClientUserId" ColumnName="ClientUserId" />
+                <ScalarProperty Name="ClientUserName" ColumnName="ClientUserName" />
+                <ScalarProperty Name="Paid" ColumnName="Paid" />
+                <ScalarProperty Name="PaidOn" ColumnName="PaidOn" />
+                <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
+                <ScalarProperty Name="PaidRef" ColumnName="PaidRef" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ReceiptDetailId" ColumnName="ReceiptDetailId" />
+                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+                <ScalarProperty Name="ItemDescription" ColumnName="ItemDescription" />
+                <ScalarProperty Name="ItemQty" ColumnName="ItemQty" />
+                <ScalarProperty Name="ItemUoM" ColumnName="ItemUoM" />
+                <ScalarProperty Name="ItemUnitAmt" ColumnName="ItemUnitAmt" />
+                <ScalarProperty Name="ItemDiscount" ColumnName="ItemDiscount" />
+                <ScalarProperty Name="ItemAmount" ColumnName="ItemAmount" />
+                <ScalarProperty Name="OrderPkPrintQueueVpsId" ColumnName="OrderPkPrintQueueVpsId" />
+                <ScalarProperty Name="OrderHeaderId" ColumnName="OrderHeaderId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3287,7 +3484,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.Log4Net' does not have a primary
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />

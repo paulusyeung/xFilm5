@@ -17,8 +17,8 @@ namespace xFilm5.Bot.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Client_User()
         {
-            this.OrderHeaders = new HashSet<OrderHeader>();
-            this.ReceiptHeaders = new HashSet<ReceiptHeader>();
+            this.OrderHeader = new HashSet<OrderHeader>();
+            this.ReceiptHeader = new HashSet<ReceiptHeader>();
         }
     
         public int ID { get; set; }
@@ -34,8 +34,8 @@ namespace xFilm5.Bot.Models
     
         public virtual Client Client { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrderHeader> OrderHeaders { get; set; }
+        public virtual ICollection<OrderHeader> OrderHeader { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ReceiptHeader> ReceiptHeaders { get; set; }
+        public virtual ICollection<ReceiptHeader> ReceiptHeader { get; set; }
     }
 }

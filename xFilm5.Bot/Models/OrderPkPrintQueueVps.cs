@@ -12,26 +12,37 @@ namespace xFilm5.Bot.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class OrderPkPrintQ
+    public partial class OrderPkPrintQueueVps
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public OrderPkPrintQ()
+        public OrderPkPrintQueueVps()
         {
             this.Acct_INDetails = new HashSet<Acct_INDetails>();
-            this.ReceiptDetails = new HashSet<ReceiptDetail>();
+            this.ReceiptDetail = new HashSet<ReceiptDetail>();
         }
     
-        public int OrderPkPrintQId { get; set; }
-        public int OrderHeaderId { get; set; }
-        public int PrintQueueId { get; set; }
-        public int PrintQSubitemType { get; set; }
-        public decimal Qty { get; set; }
+        public int OrderPkPrintQueueVpsId { get; set; }
+        public Nullable<int> OrderHeaderId { get; set; }
+        public Nullable<int> PrintQueueVpsId { get; set; }
+        public bool CheckedPlate { get; set; }
+        public bool CheckedCip3 { get; set; }
+        public bool CheckedBlueprint { get; set; }
+        public bool IsReady { get; set; }
+        public bool IsReceived { get; set; }
+        public bool IsBilled { get; set; }
+        public System.DateTime CreatedOn { get; set; }
+        public int CreatedBy { get; set; }
+        public System.DateTime ModifiedOn { get; set; }
+        public Nullable<int> ModifiedBy { get; set; }
+        public bool Retired { get; set; }
+        public Nullable<System.DateTime> RetiredOn { get; set; }
+        public Nullable<int> RetiredBy { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Acct_INDetails> Acct_INDetails { get; set; }
         public virtual OrderHeader OrderHeader { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ReceiptDetail> ReceiptDetails { get; set; }
-        public virtual PrintQueue PrintQueue { get; set; }
+        public virtual ICollection<ReceiptDetail> ReceiptDetail { get; set; }
+        public virtual PrintQueue_VPS PrintQueue_VPS { get; set; }
     }
 }

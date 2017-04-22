@@ -12,38 +12,40 @@ namespace xFilm5.Bot.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ReceiptHeader
+    public partial class vwReceiptDetailsList
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ReceiptHeader()
-        {
-            this.ReceiptDetail = new HashSet<ReceiptDetail>();
-        }
-    
+        public int ClientId { get; set; }
+        public string ClientName { get; set; }
+        public string ClientAddress { get; set; }
+        public string ClientTel { get; set; }
+        public string ClientFax { get; set; }
         public int ReceiptHeaderId { get; set; }
         public string ReceiptNumber { get; set; }
         public Nullable<System.DateTime> ReceiptDate { get; set; }
         public Nullable<decimal> ReceiptAmount { get; set; }
-        public int ClientId { get; set; }
-        public Nullable<int> PaymentType { get; set; }
+        public string PaymentType { get; set; }
         public Nullable<int> INMasterId { get; set; }
         public Nullable<int> ClientUserId { get; set; }
-        public string Remarks { get; set; }
+        public string ClientUserName { get; set; }
         public bool Paid { get; set; }
         public Nullable<System.DateTime> PaidOn { get; set; }
         public decimal PaidAmount { get; set; }
         public string PaidRef { get; set; }
+        public string Remarks { get; set; }
         public int Status { get; set; }
         public System.DateTime CreatedOn { get; set; }
-        public int CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
         public System.DateTime ModifiedOn { get; set; }
-        public int ModifiedBy { get; set; }
-    
-        public virtual Acct_INMaster Acct_INMaster { get; set; }
-        public virtual Client Client { get; set; }
-        public virtual Client_User Client_User { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ReceiptDetail> ReceiptDetail { get; set; }
-        public virtual T_PaymentType T_PaymentType { get; set; }
+        public string ModifiedBy { get; set; }
+        public int ReceiptDetailId { get; set; }
+        public string ItemCode { get; set; }
+        public string ItemDescription { get; set; }
+        public Nullable<short> ItemQty { get; set; }
+        public string ItemUoM { get; set; }
+        public Nullable<decimal> ItemUnitAmt { get; set; }
+        public Nullable<decimal> ItemDiscount { get; set; }
+        public Nullable<decimal> ItemAmount { get; set; }
+        public int OrderPkPrintQueueVpsId { get; set; }
+        public Nullable<int> OrderHeaderId { get; set; }
     }
 }

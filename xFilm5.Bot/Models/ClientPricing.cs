@@ -20,6 +20,7 @@ namespace xFilm5.Bot.Models
         public string Alias { get; set; }
         public string Tag { get; set; }
         public decimal UnitPrice { get; set; }
+        public decimal Discount { get; set; }
         public int Status { get; set; }
         public System.DateTime CreatedOn { get; set; }
         public int CreatedBy { get; set; }

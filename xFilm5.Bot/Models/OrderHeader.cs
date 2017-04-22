@@ -21,9 +21,9 @@ namespace xFilm5.Bot.Models
             this.Order_Details = new HashSet<Order_Details>();
             this.Order_Internal = new HashSet<Order_Internal>();
             this.Order_Journal = new HashSet<Order_Journal>();
-            this.OrderComments = new HashSet<OrderComment>();
-            this.OrderPkPrintQs = new HashSet<OrderPkPrintQ>();
-            this.PrintQueues = new HashSet<PrintQueue>();
+            this.OrderComment = new HashSet<OrderComment>();
+            this.OrderPkPrintQueueVps = new HashSet<OrderPkPrintQueueVps>();
+            this.PrintQueue = new HashSet<PrintQueue>();
         }
     
         public int ID { get; set; }
@@ -55,11 +55,11 @@ namespace xFilm5.Bot.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order_Journal> Order_Journal { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrderComment> OrderComments { get; set; }
+        public virtual ICollection<OrderComment> OrderComment { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrderPkPrintQ> OrderPkPrintQs { get; set; }
+        public virtual ICollection<OrderPkPrintQueueVps> OrderPkPrintQueueVps { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PrintQueue> PrintQueues { get; set; }
+        public virtual ICollection<PrintQueue> PrintQueue { get; set; }
         public virtual T_Priority T_Priority { get; set; }
         public virtual T_Service T_Service { get; set; }
         public virtual T_Status T_Status { get; set; }
