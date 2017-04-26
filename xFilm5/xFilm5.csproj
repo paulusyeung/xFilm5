@@ -65,6 +65,14 @@
       <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FileHelpers, Version=3.1.5.0, Culture=neutral, PublicKeyToken=3e0c08d59cc3d657, processorArchitecture=MSIL">
       <HintPath>..\packages\FileHelpers.3.1.5\lib\net45\FileHelpers.dll</HintPath>
       <Private>True</Private>
@@ -289,6 +297,7 @@
     <Content Include="Resources\Icons\16x16\listview_multiselect.gif" />
     <Content Include="Resources\Icons\16x16\listview_sorting.gif" />
     <Content Include="Resources\Icons\16x16\listview_uncheckbox.gif" />
+    <Content Include="Resources\Icons\16x16\mi_info_outline_16_blue.png" />
     <Content Include="Resources\Icons\16x16\Note16.png" />
     <Content Include="Resources\Icons\16x16\orgchart_16.gif" />
     <Content Include="Resources\Icons\16x16\panel_down.png" />
@@ -602,6 +611,12 @@
     <Compile Include="Admin\Staff\StaffListAts.Designer.cs">
       <DependentUpon>StaffListAts.cs</DependentUpon>
     </Compile>
+    <Compile Include="Admin\Staff\StaffExRecord.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\Staff\StaffExRecord.Designer.cs">
+      <DependentUpon>StaffExRecord.cs</DependentUpon>
+    </Compile>
     <Compile Include="Admin\Staff\StaffRecord.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -780,6 +795,8 @@
     </Compile>
     <Compile Include="Helper\BotHelper.cs" />
     <Compile Include="Helper\FileHelper.cs" />
+    <Compile Include="Helper\UserHelper.cs" />
+    <Compile Include="Helper\WorkshopHelper.cs" />
     <Compile Include="Help\About.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1038,6 +1055,10 @@
       <Project>{04aed734-0ce4-4c95-9359-aee6e959b337}</Project>
       <Name>xFilm5.DAL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\xFilm5.EF6\xFilm5.EF6.csproj">
+      <Project>{909b0971-2434-4bc2-bdf7-b04a39fe1b9e}</Project>
+      <Name>xFilm5.EF6</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Accounting\Aging.resx">
@@ -1087,6 +1108,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Admin\Staff\StaffListAts.resx">
       <DependentUpon>StaffListAts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\Staff\StaffExRecord.resx">
+      <DependentUpon>StaffExRecord.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Admin\Staff\StaffRecord.resx">
       <DependentUpon>StaffRecord.cs</DependentUpon>

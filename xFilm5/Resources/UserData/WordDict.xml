@@ -1225,13 +1225,13 @@
   </keyword>
   <keyword key="delivery_note">
     <en>Delivery Note</en>
-    <chs>送货单</chs>
-    <cht>送貨單</cht>
+    <chs>收货单</chs>
+    <cht>收貨單</cht>
   </keyword>
   <keyword key="delivery_note_number">
     <en>DN#</en>
-    <chs>送货单#</chs>
-    <cht>送貨單#</cht>
+    <chs>收货单#</chs>
+    <cht>收貨單#</cht>
   </keyword>
   <keyword key="transaction#">
     <en>Transaction #</en>
@@ -1327,5 +1327,10 @@
     <en>Invalid Email</en>
     <chs>电邮格式有问题</chs>
     <cht>電郵格式有問題</cht>
+  </keyword>
+  <keyword key="extended_info">
+    <en>Extended Info</en>
+    <chs>附加资讯</chs>
+    <cht>附加資訊</cht>
   </keyword>
 </root>

@@ -83,5 +83,62 @@ namespace xFilm5.Bot
                 return result;
             }
         }
+
+        public class Workshop
+        {
+            /// <summary>
+            /// 攞 dbo.Client_User.FullName 頭兩個 characters
+            /// KT = 觀塘; TW = 荃灣; KF = 葵芳
+            /// </summary>
+            /// <param name="workshipId"></param>
+            /// <returns></returns>
+            public static String GetWrokshopCode(int workshipId)
+            {
+                String result = "";
+
+                using (var ctx = new xFilm5Entities())
+                {
+                    var wk = ctx.Client_User.Where(x => x.ID == workshipId).SingleOrDefault();
+                    if (wk != null)
+                    {
+                        result = wk.FullName.Substring(0, 2);
+                    }
+                }
+
+                return result;
+            }
+
+            /// <summary>
+            /// config.web parameter: Workshop_Address_XX
+            /// where XX = Workshop Code
+            /// </summary>
+            /// <param name="workshopId"></param>
+            /// <returns></returns>
+            public static String GetAddress(int workshopId)
+            {
+                String result = String.Empty;
+
+                String key = String.Format("Workshop_Address_{0}", GetWrokshopCode(workshopId));
+                result = ConfigurationManager.AppSettings[key] != null ? ConfigurationManager.AppSettings[key].ToString() : "";
+
+                return result;
+            }
+
+            /// <summary>
+            /// config.web parameter: Workshop_Xprinter_XX
+            /// where XX = Workshop Code
+            /// </summary>
+            /// <param name="workshopId"></param>
+            /// <returns></returns>
+            public static String GetXprinter(int workshopId)
+            {
+                String result = String.Empty;
+
+                String key = String.Format("Workshop_Xprinter_{0}", GetWrokshopCode(workshopId));
+                result = ConfigurationManager.AppSettings[key] != null ? ConfigurationManager.AppSettings[key].ToString() : "";
+
+                return result;
+            }
+        }
     }
 }

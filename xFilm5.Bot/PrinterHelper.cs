@@ -16,6 +16,9 @@ namespace xFilm5.Bot
 {
     public class PrinterHelper
     {
+        // 2017.04.26 paulus: 如果 local config.web 有 Xprinter 名，就用 local，否則就用 caller 嘅 printerName
+        String _Xprinter = "";
+
         public void Print(int receiptId, int languageId, string printerName)
         {
             using (var ctx = new xFilm5Entities())
@@ -42,7 +45,8 @@ namespace xFilm5.Bot
                     #region HACK: 通常喺哩度就可以 send 去俾隻 printer，不過曾經試過要 login (RaspberryPi)，估計係同隻 CUPS 嘅設定有關
                     var t = Encoding.Default.GetString(bytesValue);
                     //t += Encoding.Default.GetString(bytesValue);      // 印兩張相同嘅單
-                    RawPrinterHelper.SendStringToPrinter(printerName, t);
+
+                    RawPrinterHelper.SendStringToPrinter(_Xprinter == "" ? printerName : _Xprinter, t);
                     #endregion
 
                     #region HACK: 可以睇見所有 CUPS2 嘅 print queues，不過就唔一定睇到隻 OrangePi/ RaspberryPi
@@ -171,6 +175,8 @@ namespace xFilm5.Bot
                 var clientAddr = ctx.Client_AddressBook.Where(x => x.ClientID == orderHdr.ClientID && x.PrimaryAddr == true).SingleOrDefault();
                 var deliverTo = ctx.Client_AddressBook.Where(x => x.ClientID == orderDtls.DeliveryAddr).SingleOrDefault();
 
+                _Xprinter = Utility.Workshop.GetXprinter(orderHdr.ProofingOp.Value);
+
                 //}
 
                 // DataTable dt = DataSource.DN(receiptId);
@@ -188,7 +194,7 @@ namespace xFilm5.Bot
 
                 #region Company Address
                 ///DAL.OrderHeader order = DAL.OrderHeader.Load(hdr.Field<int>("OrderHeaderId"));
-                String[] address = Utility.Owner.GetWorkshopAddress(orderHdr.ProofingOp.Value).Split(new String[] { @"\n" }, StringSplitOptions.None);
+                String[] address = Utility.Workshop.GetAddress(orderHdr.ProofingOp.Value).Split(new String[] { @"\n" }, StringSplitOptions.None);
 
                 //BytesValue = PrintExtensions.AddBytes(BytesValue, InitPrinter());
 
@@ -373,7 +379,7 @@ namespace xFilm5.Bot
                 //BytesValue = PrintExtensions.AddBytes(BytesValue, string.Format("{0,-40}{1,6}{2,9}{3,9:N2}\n", "item 1", 12, 11, 144.00));
                 foreach (vwReceiptDetailsList item in items)
                 {
-                    List<String> itemDescription = ConvertToMultipleLines(item.ItemDescription, 50);
+                    List<String> itemDescription = ConvertToMultipleLines(item.ItemCode + " " + item.ItemDescription, 50);
                     var qty = item.ItemQty;
                     var amt = item.ItemAmount;
                     BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(line = String.Format("{0} {1,-50} {2,8:N2}\n", qty.ToString().PadLeft(2), itemDescription[0], amt)));

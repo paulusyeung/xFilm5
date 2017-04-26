@@ -28,7 +28,6 @@ namespace xFilm5.Admin.Staff
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.ansToolbar = new Gizmox.WebGUI.Forms.ToolBar();
             this.wspClientRecord = new Gizmox.WebGUI.Forms.Panel();
             this.cboUserRole = new Gizmox.WebGUI.Forms.ComboBox();
@@ -41,27 +40,26 @@ namespace xFilm5.Admin.Staff
             this.lblEmail = new Gizmox.WebGUI.Forms.Label();
             this.txtStaffName = new Gizmox.WebGUI.Forms.TextBox();
             this.lblStaffName = new Gizmox.WebGUI.Forms.Label();
-            this.toolTip1 = new Gizmox.WebGUI.Forms.ToolTip(this.components);
+            this.toolTip1 = new Gizmox.WebGUI.Forms.ToolTip();
+            this.wspClientRecord.SuspendLayout();
             this.SuspendLayout();
             // 
             // ansToolbar
             // 
-            this.ansToolbar.Anchor = Gizmox.WebGUI.Forms.AnchorStyles.None;
-            this.ansToolbar.Appearance = Gizmox.WebGUI.Forms.ToolBarAppearance.Normal;
-            this.ansToolbar.Dock = Gizmox.WebGUI.Forms.DockStyle.Top;
+            this.ansToolbar.ButtonSize = new System.Drawing.Size(18, 18);
             this.ansToolbar.DragHandle = true;
-            this.ansToolbar.DropDownArrows = false;
-            this.ansToolbar.ImageList = null;
+            this.ansToolbar.DropDownArrows = true;
+            this.ansToolbar.ImageSize = new System.Drawing.Size(16, 16);
             this.ansToolbar.Location = new System.Drawing.Point(0, 0);
             this.ansToolbar.MenuHandle = true;
             this.ansToolbar.Name = "ansToolbar";
             this.ansToolbar.RightToLeft = Gizmox.WebGUI.Forms.RightToLeft.No;
             this.ansToolbar.ShowToolTips = true;
+            this.ansToolbar.Size = new System.Drawing.Size(405, 24);
             this.ansToolbar.TabIndex = 0;
             // 
             // wspClientRecord
             // 
-            this.wspClientRecord.Anchor = Gizmox.WebGUI.Forms.AnchorStyles.None;
             this.wspClientRecord.Controls.Add(this.cboUserRole);
             this.wspClientRecord.Controls.Add(this.cboBranch);
             this.wspClientRecord.Controls.Add(this.lblBranch);
@@ -74,15 +72,16 @@ namespace xFilm5.Admin.Staff
             this.wspClientRecord.Controls.Add(this.lblStaffName);
             this.wspClientRecord.Dock = Gizmox.WebGUI.Forms.DockStyle.Fill;
             this.wspClientRecord.DockPadding.All = 6;
-            this.wspClientRecord.Location = new System.Drawing.Point(0, 28);
+            this.wspClientRecord.Location = new System.Drawing.Point(0, 24);
             this.wspClientRecord.Name = "wspClientRecord";
-            this.wspClientRecord.Size = new System.Drawing.Size(405, 215);
+            this.wspClientRecord.Padding = new Gizmox.WebGUI.Forms.Padding(6);
+            this.wspClientRecord.Size = new System.Drawing.Size(405, 219);
             this.wspClientRecord.TabIndex = 1;
             // 
             // cboUserRole
             // 
             this.cboUserRole.BorderStyle = Gizmox.WebGUI.Forms.BorderStyle.Fixed3D;
-            this.cboUserRole.Location = new System.Drawing.Point(98, 79);
+            this.cboUserRole.Location = new System.Drawing.Point(98, 81);
             this.cboUserRole.Name = "cboUserRole";
             this.cboUserRole.Size = new System.Drawing.Size(100, 21);
             this.cboUserRole.TabIndex = 7;
@@ -90,14 +89,14 @@ namespace xFilm5.Admin.Staff
             // cboBranch
             // 
             this.cboBranch.BorderStyle = Gizmox.WebGUI.Forms.BorderStyle.Fixed3D;
-            this.cboBranch.Location = new System.Drawing.Point(98, 105);
+            this.cboBranch.Location = new System.Drawing.Point(98, 107);
             this.cboBranch.Name = "cboBranch";
             this.cboBranch.Size = new System.Drawing.Size(100, 21);
             this.cboBranch.TabIndex = 9;
             // 
             // lblBranch
             // 
-            this.lblBranch.Location = new System.Drawing.Point(6, 108);
+            this.lblBranch.Location = new System.Drawing.Point(6, 110);
             this.lblBranch.Name = "lblBranch";
             this.lblBranch.Size = new System.Drawing.Size(90, 21);
             this.lblBranch.TabIndex = 8;
@@ -105,7 +104,7 @@ namespace xFilm5.Admin.Staff
             // 
             // lblSecurityLevel
             // 
-            this.lblSecurityLevel.Location = new System.Drawing.Point(6, 82);
+            this.lblSecurityLevel.Location = new System.Drawing.Point(6, 84);
             this.lblSecurityLevel.Name = "lblSecurityLevel";
             this.lblSecurityLevel.Size = new System.Drawing.Size(90, 21);
             this.lblSecurityLevel.TabIndex = 6;
@@ -165,6 +164,7 @@ namespace xFilm5.Admin.Staff
             this.Size = new System.Drawing.Size(405, 243);
             this.StartPosition = Gizmox.WebGUI.Forms.FormStartPosition.CenterScreen;
             this.Text = "Staff Record";
+            this.wspClientRecord.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
