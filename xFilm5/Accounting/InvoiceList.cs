@@ -329,7 +329,7 @@ namespace xFilm5.Accounting
 
                 ListViewItem objItem = this.lvwInvoiceList.Items.Add(reader.GetInt32(3).ToString());  // Invoice Number
                 #region Aging Icon
-                int status = reader.GetInt32(7);
+                int status = reader.GetInt16(7);
                 bool paid = reader.GetBoolean(15);
                 if (status == (int)DAL.Common.Enums.Status.Inactive)
                 {   // invoice 已經 cancelled
