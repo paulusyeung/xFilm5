@@ -1228,6 +1228,11 @@
     <chs>收货单</chs>
     <cht>收貨單</cht>
   </keyword>
+  <keyword key="cash_note">
+    <en>Cash Receipt</en>
+    <chs>现金单</chs>
+    <cht>現金單</cht>
+  </keyword>
   <keyword key="delivery_note_number">
     <en>DN#</en>
     <chs>收货单#</chs>
@@ -1275,8 +1280,8 @@
   </keyword>
   <keyword key="delivery_note_list">
     <en>Delivery Note List</en>
-    <chs>送货单记录</chs>
-    <cht>送貨單記錄</cht>
+    <chs>收货单记录</chs>
+    <cht>收貨單記錄</cht>
   </keyword>
   <keyword key="a5">
     <en>A5</en>

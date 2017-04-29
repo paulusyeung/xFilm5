@@ -11,6 +11,7 @@
 			<item Caption="Outstanding" ImageUrl="16x16.reports16.png" Tag="cu_Outstanding" />
 			<item Caption="Invoice List" ImageUrl="16x16.reports16.png" Tag="cu_InvoiceList" />
 			<item Caption="Order List" ImageUrl="16x16.reports16.png" Tag="cu_OrderList" />
-		</item>
+      <item Caption="Delivery Note List" ImageUrl="16x16.reports16.png" Tag="cu_DNList" />
+    </item>
 	</admin>
 </root>

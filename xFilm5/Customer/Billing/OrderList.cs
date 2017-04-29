@@ -314,20 +314,32 @@ namespace xFilm5.Customer.Billing
                 switch (reader.GetInt32(9))                 // OrderTypeID Icons
                 {
                     case (int)Common.Enums.OrderType.UploadFile:
-                        objItem.SmallImage = new IconResourceHandle("Icons.JobOrder.UploadFile_16.png");
-                        objItem.LargeImage = new IconResourceHandle("Icons.JobOrder.UploadFile_32.png");
+                        objItem.SmallImage = new IconResourceHandle("JobOrder.UploadFile_16.png");
+                        objItem.LargeImage = new IconResourceHandle("JobOrder.UploadFile_32.png");
                         break;
                     case (int)Common.Enums.OrderType.DirectPrint:
-                        objItem.SmallImage = new IconResourceHandle("Icons.JobOrder.DirectPrint_16.png");
-                        objItem.LargeImage = new IconResourceHandle("Icons.JobOrder.DirectPrint_32.png");
+                        objItem.SmallImage = new IconResourceHandle("JobOrder.DirectPrint_16.png");
+                        objItem.LargeImage = new IconResourceHandle("JobOrder.DirectPrint_32.png");
                         break;
                     case (int)Common.Enums.OrderType.PsFile:
-                        objItem.SmallImage = new IconResourceHandle("Icons.JobOrder.PsFile_16.png");
-                        objItem.LargeImage = new IconResourceHandle("Icons.JobOrder.PsFile_32.png");
+                        objItem.SmallImage = new IconResourceHandle("JobOrder.PsFile_16.png");
+                        objItem.LargeImage = new IconResourceHandle("JobOrder.PsFile_32.png");
+                        break;
+                    case (int)Common.Enums.OrderType.Plate:
+                        objItem.SmallImage = new IconResourceHandle("JobOrder.Others_16.png");
+                        objItem.LargeImage = new IconResourceHandle("JobOrder.Others_32.png");
+                        break;
+                    case (int)Common.Enums.OrderType.Plate5:
+                        objItem.SmallImage = new IconResourceHandle("JobOrder.folder_p.png");
+                        objItem.LargeImage = new IconResourceHandle("JobOrder.folder_p.png");
+                        break;
+                    case (int)Common.Enums.OrderType.Film5:
+                        objItem.SmallImage = new IconResourceHandle("JobOrder.folder_f.png");
+                        objItem.LargeImage = new IconResourceHandle("JobOrder.folder_f.png");
                         break;
                     case (int)Common.Enums.OrderType.Others:
-                        objItem.SmallImage = new IconResourceHandle("Icons.JobOrder.Others_16.png");
-                        objItem.LargeImage = new IconResourceHandle("Icons.JobOrder.Others_32.png");
+                        objItem.SmallImage = new IconResourceHandle("JobOrder.Others_16.png");
+                        objItem.LargeImage = new IconResourceHandle("JobOrder.Others_32.png");
                         break;
                 }
                 #endregion
@@ -653,6 +665,18 @@ ORDER BY [OrderID] DESC
                         oPlate.EditMode = Common.Enums.EditMode.Read;
                         oPlate.OrderId = orderId;
                         oPlate.ShowDialog();
+                        break;
+                    case (int)Common.Enums.OrderType.Plate5:
+                        xFilm5.JobOrder.Forms.Plate5 oPlate5 = new xFilm5.JobOrder.Forms.Plate5();
+                        oPlate5.EditMode = Common.Enums.EditMode.Edit;
+                        oPlate5.OrderId = orderId;
+                        oPlate5.ShowDialog();
+                        break;
+                    case (int)Common.Enums.OrderType.Film5:
+                        xFilm5.JobOrder.Forms.Film5 oFilm5 = new xFilm5.JobOrder.Forms.Film5();
+                        oFilm5.EditMode = Common.Enums.EditMode.Edit;
+                        oFilm5.OrderId = orderId;
+                        oFilm5.ShowDialog();
                         break;
                 }
             }

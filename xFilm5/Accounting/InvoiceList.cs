@@ -128,6 +128,9 @@ namespace xFilm5.Accounting
         private void SetAttribute()
         {
             this.lvwInvoiceList.ListViewItemSorter = new ListViewItemSorter(this.lvwInvoiceList);
+            lvwInvoiceList.ItemsPerPage = 25;
+            lvwInvoiceList.UseInternalPaging = true;
+            lvwInvoiceList.GridLines = true;
 
             toolTip1.SetToolTip(lvwInvoiceList, "Double click to open record");
         }
@@ -326,27 +329,28 @@ namespace xFilm5.Accounting
 
                 ListViewItem objItem = this.lvwInvoiceList.Items.Add(reader.GetInt32(3).ToString());  // Invoice Number
                 #region Aging Icon
+                bool paid = reader.GetBoolean(15);
                 switch (reader.GetInt32(1))                 // OrderTypeID Icons
                 {
                     case 0:
-                        objItem.SmallImage = new IconResourceHandle("16x16.invoice16_0.png");
-                        objItem.LargeImage = new IconResourceHandle("Icons.32x32.invoice32_0.png");
-                        curMonth += osAmount;
+                        objItem.SmallImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("16x16.invoice16_0.png");
+                        objItem.LargeImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("Icons.32x32.invoice32_0.png");
+                        curMonth += paid ? 0 : osAmount;
                         break;
                     case 1:
-                        objItem.SmallImage = new IconResourceHandle("16x16.invoice16_1.png");
-                        objItem.LargeImage = new IconResourceHandle("Icons.32x32.invoice32_1.png");
-                        lastMonth += osAmount;
+                        objItem.SmallImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("16x16.invoice16_1.png");
+                        objItem.LargeImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("Icons.32x32.invoice32_1.png");
+                        lastMonth += paid ? 0 : osAmount;
                         break;
                     case 2:
-                        objItem.SmallImage = new IconResourceHandle("16x16.invoice16_2.png");
-                        objItem.LargeImage = new IconResourceHandle("Icons.32x32.invoice32_2.png");
-                        os2Months += osAmount;
+                        objItem.SmallImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("16x16.invoice16_2.png");
+                        objItem.LargeImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("Icons.32x32.invoice32_2.png");
+                        os2Months += paid ? 0 : osAmount;
                         break;
                     case 3:
-                        objItem.SmallImage = new IconResourceHandle("16x16.invoice16_3.png");
-                        objItem.LargeImage = new IconResourceHandle("Icons.32x32.invoice32_3.png");
-                        os3Months += osAmount;
+                        objItem.SmallImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("16x16.invoice16_3.png");
+                        objItem.LargeImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("Icons.32x32.invoice32_3.png");
+                        os3Months += paid ? 0 : osAmount;
                         break;
                 }
                 #endregion
@@ -354,7 +358,7 @@ namespace xFilm5.Accounting
 //                objItem.SubItems.Add(reader.GetInt32(1).ToString());  // Aging
                 objItem.SubItems.Add(reader.GetString(4));                          // Invoice Date
                 objItem.SubItems.Add(reader.GetDecimal(5).ToString("#,##0.00"));    // OS Amount
-                objItem.SubItems.Add(reader.GetInt32(9).ToString());                // Order ID
+                objItem.SubItems.Add(reader.GetInt32(9).ToString("###"));                // Order ID
                 objItem.SubItems.Add(reader.GetString(8));                          // Remarks
                 objItem.SubItems.Add(reader.GetInt32(2).ToString());                // Invoice ID
                 objItem.SubItems.Add(reader.GetString(14));                         // ClientName
@@ -396,13 +400,14 @@ SELECT [ClientID]
       ,[InvoiceAmount]
       ,[Status]
       ,[Remarks]
-      ,[OrderID]
+      ,ISNULL([OrderID], 0)
       ,[CreatedOn]
       ,[CreatedBy]
       ,[LastModifiedOn]
       ,[LastModifiedBy]
       ,[ClientName]
-FROM  [dbo].[vwInvoiceList_OS_Ext]
+      ,[Paid]
+FROM  [dbo].[vwInvoiceList_All]
 {0}
 ORDER BY [InvoiceNumber] DESC
 ", where);
@@ -502,20 +507,44 @@ ORDER BY [InvoiceNumber] DESC
             if (lvwInvoiceList.SelectedItem != null)
             {
                 _InvoiceId = Convert.ToInt32(lvwInvoiceList.SelectedItem.SubItems[6].ToString());
-                xFilm5.JobOrder.Billing invoice = new xFilm5.JobOrder.Billing();
-                invoice.InvoiceId = _InvoiceId;
-
-                // 2017.04.13 paulus: 如果 posted, admin 可以改單
-                if (xFilm5.Controls.Utility.User.UserRole() == (int)DAL.Common.Enums.UserRole.Admin)
+                if (Helper.InvoiceHelper.IsBilling5(_InvoiceId))
                 {
-                    invoice.EditMode = Common.Enums.EditMode.Edit;
+                    #region Popup Billing5
+                    var inv5 = new xFilm5.JobOrder.Billing5();
+                    inv5.InvoiceId = _InvoiceId;
+
+                    // 2017.04.13 paulus: 如果 posted, admin 可以改單
+                    if (xFilm5.Controls.Utility.User.UserRole() == (int)DAL.Common.Enums.UserRole.Admin)
+                    {
+                        inv5.EditMode = Common.Enums.EditMode.Edit;
+                    }
+                    else
+                    {
+                        inv5.EditMode = Common.Enums.EditMode.Read;
+                    }
+
+                    inv5.Show();
+                    #endregion
                 }
                 else
                 {
-                    invoice.EditMode = Common.Enums.EditMode.Read;
-                }
+                    #region Popup Billing
+                    var inv = new xFilm5.JobOrder.Billing();
+                    inv.InvoiceId = _InvoiceId;
 
-                invoice.Show();
+                    // 2017.04.13 paulus: 如果 posted, admin 可以改單
+                    if (xFilm5.Controls.Utility.User.UserRole() == (int)DAL.Common.Enums.UserRole.Admin)
+                    {
+                        inv.EditMode = Common.Enums.EditMode.Edit;
+                    }
+                    else
+                    {
+                        inv.EditMode = Common.Enums.EditMode.Read;
+                    }
+
+                    inv.Show();
+                    #endregion
+                }
             }
         }
 

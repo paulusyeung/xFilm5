@@ -219,7 +219,10 @@ namespace xFilm5.Bot
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Center());
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.DoubleWidth2());
 
-                BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(oDict.GetWord("delivery_note") + "\n"));
+                if (header.Paid)
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(oDict.GetWord("cash_note") + "\n"));
+                else
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(oDict.GetWord("delivery_note") + "\n"));
                 #endregion
 
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontA());
@@ -267,7 +270,10 @@ namespace xFilm5.Bot
                 {
                     case 1:
                         #region 英文
-                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(line = String.Format("{0,-24}{1,-8}\n", oDict.GetWordWithColon("transaction#"), header.ReceiptNumber)));
+                        if (header.Paid)
+                            BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(line = String.Format("{0,-24}{1,-8}/{2,-8}\n", oDict.GetWordWithColon("transaction#"), header.ReceiptNumber, header.INMasterId.ToString())));
+                        else
+                            BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(line = String.Format("{0,-24}{1,-8}\n", oDict.GetWordWithColon("transaction#"), header.ReceiptNumber)));
                         BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(line = String.Format("{0,-24}{1:yyyy-MM-dd HH:mm:ss}\n", oDict.GetWordWithColon("date_time"), header.ReceiptDate)));
 
                         BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Lf());
@@ -316,7 +322,10 @@ namespace xFilm5.Bot
                     case 2:
                     case 3:
                         #region 中文
-                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(String.Format("{0,-6}{1,-8}\n", oDict.GetWordWithColon("transaction#"), header.ReceiptNumber)));
+                        if (header.Paid)
+                            BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(String.Format("{0,-6}{1,-8}/{2,-8}\n", oDict.GetWordWithColon("transaction#"), header.ReceiptNumber, header.INMasterId.ToString())));
+                        else
+                            BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(String.Format("{0,-6}{1,-8}\n", oDict.GetWordWithColon("transaction#"), header.ReceiptNumber)));
                         BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(String.Format("{0,-6}{1:yyyy-MM-dd HH:mm:ss}\n", oDict.GetWordWithColon("date_time"), header.ReceiptDate)));
 
                         BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Lf());

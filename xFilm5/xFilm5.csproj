@@ -733,6 +733,12 @@
     <Compile Include="Customer\Billing\Aging.Designer.cs">
       <DependentUpon>Aging.cs</DependentUpon>
     </Compile>
+    <Compile Include="Customer\Billing\DNList_v5.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Customer\Billing\DNList_v5.Designer.cs">
+      <DependentUpon>DNList_v5.cs</DependentUpon>
+    </Compile>
     <Compile Include="Customer\Billing\InvoiceList.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -795,6 +801,7 @@
     </Compile>
     <Compile Include="Helper\BotHelper.cs" />
     <Compile Include="Helper\FileHelper.cs" />
+    <Compile Include="Helper\InvoiceHelper.cs" />
     <Compile Include="Helper\UserHelper.cs" />
     <Compile Include="Helper\WorkshopHelper.cs" />
     <Compile Include="Help\About.cs">
@@ -1163,6 +1170,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Customer\Billing\Aging.resx">
       <DependentUpon>Aging.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Customer\Billing\DNList_v5.resx">
+      <DependentUpon>DNList_v5.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Customer\Billing\InvoiceList.resx">
       <DependentUpon>InvoiceList.cs</DependentUpon>

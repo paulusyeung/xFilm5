@@ -52,10 +52,10 @@ namespace xFilm5.Customer
             this.atsPane = new Gizmox.WebGUI.Forms.Panel();
             this.navPane = new Gizmox.WebGUI.Forms.Panel();
             this.navTabs = new Gizmox.WebGUI.Forms.NavigationTabs();
-            this.tabJobOrder = new Gizmox.WebGUI.Forms.TabPage();
-            this.tabAccounting = new Gizmox.WebGUI.Forms.TabPage();
-            this.tabAdmin = new Gizmox.WebGUI.Forms.TabPage();
-            this.tabSettings = new Gizmox.WebGUI.Forms.TabPage();
+            this.tabJobOrder = new Gizmox.WebGUI.Forms.NavigationTab();
+            this.tabAccounting = new Gizmox.WebGUI.Forms.NavigationTab();
+            this.tabAdmin = new Gizmox.WebGUI.Forms.NavigationTab();
+            this.tabSettings = new Gizmox.WebGUI.Forms.NavigationTab();
             this.splitter1 = new Gizmox.WebGUI.Forms.Splitter();
             this.wspPane = new Gizmox.WebGUI.Forms.Panel();
             this.picBgImage = new Gizmox.WebGUI.Forms.PictureBox();

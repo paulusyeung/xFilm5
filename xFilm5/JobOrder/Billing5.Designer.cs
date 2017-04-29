@@ -185,7 +185,7 @@ namespace xFilm5.JobOrder
             // 
             this.lblPaidBy.Location = new System.Drawing.Point(398, 150);
             this.lblPaidBy.Name = "lblPaidBy";
-            this.lblPaidBy.Size = new System.Drawing.Size(94, 20);
+            this.lblPaidBy.Size = new System.Drawing.Size(90, 20);
             this.lblPaidBy.TabIndex = 12;
             this.lblPaidBy.Text = "Paid By";
             this.lblPaidBy.TextAlign = System.Drawing.ContentAlignment.BottomCenter;

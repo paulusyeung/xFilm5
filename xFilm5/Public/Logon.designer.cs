@@ -42,35 +42,29 @@ namespace xFilm5.Public
             // lblUserName
             // 
             this.lblUserName.Anchor = Gizmox.WebGUI.Forms.AnchorStyles.Top;
-            this.lblUserName.Location = new System.Drawing.Point(112, 31);
+            this.lblUserName.Location = new System.Drawing.Point(112, 188);
             this.lblUserName.Name = "lblUserName";
             this.lblUserName.Size = new System.Drawing.Size(81, 17);
             this.lblUserName.TabIndex = 0;
-            this.lblUserName.TabStop = false;
             this.lblUserName.Text = "Logon User:";
             // 
             // lblPassword
             // 
             this.lblPassword.Anchor = Gizmox.WebGUI.Forms.AnchorStyles.Top;
-            this.lblPassword.Location = new System.Drawing.Point(112, 54);
+            this.lblPassword.Location = new System.Drawing.Point(112, 211);
             this.lblPassword.Name = "lblPassword";
             this.lblPassword.Size = new System.Drawing.Size(81, 17);
             this.lblPassword.TabIndex = 2;
-            this.lblPassword.TabStop = false;
             this.lblPassword.Text = "Password:";
             // 
             // errorProvider
             // 
             this.errorProvider.BlinkRate = 3;
-            this.errorProvider.BlinkStyle = Gizmox.WebGUI.Forms.ErrorBlinkStyle.BlinkIfDifferentError;
-            this.errorProvider.DataMember = "";
-            this.errorProvider.DataSource = "";
-            this.errorProvider.Icon = null;
             // 
             // txtUserName
             // 
             this.txtUserName.Anchor = Gizmox.WebGUI.Forms.AnchorStyles.Top;
-            this.txtUserName.Location = new System.Drawing.Point(199, 28);
+            this.txtUserName.Location = new System.Drawing.Point(199, 185);
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Size = new System.Drawing.Size(200, 20);
             this.txtUserName.TabIndex = 1;
@@ -79,7 +73,7 @@ namespace xFilm5.Public
             // txtPassword
             // 
             this.txtPassword.Anchor = Gizmox.WebGUI.Forms.AnchorStyles.Top;
-            this.txtPassword.Location = new System.Drawing.Point(199, 51);
+            this.txtPassword.Location = new System.Drawing.Point(199, 208);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(200, 20);
@@ -89,7 +83,7 @@ namespace xFilm5.Public
             // btnLogon
             // 
             this.btnLogon.Anchor = Gizmox.WebGUI.Forms.AnchorStyles.Top;
-            this.btnLogon.Location = new System.Drawing.Point(199, 112);
+            this.btnLogon.Location = new System.Drawing.Point(199, 269);
             this.btnLogon.Name = "btnLogon";
             this.btnLogon.Size = new System.Drawing.Size(75, 23);
             this.btnLogon.TabIndex = 6;
@@ -101,7 +95,7 @@ namespace xFilm5.Public
             this.lblErrorMessage.Anchor = Gizmox.WebGUI.Forms.AnchorStyles.Top;
             this.lblErrorMessage.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblErrorMessage.ForeColor = System.Drawing.Color.Red;
-            this.lblErrorMessage.Location = new System.Drawing.Point(112, 171);
+            this.lblErrorMessage.Location = new System.Drawing.Point(112, 328);
             this.lblErrorMessage.Name = "lblErrorMessage";
             this.lblErrorMessage.Size = new System.Drawing.Size(287, 66);
             this.lblErrorMessage.TabIndex = 7;
@@ -110,7 +104,7 @@ namespace xFilm5.Public
             // lblVersionNumber
             // 
             this.lblVersionNumber.Anchor = Gizmox.WebGUI.Forms.AnchorStyles.Top;
-            this.lblVersionNumber.Location = new System.Drawing.Point(196, 138);
+            this.lblVersionNumber.Location = new System.Drawing.Point(196, 295);
             this.lblVersionNumber.Name = "lblVersionNumber";
             this.lblVersionNumber.Size = new System.Drawing.Size(100, 23);
             this.lblVersionNumber.TabIndex = 8;
@@ -118,8 +112,6 @@ namespace xFilm5.Public
             // 
             // Logon
             // 
-            //this.AcceptButton = this.btnLogon;
-            this.Anchor = Gizmox.WebGUI.Forms.AnchorStyles.None;
             this.Controls.Add(this.lblVersionNumber);
             this.Controls.Add(this.lblErrorMessage);
             this.Controls.Add(this.btnLogon);
@@ -127,8 +119,7 @@ namespace xFilm5.Public
             this.Controls.Add(this.txtUserName);
             this.Controls.Add(this.lblPassword);
             this.Controls.Add(this.lblUserName);
-            this.Dock = Gizmox.WebGUI.Forms.DockStyle.Fill;
-            this.Size = new System.Drawing.Size(503, 282);
+            this.Size = new System.Drawing.Size(503, 491);
             this.StartPosition = Gizmox.WebGUI.Forms.FormStartPosition.CenterScreen;
             this.Text = "Logon";
             this.Load += new System.EventHandler(this.Logon_Load);
