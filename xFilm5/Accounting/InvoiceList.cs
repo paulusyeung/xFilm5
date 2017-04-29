@@ -329,29 +329,38 @@ namespace xFilm5.Accounting
 
                 ListViewItem objItem = this.lvwInvoiceList.Items.Add(reader.GetInt32(3).ToString());  // Invoice Number
                 #region Aging Icon
+                int status = reader.GetInt32(7);
                 bool paid = reader.GetBoolean(15);
-                switch (reader.GetInt32(1))                 // OrderTypeID Icons
+                if (status == (int)DAL.Common.Enums.Status.Inactive)
+                {   // invoice 已經 cancelled
+                    objItem.SmallImage = new IconResourceHandle("16x16.document_text-remove.png");
+                    objItem.LargeImage = new IconResourceHandle("Icons.document_text-remove.png");
+                }
+                else
                 {
-                    case 0:
-                        objItem.SmallImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("16x16.invoice16_0.png");
-                        objItem.LargeImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("Icons.32x32.invoice32_0.png");
-                        curMonth += paid ? 0 : osAmount;
-                        break;
-                    case 1:
-                        objItem.SmallImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("16x16.invoice16_1.png");
-                        objItem.LargeImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("Icons.32x32.invoice32_1.png");
-                        lastMonth += paid ? 0 : osAmount;
-                        break;
-                    case 2:
-                        objItem.SmallImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("16x16.invoice16_2.png");
-                        objItem.LargeImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("Icons.32x32.invoice32_2.png");
-                        os2Months += paid ? 0 : osAmount;
-                        break;
-                    case 3:
-                        objItem.SmallImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("16x16.invoice16_3.png");
-                        objItem.LargeImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("Icons.32x32.invoice32_3.png");
-                        os3Months += paid ? 0 : osAmount;
-                        break;
+                    switch (reader.GetInt32(1))                 // Aging Icons & accumulate aging amount
+                    {
+                        case 0:
+                            objItem.SmallImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("16x16.invoice16_0.png");
+                            objItem.LargeImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("Icons.32x32.invoice32_0.png");
+                            curMonth += paid ? 0 : osAmount;
+                            break;
+                        case 1:
+                            objItem.SmallImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("16x16.invoice16_1.png");
+                            objItem.LargeImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("Icons.32x32.invoice32_1.png");
+                            lastMonth += paid ? 0 : osAmount;
+                            break;
+                        case 2:
+                            objItem.SmallImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("16x16.invoice16_2.png");
+                            objItem.LargeImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("Icons.32x32.invoice32_2.png");
+                            os2Months += paid ? 0 : osAmount;
+                            break;
+                        case 3:
+                            objItem.SmallImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("16x16.invoice16_3.png");
+                            objItem.LargeImage = paid ? new IconResourceHandle("16x16.document_text-ok.png") : new IconResourceHandle("Icons.32x32.invoice32_3.png");
+                            os3Months += paid ? 0 : osAmount;
+                            break;
+                    }
                 }
                 #endregion
                 objItem.SubItems.Add(iCount.ToString());                            // Line Number
