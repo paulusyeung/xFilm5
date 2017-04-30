@@ -382,6 +382,7 @@ namespace xFilm5.Bot
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Separator());
 
                 #region Body
+                int totalQty = 0;
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontB());
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.Nomarl());
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Left());
@@ -401,12 +402,19 @@ namespace xFilm5.Bot
                             BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(line = String.Format("   {0,-50}\n", itemDescription[i].PadLeft(3))));
                         }
                     }
+                    totalQty += (int)qty;
                 }
                 #endregion
 
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Separator());
 
-                #region Footer
+                #region Footer: left (total qty), right (total amount)
+                BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontB());
+                BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Left());
+                BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.DoubleWidth2());
+
+                BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(String.Format("{0,2:N0}", totalQty)));
+
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontB());
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Right());
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.DoubleWidth2());

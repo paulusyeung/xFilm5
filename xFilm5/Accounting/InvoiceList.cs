@@ -331,6 +331,8 @@ namespace xFilm5.Accounting
                 #region Aging Icon
                 int status = reader.GetInt16(7);
                 bool paid = reader.GetBoolean(15);
+                Decimal invAmount = reader.GetDecimal(6);
+
                 if (status == (int)DAL.Common.Enums.Status.Inactive)
                 {   // invoice 已經 cancelled
                     objItem.SmallImage = new IconResourceHandle("16x16.document_text-remove.png");
@@ -366,8 +368,11 @@ namespace xFilm5.Accounting
                 objItem.SubItems.Add(iCount.ToString());                            // Line Number
 //                objItem.SubItems.Add(reader.GetInt32(1).ToString());  // Aging
                 objItem.SubItems.Add(reader.GetString(4));                          // Invoice Date
-                objItem.SubItems.Add(reader.GetDecimal(5).ToString("#,##0.00"));    // OS Amount
-                objItem.SubItems.Add(reader.GetInt32(9).ToString("###"));                // Order ID
+                if (paid)
+                    objItem.SubItems.Add(invAmount.ToString("#,##0.00"));           // invoice Amount
+                else
+                    objItem.SubItems.Add(osAmount.ToString("#,##0.00"));            // OS Amount
+                objItem.SubItems.Add(reader.GetInt32(9).ToString("###"));           // Order ID
                 objItem.SubItems.Add(reader.GetString(8));                          // Remarks
                 objItem.SubItems.Add(reader.GetInt32(2).ToString());                // Invoice ID
                 objItem.SubItems.Add(reader.GetString(14));                         // ClientName
