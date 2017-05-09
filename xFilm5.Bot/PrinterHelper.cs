@@ -19,6 +19,9 @@ namespace xFilm5.Bot
         // 2017.04.26 paulus: 如果 local config.web 有 Xprinter 名，就用 local，否則就用 caller 嘅 printerName
         String _Xprinter = "";
 
+        // 2017.05.09 paulus: 如果係 現金單，印一式兩份
+        bool paid = false;
+
         public void Print(int receiptId, int languageId, string printerName)
         {
             using (var ctx = new xFilm5Entities())
@@ -44,7 +47,7 @@ namespace xFilm5.Bot
 
                     #region HACK: 通常喺哩度就可以 send 去俾隻 printer，不過曾經試過要 login (RaspberryPi)，估計係同隻 CUPS 嘅設定有關
                     var t = Encoding.Default.GetString(bytesValue);
-                    //t += Encoding.Default.GetString(bytesValue);      // 印兩張相同嘅單
+                    if (paid) t += Encoding.Default.GetString(bytesValue);      // 印兩張相同嘅單
 
                     RawPrinterHelper.SendStringToPrinter(_Xprinter == "" ? printerName : _Xprinter, t);
                     #endregion
@@ -220,9 +223,15 @@ namespace xFilm5.Bot
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.DoubleWidth2());
 
                 if (header.Paid)
+                {
                     BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(oDict.GetWord("cash_note") + "\n"));
+
+                    paid = true;
+                }
                 else
+                {
                     BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(oDict.GetWord("delivery_note") + "\n"));
+                }
                 #endregion
 
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontA());
