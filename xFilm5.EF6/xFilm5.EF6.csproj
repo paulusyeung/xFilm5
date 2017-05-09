@@ -196,6 +196,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <EntityDeploy Include="xFilmModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>

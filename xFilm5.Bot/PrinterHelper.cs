@@ -201,14 +201,14 @@ namespace xFilm5.Bot
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontA());
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.DoubleHeight2());
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Center());
-                BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Default.GetBytes(address[0] + "\n"));
+                BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(address[0] + "\n"));
 
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontA());
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.Nomarl());
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Center());
                 for (int i = 1; i < address.Length; i++)
                 {
-                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.Default.GetBytes(address[i] + "\n"));
+                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(address[i] + "\n"));
                 }
                 #endregion
 
@@ -413,13 +413,15 @@ namespace xFilm5.Bot
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Left());
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.DoubleWidth2());
 
-                BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(String.Format("{0,2:N0}", totalQty)));
+                BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(line = String.Format("{0} {1,-19} {2,8:N2}\n", totalQty.ToString().PadLeft(2), "", header.ReceiptAmount)));
 
-                BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontB());
-                BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Right());
-                BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.DoubleWidth2());
+                //BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(String.Format("{0,2:N0}", totalQty)));
 
-                BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(String.Format("{0,8:N2}\n", header.ReceiptAmount)));
+                //BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontB());
+                //BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Right());
+                //BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.DoubleWidth2());
+
+                //BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(String.Format("{0,8:N2}\n", header.ReceiptAmount)));
                 #endregion
 
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontB());

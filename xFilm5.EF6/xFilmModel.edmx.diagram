@@ -5,42 +5,42 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="d3bdcab64da4467c8a3c656b5fe9601f" Name="Diagram1">
-        <EntityTypeShape EntityType="xFilmModel.Acct_INDetails" Width="1.5" PointX="8.25" PointY="27.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.Acct_INMaster" Width="1.5" PointX="3" PointY="26.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.Acct_INDetails" Width="1.5" PointX="8.25" PointY="29.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.Acct_INMaster" Width="1.5" PointX="3" PointY="28.5" IsExpanded="true" />
         <EntityTypeShape EntityType="xFilmModel.Client" Width="1.5" PointX="0.75" PointY="29" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.Client_AddressBook" Width="1.5" PointX="3" PointY="33.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.Client_User" Width="1.5" PointX="3" PointY="37.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.ClientPricing" Width="1.5" PointX="6" PointY="26" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.Order_Details" Width="1.5" PointX="15.5" PointY="29.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.Order_Internal" Width="1.5" PointX="7.5" PointY="33.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.Order_Journal" Width="1.5" PointX="12.5" PointY="33.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.OrderComment" Width="1.5" PointX="7.5" PointY="41" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.OrderHeader" Width="1.5" PointX="5.25" PointY="31.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.OrderPkPrintQueueVps" Width="1.5" PointX="12.5" PointY="27.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.Client_AddressBook" Width="1.5" PointX="3" PointY="38.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.Client_User" Width="1.5" PointX="3" PointY="42.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.ClientPricing" Width="1.5" PointX="6" PointY="29" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.Order_Details" Width="1.5" PointX="13.5" PointY="31.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.Order_Internal" Width="1.5" PointX="7.5" PointY="59.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.Order_Journal" Width="1.5" PointX="7.5" PointY="40.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.OrderComment" Width="1.5" PointX="7.5" PointY="66.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.OrderHeader" Width="1.5" PointX="5.25" PointY="34.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.OrderPkPrintQueueVps" Width="1.5" PointX="10.5" PointY="38.125" IsExpanded="true" />
         <EntityTypeShape EntityType="xFilmModel.PosTx" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.PrintQueue" Width="1.5" PointX="12.5" PointY="37.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.PrintQueue_LifeCycle" Width="1.5" PointX="18" PointY="40.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.PrintQueue_VPS" Width="1.5" PointX="14.75" PointY="41.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.ReceiptDetail" Width="1.5" PointX="17.75" PointY="31" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.ReceiptHeader" Width="1.5" PointX="10.25" PointY="32" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.PrintQueue" Width="1.5" PointX="10.5" PointY="32.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.PrintQueue_LifeCycle" Width="1.5" PointX="16" PointY="30.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.PrintQueue_VPS" Width="1.5" PointX="12.75" PointY="27.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.ReceiptDetail" Width="1.5" PointX="15.75" PointY="36.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.ReceiptHeader" Width="1.5" PointX="8.25" PointY="33.625" IsExpanded="true" />
         <EntityTypeShape EntityType="xFilmModel.Staff" Width="1.5" PointX="7.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.T_BillingCode_Dept" Width="1.5" PointX="1.5" PointY="23.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.T_BillingCode_Item" Width="1.5" PointX="3.75" PointY="22.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.T_DeliveryMethod" Width="1.5" PointX="13.25" PointY="24.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.T_BillingCode_Dept" Width="1.5" PointX="1.5" PointY="22.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.T_BillingCode_Item" Width="1.5" PointX="3.75" PointY="21.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.T_DeliveryMethod" Width="1.5" PointX="11.25" PointY="44.625" IsExpanded="true" />
         <EntityTypeShape EntityType="xFilmModel.T_FriendlyService" Width="1.5" PointX="5.75" PointY="7.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.T_JobTitle" Width="1.5" PointX="8" PointY="44.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.T_JobTitle" Width="1.5" PointX="3" PointY="49.75" IsExpanded="true" />
         <EntityTypeShape EntityType="xFilmModel.T_LSR" Width="1.5" PointX="7.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.T_Media" Width="1.5" PointX="13.25" PointY="22.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.T_PaperSize" Width="1.5" PointX="13.25" PointY="46.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.T_PaymentType" Width="1.5" PointX="0.75" PointY="20.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.T_Platform" Width="1.5" PointX="13.25" PointY="48.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.T_Priority" Width="1.5" PointX="3" PointY="42.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.T_Media" Width="1.5" PointX="11.25" PointY="24.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.T_PaperSize" Width="1.5" PointX="11.25" PointY="47" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.T_PaymentType" Width="1.5" PointX="0.75" PointY="25.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.T_Platform" Width="1.5" PointX="11.25" PointY="49.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.T_Priority" Width="1.5" PointX="3" PointY="35.375" IsExpanded="true" />
         <EntityTypeShape EntityType="xFilmModel.T_ProofingMaterial" Width="1.5" PointX="9.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.T_Service" Width="1.5" PointX="3" PointY="45.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.T_Service" Width="1.5" PointX="3" PointY="25.625" IsExpanded="true" />
         <EntityTypeShape EntityType="xFilmModel.T_Software" Width="1.5" PointX="5.75" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="xFilmModel.T_SoftwareVersion" Width="1.5" PointX="8" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.T_Status" Width="1.5" PointX="3" PointY="47.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.T_Workflow" Width="1.5" PointX="10.25" PointY="44.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.T_Status" Width="1.5" PointX="3" PointY="47" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.T_Workflow" Width="1.5" PointX="5.25" PointY="49.625" IsExpanded="true" />
         <EntityTypeShape EntityType="xFilmModel.User" Width="1.5" PointX="0.75" PointY="3.25" IsExpanded="true" />
         <EntityTypeShape EntityType="xFilmModel.UserAuth" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="xFilmModel.UserNotification" Width="1.5" PointX="3" PointY="4.375" IsExpanded="true" />

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -21,8 +22,8 @@ namespace xFilm5.QRStation
         private enum SourceType
         {
             None,
-            Blueprint = (int)DAL4Win.Common.Enums.PrintQSubitemType.Blueprint,
-            Plate = (int)DAL4Win.Common.Enums.PrintQSubitemType.Plate
+            Blueprint = (int)Common.Enums.PrintQSubitemType.Blueprint,
+            Plate = (int)Common.Enums.PrintQSubitemType.Plate
         }
         #endregion
 
@@ -44,16 +45,38 @@ namespace xFilm5.QRStation
 
             InitializeCounter();
             //SendWhatsAppMsg();
+
+            ClearScreen();
+        }
+
+        private void ClearScreen()
+        {
+            txtClientInfo.Text = "";
+            txtQrCodeData.Text = "";
+            lblOrderNumber.Text = "";
         }
 
         private void InitializeCounter()
         {
+            using (var ctx = new EF6.xFilmEntities())
+            {
+                try
+                {
+                    var plates = ctx.PrintQueue_LifeCycle.Where(x => x.PrintQSubitemType == (int)Common.Enums.PrintQSubitemType.Plate && DbFunctions.TruncateTime(x.CreatedOn) == DbFunctions.TruncateTime(DateTime.Now)).Count();
+                    var blueprints = ctx.PrintQueue_LifeCycle.Where(x => x.PrintQSubitemType == (int)Common.Enums.PrintQSubitemType.Blueprint && DbFunctions.TruncateTime(x.CreatedOn) == DbFunctions.TruncateTime(DateTime.Now)).Count();
+                    lblGoodCount.Text = plates.ToString("##0");
+                    lblBadCount.Text = blueprints.ToString("##0");
+                }
+                catch { }
+            }
+
+            /**
             String sql = "";
 
             #region Good Counts
             sql = String.Format("CONVERT(varchar(10), CreatedOn, 20) = '{0}' AND (PrintQSubitemType = {1})", 
                 DateTime.Now.ToString("yyyy-MM-dd"),
-                DAL4Win.Common.Enums.PrintQSubitemType.Plate.ToString("D"));
+                Common.Enums.PrintQSubitemType.Plate.ToString("D"));
             DAL4Win.PrintQueue_LifeCycleCollection allPlate = DAL4Win.PrintQueue_LifeCycle.LoadCollection(sql);
             lblGoodCount.Text = allPlate != null ? allPlate.Count.ToString() : "0";
             #endregion
@@ -65,6 +88,7 @@ namespace xFilm5.QRStation
             DAL4Win.PrintQueue_LifeCycleCollection allBp = DAL4Win.PrintQueue_LifeCycle.LoadCollection(sql);
             lblBadCount.Text = allBp != null ? allBp.Count.ToString() : "0";
             #endregion
+            */
         }
 
         private void TxtQrCodeData_KeyUp(object sender, KeyEventArgs e)
@@ -97,6 +121,52 @@ namespace xFilm5.QRStation
                         String cupsJobId = line3parts[1].Split('-')[0];
                         String filename = line3.Replace(clientId.ToString() + ".", "");
 
+                        #region 清空原有畫面上的資料
+                        txtClientInfo.Text = String.Empty;
+                        if (lvwLifeCycle.Items.Count > 0) lvwLifeCycle.Items.Clear();
+                        if (picPreview.Image != null) picPreview.Image.Dispose();
+                        lblOrderNumber.Text = "";
+                        #endregion
+
+                        #region 開始顯示新嘅資料
+                        ShowClientInfo(clientId);                                                                   // 目前淨係顯示 Client 名，日後可以顯示其他資料
+
+                        using (var ctx = new EF6.xFilmEntities())
+                        {
+                            var pQueue = ctx.PrintQueue.Where(x => x.ClientID == clientId && x.CupsJobID == cupsJobId).SingleOrDefault();
+                            if (pQueue != null)
+                            {
+                                String vpsFileName = (sourceType == SourceType.Plate) ? filename + ".vps" : filename.Substring(0, filename.IndexOf('('));
+                                var pQueueVps = ctx.PrintQueue_VPS.Where(x => x.PrintQueueID == pQueue.ID && x.VpsFileName.Contains(vpsFileName)).FirstOrDefault();
+                                if (pQueueVps != null)
+                                {
+                                    try
+                                    {
+                                        var orderPq = ctx.OrderPkPrintQueueVps.Where(x => x.PrintQueueVpsId == pQueueVps.ID).FirstOrDefault();
+
+                                        int pQueueVpsId = (pQueueVps == null) ? 0 : pQueueVps.ID;
+                                        LogLifeCycle(sourceType, pQueue.ID, pQueueVpsId);                                   //   update Log File
+
+                                        ShowPrintQLifeCycle(pQueue.ID, filename.Substring(0, filename.IndexOf('(')));       //   顯示同一隻 PrintQueue 嘅 log file
+
+                                        if (orderPq != null)
+                                        {
+                                            lblOrderNumber.Text = orderPq.OrderHeaderId.Value.ToString("###");              // 顯示 Order ID as Order Number
+
+                                            orderPq.IsReady = true;
+                                            ctx.SaveChanges();
+                                        }
+                                    }
+                                    catch { }
+                                }
+                            }
+                        }
+                        ShowPreview(sourceType, qrCodeData[2]);                                                     // 顯示 thumbnail
+                        #endregion
+
+                        InitializeCounter();
+
+                        /**
                         String sql = String.Format("ClientID = {0} AND CupsJobID = N'{1}'", clientId.ToString(), cupsJobId);
                         DAL4Win.PrintQueue pq = DAL4Win.PrintQueue.LoadWhere(sql);
 
@@ -119,11 +189,13 @@ namespace xFilm5.QRStation
 
                         InitializeCounter();
                         //IncrementCounter(sourceType);
+                        */
                         #endregion
                     }
                 }
             }
         }
+
         private void TxtQrCodeData_Enter(object sender, EventArgs e)
         {
             txtQrCodeData.Select(0, txtQrCodeData.TextLength);
@@ -162,29 +234,46 @@ namespace xFilm5.QRStation
 
         private void ShowClientInfo(int clientId)
         {
+            using (var ctx = new EF6.xFilmEntities())
+            {
+                var client = ctx.Client.Where(x => x.ID == clientId).SingleOrDefault();
+                if (client != null)
+                {
+                    txtClientInfo.Text = client.Name;
+                }
+            }
+            /*
             DAL4Win.Client client = DAL4Win.Client.Load(clientId);
             if (client != null)
             {
                 txtClientInfo.Text = client.Name;
             }
+            */
         }
 
         private void ShowPrintQLifeCycle(int printQueueId, String pageName)
         {
-            String sql = String.Format("PrintQueueId = {0}", printQueueId.ToString());
-            String[] orderBy = { "CreatedOn" };
-            DAL4Win.PrintQueue_LifeCycleCollection allCycle = DAL4Win.PrintQueue_LifeCycle.LoadCollection(sql, orderBy, true);
-            if (allCycle.Count > 0)
+            //String sql = String.Format("PrintQueueId = {0}", printQueueId.ToString());
+            //String[] orderBy = { "CreatedOn" };
+            //DAL4Win.PrintQueue_LifeCycleCollection allCycle = DAL4Win.PrintQueue_LifeCycle.LoadCollection(sql, orderBy, true);
+            //if (allCycle.Count > 0)
+            using (var ctx = new EF6.xFilmEntities())
             {
-                int i = 0;
-                foreach (DAL4Win.PrintQueue_LifeCycle cycle in allCycle)
+                var allCycle = ctx.PrintQueue_LifeCycle.Where(x => x.PrintQueueId == printQueueId).OrderBy(x => x.CreatedOn).ToList();
+                //int i = 0;
+                //foreach (DAL4Win.PrintQueue_LifeCycle cycle in allCycle)
+                for (int i = 0; i < allCycle.Count; i++)
                 {
+                    var cycle = allCycle[i];
                     #region 祇顯示同一個 page 嘅 VPS + Plate
                     bool samepage = true;
-                    if (cycle.PrintQueueVpsId != 0)
+                    if (cycle.PrintQueueVpsId != null)
                     {
-                        DAL4Win.PrintQueue_VPS vps = DAL4Win.PrintQueue_VPS.Load(cycle.PrintQueueVpsId);
-                        if (vps.VpsFileName.IndexOf(pageName) >= 0)
+                        //DAL4Win.PrintQueue_VPS vps = DAL4Win.PrintQueue_VPS.Load(cycle.PrintQueueVpsId);
+                        //var vps = ctx.PrintQueue_VPS.Where(x => x.ID == cycle.PrintQueueVpsId).SingleOrDefault();
+
+                        //if (vps.VpsFileName.IndexOf(pageName) >= 0)
+                        if (cycle.PrintQueue_VPS.VpsFileName.IndexOf(pageName) >= 0)
                             samepage = true;
                         else
                             samepage = false;
@@ -201,23 +290,23 @@ namespace xFilm5.QRStation
                         String type = String.Empty;
                         switch (cycle.PrintQSubitemType)
                         {
-                            case (int)DAL4Win.Common.Enums.PrintQSubitemType.Ps:
-                                type = DAL4Win.Common.Enums.PrintQSubitemType.Ps.ToString("G");
+                            case (int)Common.Enums.PrintQSubitemType.Ps:
+                                type = Common.Enums.PrintQSubitemType.Ps.ToString("G");
                                 break;
-                            case (int)DAL4Win.Common.Enums.PrintQSubitemType.Vps:
-                                type = DAL4Win.Common.Enums.PrintQSubitemType.Vps.ToString("G");
+                            case (int)Common.Enums.PrintQSubitemType.Vps:
+                                type = Common.Enums.PrintQSubitemType.Vps.ToString("G");
                                 break;
-                            case (int)DAL4Win.Common.Enums.PrintQSubitemType.Cip3:
-                                type = DAL4Win.Common.Enums.PrintQSubitemType.Cip3.ToString("G");
+                            case (int)Common.Enums.PrintQSubitemType.Cip3:
+                                type = Common.Enums.PrintQSubitemType.Cip3.ToString("G");
                                 break;
-                            case (int)DAL4Win.Common.Enums.PrintQSubitemType.Tiff:
-                                type = DAL4Win.Common.Enums.PrintQSubitemType.Tiff.ToString("G");
+                            case (int)Common.Enums.PrintQSubitemType.Tiff:
+                                type = Common.Enums.PrintQSubitemType.Tiff.ToString("G");
                                 break;
-                            case (int)DAL4Win.Common.Enums.PrintQSubitemType.Blueprint:
-                                type = DAL4Win.Common.Enums.PrintQSubitemType.Blueprint.ToString("G");
+                            case (int)Common.Enums.PrintQSubitemType.Blueprint:
+                                type = Common.Enums.PrintQSubitemType.Blueprint.ToString("G");
                                 break;
-                            case (int)DAL4Win.Common.Enums.PrintQSubitemType.Plate:
-                                type = DAL4Win.Common.Enums.PrintQSubitemType.Plate.ToString("G");
+                            case (int)Common.Enums.PrintQSubitemType.Plate:
+                                type = Common.Enums.PrintQSubitemType.Plate.ToString("G");
                                 break;
                         }
                         item.SubItems.Add(type);
@@ -225,13 +314,15 @@ namespace xFilm5.QRStation
 
                         #region 拆色資料
                         String color = String.Empty;
-                        DAL4Win.PrintQueue_VPS pqVps = DAL4Win.PrintQueue_VPS.Load(cycle.PrintQueueVpsId);
-                        color = (pqVps != null) ? pqVps.VpsFileName.Substring(pqVps.VpsFileName.IndexOf('(') + 1, pqVps.VpsFileName.IndexOf(')') - pqVps.VpsFileName.IndexOf('(') - 1) : "";
+                        //DAL4Win.PrintQueue_VPS pqVps = DAL4Win.PrintQueue_VPS.Load(cycle.PrintQueueVpsId);
+                        //color = (pqVps != null) ? pqVps.VpsFileName.Substring(pqVps.VpsFileName.IndexOf('(') + 1, pqVps.VpsFileName.IndexOf(')') - pqVps.VpsFileName.IndexOf('(') - 1) : "";
+                        String vpsFileName = (cycle.PrintQueue_VPS == null) ? "" : cycle.PrintQueue_VPS.VpsFileName;
+                        color = (vpsFileName != "") ? vpsFileName.Substring(vpsFileName.IndexOf('(') + 1, vpsFileName.IndexOf(')') - vpsFileName.IndexOf('(') - 1) : "";
                         item.SubItems.Add(color);
                         #endregion
                     }
 
-                    i++;
+                    //i++;
                 }
             }
         }
@@ -284,6 +375,7 @@ namespace xFilm5.QRStation
         {
             bool result = false;
 
+            /**
             String sql = String.Format("PrintQueueId = {0} AND PrintQueueVpsId = {1} AND PrintQSubitemType = {2}", pQueueId.ToString(), pQueueVpsId.ToString(), type.ToString("D"));
             DAL4Win.PrintQueue_LifeCycle cycle = DAL4Win.PrintQueue_LifeCycle.LoadWhere(sql);
             if (cycle == null)
@@ -298,6 +390,31 @@ namespace xFilm5.QRStation
                 cycle.Save();
 
                 result = true;
+            }
+            */
+
+            using (var ctx = new EF6.xFilmEntities())
+            {
+                var cycle = ctx.PrintQueue_LifeCycle.Where(x => x.PrintQueueId == pQueueId && x.PrintQueueVpsId == pQueueVpsId && x.PrintQSubitemType == (int)type).SingleOrDefault();
+                if (cycle == null)
+                {
+                    try
+                    {
+                        cycle = new EF6.PrintQueue_LifeCycle();
+                        cycle.PrintQueueId = pQueueId;
+                        cycle.PrintQueueVpsId = pQueueVpsId;
+                        cycle.PrintQSubitemType = (int)type;
+                        cycle.Status = (int)Common.Enums.Status.Active;
+                        cycle.CreatedOn = DateTime.Now;
+                        cycle.CreatedBy = 0;
+
+                        ctx.PrintQueue_LifeCycle.Add(cycle);
+                        ctx.SaveChanges();
+
+                        result = true;
+                    }
+                    catch { }
+                }
             }
 
             return result;
