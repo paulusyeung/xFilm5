@@ -22,14 +22,14 @@ namespace xFilm5.Bot
         // 2017.05.09 paulus: 如果係 現金單，印一式兩份
         bool paid = false;
 
-        public void Print(int receiptId, int languageId, string printerName)
+        public void Print(int receiptId, int languageId, string printerName, bool smallFont)
         {
             using (var ctx = new xFilm5Entities())
             {
                 var hasRows = ctx.vwReceiptDetailsList.Where(x => x.ReceiptHeaderId == receiptId).Any();
                 if (hasRows)
                 {
-                    var bytesValue = GetPrintContent(receiptId, languageId);
+                    var bytesValue = GetPrintContent(receiptId, languageId, smallFont);
 
                     #region
 
@@ -163,7 +163,7 @@ namespace xFilm5.Bot
         // 中文字: 24x24 24 characters/line
         // CodePage: https://msdn.microsoft.com/en-us/library/windows/desktop/dd317756(v=vs.85).aspx
         // GB18030 = Codepage 54936, GB2312 = 936, Big5 = 950
-        private Byte[] GetPrintContent(int receiptId, int languageId = 1)
+        private Byte[] GetPrintContent(int receiptId, int languageId = 1, bool smallFont = true)
         {
             String dictFile = Path.Combine(HttpContext.Current.Server.MapPath("~"), "WordDict.xml");
             nxStudio.BaseClass.WordDict oDict = new nxStudio.BaseClass.WordDict(dictFile, languageId);
@@ -280,10 +280,10 @@ namespace xFilm5.Bot
                     case 1:
                         #region 英文
                         if (header.Paid)
-                            BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(line = String.Format("{0,-24}{1,-8}/{2,-8}\n", oDict.GetWordWithColon("transaction#"), header.ReceiptNumber, header.INMasterId.ToString())));
+                            BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(line = String.Format("{0,-15}{1,-8}/{2,-8}\n", oDict.GetWordWithColon("transaction#"), header.ReceiptNumber, header.INMasterId.ToString())));
                         else
-                            BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(line = String.Format("{0,-24}{1,-8}\n", oDict.GetWordWithColon("transaction#"), header.ReceiptNumber)));
-                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(line = String.Format("{0,-24}{1:yyyy-MM-dd HH:mm:ss}\n", oDict.GetWordWithColon("date_time"), header.ReceiptDate)));
+                            BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(line = String.Format("{0,-15}{1,-8}\n", oDict.GetWordWithColon("transaction#"), header.ReceiptNumber)));
+                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(line = String.Format("{0,-15}{1:yyyy-MM-dd HH:mm:ss}\n", oDict.GetWordWithColon("date_time"), header.ReceiptDate)));
 
                         BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Lf());
 
@@ -320,10 +320,12 @@ namespace xFilm5.Bot
                         BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Lf());
 
                         #region items column header
-                        BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontB());
+                        BytesValue = smallFont ? PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontB()) : PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontA());
                         BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.Nomarl());
                         BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Left());
-                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes("Qty                      Description                     Amount\n"));
+                        BytesValue = smallFont ?
+                            PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes("Qty                      Description                     Amount\n")) :
+                            PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes("Qty              Description              Amount\n"));
                         #endregion
 
                         #endregion
@@ -392,24 +394,46 @@ namespace xFilm5.Bot
 
                 #region Body
                 int totalQty = 0;
-                BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontB());
+                BytesValue = smallFont ? PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontB()) : PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontA());
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.Nomarl());
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Left());
                 //BytesValue = PrintExtensions.AddBytes(BytesValue, string.Format("{0,-40}{1,6}{2,9}{3,9:N2}\n", "item 1", 12, 11, 144.00));
                 foreach (vwReceiptDetailsList item in items)
                 {
-                    List<String> itemDescription = ConvertToMultipleLines(item.ItemCode + " " + item.ItemDescription, 50);
                     var qty = item.ItemQty;
                     var amt = item.ItemAmount;
-                    BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(line = String.Format("{0} {1,-50} {2,8:N2}\n", qty.ToString().PadLeft(2), itemDescription[0], amt)));
 
-                    // 如果超過一行，第二行開始唔使打印 Qty 同 Amount
-                    if (itemDescription.Count > 1)
+                    if (smallFont)
                     {
-                        for (int i = 1; i < itemDescription.Count; i++)
+                        #region font B: 9x17 64 chars/line
+                        List<String> itemDescription = ConvertToMultipleLines(item.ItemCode + " " + item.ItemDescription, 50);
+                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(line = String.Format("{0} {1,-50} {2,8:N2}\n", qty.ToString().PadLeft(2), itemDescription[0], amt)));
+
+                        // 如果超過一行，第二行開始唔使打印 Qty 同 Amount
+                        if (itemDescription.Count > 1)
                         {
-                            BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(line = String.Format("   {0,-50}\n", itemDescription[i].PadLeft(3))));
+                            for (int i = 1; i < itemDescription.Count; i++)
+                            {
+                                BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(line = String.Format("   {0,-50}\n", itemDescription[i].PadLeft(3))));
+                            }
                         }
+                        #endregion
+                    }
+                    else
+                    {
+                        #region font A:  12x24 48 chars/line
+                        List<String> itemDescription = ConvertToMultipleLines(item.ItemCode + " " + item.ItemDescription, 36);
+                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(line = String.Format("{0} {1,-36} {2,8:N2}\n", qty.ToString().PadLeft(2), itemDescription[0], amt)));
+
+                        // 如果超過一行，第二行開始唔使打印 Qty 同 Amount
+                        if (itemDescription.Count > 1)
+                        {
+                            for (int i = 1; i < itemDescription.Count; i++)
+                            {
+                                BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(line = String.Format("   {0,-36}\n", itemDescription[i].PadLeft(3))));
+                            }
+                        }
+                        #endregion
                     }
                     totalQty += (int)qty;
                 }
@@ -418,11 +442,13 @@ namespace xFilm5.Bot
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Separator());
 
                 #region Footer: left (total qty), right (total amount)
-                BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontB());
+                BytesValue = smallFont ? PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontB()) : PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontA());
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Left());
-                BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.DoubleWidth2());
+                BytesValue = smallFont ? PrintExtensions.AddBytes(BytesValue, obj.CharSize.DoubleWidth2()) : PrintExtensions.AddBytes(BytesValue, obj.Emphasizing.On());
 
-                BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(line = String.Format("{0} {1,-19} {2,8:N2}\n", totalQty.ToString().PadLeft(2), "", header.ReceiptAmount)));
+                BytesValue = smallFont ?
+                    PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(line = String.Format("{0} {1,-19} {2,8:N2}\n", totalQty.ToString().PadLeft(2), "", header.ReceiptAmount))) :
+                    PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(line = String.Format("{0} {1,-36} {2,8:N2}\n", totalQty.ToString().PadLeft(2), "", header.ReceiptAmount)));
 
                 //BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(String.Format("{0,2:N0}", totalQty)));
 
@@ -436,6 +462,7 @@ namespace xFilm5.Bot
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.FontSelect.FontB());
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Right());
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.Nomarl());
+                BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Emphasizing.Off());
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Separator());
 
                 #region Barcode / QR Code

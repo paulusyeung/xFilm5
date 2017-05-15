@@ -147,15 +147,17 @@ namespace xFilm5.QRStation
                                         int pQueueVpsId = (pQueueVps == null) ? 0 : pQueueVps.ID;
                                         LogLifeCycle(sourceType, pQueue.ID, pQueueVpsId);                                   //   update Log File
 
-                                        ShowPrintQLifeCycle(pQueue.ID, filename.Substring(0, filename.IndexOf('(')));       //   顯示同一隻 PrintQueue 嘅 log file
-
                                         if (orderPq != null)
                                         {
-                                            lblOrderNumber.Text = orderPq.OrderHeaderId.Value.ToString("###");              // 顯示 Order ID as Order Number
-
                                             orderPq.IsReady = true;
                                             ctx.SaveChanges();
+
+                                            var xQty = ctx.OrderPkPrintQueueVps.Where(x => x.OrderHeaderId == orderPq.OrderHeaderId.Value && x.CheckedPlate == true).Count();
+                                            var yQty = ctx.OrderPkPrintQueueVps.Where(x => x.OrderHeaderId == orderPq.OrderHeaderId.Value && x.CheckedPlate == true  && x.IsReady == true).Count();
+                                            lblOrderNumber.Text = String.Format("{0}/{1}", orderPq.OrderHeaderId.Value.ToString("###"), (xQty - yQty).ToString());              // 顯示 Order ID as Order Number
                                         }
+
+                                        ShowPrintQLifeCycle(pQueue.ID, filename.Substring(0, filename.IndexOf('(')));       //   顯示同一隻 PrintQueue 嘅 log file
                                     }
                                     catch { }
                                 }
@@ -253,15 +255,10 @@ namespace xFilm5.QRStation
 
         private void ShowPrintQLifeCycle(int printQueueId, String pageName)
         {
-            //String sql = String.Format("PrintQueueId = {0}", printQueueId.ToString());
-            //String[] orderBy = { "CreatedOn" };
-            //DAL4Win.PrintQueue_LifeCycleCollection allCycle = DAL4Win.PrintQueue_LifeCycle.LoadCollection(sql, orderBy, true);
-            //if (allCycle.Count > 0)
             using (var ctx = new EF6.xFilmEntities())
             {
                 var allCycle = ctx.PrintQueue_LifeCycle.Where(x => x.PrintQueueId == printQueueId).OrderBy(x => x.CreatedOn).ToList();
-                //int i = 0;
-                //foreach (DAL4Win.PrintQueue_LifeCycle cycle in allCycle)
+
                 for (int i = 0; i < allCycle.Count; i++)
                 {
                     var cycle = allCycle[i];
@@ -314,15 +311,11 @@ namespace xFilm5.QRStation
 
                         #region 拆色資料
                         String color = String.Empty;
-                        //DAL4Win.PrintQueue_VPS pqVps = DAL4Win.PrintQueue_VPS.Load(cycle.PrintQueueVpsId);
-                        //color = (pqVps != null) ? pqVps.VpsFileName.Substring(pqVps.VpsFileName.IndexOf('(') + 1, pqVps.VpsFileName.IndexOf(')') - pqVps.VpsFileName.IndexOf('(') - 1) : "";
                         String vpsFileName = (cycle.PrintQueue_VPS == null) ? "" : cycle.PrintQueue_VPS.VpsFileName;
                         color = (vpsFileName != "") ? vpsFileName.Substring(vpsFileName.IndexOf('(') + 1, vpsFileName.IndexOf(')') - vpsFileName.IndexOf('(') - 1) : "";
                         item.SubItems.Add(color);
                         #endregion
                     }
-
-                    //i++;
                 }
             }
         }
@@ -360,7 +353,7 @@ namespace xFilm5.QRStation
                 {
                     try
                     {
-                        picPreview.SizeMode = PictureBoxSizeMode.StretchImage;
+                        picPreview.SizeMode = PictureBoxSizeMode.Zoom;
                         picPreview.Image = Image.FromFile(imgFile);
                     }
                     catch

@@ -50,6 +50,16 @@ namespace xFilm5.Controls.Email
 
         private void ShowRecord()
         {
+            using (var ctx = new EF6.xFilmEntities())
+            {
+                var hdr = ctx.ReceiptHeader.Where(x => x.ReceiptHeaderId == _ReceiptHeaderId).SingleOrDefault();
+                if (hdr != null)
+                {
+                    txtReceiptNumber.Text = hdr.ReceiptNumber.ToString();
+                    txtRecipient.Text = Helper.ClientHelper.GetEmailRecipient(hdr.ClientId);
+                }
+            }
+            /**
             DAL.ReceiptHeader hdr = DAL.ReceiptHeader.Load(_ReceiptHeaderId);
             if (hdr != null)
             {
@@ -73,6 +83,7 @@ namespace xFilm5.Controls.Email
                     }
                 }
             }
+            */
         }
 
         private void cmdSendEmail_Click(object sender, EventArgs e)
@@ -92,7 +103,7 @@ namespace xFilm5.Controls.Email
 
             if (valid)
             {
-                if (EmailEx.SendDNEmail(_ReceiptHeaderId, recipients))
+                if (EmailEx.SendDNEmail(_ReceiptHeaderId, txtRecipient.Text))
                 {
                     MessageBox.Show(oDict.GetWord("done"), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information, new EventHandler(cmdCloseForm));
                 }

@@ -1338,4 +1338,59 @@
     <chs>附加资讯</chs>
     <cht>附加資訊</cht>
   </keyword>
+  <keyword key="receipt">
+    <en>Receipt</en>
+    <chs>收贷票据</chs>
+    <cht>收貸票據</cht>
+  </keyword>
+  <keyword key="notification">
+    <en>Notification</en>
+    <chs>温馨提示</chs>
+    <cht>溫馨提示</cht>
+  </keyword>
+  <keyword key="receipt_grouping">
+    <en>Grouping</en>
+    <chs>合单</chs>
+    <cht>夾單</cht>
+  </keyword>
+  <keyword key="receipt_smallfont">
+    <en>Small Font</en>
+    <chs>细字</chs>
+    <cht>細字</cht>
+  </keyword>
+  <keyword key="receipt_slip">
+    <en>Slip</en>
+    <chs>小票据</chs>
+    <cht>小票據</cht>
+  </keyword>
+  <keyword key="receipt_email">
+    <en>Email</en>
+    <chs>电邮</chs>
+    <cht>電郵</cht>
+  </keyword>
+  <keyword key="notification_email">
+    <en>Email</en>
+    <chs>电邮</chs>
+    <cht>電郵</cht>
+  </keyword>
+  <keyword key="notification_mobileapp">
+    <en>Mobile App</en>
+    <chs>手机 App</chs>
+    <cht>手機 App</cht>
+  </keyword>
+  <keyword key="notification_onorder">
+    <en>On Order</en>
+    <chs>下单</chs>
+    <cht>下單</cht>
+  </keyword>
+  <keyword key="notification_onready">
+    <en>On Ready</en>
+    <chs>出货</chs>
+    <cht>出貨</cht>
+  </keyword>
+  <keyword key="email_recipient">
+    <en>Emails</en>
+    <chs>电邮收件人</chs>
+    <cht>電郵收件人</cht>
+  </keyword>
 </root>

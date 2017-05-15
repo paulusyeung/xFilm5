@@ -370,6 +370,7 @@ namespace xFilm5.Bot.Controllers
                 int receiptId = jsonData["ReceiptId"].Value<int>();
                 int languageId = jsonData["LanguageId"].Value<int>();
                 string printerName = jsonData["PrinterName"].Value<string>();
+                bool smallFont = jsonData["SmallFont"].Value<bool>();
 
                 using (var context = new xFilm5Entities())
                 {
@@ -380,7 +381,7 @@ namespace xFilm5.Bot.Controllers
                         try
                         {
                             var xp80 = new PrinterHelper();
-                            xp80.Print(receiptId, languageId, printerName);
+                            xp80.Print(receiptId, languageId, printerName, smallFont);
 
                             log.Info(String.Format("[bot, xprinter, receipt printed] \r\nReceipt Number = {0}\r\nLanguage Id = {1}\r\nPrinter Name = {2}", receiptId.ToString(), languageId.ToString(), printerName));
                             return Ok();

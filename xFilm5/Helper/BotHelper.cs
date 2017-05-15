@@ -113,7 +113,19 @@ namespace xFilm5.Helper
             //var pqs = server.GetPrintQueues();
 
             String printerName = Controls.Utility.Config.Xprinter_KT;   // @"\\192.168.2.223\KT-XP80C";
-            //String printerName = @"\\http://192.168.2.223:631\KT-XP80C";
+                                                                        //String printerName = @"\\http://192.168.2.223:631\KT-XP80C";
+
+            #region 2017.05.14 paulus: 加個 SmallFont option
+            bool smallFont = false;
+            using (var ctx = new EF6.xFilmEntities())
+            {
+                var rHdr = ctx.ReceiptHeader.Where(x => x.ReceiptHeaderId == receiptId).SingleOrDefault();
+                if (rHdr != null)
+                {
+                    smallFont = Helper.ClientHelper.IsReceiptSmallFont(rHdr.ClientId);
+                }
+            }
+            #endregion
 
             //request.AddParameter("ReceiptId", receiptId.ToString());
             //request.AddParameter("LanguageId", DAL.Common.Config.CurrentLanguageId.ToString());
@@ -123,6 +135,7 @@ namespace xFilm5.Helper
                 ReceiptId = receiptId.ToString(),
                 LanguageId = DAL.Common.Config.CurrentLanguageId.ToString(),
                 PrinterName = printerName,
+                SmallFont = smallFont.ToString(),
                 AnotherParam = 19.99
             });
             var result = client.Execute(request);

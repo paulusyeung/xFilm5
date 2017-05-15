@@ -800,9 +800,13 @@
       <DependentUpon>Desktop.cs</DependentUpon>
     </Compile>
     <Compile Include="Helper\BotHelper.cs" />
+    <Compile Include="Helper\ClientHelper.cs" />
+    <Compile Include="Helper\CommonHelper.cs" />
     <Compile Include="Helper\FileHelper.cs" />
     <Compile Include="Helper\InvoiceHelper.cs" />
+    <Compile Include="Helper\UserExHelper.cs" />
     <Compile Include="Helper\UserHelper.cs" />
+    <Compile Include="Helper\UserPreferencesHelper.cs" />
     <Compile Include="Helper\WorkshopHelper.cs" />
     <Compile Include="Help\About.cs">
       <SubType>Form</SubType>

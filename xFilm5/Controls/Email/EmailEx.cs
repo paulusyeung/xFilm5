@@ -9,6 +9,22 @@ namespace xFilm5.Controls.Email
 {
     public class EmailEx
     {
+        /// <summary>
+        /// 可以用 [,] / [ ] / [;] 嚟分隔 email 收件人
+        /// </summary>
+        /// <param name="ReceiptHeaderId"></param>
+        /// <param name="Recipient"></param>
+        /// <returns></returns>
+        public static bool SendDNEmail(int ReceiptHeaderId, String Recipient)
+        {
+            bool result = false;
+
+            var emails = Recipient.Split(new Char[] { ',', ' ', ';' }, StringSplitOptions.RemoveEmptyEntries);
+            result = SendDNEmail(ReceiptHeaderId, emails);
+
+            return result;
+        }
+
         public static bool SendDNEmail(int ReceiptHeaderId, String[] Recipients)
         {
             bool result = false;

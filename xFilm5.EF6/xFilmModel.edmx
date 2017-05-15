@@ -497,7 +497,7 @@
           <Key>
             <PropertyRef Name="UserId" />
           </Key>
-          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="None" Nullable="false" />
           <Property Name="UserType" Type="int" Nullable="false" />
           <Property Name="UserSid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="LoginName" Type="nvarchar" MaxLength="64" Nullable="false" />
@@ -1854,7 +1854,7 @@
           <Key>
             <PropertyRef Name="UserId" />
           </Key>
-          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
           <Property Name="UserType" Type="Int32" Nullable="false" />
           <Property Name="UserSid" Type="Guid" Nullable="false" />
           <Property Name="LoginName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
