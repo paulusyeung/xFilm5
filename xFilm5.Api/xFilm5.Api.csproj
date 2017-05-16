@@ -218,6 +218,10 @@
       <Project>{04aed734-0ce4-4c95-9359-aee6e959b337}</Project>
       <Name>xFilm5.DAL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\xFilm5.EF6\xFilm5.EF6.csproj">
+      <Project>{909b0971-2434-4bc2-bdf7-b04a39fe1b9e}</Project>
+      <Name>xFilm5.EF6</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

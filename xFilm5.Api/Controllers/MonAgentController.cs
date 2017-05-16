@@ -36,6 +36,74 @@ namespace xFilm5.Api.Controllers
                 String jobTitle = jsonData["jobTitle"].Value<String>();
                 String plateSize = jsonData["plateSize"].Value<String>();
 
+                using (var ctx = new EF6.xFilmEntities())
+                {
+                    var client = ctx.Client.Where(x => x.ID == clientId).SingleOrDefault();
+                    if (client == null)
+                    {
+                        try
+                        {
+                            // 先捜一搜，有可能係 CUPS reprint
+                            var pq = ctx.PrintQueue.Where(x => x.ClientID == clientId && x.CupsJobID == jobId).SingleOrDefault();
+                            if (pq == null)
+                            {
+                                #region New print queue, use dbo.PrintQueue_InsRec
+                                pq = new EF6.PrintQueue();
+                                pq.ClientID = clientId;
+                                pq.CupsJobID = jobId;
+
+                                pq.CupsJobTitle = jobTitle;
+                                pq.PlateSize = plateSize;
+                                pq.Status = (int)DAL.Common.Enums.Status.Active;
+                                pq.CreatedOn = DateTime.Now;
+                                pq.ModifiedOn = DateTime.Now;
+                                pq.Retired = false;
+
+                                ctx.PrintQueue.Add(pq);
+                                ctx.SaveChanges();
+                                #endregion
+                            }
+                            else
+                            {
+                                #region Reprint, reset PrintQueue.OrderID, clear dbo.PrintQueue_VPS items
+                                pq.OrderID = 0;
+
+                                pq.CupsJobTitle = jobTitle;
+                                pq.PlateSize = plateSize;
+                                pq.Status = (int)DAL.Common.Enums.Status.Active;
+                                pq.CreatedOn = DateTime.Now;
+                                pq.ModifiedOn = DateTime.Now;
+                                pq.Retired = false;
+
+                                using (var scope = ctx.Database.BeginTransaction())
+                                {
+                                    ctx.Database.ExecuteSqlCommand(String.Format("DELETE PrintQueue_VPS WHERE PrintQueueID = {0}", pq.ID.ToString()));
+                                    //ctx.PrintQueue.Attach(pq);
+                                    ctx.SaveChanges();
+
+                                    scope.Commit();
+                                }
+                                #endregion
+                            }
+
+                            UpdateListCycle(pq.ID, (int)DAL.Common.Enums.PrintQSubitemType.Ps);
+
+                            log.Info("[cups] " + jsonData.ToString());
+                            return Ok();
+                        }
+                        catch (Exception e)
+                        {
+                            log.Fatal("[cups] " + jsonData.ToString(), e);
+                            return NotFound();
+                        }
+                    }
+                    else
+                    {
+                        log.Error("[cups] Client == null " + jsonData.ToString());
+                        return NotFound();
+                    }
+                }
+                /**
                 DAL.Client client = DAL.Client.Load(clientId);
                 if (client != null)
                 {
@@ -93,7 +161,7 @@ namespace xFilm5.Api.Controllers
                     log.Error("[cups] Client == null " + jsonData.ToString());
                     return NotFound();
                 }
-
+                */
                 #endregion
             }
         }
@@ -116,6 +184,53 @@ namespace xFilm5.Api.Controllers
                     String jobId = jsonData["jobId"].Value<String>();
                     String vpsFileName = jsonData["vpsFileName"].Value<String>();
 
+                    using (var ctx = new EF6.xFilmEntities())
+                    {
+                        var pq = ctx.PrintQueue.Where(x => x.ClientID == clientId && x.CupsJobID == jobId).SingleOrDefault();
+                        if (pq != null)
+                        {
+                            // 2011.11.08 paulus: 先 check 下有冇相同 PrintQueue_VPS，如果冇先至 InsRec，否則 UpdRec
+                            var vps = ctx.PrintQueue_VPS.Where(x => x.PrintQueueID == pq.ID && x.VpsFileName == vpsFileName).SingleOrDefault();
+
+                            #region dbo.PrintQuee_VPS_InsRec or UpRec
+                            if (vps == null)
+                            {
+                                vps = new EF6.PrintQueue_VPS();
+
+                                vps.PrintQueueID = pq.ID;
+                                vps.VpsFileName = vpsFileName;
+                                vps.CreatedOn = DateTime.Now;
+                                vps.ModifiedOn = DateTime.Now;
+                                vps.Retired = false;
+
+                                ctx.PrintQueue_VPS.Add(vps);
+                                ctx.SaveChanges();
+                            }
+                            else
+                            {
+                                vps.PrintQueueID = pq.ID;
+                                vps.VpsFileName = vpsFileName;
+                                vps.CreatedOn = DateTime.Now;
+                                vps.ModifiedOn = DateTime.Now;
+                                vps.Retired = false;
+
+                                ctx.SaveChanges();
+                            }
+                            #endregion
+
+                            //UpdateListCycle(pQueue.ID, (int)DAL.Common.Enums.PrintQSubitemType.Vps);
+                            UpdateListCycle_Vps(pq.ID, pq.ID, (int)DAL.Common.Enums.PrintQSubitemType.Vps);
+
+                            log.Info("[vps] " + jsonData.ToString());
+                            return Ok();
+                        }
+                        else
+                        {
+                            log.Error("[vps] PrintQueue == null " + jsonData.ToString());
+                            return NotFound();
+                        }
+                    }
+                    /**
                     String sql = String.Format("ClientID = {0} AND CupsJobId = N'{1}'", clientId.ToString(), jobId);
                     DAL.PrintQueue pQueue = DAL.PrintQueue.LoadWhere(sql);
                     if (pQueue != null)
@@ -147,6 +262,7 @@ namespace xFilm5.Api.Controllers
                         log.Error("[vps] PrintQueue == null " + jsonData.ToString());
                         return NotFound();
                     }
+                    */
                 }
                 catch (Exception e)
                 {
@@ -175,6 +291,23 @@ namespace xFilm5.Api.Controllers
                     String jobId = jsonData["jobId"].Value<String>();
                     String cip3FileName = jsonData["cip3FileName"].Value<String>();
 
+                    using (var ctx = new EF6.xFilmEntities())
+                    {
+                        var pq = ctx.PrintQueue.Where(x => x.ClientID == clientId && x.CupsJobID == jobId).SingleOrDefault();
+                        if (pq != null)
+                        {
+                            UpdateListCycle(pq.ID, (int)DAL.Common.Enums.PrintQSubitemType.Cip3);
+
+                            log.Info("[cip3] " + jsonData.ToString());
+                            return Ok();
+                        }
+                        else
+                        {
+                            log.Error("[cip3] PrintQueue == null " + jsonData.ToString());
+                            return NotFound();
+                        }
+                    }
+                    /**
                     String sql = String.Format("ClientID = {0} AND CupsJobId = N'{1}'", clientId.ToString(), jobId);
                     DAL.PrintQueue pQueue = DAL.PrintQueue.LoadWhere(sql);
                     if (pQueue != null)
@@ -189,6 +322,7 @@ namespace xFilm5.Api.Controllers
                         log.Error("[cip3] PrintQueue == null " + jsonData.ToString());
                         return NotFound();
                     }
+                    */
                 }
                 catch (Exception e)
                 {
@@ -217,6 +351,23 @@ namespace xFilm5.Api.Controllers
                     String jobId = jsonData["jobId"].Value<String>();
                     String tiffFileName = jsonData["tiffFileName"].Value<String>();
 
+                    using (var ctx = new EF6.xFilmEntities())
+                    {
+                        var pq = ctx.PrintQueue.Where(x => x.ClientID == clientId && x.CupsJobID == jobId).SingleOrDefault();
+                        if (pq != null)
+                        {
+                            UpdateListCycle(pq.ID, (int)DAL.Common.Enums.PrintQSubitemType.Tiff);
+
+                            log.Info("[tiff] " + jsonData.ToString());
+                            return Ok();
+                        }
+                        else
+                        {
+                            log.Error("[tiff] PrintQueue == null " + jsonData.ToString());
+                            return NotFound();
+                        }
+                    }
+                    /**
                     String sql = String.Format("ClientID = {0} AND CupsJobId = N'{1}'", clientId.ToString(), jobId);
                     DAL.PrintQueue pQueue = DAL.PrintQueue.LoadWhere(sql);
                     if (pQueue != null)
@@ -231,6 +382,7 @@ namespace xFilm5.Api.Controllers
                         log.Error("[tiff] PrintQueue == null " + jsonData.ToString());
                         return NotFound();
                     }
+                    */
                 }
                 catch (Exception e)
                 {
@@ -259,6 +411,23 @@ namespace xFilm5.Api.Controllers
                     String jobId = jsonData["jobId"].Value<String>();
                     String bpFileName = jsonData["bpFileName"].Value<String>();
 
+                    using (var ctx = new EF6.xFilmEntities())
+                    {
+                        var pq = ctx.PrintQueue.Where(x => x.ClientID == clientId && x.CupsJobID == jobId).SingleOrDefault();
+                        if (pq != null)
+                        {
+                            UpdateListCycle(pq.ID, (int)DAL.Common.Enums.PrintQSubitemType.Blueprint);
+
+                            log.Info("[blueprint] " + jsonData.ToString());
+                            return Ok();
+                        }
+                        else
+                        {
+                            log.Error("[blueprint] PrintQueue == null " + jsonData.ToString());
+                            return NotFound();
+                        }
+                    }
+                    /**
                     String sql = String.Format("ClientID = {0} AND CupsJobId = N'{1}'", clientId.ToString(), jobId);
                     DAL.PrintQueue pQueue = DAL.PrintQueue.LoadWhere(sql);
                     if (pQueue != null)
@@ -273,6 +442,7 @@ namespace xFilm5.Api.Controllers
                         log.Error("[blueprint] PrintQueue == null " + jsonData.ToString());
                         return NotFound();
                     }
+                    */
                 }
                 catch (Exception e)
                 {
@@ -301,6 +471,31 @@ namespace xFilm5.Api.Controllers
                     String jobId = jsonData["jobId"].Value<String>();
                     String plateFileName = jsonData["plateFileName"].Value<String>();
 
+                    using (var ctx = new EF6.xFilmEntities())
+                    {
+                        var pq = ctx.PrintQueue.Where(x => x.ClientID == clientId && x.CupsJobID == jobId).SingleOrDefault();
+                        if (pq != null)
+                        {
+                            var vps = ctx.PrintQueue_VPS.Where(x => x.PrintQueueID == pq.ID && x.VpsFileName == plateFileName).SingleOrDefault();
+                            if (vps == null)
+                            {
+                                UpdateListCycle(pq.ID, (int)DAL.Common.Enums.PrintQSubitemType.Plate);
+                            }
+                            else
+                            {
+                                UpdateListCycle_Vps(pq.ID, vps.ID, (int)DAL.Common.Enums.PrintQSubitemType.Plate);
+                            }
+
+                            log.Info("[plate] " + jsonData.ToString());
+                            return Ok();
+                        }
+                        else
+                        {
+                            log.Error("[plate] PrintQueue == null " + jsonData.ToString());
+                            return NotFound();
+                        }
+                    }
+                    /**
                     String sql = String.Format("ClientID = {0} AND CupsJobId = N'{1}'", clientId.ToString(), jobId);
                     DAL.PrintQueue pQueue = DAL.PrintQueue.LoadWhere(sql);
                     if (pQueue != null)
@@ -325,6 +520,7 @@ namespace xFilm5.Api.Controllers
                         log.Error("[plate] PrintQueue == null " + jsonData.ToString());
                         return NotFound();
                     }
+                    */
                 }
                 catch (Exception e)
                 {
@@ -342,6 +538,23 @@ namespace xFilm5.Api.Controllers
         /// <param name="type"></param>
         private void UpdateListCycle(int pQueueId, int type)
         {
+            using (var ctx = new EF6.xFilmEntities())
+            {
+                var cycleExist = ctx.PrintQueue_LifeCycle.Where(x => x.PrintQueueId == pQueueId && x.PrintQSubitemType == type).Any();
+                if (!(cycleExist))
+                {
+                    var cycle = new EF6.PrintQueue_LifeCycle();
+                    cycle.PrintQueueId = pQueueId;
+                    cycle.PrintQSubitemType = type;
+                    cycle.Status = (int)DAL.Common.Enums.Status.Active;
+                    cycle.CreatedOn = DateTime.Now;
+                    cycle.CreatedBy = 0;
+
+                    ctx.PrintQueue_LifeCycle.Add(cycle);
+                    ctx.SaveChanges();
+                }
+            }
+            /**
             String sql = String.Format("PrintQueueId = {0} AND PrintQSubitemType = {1}", pQueueId.ToString(), type);
             DAL.PrintQueue_LifeCycle lifeCycle = DAL.PrintQueue_LifeCycle.LoadWhere(sql);
             if (lifeCycle == null)
@@ -349,17 +562,36 @@ namespace xFilm5.Api.Controllers
                 lifeCycle = new DAL.PrintQueue_LifeCycle();
                 lifeCycle.PrintQueueId = pQueueId;
                 lifeCycle.PrintQSubitemType = type;
-            lifeCycle.Status = (int)DAL.Common.Enums.Status.Active;
-            lifeCycle.CreatedOn = DateTime.Now;
-            lifeCycle.CreatedBy = 0;
-            lifeCycle.Save();
+                lifeCycle.Status = (int)DAL.Common.Enums.Status.Active;
+                lifeCycle.CreatedOn = DateTime.Now;
+                lifeCycle.CreatedBy = 0;
+                lifeCycle.Save();
 
                 //log.Info(String.Format("[InsRec PrintQueue_LifeCycle] PrintQueueId = {0}, PrintQSubitemType = {1}", pQueueId.ToString(), type.ToString()));
             }
+            */
         }
 
         private void UpdateListCycle_Vps(int pQueueId, int pQueueVpsId, int type)
         {
+            using (var ctx = new EF6.xFilmEntities())
+            {
+                var cycleExist = ctx.PrintQueue_LifeCycle.Where(x => x.PrintQueueVpsId == pQueueId && x.PrintQSubitemType == type).Any();
+                if (!(cycleExist))
+                {
+                    var cycle = new EF6.PrintQueue_LifeCycle();
+                    cycle.PrintQueueId = pQueueId;
+                    cycle.PrintQueueVpsId = pQueueVpsId;
+                    cycle.PrintQSubitemType = type;
+                    cycle.Status = (int)DAL.Common.Enums.Status.Active;
+                    cycle.CreatedOn = DateTime.Now;
+                    cycle.CreatedBy = 0;
+
+                    ctx.PrintQueue_LifeCycle.Add(cycle);
+                    ctx.SaveChanges();
+                }
+            }
+            /**
             String sql = String.Format("PrintQueueId = {0} AND PrintQueueVpsId = {1} AND PrintQSubitemType = {2}", pQueueId.ToString(), pQueueVpsId.ToString(), type);
             DAL.PrintQueue_LifeCycle lifeCycle = DAL.PrintQueue_LifeCycle.LoadWhere(sql);
             if (lifeCycle == null)
@@ -375,6 +607,7 @@ namespace xFilm5.Api.Controllers
 
                 //log.Info(String.Format("[InsRec PrintQueue_LifeCycle] PrintQueueId = {0}, PrintQSubitemType = {1}", pQueueId.ToString(), type.ToString()));
             }
+            */
         }
     }
 }
