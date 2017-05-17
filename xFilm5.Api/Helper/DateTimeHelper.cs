@@ -9,6 +9,11 @@ namespace xFilm5.Api.Helper
 {
     public class DateTimeHelper
     {
+        public static DateTime GetZeroDate()
+        {
+            return DateTime.Parse("1900-01-01 00:00:00.000");
+        }
+
         public static DateTime GetDateTimeNow()
         {
             var format = "yyyy-MM-dd HH:mm:ss:fff";
