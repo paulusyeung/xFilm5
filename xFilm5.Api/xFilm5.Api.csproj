@@ -153,6 +153,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\DateTimeHelper.cs" />
     <Compile Include="Models\Acct_INDetails.cs" />
     <Compile Include="Models\Acct_INMaster.cs" />
     <Compile Include="Models\Client.cs" />

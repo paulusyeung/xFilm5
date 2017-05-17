@@ -36,10 +36,11 @@ namespace xFilm5.Api.Controllers
                 String jobTitle = jsonData["jobTitle"].Value<String>();
                 String plateSize = jsonData["plateSize"].Value<String>();
 
+                /**
                 using (var ctx = new EF6.xFilmEntities())
                 {
                     var client = ctx.Client.Where(x => x.ID == clientId).SingleOrDefault();
-                    if (client == null)
+                    if (client != null)
                     {
                         try
                         {
@@ -51,12 +52,14 @@ namespace xFilm5.Api.Controllers
                                 pq = new EF6.PrintQueue();
                                 pq.ClientID = clientId;
                                 pq.CupsJobID = jobId;
-
                                 pq.CupsJobTitle = jobTitle;
                                 pq.PlateSize = plateSize;
+                                pq.BlueprintOrdered = false;
                                 pq.Status = (int)DAL.Common.Enums.Status.Active;
                                 pq.CreatedOn = DateTime.Now;
+                                pq.CreatedBy = 0;
                                 pq.ModifiedOn = DateTime.Now;
+                                pq.ModifiedBy = 0;
                                 pq.Retired = false;
 
                                 ctx.PrintQueue.Add(pq);
@@ -70,9 +73,12 @@ namespace xFilm5.Api.Controllers
 
                                 pq.CupsJobTitle = jobTitle;
                                 pq.PlateSize = plateSize;
+                                pq.BlueprintOrdered = false;
                                 pq.Status = (int)DAL.Common.Enums.Status.Active;
                                 pq.CreatedOn = DateTime.Now;
+                                pq.CreatedBy = 0;
                                 pq.ModifiedOn = DateTime.Now;
+                                pq.ModifiedBy = 0;
                                 pq.Retired = false;
 
                                 using (var scope = ctx.Database.BeginTransaction())
@@ -103,7 +109,8 @@ namespace xFilm5.Api.Controllers
                         return NotFound();
                     }
                 }
-                /**
+                */
+                
                 DAL.Client client = DAL.Client.Load(clientId);
                 if (client != null)
                 {
@@ -161,7 +168,7 @@ namespace xFilm5.Api.Controllers
                     log.Error("[cups] Client == null " + jsonData.ToString());
                     return NotFound();
                 }
-                */
+                
                 #endregion
             }
         }
@@ -184,6 +191,7 @@ namespace xFilm5.Api.Controllers
                     String jobId = jsonData["jobId"].Value<String>();
                     String vpsFileName = jsonData["vpsFileName"].Value<String>();
 
+                    /**
                     using (var ctx = new EF6.xFilmEntities())
                     {
                         var pq = ctx.PrintQueue.Where(x => x.ClientID == clientId && x.CupsJobID == jobId).SingleOrDefault();
@@ -199,8 +207,11 @@ namespace xFilm5.Api.Controllers
 
                                 vps.PrintQueueID = pq.ID;
                                 vps.VpsFileName = vpsFileName;
+                                vps.PlateOrdered = false;
                                 vps.CreatedOn = DateTime.Now;
+                                vps.CreatedBy = 0;
                                 vps.ModifiedOn = DateTime.Now;
+                                vps.ModifiedBy = 0;
                                 vps.Retired = false;
 
                                 ctx.PrintQueue_VPS.Add(vps);
@@ -210,8 +221,11 @@ namespace xFilm5.Api.Controllers
                             {
                                 vps.PrintQueueID = pq.ID;
                                 vps.VpsFileName = vpsFileName;
+                                vps.PlateOrdered = false;
                                 vps.CreatedOn = DateTime.Now;
+                                vps.CreatedBy = 0;
                                 vps.ModifiedOn = DateTime.Now;
+                                vps.ModifiedBy = 0;
                                 vps.Retired = false;
 
                                 ctx.SaveChanges();
@@ -230,7 +244,8 @@ namespace xFilm5.Api.Controllers
                             return NotFound();
                         }
                     }
-                    /**
+                    */
+                    
                     String sql = String.Format("ClientID = {0} AND CupsJobId = N'{1}'", clientId.ToString(), jobId);
                     DAL.PrintQueue pQueue = DAL.PrintQueue.LoadWhere(sql);
                     if (pQueue != null)
@@ -262,7 +277,7 @@ namespace xFilm5.Api.Controllers
                         log.Error("[vps] PrintQueue == null " + jsonData.ToString());
                         return NotFound();
                     }
-                    */
+                    
                 }
                 catch (Exception e)
                 {
@@ -291,6 +306,7 @@ namespace xFilm5.Api.Controllers
                     String jobId = jsonData["jobId"].Value<String>();
                     String cip3FileName = jsonData["cip3FileName"].Value<String>();
 
+                    /**
                     using (var ctx = new EF6.xFilmEntities())
                     {
                         var pq = ctx.PrintQueue.Where(x => x.ClientID == clientId && x.CupsJobID == jobId).SingleOrDefault();
@@ -307,7 +323,8 @@ namespace xFilm5.Api.Controllers
                             return NotFound();
                         }
                     }
-                    /**
+                    */
+                    
                     String sql = String.Format("ClientID = {0} AND CupsJobId = N'{1}'", clientId.ToString(), jobId);
                     DAL.PrintQueue pQueue = DAL.PrintQueue.LoadWhere(sql);
                     if (pQueue != null)
@@ -322,7 +339,7 @@ namespace xFilm5.Api.Controllers
                         log.Error("[cip3] PrintQueue == null " + jsonData.ToString());
                         return NotFound();
                     }
-                    */
+                    
                 }
                 catch (Exception e)
                 {
@@ -351,6 +368,7 @@ namespace xFilm5.Api.Controllers
                     String jobId = jsonData["jobId"].Value<String>();
                     String tiffFileName = jsonData["tiffFileName"].Value<String>();
 
+                    /**
                     using (var ctx = new EF6.xFilmEntities())
                     {
                         var pq = ctx.PrintQueue.Where(x => x.ClientID == clientId && x.CupsJobID == jobId).SingleOrDefault();
@@ -367,7 +385,8 @@ namespace xFilm5.Api.Controllers
                             return NotFound();
                         }
                     }
-                    /**
+                    */
+                    
                     String sql = String.Format("ClientID = {0} AND CupsJobId = N'{1}'", clientId.ToString(), jobId);
                     DAL.PrintQueue pQueue = DAL.PrintQueue.LoadWhere(sql);
                     if (pQueue != null)
@@ -382,7 +401,7 @@ namespace xFilm5.Api.Controllers
                         log.Error("[tiff] PrintQueue == null " + jsonData.ToString());
                         return NotFound();
                     }
-                    */
+                    
                 }
                 catch (Exception e)
                 {
@@ -411,6 +430,7 @@ namespace xFilm5.Api.Controllers
                     String jobId = jsonData["jobId"].Value<String>();
                     String bpFileName = jsonData["bpFileName"].Value<String>();
 
+                    /**
                     using (var ctx = new EF6.xFilmEntities())
                     {
                         var pq = ctx.PrintQueue.Where(x => x.ClientID == clientId && x.CupsJobID == jobId).SingleOrDefault();
@@ -427,7 +447,8 @@ namespace xFilm5.Api.Controllers
                             return NotFound();
                         }
                     }
-                    /**
+                    */
+                    
                     String sql = String.Format("ClientID = {0} AND CupsJobId = N'{1}'", clientId.ToString(), jobId);
                     DAL.PrintQueue pQueue = DAL.PrintQueue.LoadWhere(sql);
                     if (pQueue != null)
@@ -442,7 +463,7 @@ namespace xFilm5.Api.Controllers
                         log.Error("[blueprint] PrintQueue == null " + jsonData.ToString());
                         return NotFound();
                     }
-                    */
+                    
                 }
                 catch (Exception e)
                 {
@@ -471,6 +492,7 @@ namespace xFilm5.Api.Controllers
                     String jobId = jsonData["jobId"].Value<String>();
                     String plateFileName = jsonData["plateFileName"].Value<String>();
 
+                    /**
                     using (var ctx = new EF6.xFilmEntities())
                     {
                         var pq = ctx.PrintQueue.Where(x => x.ClientID == clientId && x.CupsJobID == jobId).SingleOrDefault();
@@ -495,7 +517,8 @@ namespace xFilm5.Api.Controllers
                             return NotFound();
                         }
                     }
-                    /**
+                    */
+                    
                     String sql = String.Format("ClientID = {0} AND CupsJobId = N'{1}'", clientId.ToString(), jobId);
                     DAL.PrintQueue pQueue = DAL.PrintQueue.LoadWhere(sql);
                     if (pQueue != null)
@@ -520,7 +543,7 @@ namespace xFilm5.Api.Controllers
                         log.Error("[plate] PrintQueue == null " + jsonData.ToString());
                         return NotFound();
                     }
-                    */
+                    
                 }
                 catch (Exception e)
                 {
@@ -538,6 +561,7 @@ namespace xFilm5.Api.Controllers
         /// <param name="type"></param>
         private void UpdateListCycle(int pQueueId, int type)
         {
+            /**
             using (var ctx = new EF6.xFilmEntities())
             {
                 var cycleExist = ctx.PrintQueue_LifeCycle.Where(x => x.PrintQueueId == pQueueId && x.PrintQSubitemType == type).Any();
@@ -554,7 +578,8 @@ namespace xFilm5.Api.Controllers
                     ctx.SaveChanges();
                 }
             }
-            /**
+            */
+            
             String sql = String.Format("PrintQueueId = {0} AND PrintQSubitemType = {1}", pQueueId.ToString(), type);
             DAL.PrintQueue_LifeCycle lifeCycle = DAL.PrintQueue_LifeCycle.LoadWhere(sql);
             if (lifeCycle == null)
@@ -569,11 +594,12 @@ namespace xFilm5.Api.Controllers
 
                 //log.Info(String.Format("[InsRec PrintQueue_LifeCycle] PrintQueueId = {0}, PrintQSubitemType = {1}", pQueueId.ToString(), type.ToString()));
             }
-            */
+            
         }
 
         private void UpdateListCycle_Vps(int pQueueId, int pQueueVpsId, int type)
         {
+            /**
             using (var ctx = new EF6.xFilmEntities())
             {
                 var cycleExist = ctx.PrintQueue_LifeCycle.Where(x => x.PrintQueueVpsId == pQueueId && x.PrintQSubitemType == type).Any();
@@ -591,7 +617,8 @@ namespace xFilm5.Api.Controllers
                     ctx.SaveChanges();
                 }
             }
-            /**
+            */
+            
             String sql = String.Format("PrintQueueId = {0} AND PrintQueueVpsId = {1} AND PrintQSubitemType = {2}", pQueueId.ToString(), pQueueVpsId.ToString(), type);
             DAL.PrintQueue_LifeCycle lifeCycle = DAL.PrintQueue_LifeCycle.LoadWhere(sql);
             if (lifeCycle == null)
@@ -607,7 +634,7 @@ namespace xFilm5.Api.Controllers
 
                 //log.Info(String.Format("[InsRec PrintQueue_LifeCycle] PrintQueueId = {0}, PrintQSubitemType = {1}", pQueueId.ToString(), type.ToString()));
             }
-            */
+            
         }
     }
 }
