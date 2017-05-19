@@ -142,7 +142,16 @@ namespace xFilm5.QRStation
                                 {
                                     try
                                     {
-                                        var orderPq = ctx.OrderPkPrintQueueVps.Where(x => x.PrintQueueVpsId == pQueueVps.ID).FirstOrDefault();
+                                        EF6.OrderPkPrintQueueVps orderPq = null;
+                                        switch (sourceType)
+                                        {
+                                            case SourceType.Plate:
+                                                orderPq = ctx.OrderPkPrintQueueVps.Where(x => x.PrintQueueVpsId == pQueueVps.ID && x.CheckedPlate == true).FirstOrDefault();
+                                                break;
+                                            case SourceType.Blueprint:
+                                                orderPq = ctx.OrderPkPrintQueueVps.Where(x => x.PrintQueueVpsId == pQueueVps.ID && x.CheckedBlueprint == true).FirstOrDefault();
+                                                break;
+                                        }
 
                                         int pQueueVpsId = (pQueueVps == null) ? 0 : pQueueVps.ID;
                                         LogLifeCycle(sourceType, pQueue.ID, pQueueVpsId);                                   //   update Log File
