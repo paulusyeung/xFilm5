@@ -906,7 +906,7 @@ WHERE Rn = 1
             if (_ClientId != 0)
             {
                 //xFilm5.Controls.Excel.ExcelEx.ExportDNList(this, _ClientId, dtpSelectedDate.Value.Year, dtpSelectedDate.Value.Month);
-                String wksheetName = "DNList";
+                String wksheetName = "DN List";
                 String filename = "DNList.xlsx";
                 String filePath = Path.Combine(DAL.Common.Config.OutBox, filename);
 
@@ -933,6 +933,14 @@ WHERE Rn = 1
                 wb.Worksheet(wksheetName).Range(2, 27, rowcount, 27).Style.NumberFormat.SetFormat("$#,##0.00;-$#,##0.00;;@");         // Amount
                 //wb.Worksheet(wksheetName).Range(2, 12, rowcount, 12).Style.DateFormat.SetFormat("dd/MM/yyyy");                      // required on
                 //wb.Worksheet(wksheetName).Range(2, 19, rowcount, 19).Style.DateFormat.SetFormat("dd/MM/yyyy");                      // completed on
+                
+                wb.Worksheet(wksheetName).Columns(9, 19).Hide();    // hide columns I to S
+
+                // subtotal amount
+                wb.Worksheet(wksheetName).Cell(rowcount + 1, 6).FormulaA1 = String.Format("=SUBTOTAL(9,F2:F{0})", rowcount.ToString());
+                wb.Worksheet(wksheetName).Cell(rowcount + 1, 6).Style.NumberFormat.SetFormat("$#,##0.00;-$#,##0.00;;@");
+                wb.Worksheet(wksheetName).Cell(rowcount + 1, 6).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                wb.Worksheet(wksheetName).Cell(rowcount + 1, 6).Style.Border.BottomBorder = XLBorderStyleValues.Double;
                 #endregion
 
                 //wb.SaveAs(filePath);
