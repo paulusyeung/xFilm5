@@ -25,8 +25,8 @@ SELECT CASE WHEN Ln = 1 THEN CAST([idx] AS VARCHAR(10)) ELSE '' END AS idx
       ,CASE WHEN Ln = 1 THEN CAST([ReceiptNumber] AS VARCHAR(10)) ELSE '' END AS ReceiptNumber
       ,CASE WHEN Ln = 1 THEN CONVERT(VARCHAR(10), [ReceiptDate], 120) ELSE '' END AS ReceiptDate
       ,CASE WHEN Ln = 1 THEN [ReceiptAmount] ELSE 0 END AS ReceiptAmount
-      ,CASE WHEN Ln = 1 THEN ISNULL(CAST([ClientUserId] AS VARCHAR(10)), '') ELSE '' END AS ClientUserId
-      ,CASE WHEN Ln = 1 THEN ISNULL([ClientUserName], '') ELSE '' END AS ClientUserName
+      ,CASE WHEN Ln = 1 THEN ISNULL(CAST([OrderedClientUserId] AS VARCHAR(10)), '') ELSE '' END AS OrderedByUserId
+      ,CASE WHEN Ln = 1 THEN ISNULL([OrderedClientUserName], '') ELSE '' END AS OrderedByUserName
       ,CASE WHEN Ln = 1 THEN (CASE WHEN [Paid] = 1 THEN 'Yes' ELSE 'No' END) ELSE '' END AS Paid
       ,CASE WHEN Ln = 1 THEN [PaymentType] ELSE '' END AS PaymentType
 --      ,[INMasterId]
@@ -64,8 +64,8 @@ SELECT DENSE_RANK() OVER(Order By [ReceiptHeaderId]) AS idx
       ,[ReceiptAmount]
       ,[PaymentType]
       ,[INMasterId]
-      ,[ClientUserId]
-      ,[ClientUserName]
+      ,[OrderedClientUserId]
+      ,[OrderedClientUserName]
       ,[Paid]
       ,[PaidOn]
       ,[PaidAmount]
@@ -87,7 +87,7 @@ SELECT DENSE_RANK() OVER(Order By [ReceiptHeaderId]) AS idx
       ,[ItemAmount]
       ,[OrderPkPrintQueueVpsId]
       ,[OrderHeaderId]
-FROM [dbo].[vwReceiptDetailsList]
+FROM [dbo].[vwReceiptDetailsList_Ex]
 WHERE ([ClientId] = {0}) AND (YEAR([ReceiptDate]) = {1}) AND (MONTH([ReceiptDate]) = {2})
 ) AS s
 ORDER By [ReceiptHeaderId], [ItemDescription]
