@@ -423,14 +423,14 @@ namespace xFilm5.Bot
                     {
                         #region font A:  12x24 48 chars/line
                         List<String> itemDescription = ConvertToMultipleLines(item.ItemCode + " " + item.ItemDescription, 36);
-                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(line = String.Format("{0} {1,-36} {2,8:N2}\n", qty.ToString().PadLeft(2), itemDescription[0], amt)));
+                        BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(line = String.Format("{0} {1,-36} {2,8:N2}\n", qty.ToString().PadLeft(2), itemDescription[0], amt)));
 
                         // 如果超過一行，第二行開始唔使打印 Qty 同 Amount
                         if (itemDescription.Count > 1)
                         {
                             for (int i = 1; i < itemDescription.Count; i++)
                             {
-                                BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.ASCII.GetBytes(line = String.Format("   {0,-36}\n", itemDescription[i].PadLeft(3))));
+                                BytesValue = PrintExtensions.AddBytes(BytesValue, Encoding.GetEncoding(codePage).GetBytes(line = String.Format("   {0,-36}\n", itemDescription[i].PadLeft(3))));
                             }
                         }
                         #endregion
