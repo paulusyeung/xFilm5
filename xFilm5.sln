@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xFilm5.Bot", "xFilm5.Bot\xF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xFilm5.EF6", "xFilm5.EF6\xFilm5.EF6.csproj", "{909B0971-2434-4BC2-BDF7-B04A39FE1B9E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xFilm5.QRCoder", "xFilm5.QRCoder\xFilm5.QRCoder.csproj", "{E999D6E2-6CC7-4E5D-B9FB-08B7C0C78ABB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{909B0971-2434-4BC2-BDF7-B04A39FE1B9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{909B0971-2434-4BC2-BDF7-B04A39FE1B9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{909B0971-2434-4BC2-BDF7-B04A39FE1B9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E999D6E2-6CC7-4E5D-B9FB-08B7C0C78ABB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E999D6E2-6CC7-4E5D-B9FB-08B7C0C78ABB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E999D6E2-6CC7-4E5D-B9FB-08B7C0C78ABB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E999D6E2-6CC7-4E5D-B9FB-08B7C0C78ABB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
