@@ -67,5 +67,6 @@ namespace xFilm5.EF6
         public virtual DbSet<UserPreference> UserPreference { get; set; }
         public virtual DbSet<X_Counter> X_Counter { get; set; }
         public virtual DbSet<Z_WebColor> Z_WebColor { get; set; }
+        public virtual DbSet<vwReceiptDetailsList_Ex> vwReceiptDetailsList_Ex { get; set; }
     }
 }

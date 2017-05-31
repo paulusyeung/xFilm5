@@ -60,7 +60,7 @@ namespace xFilm5.Accounting.Reports
             this.txtInvoiceNumber.DataBindings.Add("Text", DataSource, "InvoiceNumber", "{0:###}");
             this.txtOrderNumber.DataBindings.Add("Text", DataSource, "OrderID", "{0:###}");
             this.txtRemarks.DataBindings.Add("Text", DataSource, "Remarks");
-            this.txtAmount.DataBindings.Add("Text", DataSource, "OsAmount", "{0:n2}");
+            this.txtAmount.DataBindings.Add("Text", DataSource, "OsAmount", "{0:$#,##0.00}");
             #endregion
 
             //this.txtInvoiceAmount.DataBindings.Add("Text", DataSource, "InvoiceAmount", "{0:c2}");
@@ -94,11 +94,11 @@ namespace xFilm5.Accounting.Reports
 
         private void GroupFooter1_BeforePrint(object sender, System.Drawing.Printing.PrintEventArgs e)
         {
-            this.txt90Days.Text = os3Months.ToString("#,##0.00");
-            this.txt60Days.Text = os2Months.ToString("#,##0.00");
-            this.txt30Days.Text = lastMonth.ToString("#,##0.00");
-            this.txtCurrent.Text = curMonth.ToString("#,##0.00");
-            this.txtTotal.Text = totalDue.ToString("#,##0.00");
+            this.txt90Days.Text = os3Months.ToString("$#,##0.00");
+            this.txt60Days.Text = (os2Months + os3Months).ToString("$#,##0.00");
+            this.txt30Days.Text = lastMonth.ToString("$#,##0.00");
+            this.txtCurrent.Text = curMonth.ToString("$#,##0.00");
+            this.txtTotal.Text = totalDue.ToString("$#,##0.00");
         }
 
     }

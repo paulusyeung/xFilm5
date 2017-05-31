@@ -341,7 +341,7 @@ namespace xFilm5.Accounting
 //                objItem.SubItems.Add(reader.GetInt32(1).ToString());  // Aging
                 objItem.SubItems.Add(reader.GetString(4));  // Invoice Date
                 objItem.SubItems.Add(reader.GetDecimal(5).ToString("#,##0.00"));  // OS Amount
-                objItem.SubItems.Add(reader.GetInt32(9).ToString()); // Order ID
+                objItem.SubItems.Add(reader.GetInt32(9).ToString("###")); // Order ID
                 objItem.SubItems.Add(reader.GetString(8));  // Remarks
                 objItem.SubItems.Add(reader.GetInt32(2).ToString()); // Invoice ID
 
@@ -371,10 +371,10 @@ SELECT [ClientID]
       ,[InvoiceNumber]
       ,CONVERT(NVARCHAR(10), [InvoiceDate], 120) AS InvoiceDate
       ,[OsAmount]
-      ,[InvoiceAmount]
+      ,ISNULL([InvoiceAmount], 0) AS InvoiceAmount
       ,[Status]
-      ,[Remarks]
-      ,[OrderID]
+      ,ISNULL([Remarks], '') AS Remarks
+      ,ISNULL([OrderID], 0) AS OrderID
       ,[CreatedOn]
       ,[CreatedBy]
       ,[LastModifiedOn]

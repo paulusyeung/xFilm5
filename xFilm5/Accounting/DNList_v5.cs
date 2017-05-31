@@ -23,6 +23,8 @@ using Gizmox.WebGUI.Forms.Dialogs;
 
 using xFilm5.DAL;
 using ClosedXML.Excel;
+using System.Linq;
+using xFilm5.Helper;
 
 #endregion
 
@@ -497,6 +499,8 @@ ORDER BY [ReceiptHeaderId], [ItemDescription]
             cmdEmail.Text = oDict.GetWord("email");
             cmdEmail.ToolTipText = oDict.GetWord("send_email");
             cmdExcel.ToolTipText = oDict.GetWord("export_to_excel");
+
+            cmdBilling.Text = oDict.GetWord("invoice");
         }
 
         private void SetAttribute()
@@ -992,6 +996,75 @@ WHERE Rn = 1
                 dl.SetContentType(xFilm5.Controls.DownloadContentType.MicrosoftExcel);
                 //dl.StartFileDownload(this, filePath);
                 dl.StartStreamDownload(this, stream);
+            }
+        }
+
+        private void cmdBilling_Click(object sender, EventArgs e)
+        {
+            if (_ClientId != 0)
+            {
+                nxStudio.BaseClass.WordDict oDict = new nxStudio.BaseClass.WordDict(Common.Config.CurrentWordDict, Common.Config.CurrentLanguageId);
+                MessageBox.Show(oDict.GetWord("q_bill_this_customer"), "Billing Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, new EventHandler(cmdBilling_Confirmed));
+            }
+        }
+
+        private void cmdBilling_Confirmed(object sender, EventArgs e)
+        { 
+            if (((Form)sender).DialogResult == DialogResult.Yes)
+            {
+                Decimal totalAmount = 0;
+                int invoiceNumber = 0;
+
+                var invoiceDate = (new DateTime(dtpSelectedDate.Value.Year, dtpSelectedDate.Value.Month, 1)).AddMonths(1).AddDays(-1);
+                var dt = xFilm5.Controls.Excel.DataSource.Receipts_NotInvoiced(_ClientId, dtpSelectedDate.Value.Year, dtpSelectedDate.Value.Month);
+
+                #region 計個 Total Amount 俾個 report 用
+                using (var ctx = new EF6.xFilmEntities())
+                {
+                    var items = ctx.vwReceiptDetailsList_Ex
+                        .Where(x => x.ClientId == _ClientId && x.INMasterId == null && x.ReceiptDate.Value.Year == dtpSelectedDate.Value.Year && x.ReceiptDate.Value.Month == dtpSelectedDate.Value.Month)
+                        .OrderBy(x => x.ReceiptNumber).OrderBy(x => x.ItemDescription)
+                        .ToList();
+                    if (items.Count > 0)
+                    {
+                        invoiceNumber = xFilm5.Controls.Utility.System.GetNextInvoiceNumber();
+                        totalAmount = items.AsEnumerable().Sum(x => x.ItemAmount.Value);
+
+                        #region 同一 Receipt Header 抽一個 record，用嚟 update 個 dbo.INMaster
+                        var receiptHeaders = items.GroupBy(x => x.ReceiptHeaderId).Select(x => x.OrderBy(y => y.ItemDescription).First()).ToList();
+
+                        InvoiceHelper.GenMonthlyInvoice(receiptHeaders, _ClientId, invoiceNumber, invoiceDate, totalAmount);
+                        #endregion
+                    }
+                    else
+                    {
+                        MessageBox.Show("There's no valid record to bill!");
+                    }
+                }
+                #endregion
+
+                if (invoiceNumber != 0)
+                {
+                    #region 打印張 Invoice (A4 PDF)
+                    Reports.Invoice_v5 report1 = new Reports.Invoice_v5();
+                    report1.ClientId = _ClientId;
+                    report1.Year = dtpSelectedDate.Value.Year;
+                    report1.Month = dtpSelectedDate.Value.Month;
+                    report1.InvoiceNumber = invoiceNumber.ToString();
+                    report1.TotalAmount = totalAmount;
+                    report1.DataSource = dt;
+                    report1.CreateDocument();
+
+                    System.IO.MemoryStream memStream = new System.IO.MemoryStream();
+                    report1.ExportOptions.Pdf.NeverEmbeddedFonts = "MingLiU;Microsoft YaHei";
+                    report1.ExportToPdf(memStream);
+
+                    xFilm5.Controls.Reporting.Viewer viewer = new xFilm5.Controls.Reporting.Viewer();
+                    viewer.ReportName = "Invoice_v5";
+                    viewer.BinarySource = memStream;
+                    viewer.Show();
+                    #endregion
+                }
             }
         }
     }

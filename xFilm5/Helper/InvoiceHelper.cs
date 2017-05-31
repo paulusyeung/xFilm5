@@ -47,5 +47,96 @@ namespace xFilm5.Helper
             if (receipt != null)
                 Helper.BotHelper.PostXprinter(receipt.ReceiptHeaderId);
         }
+
+        public static bool GenMonthlyInvoice(List<EF6.vwReceiptDetailsList_Ex> items, int clientId, int invoiceNumber, DateTime invoiceDate, Decimal invoiceAmount)
+        {
+            bool result = false;
+            int invMasterId = 0;
+
+            if (items.Count > 0)
+            {
+                try
+                {
+                    using (var ctx = new EF6.xFilmEntities())
+                    {
+                        #region InsRec: dbo.Acct_INMaster
+                        var inv5Hdr = new EF6.Acct_INMaster();
+
+                        inv5Hdr.InvoiceNumber = invoiceNumber;
+                        inv5Hdr.InvoiceDate = invoiceDate;
+                        inv5Hdr.InvoiceAmount = invoiceAmount;
+                        inv5Hdr.ClientID = clientId;
+
+                        inv5Hdr.Paid = false;
+                        inv5Hdr.Remarks = "";
+
+                        inv5Hdr.CreatedOn = DateTime.Now;
+                        inv5Hdr.CreatedBy = CommonHelper.Config.CurrentUserId;
+                        inv5Hdr.LastModifiedOn = DateTime.Now;
+                        inv5Hdr.LastModifiedBy = CommonHelper.Config.CurrentUserId;
+                        inv5Hdr.Status = (int)CommonHelper.Enums.Status.Active;
+
+                        ctx.Acct_INMaster.Add(inv5Hdr);
+                        ctx.SaveChanges();
+
+                        invMasterId = inv5Hdr.ID;
+                        #endregion
+
+                        for (int i = 0; i < items.Count; i++)
+                        {
+                            var item = items[i];
+                            var hdr = ctx.ReceiptHeader.Where(x => x.ReceiptHeaderId == item.ReceiptHeaderId).SingleOrDefault();
+                            if (hdr != null)
+                            {
+                                #region UpdRec: dbo.ReceiptHeader.INMasterId
+                                hdr.INMasterId = invMasterId;
+                                //ctx.SaveChanges();
+                                #endregion
+
+                                var dtl = ctx.ReceiptDetail.Where(x => x.ReceiptHeaderId == hdr.ReceiptHeaderId).ToList();
+                                if (dtl.Count > 0)
+                                {
+                                    for (int j = 0; j < dtl.Count; j++)
+                                    {
+                                        var dtlRow = dtl[j];
+                                        var pk = ctx.OrderPkPrintQueueVps.Where(x => x.OrderPkPrintQueueVpsId == dtlRow.OrderPkPrintQueueVpsId).SingleOrDefault();
+                                        if (pk != null)
+                                        {
+                                            #region UpdRec: dbo.OrderPkPrintQueueVpsId.IsBilled
+                                            pk.IsBilled = true;
+                                            pk.ModifiedOn = DateTime.Now;
+                                            pk.ModifiedBy = CommonHelper.Config.CurrentUserId;
+                                            #endregion
+
+                                            #region InsRec: dbo.Acct_INDetails
+                                            var invDetail = new EF6.Acct_INDetails();
+
+                                            invDetail.INMasterID = invMasterId;
+                                            invDetail.OrderPkPrintQueueVpsId = pk.OrderPkPrintQueueVpsId;
+                                            invDetail.BillingCode = dtlRow.BillingCode;
+                                            invDetail.Description = dtlRow.Description;
+                                            invDetail.Qty = dtlRow.Qty;
+                                            invDetail.UnitAmount = dtlRow.UnitAmount;
+                                            invDetail.Discount = dtlRow.Discount;
+                                            invDetail.Amount = dtlRow.Amount;
+
+                                            ctx.Acct_INDetails.Add(invDetail);
+                                            #endregion
+
+                                            //ctx.SaveChanges();
+                                        }
+                                    }
+                                }
+                                // 一次過 save 哩隻 ReceiptHeader 有關嘅 changes
+                                ctx.SaveChanges();
+                            }
+                        }
+                    }
+                    result = true;
+                }
+                catch { }
+            }
+            return result;
+        }
     }
 }

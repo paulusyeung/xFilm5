@@ -1,6 +1,6 @@
 namespace xFilm5.Accounting.Reports
 {
-    partial class Statement
+    partial class Invoice_v5
     {
         /// <summary>
         /// Required designer variable.
@@ -32,22 +32,24 @@ namespace xFilm5.Accounting.Reports
             this.txtRemarks = new DevExpress.XtraReports.UI.XRLabel();
             this.txtAmount = new DevExpress.XtraReports.UI.XRLabel();
             this.txtOrderNumber = new DevExpress.XtraReports.UI.XRLabel();
-            this.txtInvoiceNumber = new DevExpress.XtraReports.UI.XRLabel();
+            this.txtDNNumber = new DevExpress.XtraReports.UI.XRLabel();
             this.txtDate = new DevExpress.XtraReports.UI.XRLabel();
             this.PageHeader = new DevExpress.XtraReports.UI.PageHeaderBand();
+            this.lblInvoiceAmount = new DevExpress.XtraReports.UI.XRLabel();
+            this.txtInvoiceAmount = new DevExpress.XtraReports.UI.XRLabel();
             this.lblCompanyAddress = new DevExpress.XtraReports.UI.XRRichText();
             this.xrPageInfo1 = new DevExpress.XtraReports.UI.XRPageInfo();
             this.lblRemarks = new DevExpress.XtraReports.UI.XRLabel();
             this.lblAmount = new DevExpress.XtraReports.UI.XRLabel();
             this.lblOrderNumber = new DevExpress.XtraReports.UI.XRLabel();
-            this.lblInvoiceNumber = new DevExpress.XtraReports.UI.XRLabel();
+            this.lblDNNumber = new DevExpress.XtraReports.UI.XRLabel();
             this.lblDate = new DevExpress.XtraReports.UI.XRLabel();
-            this.txtToday = new DevExpress.XtraReports.UI.XRLabel();
-            this.txtClientId = new DevExpress.XtraReports.UI.XRLabel();
+            this.txtInvoiceDate = new DevExpress.XtraReports.UI.XRLabel();
+            this.txtInvoiceNumber = new DevExpress.XtraReports.UI.XRLabel();
             this.lblPageNumber = new DevExpress.XtraReports.UI.XRLabel();
-            this.lblStatementOn = new DevExpress.XtraReports.UI.XRLabel();
-            this.lblClientId = new DevExpress.XtraReports.UI.XRLabel();
-            this.lblStatement = new DevExpress.XtraReports.UI.XRLabel();
+            this.lblInvoiceDate = new DevExpress.XtraReports.UI.XRLabel();
+            this.lblInvoiceNumber = new DevExpress.XtraReports.UI.XRLabel();
+            this.lblInvoice = new DevExpress.XtraReports.UI.XRLabel();
             this.xrPanel1 = new DevExpress.XtraReports.UI.XRPanel();
             this.txtClientAddress = new DevExpress.XtraReports.UI.XRRichText();
             this.txtFax = new DevExpress.XtraReports.UI.XRLabel();
@@ -59,14 +61,6 @@ namespace xFilm5.Accounting.Reports
             this.txtTimeStamp = new DevExpress.XtraReports.UI.XRLabel();
             this.GroupFooter1 = new DevExpress.XtraReports.UI.GroupFooterBand();
             this.txtTotal = new DevExpress.XtraReports.UI.XRLabel();
-            this.txtCurrent = new DevExpress.XtraReports.UI.XRLabel();
-            this.txt30Days = new DevExpress.XtraReports.UI.XRLabel();
-            this.txt60Days = new DevExpress.XtraReports.UI.XRLabel();
-            this.txt90Days = new DevExpress.XtraReports.UI.XRLabel();
-            this.lbl90Days = new DevExpress.XtraReports.UI.XRLabel();
-            this.lbl60Days = new DevExpress.XtraReports.UI.XRLabel();
-            this.lbl30Days = new DevExpress.XtraReports.UI.XRLabel();
-            this.lblCurrent = new DevExpress.XtraReports.UI.XRLabel();
             this.lblTotal = new DevExpress.XtraReports.UI.XRLabel();
             this.topMarginBand1 = new DevExpress.XtraReports.UI.TopMarginBand();
             this.bottomMarginBand1 = new DevExpress.XtraReports.UI.BottomMarginBand();
@@ -80,7 +74,7 @@ namespace xFilm5.Accounting.Reports
             this.txtRemarks,
             this.txtAmount,
             this.txtOrderNumber,
-            this.txtInvoiceNumber,
+            this.txtDNNumber,
             this.txtDate});
             this.Detail.HeightF = 24F;
             this.Detail.Name = "Detail";
@@ -121,16 +115,16 @@ namespace xFilm5.Accounting.Reports
             this.txtOrderNumber.Text = "txtOrderNumber";
             this.txtOrderNumber.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
-            // txtInvoiceNumber
+            // txtDNNumber
             // 
-            this.txtInvoiceNumber.CanGrow = false;
-            this.txtInvoiceNumber.Font = new System.Drawing.Font("MingLiU", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtInvoiceNumber.LocationFloat = new DevExpress.Utils.PointFloat(100F, 0F);
-            this.txtInvoiceNumber.Name = "txtInvoiceNumber";
-            this.txtInvoiceNumber.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.txtInvoiceNumber.SizeF = new System.Drawing.SizeF(100F, 20F);
-            this.txtInvoiceNumber.Text = "txtInvoiceNumber";
-            this.txtInvoiceNumber.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
+            this.txtDNNumber.CanGrow = false;
+            this.txtDNNumber.Font = new System.Drawing.Font("MingLiU", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtDNNumber.LocationFloat = new DevExpress.Utils.PointFloat(100F, 0F);
+            this.txtDNNumber.Name = "txtDNNumber";
+            this.txtDNNumber.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
+            this.txtDNNumber.SizeF = new System.Drawing.SizeF(100F, 20F);
+            this.txtDNNumber.Text = "txtDNNumber";
+            this.txtDNNumber.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // txtDate
             // 
@@ -146,25 +140,48 @@ namespace xFilm5.Accounting.Reports
             // PageHeader
             // 
             this.PageHeader.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {
+            this.lblInvoiceAmount,
+            this.txtInvoiceAmount,
             this.lblCompanyAddress,
             this.xrPageInfo1,
             this.lblRemarks,
             this.lblAmount,
             this.lblOrderNumber,
-            this.lblInvoiceNumber,
+            this.lblDNNumber,
             this.lblDate,
-            this.txtToday,
-            this.txtClientId,
+            this.txtInvoiceDate,
+            this.txtInvoiceNumber,
             this.lblPageNumber,
-            this.lblStatementOn,
-            this.lblClientId,
-            this.lblStatement,
+            this.lblInvoiceDate,
+            this.lblInvoiceNumber,
+            this.lblInvoice,
             this.xrPanel1,
             this.lblCompanyName});
             this.PageHeader.HeightF = 299F;
             this.PageHeader.Name = "PageHeader";
             this.PageHeader.Padding = new DevExpress.XtraPrinting.PaddingInfo(0, 0, 0, 0, 100F);
             this.PageHeader.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopLeft;
+            // 
+            // lblInvoiceAmount
+            // 
+            this.lblInvoiceAmount.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblInvoiceAmount.LocationFloat = new DevExpress.Utils.PointFloat(499.0001F, 129F);
+            this.lblInvoiceAmount.Name = "lblInvoiceAmount";
+            this.lblInvoiceAmount.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
+            this.lblInvoiceAmount.SizeF = new System.Drawing.SizeF(125F, 20F);
+            this.lblInvoiceAmount.StylePriority.UseTextAlignment = false;
+            this.lblInvoiceAmount.Text = "Invoice Amount:";
+            this.lblInvoiceAmount.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
+            // 
+            // txtInvoiceAmount
+            // 
+            this.txtInvoiceAmount.Font = new System.Drawing.Font("MingLiU", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtInvoiceAmount.LocationFloat = new DevExpress.Utils.PointFloat(625F, 129F);
+            this.txtInvoiceAmount.Name = "txtInvoiceAmount";
+            this.txtInvoiceAmount.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
+            this.txtInvoiceAmount.SizeF = new System.Drawing.SizeF(125F, 20F);
+            this.txtInvoiceAmount.Text = "txtInvoiceAmount";
+            this.txtInvoiceAmount.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
             // lblCompanyAddress
             // 
@@ -178,7 +195,7 @@ namespace xFilm5.Accounting.Reports
             // 
             this.xrPageInfo1.Font = new System.Drawing.Font("MingLiU", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.xrPageInfo1.Format = "{0} of {1}";
-            this.xrPageInfo1.LocationFloat = new DevExpress.Utils.PointFloat(625F, 150F);
+            this.xrPageInfo1.LocationFloat = new DevExpress.Utils.PointFloat(625F, 172F);
             this.xrPageInfo1.Name = "xrPageInfo1";
             this.xrPageInfo1.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
             this.xrPageInfo1.SizeF = new System.Drawing.SizeF(125F, 20F);
@@ -227,19 +244,19 @@ namespace xFilm5.Accounting.Reports
             this.lblOrderNumber.Text = "Order No.";
             this.lblOrderNumber.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
-            // lblInvoiceNumber
+            // lblDNNumber
             // 
-            this.lblInvoiceNumber.BackColor = System.Drawing.Color.Gray;
-            this.lblInvoiceNumber.Borders = ((DevExpress.XtraPrinting.BorderSide)(((DevExpress.XtraPrinting.BorderSide.Left | DevExpress.XtraPrinting.BorderSide.Top) 
+            this.lblDNNumber.BackColor = System.Drawing.Color.Gray;
+            this.lblDNNumber.Borders = ((DevExpress.XtraPrinting.BorderSide)(((DevExpress.XtraPrinting.BorderSide.Left | DevExpress.XtraPrinting.BorderSide.Top) 
             | DevExpress.XtraPrinting.BorderSide.Bottom)));
-            this.lblInvoiceNumber.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblInvoiceNumber.ForeColor = System.Drawing.Color.White;
-            this.lblInvoiceNumber.LocationFloat = new DevExpress.Utils.PointFloat(100F, 275F);
-            this.lblInvoiceNumber.Name = "lblInvoiceNumber";
-            this.lblInvoiceNumber.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lblInvoiceNumber.SizeF = new System.Drawing.SizeF(100F, 20F);
-            this.lblInvoiceNumber.Text = "Invoice No.";
-            this.lblInvoiceNumber.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
+            this.lblDNNumber.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDNNumber.ForeColor = System.Drawing.Color.White;
+            this.lblDNNumber.LocationFloat = new DevExpress.Utils.PointFloat(100F, 275F);
+            this.lblDNNumber.Name = "lblDNNumber";
+            this.lblDNNumber.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
+            this.lblDNNumber.SizeF = new System.Drawing.SizeF(100F, 20F);
+            this.lblDNNumber.Text = "DN No.";
+            this.lblDNNumber.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // lblDate
             // 
@@ -255,65 +272,68 @@ namespace xFilm5.Accounting.Reports
             this.lblDate.Text = "Date";
             this.lblDate.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
-            // txtToday
+            // txtInvoiceDate
             // 
-            this.txtToday.Font = new System.Drawing.Font("MingLiU", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtToday.LocationFloat = new DevExpress.Utils.PointFloat(625F, 129F);
-            this.txtToday.Name = "txtToday";
-            this.txtToday.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.txtToday.SizeF = new System.Drawing.SizeF(125F, 20F);
-            this.txtToday.Text = "txtToday";
-            this.txtToday.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
+            this.txtInvoiceDate.Font = new System.Drawing.Font("MingLiU", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtInvoiceDate.LocationFloat = new DevExpress.Utils.PointFloat(625F, 150.875F);
+            this.txtInvoiceDate.Name = "txtInvoiceDate";
+            this.txtInvoiceDate.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
+            this.txtInvoiceDate.SizeF = new System.Drawing.SizeF(125F, 20F);
+            this.txtInvoiceDate.Text = "txtInvoiceDate";
+            this.txtInvoiceDate.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
-            // txtClientId
+            // txtInvoiceNumber
             // 
-            this.txtClientId.Font = new System.Drawing.Font("MingLiU", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtClientId.LocationFloat = new DevExpress.Utils.PointFloat(625F, 108F);
-            this.txtClientId.Name = "txtClientId";
-            this.txtClientId.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.txtClientId.SizeF = new System.Drawing.SizeF(125F, 20F);
-            this.txtClientId.Text = "txtClientId";
-            this.txtClientId.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
+            this.txtInvoiceNumber.Font = new System.Drawing.Font("MingLiU", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtInvoiceNumber.LocationFloat = new DevExpress.Utils.PointFloat(625F, 108F);
+            this.txtInvoiceNumber.Name = "txtInvoiceNumber";
+            this.txtInvoiceNumber.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
+            this.txtInvoiceNumber.SizeF = new System.Drawing.SizeF(125F, 20F);
+            this.txtInvoiceNumber.Text = "txtInvoiceNumber";
+            this.txtInvoiceNumber.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
             // lblPageNumber
             // 
             this.lblPageNumber.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPageNumber.LocationFloat = new DevExpress.Utils.PointFloat(500F, 150F);
+            this.lblPageNumber.LocationFloat = new DevExpress.Utils.PointFloat(499F, 172F);
             this.lblPageNumber.Name = "lblPageNumber";
             this.lblPageNumber.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
             this.lblPageNumber.SizeF = new System.Drawing.SizeF(125F, 20F);
+            this.lblPageNumber.StylePriority.UseTextAlignment = false;
             this.lblPageNumber.Text = "Page Number:";
-            this.lblPageNumber.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopLeft;
+            this.lblPageNumber.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
-            // lblStatementOn
+            // lblInvoiceDate
             // 
-            this.lblStatementOn.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblStatementOn.LocationFloat = new DevExpress.Utils.PointFloat(500F, 129F);
-            this.lblStatementOn.Name = "lblStatementOn";
-            this.lblStatementOn.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lblStatementOn.SizeF = new System.Drawing.SizeF(125F, 20F);
-            this.lblStatementOn.Text = "Statement As On:";
-            this.lblStatementOn.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopLeft;
+            this.lblInvoiceDate.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblInvoiceDate.LocationFloat = new DevExpress.Utils.PointFloat(499F, 150.875F);
+            this.lblInvoiceDate.Name = "lblInvoiceDate";
+            this.lblInvoiceDate.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
+            this.lblInvoiceDate.SizeF = new System.Drawing.SizeF(125F, 20F);
+            this.lblInvoiceDate.StylePriority.UseTextAlignment = false;
+            this.lblInvoiceDate.Text = "Invoice Date:";
+            this.lblInvoiceDate.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
-            // lblClientId
+            // lblInvoiceNumber
             // 
-            this.lblClientId.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblClientId.LocationFloat = new DevExpress.Utils.PointFloat(500F, 108F);
-            this.lblClientId.Name = "lblClientId";
-            this.lblClientId.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lblClientId.SizeF = new System.Drawing.SizeF(125F, 20F);
-            this.lblClientId.Text = "Client ID:";
-            this.lblClientId.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopLeft;
+            this.lblInvoiceNumber.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblInvoiceNumber.LocationFloat = new DevExpress.Utils.PointFloat(499F, 108F);
+            this.lblInvoiceNumber.Name = "lblInvoiceNumber";
+            this.lblInvoiceNumber.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
+            this.lblInvoiceNumber.SizeF = new System.Drawing.SizeF(125F, 20F);
+            this.lblInvoiceNumber.StylePriority.UseTextAlignment = false;
+            this.lblInvoiceNumber.Text = "Invoice Number:";
+            this.lblInvoiceNumber.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleLeft;
             // 
-            // lblStatement
+            // lblInvoice
             // 
-            this.lblStatement.Font = new System.Drawing.Font("Arial", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblStatement.LocationFloat = new DevExpress.Utils.PointFloat(0F, 233F);
-            this.lblStatement.Name = "lblStatement";
-            this.lblStatement.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lblStatement.SizeF = new System.Drawing.SizeF(750F, 29F);
-            this.lblStatement.Text = "Statement";
-            this.lblStatement.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
+            this.lblInvoice.Font = new System.Drawing.Font("Arial", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblInvoice.LocationFloat = new DevExpress.Utils.PointFloat(0F, 233F);
+            this.lblInvoice.Name = "lblInvoice";
+            this.lblInvoice.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
+            this.lblInvoice.SizeF = new System.Drawing.SizeF(750F, 29F);
+            this.lblInvoice.Text = "INVOICE";
+            this.lblInvoice.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // xrPanel1
             // 
@@ -419,14 +439,6 @@ namespace xFilm5.Accounting.Reports
             // 
             this.GroupFooter1.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {
             this.txtTotal,
-            this.txtCurrent,
-            this.txt30Days,
-            this.txt60Days,
-            this.txt90Days,
-            this.lbl90Days,
-            this.lbl60Days,
-            this.lbl30Days,
-            this.lblCurrent,
             this.lblTotal});
             this.GroupFooter1.HeightF = 67F;
             this.GroupFooter1.KeepTogether = true;
@@ -446,108 +458,6 @@ namespace xFilm5.Accounting.Reports
             this.txtTotal.SizeF = new System.Drawing.SizeF(100F, 20F);
             this.txtTotal.Text = "txtTotal";
             this.txtTotal.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
-            // 
-            // txtCurrent
-            // 
-            this.txtCurrent.Borders = ((DevExpress.XtraPrinting.BorderSide)((DevExpress.XtraPrinting.BorderSide.Left | DevExpress.XtraPrinting.BorderSide.Bottom)));
-            this.txtCurrent.Font = new System.Drawing.Font("MingLiU", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtCurrent.LocationFloat = new DevExpress.Utils.PointFloat(550F, 32F);
-            this.txtCurrent.Name = "txtCurrent";
-            this.txtCurrent.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.txtCurrent.SizeF = new System.Drawing.SizeF(100F, 20F);
-            this.txtCurrent.Text = "txtCurrent";
-            this.txtCurrent.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
-            // 
-            // txt30Days
-            // 
-            this.txt30Days.Borders = ((DevExpress.XtraPrinting.BorderSide)((DevExpress.XtraPrinting.BorderSide.Left | DevExpress.XtraPrinting.BorderSide.Bottom)));
-            this.txt30Days.Font = new System.Drawing.Font("MingLiU", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt30Days.LocationFloat = new DevExpress.Utils.PointFloat(450F, 32F);
-            this.txt30Days.Name = "txt30Days";
-            this.txt30Days.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.txt30Days.SizeF = new System.Drawing.SizeF(100F, 20F);
-            this.txt30Days.Text = "txt30Days";
-            this.txt30Days.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
-            // 
-            // txt60Days
-            // 
-            this.txt60Days.Borders = ((DevExpress.XtraPrinting.BorderSide)((DevExpress.XtraPrinting.BorderSide.Left | DevExpress.XtraPrinting.BorderSide.Bottom)));
-            this.txt60Days.Font = new System.Drawing.Font("MingLiU", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt60Days.LocationFloat = new DevExpress.Utils.PointFloat(350F, 32F);
-            this.txt60Days.Name = "txt60Days";
-            this.txt60Days.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.txt60Days.SizeF = new System.Drawing.SizeF(100F, 20F);
-            this.txt60Days.Text = "txt60Days";
-            this.txt60Days.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
-            // 
-            // txt90Days
-            // 
-            this.txt90Days.Borders = ((DevExpress.XtraPrinting.BorderSide)((DevExpress.XtraPrinting.BorderSide.Left | DevExpress.XtraPrinting.BorderSide.Bottom)));
-            this.txt90Days.Font = new System.Drawing.Font("MingLiU", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txt90Days.LocationFloat = new DevExpress.Utils.PointFloat(250F, 32F);
-            this.txt90Days.Name = "txt90Days";
-            this.txt90Days.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.txt90Days.SizeF = new System.Drawing.SizeF(100F, 20F);
-            this.txt90Days.Text = "txt90Days";
-            this.txt90Days.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
-            this.txt90Days.Visible = false;
-            // 
-            // lbl90Days
-            // 
-            this.lbl90Days.BackColor = System.Drawing.Color.Gray;
-            this.lbl90Days.Borders = ((DevExpress.XtraPrinting.BorderSide)(((DevExpress.XtraPrinting.BorderSide.Left | DevExpress.XtraPrinting.BorderSide.Top) 
-            | DevExpress.XtraPrinting.BorderSide.Bottom)));
-            this.lbl90Days.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl90Days.ForeColor = System.Drawing.Color.White;
-            this.lbl90Days.LocationFloat = new DevExpress.Utils.PointFloat(250F, 12F);
-            this.lbl90Days.Name = "lbl90Days";
-            this.lbl90Days.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbl90Days.SizeF = new System.Drawing.SizeF(100F, 20F);
-            this.lbl90Days.Text = "Over 2 Months";
-            this.lbl90Days.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
-            this.lbl90Days.Visible = false;
-            // 
-            // lbl60Days
-            // 
-            this.lbl60Days.BackColor = System.Drawing.Color.Gray;
-            this.lbl60Days.Borders = ((DevExpress.XtraPrinting.BorderSide)(((DevExpress.XtraPrinting.BorderSide.Left | DevExpress.XtraPrinting.BorderSide.Top) 
-            | DevExpress.XtraPrinting.BorderSide.Bottom)));
-            this.lbl60Days.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl60Days.ForeColor = System.Drawing.Color.White;
-            this.lbl60Days.LocationFloat = new DevExpress.Utils.PointFloat(350F, 12F);
-            this.lbl60Days.Name = "lbl60Days";
-            this.lbl60Days.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbl60Days.SizeF = new System.Drawing.SizeF(100F, 20F);
-            this.lbl60Days.Text = "Over 2 Months";
-            this.lbl60Days.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
-            // 
-            // lbl30Days
-            // 
-            this.lbl30Days.BackColor = System.Drawing.Color.Gray;
-            this.lbl30Days.Borders = ((DevExpress.XtraPrinting.BorderSide)(((DevExpress.XtraPrinting.BorderSide.Left | DevExpress.XtraPrinting.BorderSide.Top) 
-            | DevExpress.XtraPrinting.BorderSide.Bottom)));
-            this.lbl30Days.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl30Days.ForeColor = System.Drawing.Color.White;
-            this.lbl30Days.LocationFloat = new DevExpress.Utils.PointFloat(450F, 12F);
-            this.lbl30Days.Name = "lbl30Days";
-            this.lbl30Days.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lbl30Days.SizeF = new System.Drawing.SizeF(100F, 20F);
-            this.lbl30Days.Text = "Last Month";
-            this.lbl30Days.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
-            // 
-            // lblCurrent
-            // 
-            this.lblCurrent.BackColor = System.Drawing.Color.Gray;
-            this.lblCurrent.Borders = ((DevExpress.XtraPrinting.BorderSide)(((DevExpress.XtraPrinting.BorderSide.Left | DevExpress.XtraPrinting.BorderSide.Top) 
-            | DevExpress.XtraPrinting.BorderSide.Bottom)));
-            this.lblCurrent.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCurrent.ForeColor = System.Drawing.Color.White;
-            this.lblCurrent.LocationFloat = new DevExpress.Utils.PointFloat(550F, 12F);
-            this.lblCurrent.Name = "lblCurrent";
-            this.lblCurrent.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
-            this.lblCurrent.SizeF = new System.Drawing.SizeF(100F, 20F);
-            this.lblCurrent.Text = "Current Month";
-            this.lblCurrent.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleCenter;
             // 
             // lblTotal
             // 
@@ -574,7 +484,7 @@ namespace xFilm5.Accounting.Reports
             this.bottomMarginBand1.HeightF = 36F;
             this.bottomMarginBand1.Name = "bottomMarginBand1";
             // 
-            // Statement
+            // Invoice_v5
             // 
             this.Bands.AddRange(new DevExpress.XtraReports.UI.Band[] {
             this.Detail,
@@ -606,38 +516,32 @@ namespace xFilm5.Accounting.Reports
         private DevExpress.XtraReports.UI.XRLabel txtClientName;
         private DevExpress.XtraReports.UI.XRLabel txtFax;
         private DevExpress.XtraReports.UI.XRLabel txtTel;
-        private DevExpress.XtraReports.UI.XRLabel lblStatement;
-        private DevExpress.XtraReports.UI.XRLabel txtClientId;
+        private DevExpress.XtraReports.UI.XRLabel lblInvoice;
+        private DevExpress.XtraReports.UI.XRLabel txtInvoiceNumber;
         private DevExpress.XtraReports.UI.XRLabel lblPageNumber;
-        private DevExpress.XtraReports.UI.XRLabel lblStatementOn;
-        private DevExpress.XtraReports.UI.XRLabel lblClientId;
-        private DevExpress.XtraReports.UI.XRLabel txtToday;
+        private DevExpress.XtraReports.UI.XRLabel lblInvoiceDate;
+        private DevExpress.XtraReports.UI.XRLabel lblInvoiceNumber;
+        private DevExpress.XtraReports.UI.XRLabel txtInvoiceDate;
         private DevExpress.XtraReports.UI.XRLabel lblRemarks;
         private DevExpress.XtraReports.UI.XRLabel lblAmount;
         private DevExpress.XtraReports.UI.XRLabel lblOrderNumber;
-        private DevExpress.XtraReports.UI.XRLabel lblInvoiceNumber;
+        private DevExpress.XtraReports.UI.XRLabel lblDNNumber;
         private DevExpress.XtraReports.UI.XRLabel lblDate;
-        private DevExpress.XtraReports.UI.XRLabel lbl30Days;
-        private DevExpress.XtraReports.UI.XRLabel lblCurrent;
         private DevExpress.XtraReports.UI.XRLabel lblTotal;
-        private DevExpress.XtraReports.UI.XRLabel txtCurrent;
-        private DevExpress.XtraReports.UI.XRLabel txt30Days;
-        private DevExpress.XtraReports.UI.XRLabel txt60Days;
-        private DevExpress.XtraReports.UI.XRLabel txt90Days;
-        private DevExpress.XtraReports.UI.XRLabel lbl90Days;
-        private DevExpress.XtraReports.UI.XRLabel lbl60Days;
         private DevExpress.XtraReports.UI.XRLabel txtTotal;
         private DevExpress.XtraReports.UI.XRLabel lblPoweredBy;
         private DevExpress.XtraReports.UI.XRLabel txtTimeStamp;
         private DevExpress.XtraReports.UI.XRLabel txtRemarks;
         private DevExpress.XtraReports.UI.XRLabel txtAmount;
         private DevExpress.XtraReports.UI.XRLabel txtOrderNumber;
-        private DevExpress.XtraReports.UI.XRLabel txtInvoiceNumber;
+        private DevExpress.XtraReports.UI.XRLabel txtDNNumber;
         private DevExpress.XtraReports.UI.XRLabel txtDate;
         private DevExpress.XtraReports.UI.XRPageInfo xrPageInfo1;
         private DevExpress.XtraReports.UI.XRRichText lblCompanyAddress;
         private DevExpress.XtraReports.UI.XRRichText txtClientAddress;
         private DevExpress.XtraReports.UI.TopMarginBand topMarginBand1;
         private DevExpress.XtraReports.UI.BottomMarginBand bottomMarginBand1;
+        private DevExpress.XtraReports.UI.XRLabel lblInvoiceAmount;
+        private DevExpress.XtraReports.UI.XRLabel txtInvoiceAmount;
     }
 }

@@ -61,10 +61,12 @@ namespace xFilm5.Accounting
             this.cmd80mm = new Gizmox.WebGUI.Forms.ToolStripButton();
             this.cmdEmail = new Gizmox.WebGUI.Forms.ToolStripButton();
             this.toolStripSeparator1 = new Gizmox.WebGUI.Forms.ToolStripSeparator();
+            this.cmdExcel = new Gizmox.WebGUI.Forms.ToolStripButton();
             this.lblMonth = new Gizmox.WebGUI.Forms.Label();
             this.cmdRefresh = new Gizmox.WebGUI.Forms.Button();
             this.dtpSelectedDate = new Gizmox.WebGUI.Forms.DateTimePicker();
-            this.cmdExcel = new Gizmox.WebGUI.Forms.ToolStripButton();
+            this.cmdBilling = new Gizmox.WebGUI.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new Gizmox.WebGUI.Forms.ToolStripSeparator();
             this.navPane.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.idxSelect)).BeginInit();
             this.idxSelect.SuspendLayout();
@@ -336,7 +338,8 @@ namespace xFilm5.Accounting
             this.cmd80mm,
             this.cmdEmail,
             this.toolStripSeparator1,
-            this.cmdExcel});
+            this.cmdExcel,
+            this.cmdBilling});
             this.toolStrip1.Location = new System.Drawing.Point(211, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Padding = new Gizmox.WebGUI.Forms.Padding(0, 0, 8, 0);
@@ -380,6 +383,15 @@ namespace xFilm5.Accounting
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 23);
             // 
+            // cmdExcel
+            // 
+            this.cmdExcel.Alignment = Gizmox.WebGUI.Forms.ToolStripItemAlignment.Right;
+            this.cmdExcel.Image = new Gizmox.WebGUI.Common.Resources.IconResourceHandle(resources.GetString("cmdExcel.Image"));
+            this.cmdExcel.Name = "cmdExcel";
+            this.cmdExcel.Size = new System.Drawing.Size(23, 20);
+            this.cmdExcel.ToolTipText = "Export Excel";
+            this.cmdExcel.Click += new System.EventHandler(this.cmdExcel_Click);
+            // 
             // lblMonth
             // 
             this.lblMonth.Location = new System.Drawing.Point(11, 0);
@@ -407,14 +419,19 @@ namespace xFilm5.Accounting
             this.dtpSelectedDate.Size = new System.Drawing.Size(100, 21);
             this.dtpSelectedDate.TabIndex = 1;
             // 
-            // cmdExcel
+            // cmdBilling
             // 
-            this.cmdExcel.Alignment = Gizmox.WebGUI.Forms.ToolStripItemAlignment.Right;
-            this.cmdExcel.Image = new Gizmox.WebGUI.Common.Resources.IconResourceHandle(resources.GetString("cmdExcel.Image"));
-            this.cmdExcel.Name = "toolStripButton1";
-            this.cmdExcel.Size = new System.Drawing.Size(23, 20);
-            this.cmdExcel.ToolTipText = "Export Excel";
-            this.cmdExcel.Click += new System.EventHandler(this.cmdExcel_Click);
+            this.cmdBilling.Image = new Gizmox.WebGUI.Common.Resources.IconResourceHandle(resources.GetString("cmdBilling.Image"));
+            this.cmdBilling.Name = "toolStripButton1";
+            this.cmdBilling.Size = new System.Drawing.Size(23, 20);
+            this.cmdBilling.Text = "Billing";
+            this.cmdBilling.Click += new System.EventHandler(this.cmdBilling_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 23);
             // 
             // DNList_v5
             // 
@@ -475,5 +492,7 @@ namespace xFilm5.Accounting
         private Gizmox.WebGUI.Forms.ToolStripButton cmdEmail;
         private Gizmox.WebGUI.Forms.ToolStripSeparator toolStripSeparator1;
         private Gizmox.WebGUI.Forms.ToolStripButton cmdExcel;
+        private Gizmox.WebGUI.Forms.ToolStripButton cmdBilling;
+        private Gizmox.WebGUI.Forms.ToolStripSeparator toolStripSeparator2;
     }
 }

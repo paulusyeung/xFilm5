@@ -1393,4 +1393,9 @@
     <chs>电邮收件人</chs>
     <cht>電郵收件人</cht>
   </keyword>
+  <keyword key="q_bill_this_customer">
+    <en>Bill this customer?</en>
+    <chs>确定要开发票？</chs>
+    <cht>確定要開發票？</cht>
+  </keyword>
 </root>

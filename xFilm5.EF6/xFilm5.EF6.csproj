@@ -172,6 +172,9 @@
     <Compile Include="UserPreference.cs">
       <DependentUpon>xFilmModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="vwReceiptDetailsList_Ex.cs">
+      <DependentUpon>xFilmModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="xFilmModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="xFilmModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="xFilmModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Acct_INDetails">
           <Key>
             <PropertyRef Name="ID" />
@@ -497,7 +497,7 @@
           <Key>
             <PropertyRef Name="UserId" />
           </Key>
-          <Property Name="UserId" Type="int" StoreGeneratedPattern="None" Nullable="false" />
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserType" Type="int" Nullable="false" />
           <Property Name="UserSid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="LoginName" Type="nvarchar" MaxLength="64" Nullable="false" />
@@ -562,6 +562,57 @@
           <Property Name="ColorID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Code" Type="nvarchar" MaxLength="6" />
           <Property Name="Name" Type="nvarchar" MaxLength="32" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vwReceiptDetailsList_Ex">
+          <Key>
+            <PropertyRef Name="ReceiptHeaderId" />
+            <PropertyRef Name="ReceiptDetailId" />
+          </Key>
+          <Property Name="ClientId" Type="int" Nullable="false" />
+          <Property Name="ClientName" Type="nvarchar" MaxLength="128" />
+          <Property Name="ClientAddress" Type="nvarchar" MaxLength="255" />
+          <Property Name="ClientTel" Type="nvarchar" MaxLength="32" />
+          <Property Name="ClientFax" Type="nvarchar" MaxLength="32" />
+          <Property Name="ReceiptHeaderId" Type="int" Nullable="false" />
+          <Property Name="ReceiptNumber" Type="nvarchar" MaxLength="16" />
+          <Property Name="ReceiptDate" Type="datetime" />
+          <Property Name="ReceiptAmount" Type="money" />
+          <Property Name="PaymentType" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="INMasterId" Type="int" />
+          <Property Name="ClientUserId" Type="int" />
+          <Property Name="ClientUserName" Type="nvarchar" MaxLength="64" />
+          <Property Name="Paid" Type="bit" Nullable="false" />
+          <Property Name="PaidOn" Type="datetime" />
+          <Property Name="PaidAmount" Type="money" Nullable="false" />
+          <Property Name="PaidRef" Type="nvarchar" MaxLength="128" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="255" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="64" />
+          <Property Name="ModifiedOn" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedBy" Type="nvarchar" MaxLength="64" />
+          <Property Name="ReceiptDetailId" Type="int" Nullable="false" />
+          <Property Name="ItemCode" Type="nvarchar" MaxLength="16" />
+          <Property Name="ItemDescription" Type="nvarchar" MaxLength="255" />
+          <Property Name="ItemQty" Type="smallint" />
+          <Property Name="ItemUoM" Type="nvarchar" MaxLength="32" />
+          <Property Name="ItemUnitAmt" Type="money" />
+          <Property Name="ItemDiscount" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="ItemAmount" Type="money" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="int" Nullable="false" />
+          <Property Name="OrderHeaderId" Type="int" />
+          <Property Name="OrderedOn" Type="datetime" Nullable="false" />
+          <Property Name="OrderedClientUserId" Type="int" Nullable="false" />
+          <Property Name="OrderedClientUserName" Type="nvarchar" MaxLength="64" />
+          <Property Name="PrintQueueVpsId" Type="int" />
+          <Property Name="CheckedPlate" Type="bit" Nullable="false" />
+          <Property Name="CheckedCip3" Type="bit" Nullable="false" />
+          <Property Name="CheckedBlueprint" Type="bit" Nullable="false" />
+          <Property Name="IsReady" Type="bit" Nullable="false" />
+          <Property Name="IsReceived" Type="bit" Nullable="false" />
+          <Property Name="IsBilled" Type="bit" Nullable="false" />
         </EntityType>
         <Association Name="FK_Acct_INMaster_Acct_INDetails">
           <End Role="Acct_INMaster" Type="Self.Acct_INMaster" Multiplicity="1" />
@@ -1110,6 +1161,53 @@
           <EntitySet Name="UserPreference" EntityType="Self.UserPreference" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="X_Counter" EntityType="Self.X_Counter" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Z_WebColor" EntityType="Self.Z_WebColor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vwReceiptDetailsList_Ex" EntityType="Self.vwReceiptDetailsList_Ex" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vwReceiptDetailsList_Ex].[ClientId] AS [ClientId], 
+    [vwReceiptDetailsList_Ex].[ClientName] AS [ClientName], 
+    [vwReceiptDetailsList_Ex].[ClientAddress] AS [ClientAddress], 
+    [vwReceiptDetailsList_Ex].[ClientTel] AS [ClientTel], 
+    [vwReceiptDetailsList_Ex].[ClientFax] AS [ClientFax], 
+    [vwReceiptDetailsList_Ex].[ReceiptHeaderId] AS [ReceiptHeaderId], 
+    [vwReceiptDetailsList_Ex].[ReceiptNumber] AS [ReceiptNumber], 
+    [vwReceiptDetailsList_Ex].[ReceiptDate] AS [ReceiptDate], 
+    [vwReceiptDetailsList_Ex].[ReceiptAmount] AS [ReceiptAmount], 
+    [vwReceiptDetailsList_Ex].[PaymentType] AS [PaymentType], 
+    [vwReceiptDetailsList_Ex].[INMasterId] AS [INMasterId], 
+    [vwReceiptDetailsList_Ex].[ClientUserId] AS [ClientUserId], 
+    [vwReceiptDetailsList_Ex].[ClientUserName] AS [ClientUserName], 
+    [vwReceiptDetailsList_Ex].[Paid] AS [Paid], 
+    [vwReceiptDetailsList_Ex].[PaidOn] AS [PaidOn], 
+    [vwReceiptDetailsList_Ex].[PaidAmount] AS [PaidAmount], 
+    [vwReceiptDetailsList_Ex].[PaidRef] AS [PaidRef], 
+    [vwReceiptDetailsList_Ex].[Remarks] AS [Remarks], 
+    [vwReceiptDetailsList_Ex].[Status] AS [Status], 
+    [vwReceiptDetailsList_Ex].[CreatedOn] AS [CreatedOn], 
+    [vwReceiptDetailsList_Ex].[CreatedBy] AS [CreatedBy], 
+    [vwReceiptDetailsList_Ex].[ModifiedOn] AS [ModifiedOn], 
+    [vwReceiptDetailsList_Ex].[ModifiedBy] AS [ModifiedBy], 
+    [vwReceiptDetailsList_Ex].[ReceiptDetailId] AS [ReceiptDetailId], 
+    [vwReceiptDetailsList_Ex].[ItemCode] AS [ItemCode], 
+    [vwReceiptDetailsList_Ex].[ItemDescription] AS [ItemDescription], 
+    [vwReceiptDetailsList_Ex].[ItemQty] AS [ItemQty], 
+    [vwReceiptDetailsList_Ex].[ItemUoM] AS [ItemUoM], 
+    [vwReceiptDetailsList_Ex].[ItemUnitAmt] AS [ItemUnitAmt], 
+    [vwReceiptDetailsList_Ex].[ItemDiscount] AS [ItemDiscount], 
+    [vwReceiptDetailsList_Ex].[ItemAmount] AS [ItemAmount], 
+    [vwReceiptDetailsList_Ex].[OrderPkPrintQueueVpsId] AS [OrderPkPrintQueueVpsId], 
+    [vwReceiptDetailsList_Ex].[OrderHeaderId] AS [OrderHeaderId], 
+    [vwReceiptDetailsList_Ex].[OrderedOn] AS [OrderedOn], 
+    [vwReceiptDetailsList_Ex].[OrderedClientUserId] AS [OrderedClientUserId], 
+    [vwReceiptDetailsList_Ex].[OrderedClientUserName] AS [OrderedClientUserName], 
+    [vwReceiptDetailsList_Ex].[PrintQueueVpsId] AS [PrintQueueVpsId], 
+    [vwReceiptDetailsList_Ex].[CheckedPlate] AS [CheckedPlate], 
+    [vwReceiptDetailsList_Ex].[CheckedCip3] AS [CheckedCip3], 
+    [vwReceiptDetailsList_Ex].[CheckedBlueprint] AS [CheckedBlueprint], 
+    [vwReceiptDetailsList_Ex].[IsReady] AS [IsReady], 
+    [vwReceiptDetailsList_Ex].[IsReceived] AS [IsReceived], 
+    [vwReceiptDetailsList_Ex].[IsBilled] AS [IsBilled]
+    FROM [dbo].[vwReceiptDetailsList_Ex] AS [vwReceiptDetailsList_Ex]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_Acct_INMaster_Acct_INDetails" Association="Self.FK_Acct_INMaster_Acct_INDetails">
             <End Role="Acct_INMaster" EntitySet="Acct_INMaster" />
             <End Role="Acct_INDetails" EntitySet="Acct_INDetails" />
@@ -1279,8 +1377,7 @@
             <End Role="UserPreference" EntitySet="UserPreference" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="xFilmModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -2641,7 +2738,57 @@
             <End Role="User" EntitySet="User" />
             <End Role="UserPreference" EntitySet="UserPreference" />
           </AssociationSet>
+          <EntitySet Name="vwReceiptDetailsList_Ex" EntityType="xFilmModel.vwReceiptDetailsList_Ex" />
         </EntityContainer>
+        <EntityType Name="vwReceiptDetailsList_Ex">
+          <Key>
+            <PropertyRef Name="ReceiptHeaderId" />
+            <PropertyRef Name="ReceiptDetailId" />
+          </Key>
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="ClientName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ClientAddress" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ClientTel" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="ClientFax" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiptHeaderId" Type="Int32" Nullable="false" />
+          <Property Name="ReceiptNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiptDate" Type="DateTime" Precision="3" />
+          <Property Name="ReceiptAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="PaymentType" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="INMasterId" Type="Int32" />
+          <Property Name="ClientUserId" Type="Int32" />
+          <Property Name="ClientUserName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Paid" Type="Boolean" Nullable="false" />
+          <Property Name="PaidOn" Type="DateTime" Precision="3" />
+          <Property Name="PaidAmount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="PaidRef" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Remarks" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="ModifiedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedBy" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiptDetailId" Type="Int32" Nullable="false" />
+          <Property Name="ItemCode" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="ItemDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ItemQty" Type="Int16" />
+          <Property Name="ItemUoM" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="ItemUnitAmt" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ItemDiscount" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="ItemAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="Int32" Nullable="false" />
+          <Property Name="OrderHeaderId" Type="Int32" />
+          <Property Name="OrderedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="OrderedClientUserId" Type="Int32" Nullable="false" />
+          <Property Name="OrderedClientUserName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="PrintQueueVpsId" Type="Int32" />
+          <Property Name="CheckedPlate" Type="Boolean" Nullable="false" />
+          <Property Name="CheckedCip3" Type="Boolean" Nullable="false" />
+          <Property Name="CheckedBlueprint" Type="Boolean" Nullable="false" />
+          <Property Name="IsReady" Type="Boolean" Nullable="false" />
+          <Property Name="IsReceived" Type="Boolean" Nullable="false" />
+          <Property Name="IsBilled" Type="Boolean" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3245,6 +3392,55 @@
                 <ScalarProperty Name="ColorID" ColumnName="ColorID" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vwReceiptDetailsList_Ex">
+            <EntityTypeMapping TypeName="xFilmModel.vwReceiptDetailsList_Ex">
+              <MappingFragment StoreEntitySet="vwReceiptDetailsList_Ex">
+                <ScalarProperty Name="IsBilled" ColumnName="IsBilled" />
+                <ScalarProperty Name="IsReceived" ColumnName="IsReceived" />
+                <ScalarProperty Name="IsReady" ColumnName="IsReady" />
+                <ScalarProperty Name="CheckedBlueprint" ColumnName="CheckedBlueprint" />
+                <ScalarProperty Name="CheckedCip3" ColumnName="CheckedCip3" />
+                <ScalarProperty Name="CheckedPlate" ColumnName="CheckedPlate" />
+                <ScalarProperty Name="PrintQueueVpsId" ColumnName="PrintQueueVpsId" />
+                <ScalarProperty Name="OrderedClientUserName" ColumnName="OrderedClientUserName" />
+                <ScalarProperty Name="OrderedClientUserId" ColumnName="OrderedClientUserId" />
+                <ScalarProperty Name="OrderedOn" ColumnName="OrderedOn" />
+                <ScalarProperty Name="OrderHeaderId" ColumnName="OrderHeaderId" />
+                <ScalarProperty Name="OrderPkPrintQueueVpsId" ColumnName="OrderPkPrintQueueVpsId" />
+                <ScalarProperty Name="ItemAmount" ColumnName="ItemAmount" />
+                <ScalarProperty Name="ItemDiscount" ColumnName="ItemDiscount" />
+                <ScalarProperty Name="ItemUnitAmt" ColumnName="ItemUnitAmt" />
+                <ScalarProperty Name="ItemUoM" ColumnName="ItemUoM" />
+                <ScalarProperty Name="ItemQty" ColumnName="ItemQty" />
+                <ScalarProperty Name="ItemDescription" ColumnName="ItemDescription" />
+                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+                <ScalarProperty Name="ReceiptDetailId" ColumnName="ReceiptDetailId" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="PaidRef" ColumnName="PaidRef" />
+                <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
+                <ScalarProperty Name="PaidOn" ColumnName="PaidOn" />
+                <ScalarProperty Name="Paid" ColumnName="Paid" />
+                <ScalarProperty Name="ClientUserName" ColumnName="ClientUserName" />
+                <ScalarProperty Name="ClientUserId" ColumnName="ClientUserId" />
+                <ScalarProperty Name="INMasterId" ColumnName="INMasterId" />
+                <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
+                <ScalarProperty Name="ReceiptAmount" ColumnName="ReceiptAmount" />
+                <ScalarProperty Name="ReceiptDate" ColumnName="ReceiptDate" />
+                <ScalarProperty Name="ReceiptNumber" ColumnName="ReceiptNumber" />
+                <ScalarProperty Name="ReceiptHeaderId" ColumnName="ReceiptHeaderId" />
+                <ScalarProperty Name="ClientFax" ColumnName="ClientFax" />
+                <ScalarProperty Name="ClientTel" ColumnName="ClientTel" />
+                <ScalarProperty Name="ClientAddress" ColumnName="ClientAddress" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

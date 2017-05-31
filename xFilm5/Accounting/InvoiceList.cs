@@ -411,10 +411,10 @@ SELECT [ClientID]
       ,[InvoiceNumber]
       ,CONVERT(NVARCHAR(10), [InvoiceDate], 120) AS InvoiceDate
       ,[OsAmount]
-      ,[InvoiceAmount]
+      ,ISNULL([InvoiceAmount], 0) AS InvoiceAmount
       ,[Status]
-      ,[Remarks]
-      ,ISNULL([OrderID], 0)
+      ,ISNULL([Remarks], '') AS Remarks
+      ,ISNULL([OrderID], 0) AS OrderID
       ,[CreatedOn]
       ,[CreatedBy]
       ,[LastModifiedOn]

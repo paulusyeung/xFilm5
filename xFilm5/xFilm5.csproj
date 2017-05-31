@@ -593,6 +593,12 @@
     <Compile Include="Accounting\Reports\PaymentNotice.Designer.cs">
       <DependentUpon>PaymentNotice.cs</DependentUpon>
     </Compile>
+    <Compile Include="Accounting\Reports\Invoice_v5.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Accounting\Reports\Invoice_v5.Designer.cs">
+      <DependentUpon>Invoice_v5.cs</DependentUpon>
+    </Compile>
     <Compile Include="Accounting\Reports\Statement.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -1110,6 +1116,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Accounting\Reports\PaymentNotice.resx">
       <DependentUpon>PaymentNotice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Accounting\Reports\Invoice_v5.resx">
+      <DependentUpon>Invoice_v5.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Accounting\Reports\Statement.resx">
       <DependentUpon>Statement.cs</DependentUpon>
