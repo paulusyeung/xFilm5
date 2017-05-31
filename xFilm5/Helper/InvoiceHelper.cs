@@ -55,86 +55,94 @@ namespace xFilm5.Helper
 
             if (items.Count > 0)
             {
-                try
+                using (var ctx = new EF6.xFilmEntities())
                 {
-                    using (var ctx = new EF6.xFilmEntities())
+                    // 用 Transactions 可以快啲同埋有 error 可以 roolback
+                    using (var scope = ctx.Database.BeginTransaction())
                     {
-                        #region InsRec: dbo.Acct_INMaster
-                        var inv5Hdr = new EF6.Acct_INMaster();
-
-                        inv5Hdr.InvoiceNumber = invoiceNumber;
-                        inv5Hdr.InvoiceDate = invoiceDate;
-                        inv5Hdr.InvoiceAmount = invoiceAmount;
-                        inv5Hdr.ClientID = clientId;
-
-                        inv5Hdr.Paid = false;
-                        inv5Hdr.Remarks = "";
-
-                        inv5Hdr.CreatedOn = DateTime.Now;
-                        inv5Hdr.CreatedBy = CommonHelper.Config.CurrentUserId;
-                        inv5Hdr.LastModifiedOn = DateTime.Now;
-                        inv5Hdr.LastModifiedBy = CommonHelper.Config.CurrentUserId;
-                        inv5Hdr.Status = (int)CommonHelper.Enums.Status.Active;
-
-                        ctx.Acct_INMaster.Add(inv5Hdr);
-                        ctx.SaveChanges();
-
-                        invMasterId = inv5Hdr.ID;
-                        #endregion
-
-                        for (int i = 0; i < items.Count; i++)
+                        try
                         {
-                            var item = items[i];
-                            var hdr = ctx.ReceiptHeader.Where(x => x.ReceiptHeaderId == item.ReceiptHeaderId).SingleOrDefault();
-                            if (hdr != null)
+                            #region InsRec: dbo.Acct_INMaster
+                            var inv5Hdr = new EF6.Acct_INMaster();
+
+                            inv5Hdr.InvoiceNumber = invoiceNumber;
+                            inv5Hdr.InvoiceDate = invoiceDate;
+                            inv5Hdr.InvoiceAmount = invoiceAmount;
+                            inv5Hdr.ClientID = clientId;
+
+                            inv5Hdr.Paid = false;
+                            inv5Hdr.Remarks = "";
+
+                            inv5Hdr.CreatedOn = DateTime.Now;
+                            inv5Hdr.CreatedBy = CommonHelper.Config.CurrentUserId;
+                            inv5Hdr.LastModifiedOn = DateTime.Now;
+                            inv5Hdr.LastModifiedBy = CommonHelper.Config.CurrentUserId;
+                            inv5Hdr.Status = (int)CommonHelper.Enums.Status.Active;
+
+                            ctx.Acct_INMaster.Add(inv5Hdr);
+                            ctx.SaveChanges();
+
+                            invMasterId = inv5Hdr.ID;
+                            #endregion
+
+                            for (int i = 0; i < items.Count; i++)
                             {
-                                #region UpdRec: dbo.ReceiptHeader.INMasterId
-                                hdr.INMasterId = invMasterId;
-                                //ctx.SaveChanges();
-                                #endregion
-
-                                var dtl = ctx.ReceiptDetail.Where(x => x.ReceiptHeaderId == hdr.ReceiptHeaderId).ToList();
-                                if (dtl.Count > 0)
+                                var item = items[i];
+                                var hdr = ctx.ReceiptHeader.Where(x => x.ReceiptHeaderId == item.ReceiptHeaderId).SingleOrDefault();
+                                if (hdr != null)
                                 {
-                                    for (int j = 0; j < dtl.Count; j++)
+                                    #region UpdRec: dbo.ReceiptHeader.INMasterId
+                                    hdr.INMasterId = invMasterId;
+                                    //ctx.SaveChanges();
+                                    #endregion
+
+                                    var dtl = ctx.ReceiptDetail.Where(x => x.ReceiptHeaderId == hdr.ReceiptHeaderId).ToList();
+                                    if (dtl.Count > 0)
                                     {
-                                        var dtlRow = dtl[j];
-                                        var pk = ctx.OrderPkPrintQueueVps.Where(x => x.OrderPkPrintQueueVpsId == dtlRow.OrderPkPrintQueueVpsId).SingleOrDefault();
-                                        if (pk != null)
+                                        for (int j = 0; j < dtl.Count; j++)
                                         {
-                                            #region UpdRec: dbo.OrderPkPrintQueueVpsId.IsBilled
-                                            pk.IsBilled = true;
-                                            pk.ModifiedOn = DateTime.Now;
-                                            pk.ModifiedBy = CommonHelper.Config.CurrentUserId;
-                                            #endregion
+                                            var dtlRow = dtl[j];
+                                            var pk = ctx.OrderPkPrintQueueVps.Where(x => x.OrderPkPrintQueueVpsId == dtlRow.OrderPkPrintQueueVpsId).SingleOrDefault();
+                                            if (pk != null)
+                                            {
+                                                #region UpdRec: dbo.OrderPkPrintQueueVpsId.IsBilled
+                                                pk.IsBilled = true;
+                                                pk.ModifiedOn = DateTime.Now;
+                                                pk.ModifiedBy = CommonHelper.Config.CurrentUserId;
+                                                #endregion
 
-                                            #region InsRec: dbo.Acct_INDetails
-                                            var invDetail = new EF6.Acct_INDetails();
+                                                #region InsRec: dbo.Acct_INDetails
+                                                var invDetail = new EF6.Acct_INDetails();
 
-                                            invDetail.INMasterID = invMasterId;
-                                            invDetail.OrderPkPrintQueueVpsId = pk.OrderPkPrintQueueVpsId;
-                                            invDetail.BillingCode = dtlRow.BillingCode;
-                                            invDetail.Description = dtlRow.Description;
-                                            invDetail.Qty = dtlRow.Qty;
-                                            invDetail.UnitAmount = dtlRow.UnitAmount;
-                                            invDetail.Discount = dtlRow.Discount;
-                                            invDetail.Amount = dtlRow.Amount;
+                                                invDetail.INMasterID = invMasterId;
+                                                invDetail.OrderPkPrintQueueVpsId = pk.OrderPkPrintQueueVpsId;
+                                                invDetail.BillingCode = dtlRow.BillingCode;
+                                                invDetail.Description = dtlRow.Description;
+                                                invDetail.Qty = dtlRow.Qty;
+                                                invDetail.UnitAmount = dtlRow.UnitAmount;
+                                                invDetail.Discount = dtlRow.Discount;
+                                                invDetail.Amount = dtlRow.Amount;
 
-                                            ctx.Acct_INDetails.Add(invDetail);
-                                            #endregion
+                                                ctx.Acct_INDetails.Add(invDetail);
+                                                #endregion
 
-                                            //ctx.SaveChanges();
+                                                //ctx.SaveChanges();
+                                            }
                                         }
                                     }
+                                    // 一次過 save 哩隻 ReceiptHeader 有關嘅 changes
+                                    ctx.SaveChanges();
                                 }
-                                // 一次過 save 哩隻 ReceiptHeader 有關嘅 changes
-                                ctx.SaveChanges();
                             }
+                            scope.Commit();
+                            result = true;
+                        }
+                        catch (Exception)
+                        {
+                            scope.Rollback();
                         }
                     }
-                    result = true;
                 }
-                catch { }
             }
             return result;
         }
@@ -143,57 +151,66 @@ namespace xFilm5.Helper
         {
             bool result = false;
 
-            try
+            using (var ctx = new EF6.xFilmEntities())
             {
-                using (var ctx = new EF6.xFilmEntities())
+                // 用 Transactions 可以快啲同埋有 error 可以 roolback
+                using (var scope = ctx.Database.BeginTransaction())
                 {
-                    var invHdr = ctx.Acct_INMaster.Where(x => x.ID == invoiceId).SingleOrDefault();
-                    if (invHdr != null)
+                    try
                     {
-                        #region UpdRec: dbo.Acct_INMaster
-                        invHdr.Paid = true;
-                        invHdr.PaidAmount = invHdr.InvoiceAmount.Value;
-                        invHdr.PaidOn = paidOn;
-                        invHdr.PaidRef = paidRef;
-                        invHdr.LastModifiedOn = DateTime.Now;
-                        invHdr.LastModifiedBy = CommonHelper.Config.CurrentUserId;
-                        #endregion
-
-                        #region UpdRec: related dbo.ReceiptHeader
-                        var invDtls = ctx.Acct_INDetails.Where(x => x.INMasterID == invoiceId).ToList();
-                        if (invDtls.Count > 0)
+                        var invHdr = ctx.Acct_INMaster.Where(x => x.ID == invoiceId).SingleOrDefault();
+                        if (invHdr != null)
                         {
-                            for (int i = 0; i < invDtls.Count; i++)
+                            #region UpdRec: dbo.Acct_INMaster
+                            invHdr.Paid = true;
+                            invHdr.PaidAmount = invHdr.InvoiceAmount.Value;
+                            invHdr.PaidOn = paidOn;
+                            invHdr.PaidRef = paidRef;
+                            invHdr.LastModifiedOn = DateTime.Now;
+                            invHdr.LastModifiedBy = CommonHelper.Config.CurrentUserId;
+                            #endregion
+
+                            #region UpdRec: related dbo.ReceiptHeader
+                            var invDtls = ctx.Acct_INDetails.Where(x => x.INMasterID == invoiceId).ToList();
+                            if (invDtls.Count > 0)
                             {
-                                var invDtl = invDtls[i];
-                                var rDetails = ctx.ReceiptDetail.Where(x => x.OrderPkPrintQueueVpsId == invDtl.OrderPkPrintQueueVpsId).ToList();
-                                if (rDetails.Count > 0)
+                                for (int i = 0; i < invDtls.Count; i++)
                                 {
-                                    for (int j = 0; j < rDetails.Count; j++)
+                                    var invDtl = invDtls[i];
+                                    var rDetails = ctx.ReceiptDetail.Where(x => x.OrderPkPrintQueueVpsId == invDtl.OrderPkPrintQueueVpsId).ToList();
+                                    if (rDetails.Count > 0)
                                     {
-                                        var rDetail = rDetails[j];
-                                        var rHeader = ctx.ReceiptHeader.Where(x => x.ReceiptHeaderId == rDetail.ReceiptHeaderId).SingleOrDefault();
-                                        if (rHeader != null)
+                                        for (int j = 0; j < rDetails.Count; j++)
                                         {
-                                            rHeader.Paid = true;
-                                            rHeader.PaidAmount = invHdr.InvoiceAmount.Value;
-                                            rHeader.PaidOn = paidOn;
-                                            rHeader.PaidRef = paidRef;
-                                            rHeader.ModifiedOn = DateTime.Now;
-                                            rHeader.ModifiedBy = CommonHelper.Config.CurrentUserId;
+                                            var rDetail = rDetails[j];
+                                            var rHeader = ctx.ReceiptHeader.Where(x => x.ReceiptHeaderId == rDetail.ReceiptHeaderId).SingleOrDefault();
+                                            if (rHeader != null)
+                                            {
+                                                rHeader.Paid = true;
+                                                rHeader.PaidAmount = invHdr.InvoiceAmount.Value;
+                                                rHeader.PaidOn = paidOn;
+                                                rHeader.PaidRef = paidRef;
+                                                rHeader.ModifiedOn = DateTime.Now;
+                                                rHeader.ModifiedBy = CommonHelper.Config.CurrentUserId;
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
-                        #endregion
+                            #endregion
 
-                        ctx.SaveChanges();
+                            ctx.SaveChanges();
+
+                            scope.Commit();
+                            result = true;
+                        }
                     }
-                    result = true;
+                    catch (Exception)
+                    {
+                        scope.Rollback();
+                    }
                 }
             }
-            catch { }
 
             return result;
         }

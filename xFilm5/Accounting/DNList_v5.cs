@@ -1060,7 +1060,7 @@ WHERE Rn = 1
                     report1.ExportToPdf(memStream);
 
                     xFilm5.Controls.Reporting.Viewer viewer = new xFilm5.Controls.Reporting.Viewer();
-                    viewer.ReportName = "Invoice_v5";
+                    viewer.ReportName = String.Format("Invoice_{0}.pdf", invoiceNumber.ToString());
                     viewer.BinarySource = memStream;
                     viewer.Show();
                     #endregion
