@@ -131,9 +131,10 @@ namespace xFilm5.Helper
                                         }
                                     }
                                     // 一次過 save 哩隻 ReceiptHeader 有關嘅 changes
-                                    ctx.SaveChanges();
+                                    //ctx.SaveChanges();
                                 }
                             }
+                            ctx.SaveChanges();      // 據網友講，放喺個 loop 出面會快好多，不過我就唔覺
                             scope.Commit();
                             result = true;
                         }
