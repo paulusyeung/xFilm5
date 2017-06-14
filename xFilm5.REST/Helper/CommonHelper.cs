@@ -1,6 +1,7 @@
 ﻿using Gizmox.WebGUI.Forms;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -8,13 +9,12 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using xFilm5.EF6;
 
-namespace xFilm5.Helper
+namespace xFilm5.REST
 {
     /// <summary>
-    /// 2017.05.11 paulus: 
-    /// 事源，我想用 EF6 取代 DAL，哩個 helper 用嚟代替 DAL.Common 配合 EF6 用
-    /// 唔使抄哂過嚟，用到先 copy
+    /// 抄 xFilm5.Helper.CommonHelper.cs
     /// </summary>
     public class CommonHelper
     {
@@ -61,6 +61,53 @@ namespace xFilm5.Helper
                 Admin,
                 Workshop,
                 Cashier
+            }
+
+            public enum UserType
+            {
+                Staff,
+                Customer,
+                Supplier
+            }
+
+            public enum PaymentType
+            {
+                OnAccount,
+                Cash
+            }
+
+            public enum OrderType
+            {
+                Blueprint,
+                Film,
+                Plate
+            }
+
+            public enum Workflow
+            {
+                Cancelled = 1,
+                Queuing,
+                Retouch,
+                Printing,
+                ProofingOutgoing,
+                ProofingIncoming,
+                Ready,
+                Dispatch,
+                Completed
+            }
+
+            public enum PrintQSubitemType
+            {
+                Ps,             // 收到 ps
+                Vps,            // 有 vps
+                Tiff,           // 有 tiff
+                Cip3,           // 有 cip3
+                Blueprint,      // 有 藍紙
+                Plate,          // 有 鋅
+                Order,          // 落咗荷打
+                Receipt,        // 收咗貸
+                Invoice,        // 開咗單
+                Film            // 2017 追加
             }
         }
 
@@ -219,6 +266,117 @@ namespace xFilm5.Helper
 
                     return result;
                 }
+            }
+
+            /// <summary>
+            /// 己已經冇用，改由 xFilm5.Bot 根據 Workshop 自己決定
+            /// </summary>
+            public static string Xprinter_KT
+            {
+                get
+                {
+                    return ConfigurationManager.AppSettings["Xprinter_KT"] != null ? ConfigurationManager.AppSettings["Xprinter_KT"] : "";
+                }
+            }
+
+            public static string SparkPost_ApiKey
+            {
+                get
+                {
+                    return ConfigurationManager.AppSettings["SparkPost_ApiKey"] != null ? ConfigurationManager.AppSettings["SparkPost_ApiKey"] : "";
+                }
+            }
+        }
+
+        public class xFilm5System
+        {
+            public static int GetNextInvoiceNumber()
+            {
+                int result = 0;
+
+                using (var ctx = new xFilmEntities())
+                {
+                    var sys = ctx.X_Counter.FirstOrDefault();
+                    if (sys != null)
+                    {
+                        result = sys.InvoiceNo.Value;
+                        sys.InvoiceNo++;
+                        ctx.SaveChanges();
+                    }
+                }
+
+                return result;
+            }
+        }
+
+        public class Owner
+        {
+            public static int GetOwnerId()
+            {
+                int result = 0;
+
+                using (var ctx = new xFilmEntities())
+                {
+                    var client = ctx.Client.Where(x => x.Status == 2).SingleOrDefault();
+                    if (client != null)
+                    {
+                        result = client.ID;
+                    }
+                }
+
+                return result;
+            }
+
+            public static string GetOwnerName()
+            {
+                string result = String.Empty;
+
+                using (var ctx = new xFilmEntities())
+                {
+                    int ownerId = GetOwnerId();
+
+                    var client = ctx.Client.Where(x => x.ID == ownerId).SingleOrDefault();
+                    if (client != null)
+                    {
+                        result = client.Name;
+                    }
+                }
+
+                return result;
+            }
+
+            public static string GetOwnerAddress()
+            {
+                string result = String.Empty;
+
+                using (var ctx = new xFilmEntities())
+                {
+                    int ownerId = GetOwnerId();
+
+                    var address = ctx.Client_AddressBook.Where(x => x.ClientID == ownerId && x.PrimaryAddr == true).SingleOrDefault();
+                    if (address != null)
+                    {
+                        result = address.Address;
+                    }
+                }
+
+                return result;
+            }
+
+            public static String GetWorkshopAddress(int workshopId)
+            {
+                String result = String.Empty;
+
+                using (var ctx = new xFilmEntities())
+                {
+                    var user = ctx.Client_User.Where(x => x.ID == workshopId).SingleOrDefault();
+                    if (user != null)
+                    {
+                        result = ConfigurationManager.AppSettings[user.FullName] != null ? ConfigurationManager.AppSettings[user.FullName].ToString() : user.FullName;
+                    }
+                }
+
+                return result;
             }
         }
     }

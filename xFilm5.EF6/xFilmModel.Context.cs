@@ -68,5 +68,9 @@ namespace xFilm5.EF6
         public virtual DbSet<X_Counter> X_Counter { get; set; }
         public virtual DbSet<Z_WebColor> Z_WebColor { get; set; }
         public virtual DbSet<vwReceiptDetailsList_Ex> vwReceiptDetailsList_Ex { get; set; }
+        public virtual DbSet<vwOrderPkPrintQueueVpsList> vwOrderPkPrintQueueVpsList { get; set; }
+        public virtual DbSet<vwOrderPkPrintQueueVpsList_Blueprint> vwOrderPkPrintQueueVpsList_Blueprint { get; set; }
+        public virtual DbSet<vwOrderPkPrintQueueVpsList_Film> vwOrderPkPrintQueueVpsList_Film { get; set; }
+        public virtual DbSet<vwOrderPkPrintQueueVpsList_Plate> vwOrderPkPrintQueueVpsList_Plate { get; set; }
     }
 }

@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xFilm5.EF6", "xFilm5.EF6\xF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xFilm5.QRCoder", "xFilm5.QRCoder\xFilm5.QRCoder.csproj", "{E999D6E2-6CC7-4E5D-B9FB-08B7C0C78ABB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xFilm5.REST", "xFilm5.REST\xFilm5.REST.csproj", "{E0328D45-9C3D-41EA-B4C8-30644E437C14}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{E999D6E2-6CC7-4E5D-B9FB-08B7C0C78ABB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E999D6E2-6CC7-4E5D-B9FB-08B7C0C78ABB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E999D6E2-6CC7-4E5D-B9FB-08B7C0C78ABB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0328D45-9C3D-41EA-B4C8-30644E437C14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0328D45-9C3D-41EA-B4C8-30644E437C14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0328D45-9C3D-41EA-B4C8-30644E437C14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0328D45-9C3D-41EA-B4C8-30644E437C14}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -28,60 +28,72 @@ namespace xFilm5.Helper
 
             using (var ctx = new EF6.xFilmEntities())
             {
-                try
-                {   // 如果 dbo.User 冇 record 先要 migrate
-                    if (!(ctx.User.Where(x => x.UserId == clientUserId).Any()))
-                    {
-                        var cUser = ctx.Client_User.Where(x => x.ID == clientUserId).SingleOrDefault();
-                        if (cUser != null)
+                using (var scope = ctx.Database.BeginTransaction())
+                {
+                    try
+                    {   // 如果 dbo.User 冇 record 先要 migrate
+                        if (!(ctx.User.Where(x => x.UserId == clientUserId).Any()))
                         {
-                            #region 先 save dbo.User
-                            var u = new EF6.User();
-                            u.UserId = clientUserId;
-                            u.UserType = CommonHelper.Config.IamStaff ? (int)UserType.Staff : (int)UserType.Customer;
-
-                            u.Alias = cUser.FullName;
-                            u.LoginName = cUser.Email;
-                            u.LoginPassword = cUser.Password;
-
-                            u.Status = (int)CommonHelper.Enums.Status.Active;
-                            u.CreatedOn = DateTime.Now;
-                            u.CreatedBy = CommonHelper.Config.CurrentUserId;
-                            u.ModifiedOn = DateTime.Now;
-                            u.ModifiedBy = CommonHelper.Config.CurrentUserId;
-                            u.Retired = false;
-
-                            // force entity framework to insert identity columns
-                            // 參考: http://stackoverflow.com/questions/13086006/how-can-i-force-entity-framework-to-insert-identity-columns
-                            // 留意要改埋 EF6.User.UserId.StoreGeneratedPattern
-                            using (var scope = ctx.Database.BeginTransaction())
+                            var cUser = ctx.Client_User.Where(x => x.ID == clientUserId).SingleOrDefault();
+                            if (cUser != null)
                             {
+                                #region 先 save dbo.User
+                                var u = new EF6.User();
+                                u.UserId = clientUserId;
+                                u.UserType = CommonHelper.Config.IamStaff ? (int)UserType.Staff : (int)UserType.Customer;
+                                u.UserSid = Guid.NewGuid();
+                                u.Alias = cUser.FullName;
+                                u.LoginName = cUser.Email;
+                                u.LoginPassword = cUser.Password;
+
+                                u.Status = (int)CommonHelper.Enums.Status.Active;
+                                u.CreatedOn = DateTime.Now;
+                                u.CreatedBy = CommonHelper.Config.CurrentUserId;
+                                u.ModifiedOn = DateTime.Now;
+                                u.ModifiedBy = CommonHelper.Config.CurrentUserId;
+                                u.Retired = false;
+
+                                // force entity framework to insert identity columns
+                                // 參考: http://stackoverflow.com/questions/13086006/how-can-i-force-entity-framework-to-insert-identity-columns
+                                // 留意要改埋 EF6.User.UserId.StoreGeneratedPattern
+                                /**
+                                using (var scope = ctx.Database.BeginTransaction())
+                                {
+                                    ctx.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[User] ON ");
+                                    ctx.User.Add(u);
+                                    ctx.SaveChanges();
+                                    ctx.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[User] OFF ");
+                                    scope.Commit();
+                                }
+                                */
+                                #endregion
+
+                                #region 再 save dbo.UserPreferences
+                                var up = new EF6.UserPreference();
+                                var defaults = UserExHelper.Preferences.GetDefaults();
+
+                                up.UserId = clientUserId;
+                                up.ObjectId = UserExHelper.USEREX_OBJECTID;
+                                up.ObjectType = (int)CommonHelper.Enums.ObjectType.UserExInfo;
+                                up.MetadataXml = JsonConvert.SerializeObject(defaults, Formatting.Indented);
+                                #endregion
+
                                 ctx.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[User] ON ");
                                 ctx.User.Add(u);
+                                ctx.UserPreference.Add(up);
                                 ctx.SaveChanges();
                                 ctx.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[User] OFF ");
                                 scope.Commit();
+
+                                result = true;
                             }
-                            #endregion
-
-                            #region 再 save dbo.UserPreferences
-                            var up = new EF6.UserPreference();
-                            var defaults = UserExHelper.Preferences.GetDefaults();
-                            
-                            up.UserId = clientUserId;
-                            up.ObjectId = UserExHelper.USEREX_OBJECTID;
-                            up.ObjectType = (int)CommonHelper.Enums.ObjectType.UserExInfo;
-                            up.MetadataXml = JsonConvert.SerializeObject(defaults, Formatting.Indented);
-
-                            ctx.UserPreference.Add(up);
-                            ctx.SaveChanges();
-                            #endregion
-
-                            result = true;
                         }
                     }
+                    catch (Exception)
+                    {
+                        scope.Rollback();
+                    }
                 }
-                catch { }
             }
 
             return result;

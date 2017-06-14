@@ -172,6 +172,18 @@
     <Compile Include="UserPreference.cs">
       <DependentUpon>xFilmModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="vwOrderPkPrintQueueVpsList.cs">
+      <DependentUpon>xFilmModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vwOrderPkPrintQueueVpsList_Blueprint.cs">
+      <DependentUpon>xFilmModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vwOrderPkPrintQueueVpsList_Film.cs">
+      <DependentUpon>xFilmModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vwOrderPkPrintQueueVpsList_Plate.cs">
+      <DependentUpon>xFilmModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="vwReceiptDetailsList_Ex.cs">
       <DependentUpon>xFilmModel.tt</DependentUpon>
     </Compile>
