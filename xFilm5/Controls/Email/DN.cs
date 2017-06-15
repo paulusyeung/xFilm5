@@ -10,6 +10,7 @@ using System.Text;
 
 using Gizmox.WebGUI.Common;
 using Gizmox.WebGUI.Forms;
+using xFilm5.Helper;
 
 #endregion
 
@@ -103,7 +104,8 @@ namespace xFilm5.Controls.Email
 
             if (valid)
             {
-                if (EmailEx.SendDNEmail(_ReceiptHeaderId, txtRecipient.Text))
+                if (BotHelper.PostEmailReceipt(_ReceiptHeaderId, txtRecipient.Text))
+                //if (EmailEx.SendDNEmail(_ReceiptHeaderId, txtRecipient.Text))
                 {
                     MessageBox.Show(oDict.GetWord("done"), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information, new EventHandler(cmdCloseForm));
                 }

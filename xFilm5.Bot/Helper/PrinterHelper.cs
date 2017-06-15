@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using xFilm5.Bot.Models;
+using xFilm5.EF6;
 
 namespace xFilm5.Bot
 {
@@ -24,9 +24,9 @@ namespace xFilm5.Bot
 
         public void Print(int receiptId, int languageId, string printerName, bool smallFont)
         {
-            using (var ctx = new xFilm5Entities())
+            using (var ctx = new xFilmEntities())
             {
-                var hasRows = ctx.vwReceiptDetailsList.Where(x => x.ReceiptHeaderId == receiptId).Any();
+                var hasRows = ctx.vwReceiptDetailsList_Ex.Where(x => x.ReceiptHeaderId == receiptId).Any();
                 if (hasRows)
                 {
                     var bytesValue = GetPrintContent(receiptId, languageId, smallFont);
@@ -168,9 +168,9 @@ namespace xFilm5.Bot
             String dictFile = Path.Combine(HttpContext.Current.Server.MapPath("~"), "WordDict.xml");
             nxStudio.BaseClass.WordDict oDict = new nxStudio.BaseClass.WordDict(dictFile, languageId);
 
-            using (var ctx = new xFilm5Entities())
+            using (var ctx = new xFilmEntities())
             {
-                var items = ctx.vwReceiptDetailsList.Where(x => x.ReceiptHeaderId == receiptId).OrderBy(x => x.OrderPkPrintQueueVpsId).ToList<vwReceiptDetailsList>();
+                var items = ctx.vwReceiptDetailsList_Ex.Where(x => x.ReceiptHeaderId == receiptId).OrderBy(x => x.OrderPkPrintQueueVpsId).ToList<vwReceiptDetailsList_Ex>();
 
                 var header = items[0];
                 var orderHdr = ctx.OrderHeader.Where(x => x.ID == header.OrderHeaderId).SingleOrDefault();
@@ -398,7 +398,7 @@ namespace xFilm5.Bot
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.CharSize.Nomarl());
                 BytesValue = PrintExtensions.AddBytes(BytesValue, obj.Alignment.Left());
                 //BytesValue = PrintExtensions.AddBytes(BytesValue, string.Format("{0,-40}{1,6}{2,9}{3,9:N2}\n", "item 1", 12, 11, 144.00));
-                foreach (vwReceiptDetailsList item in items)
+                foreach (vwReceiptDetailsList_Ex item in items)
                 {
                     var qty = item.ItemQty;
                     var amt = item.ItemAmount;

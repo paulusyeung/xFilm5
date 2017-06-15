@@ -11,7 +11,7 @@ using System.Web;
 using Gizmox.WebGUI;
 using Gizmox.WebGUI.Forms;
 using Gizmox.WebGUI.Common.Resources;
-using xFilm5.Bot.Models;
+using xFilm5.EF6;
 
 namespace xFilm5.Bot
 {
@@ -23,7 +23,7 @@ namespace xFilm5.Bot
             {
                 int result = 0;
 
-                using (var ctx = new xFilm5Entities())
+                using (var ctx = new xFilmEntities())
                 {
                     var client = ctx.Client.Where(x => x.Status == 2).SingleOrDefault();
                     if (client != null)
@@ -39,7 +39,7 @@ namespace xFilm5.Bot
             {
                 string result = String.Empty;
 
-                using (var ctx = new xFilm5Entities())
+                using (var ctx = new xFilmEntities())
                 {
                     var client = ctx.Client.Where(x => x.Status == 2).SingleOrDefault();
                     if (client != null)
@@ -55,7 +55,7 @@ namespace xFilm5.Bot
             {
                 string result = String.Empty;
 
-                using (var ctx = new xFilm5Entities())
+                using (var ctx = new xFilmEntities())
                 {
                     var item = ctx.Client_AddressBook.Where(x => (x.ID == GetOwnerId()) && (x.PrimaryAddr == true)).SingleOrDefault();
                     if (item != null)
@@ -71,7 +71,7 @@ namespace xFilm5.Bot
             {
                 String result = String.Empty;
 
-                using (var ctx = new xFilm5Entities())
+                using (var ctx = new xFilmEntities())
                 {
                     var item = ctx.Client_User.Where(x => x.ID == workshopId).SingleOrDefault();
                     if (item != null)
@@ -96,7 +96,7 @@ namespace xFilm5.Bot
             {
                 String result = "";
 
-                using (var ctx = new xFilm5Entities())
+                using (var ctx = new xFilmEntities())
                 {
                     var wk = ctx.Client_User.Where(x => x.ID == workshipId).SingleOrDefault();
                     if (wk != null)

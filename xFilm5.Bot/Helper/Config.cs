@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace xFilm5.Bot
 {
@@ -24,7 +25,8 @@ namespace xFilm5.Bot
 
         public static void LoadCurrentWordDict()
         {
-            CurrentWordDict = Path.Combine(VWGContext.Current.Config.GetDirectory("UserData"), "WordDict.xml");
+            //CurrentWordDict = Path.Combine(VWGContext.Current.Config.GetDirectory("UserData"), "WordDict.xml");
+            CurrentWordDict = Path.Combine(HttpContext.Current.Server.MapPath("~"), "WordDict.xml");
         }
 
         public static void LoadCurrentLanguageId()
@@ -124,6 +126,14 @@ namespace xFilm5.Bot
                 }
 
                 return result;
+            }
+        }
+
+        public static string SparkPost_ApiKey
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["SparkPost_ApiKey"] != null ? ConfigurationManager.AppSettings["SparkPost_ApiKey"] : "";
             }
         }
     }

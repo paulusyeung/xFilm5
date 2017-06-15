@@ -140,5 +140,64 @@ namespace xFilm5.Helper
             });
             var result = client.Execute(request);
         }
+
+        public static bool PostEmailReceipt(int receiptId)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            //#if (DEBUG)
+            //            botServer = "http://localhost:35543/";
+            //#endif
+            var client = new RestClient(botServer);
+            var request = new RestRequest("email/receipt/", Method.POST);
+            //request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+            request.RequestFormat = DataFormat.Json;
+
+            #region 準備要用到嘅 data: Recipients
+            String recipients = "";
+            using (var ctx = new EF6.xFilmEntities())
+            {
+                var receipt = ctx.ReceiptHeader.Where(x => x.ReceiptHeaderId == receiptId).SingleOrDefault();
+                recipients = Helper.ClientHelper.GetEmailRecipient(receipt.ClientId);
+            }
+            #endregion
+
+            //request.AddParameter("ReceiptId", receiptId.ToString());
+            //request.AddParameter("LanguageId", DAL.Common.Config.CurrentLanguageId.ToString());
+            //request.AddParameter("PrinterName", printerName);
+            request.AddBody(new
+            {
+                ReceiptId = receiptId.ToString(),
+                LanguageId = DAL.Common.Config.CurrentLanguageId.ToString(),
+                Recipient = recipients,
+                AnotherParam = 19.99
+            });
+            var response = client.Execute(request);
+            return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
+        }
+
+        public static bool PostEmailReceipt(int receiptId, string recipients)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            //#if (DEBUG)
+            //            botServer = "http://localhost:35543/";
+            //#endif
+            var client = new RestClient(botServer);
+            var request = new RestRequest("email/receipt/", Method.POST);
+            //request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+            request.RequestFormat = DataFormat.Json;
+
+            //request.AddParameter("ReceiptId", receiptId.ToString());
+            //request.AddParameter("LanguageId", DAL.Common.Config.CurrentLanguageId.ToString());
+            //request.AddParameter("PrinterName", printerName);
+            request.AddBody(new
+            {
+                ReceiptId = receiptId.ToString(),
+                LanguageId = DAL.Common.Config.CurrentLanguageId.ToString(),
+                Recipient = recipients,
+                AnotherParam = 19.99
+            });
+            var response = client.Execute(request);
+            return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
+        }
     }
 }

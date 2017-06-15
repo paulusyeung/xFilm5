@@ -72,6 +72,10 @@
       <HintPath>..\packages\PrinterUtility.1.1.2\lib\PrinterUtility.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SparkPost, Version=1.13.0.36877, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SparkPost.1.13.0\lib\net45\SparkPost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
       <HintPath>..\packages\Swashbuckle.Core.5.5.3\lib\net40\Swashbuckle.Core.dll</HintPath>
       <Private>True</Private>
@@ -118,16 +122,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
-    <Content Include="Models\xFilm5Model.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>xFilm5Model.edmx</DependentUpon>
-      <LastGenOutput>xFilm5Model.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\xFilm5Model.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>xFilm5Model.edmx</DependentUpon>
-      <LastGenOutput>xFilm5Model.cs</LastGenOutput>
-    </Content>
     <Content Include="Web.config" />
     <Content Include="WordDict.xml">
       <SubType>Designer</SubType>
@@ -136,176 +130,23 @@
   <ItemGroup>
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Config.cs" />
+    <Compile Include="Helper\Config.cs" />
     <Compile Include="Controllers\BotController.cs" />
-    <Compile Include="DirectoryHelper.cs" />
-    <Compile Include="Enums.cs" />
+    <Compile Include="Helper\DirectoryHelper.cs" />
+    <Compile Include="Helper\EmailHelper.cs" />
+    <Compile Include="Helper\Enums.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Acct_INDetails.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Acct_INMaster.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Client.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ClientPricing.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Client_AddressBook.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Client_User.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Log4Net.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\OrderComment.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\OrderHeader.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\OrderPkPrintQueueVps.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Order_Details.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Order_Internal.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Order_Journal.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\PosTx.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\PrintQueue.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\PrintQueue_LifeCycle.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\PrintQueue_VPS.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ReceiptDetail.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ReceiptHeader.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Staff.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\T_BillingCode_Dept.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\T_BillingCode_Item.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\T_DeliveryMethod.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\T_FriendlyService.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\T_JobTitle.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\T_LSR.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\T_Media.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\T_PaperSize.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\T_PaymentType.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\T_Platform.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\T_Priority.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\T_ProofingMaterial.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\T_Service.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\T_Software.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\T_SoftwareVersion.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\T_Status.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\T_Workflow.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\User.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\UserAuth.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\UserNotification.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\UserPreference.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\vwReceiptDetailsList.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\xFilm5Model.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>xFilm5Model.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\xFilm5Model.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\xFilm5Model.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>xFilm5Model.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\X_Counter.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Z_WebColor.cs">
-      <DependentUpon>xFilm5Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="NetworkConnection.cs" />
-    <Compile Include="PrinterHelper.cs" />
+    <Compile Include="Helper\NetworkConnection.cs" />
+    <Compile Include="Helper\PrinterHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RawPrinterHelper.cs" />
-    <Compile Include="Utility.cs" />
+    <Compile Include="Helper\RawPrinterHelper.cs" />
+    <Compile Include="Helper\Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="log4net.config" />
-    <EntityDeploy Include="Models\xFilm5Model.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>xFilm5Model.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\xFilm5Model.edmx.diagram">
-      <DependentUpon>xFilm5Model.edmx</DependentUpon>
-    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -315,9 +156,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\xFilm5.EF6\xFilm5.EF6.csproj">
+      <Project>{909b0971-2434-4bc2-bdf7-b04a39fe1b9e}</Project>
+      <Name>xFilm5.EF6</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

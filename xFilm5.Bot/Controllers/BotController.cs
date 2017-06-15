@@ -9,7 +9,8 @@ using System.Net;
 using System.Net.Http;
 using System.Security.Principal;
 using System.Web.Http;
-using xFilm5.Bot.Models;
+using xFilm5.Bot.Helper;
+using xFilm5.EF6;
 
 namespace xFilm5.Bot.Controllers
 {
@@ -30,9 +31,9 @@ namespace xFilm5.Bot.Controllers
             {
                 int vpsPqId = jsonData["PrintQueueVpsId"].Value<int>();
 
-                using (var context = new xFilm5Entities())
+                using (var ctx = new xFilmEntities())
                 {
-                    Models.PrintQueue_VPS vps = context.PrintQueue_VPS.FirstOrDefault(v => v.ID == vpsPqId);
+                    var vps = ctx.PrintQueue_VPS.FirstOrDefault(v => v.ID == vpsPqId);
                     if (vps != null)
                     {
                         #region 用 NetworkConnection: 來自於 NetworkConnection.cs 用嚟做 impersonation
@@ -122,9 +123,9 @@ namespace xFilm5.Bot.Controllers
             {
                 int vpsPqId = jsonData["PrintQueueVpsId"].Value<int>();
 
-                using (var context = new xFilm5Entities())
+                using (var ctx = new xFilmEntities())
                 {
-                    Models.PrintQueue_VPS vps = context.PrintQueue_VPS.FirstOrDefault(v => v.ID == vpsPqId);
+                    var vps = ctx.PrintQueue_VPS.FirstOrDefault(v => v.ID == vpsPqId);
                     if (vps != null)
                     {
                         #region 用 NetworkConnection: 來自於 NetworkConnection.cs 用嚟做 impersonation
@@ -204,9 +205,9 @@ namespace xFilm5.Bot.Controllers
             {
                 int vpsPqId = jsonData["PrintQueueVpsId"].Value<int>();
 
-                using (var context = new xFilm5Entities())
+                using (var ctx = new xFilmEntities())
                 {
-                    Models.PrintQueue_VPS vps = context.PrintQueue_VPS.FirstOrDefault(v => v.ID == vpsPqId);
+                    var vps = ctx.PrintQueue_VPS.FirstOrDefault(v => v.ID == vpsPqId);
                     if (vps != null)
                     {
                         #region 用 NetworkConnection: 來自於 NetworkConnection.cs 用嚟做 impersonation
@@ -282,9 +283,9 @@ namespace xFilm5.Bot.Controllers
             {
                 int vpsPqId = jsonData["PrintQueueVpsId"].Value<int>();
 
-                using (var context = new xFilm5Entities())
+                using (var ctx = new xFilmEntities())
                 {
-                    Models.PrintQueue_VPS vps = context.PrintQueue_VPS.FirstOrDefault(v => v.ID == vpsPqId);
+                    var vps = ctx.PrintQueue_VPS.FirstOrDefault(v => v.ID == vpsPqId);
                     if (vps != null)
                     {
                         #region 用 NetworkConnection: 來自於 NetworkConnection.cs 用嚟做 impersonation
@@ -372,10 +373,10 @@ namespace xFilm5.Bot.Controllers
                 string printerName = jsonData["PrinterName"].Value<string>();
                 bool smallFont = jsonData["SmallFont"].Value<bool>();
 
-                using (var context = new xFilm5Entities())
+                using (var ctx = new xFilmEntities())
                 {
-                    Models.PrintQueue_VPS vps = context.PrintQueue_VPS.FirstOrDefault(v => v.ID == receiptId);
-                    var hasRows = context.vwReceiptDetailsList.Where(x => x.ReceiptHeaderId == receiptId).Any();
+                    var vps = ctx.PrintQueue_VPS.FirstOrDefault(v => v.ID == receiptId);
+                    var hasRows = ctx.vwReceiptDetailsList_Ex.Where(x => x.ReceiptHeaderId == receiptId).Any();
                     if (hasRows)
                     {
                         try
@@ -395,6 +396,57 @@ namespace xFilm5.Bot.Controllers
                     else
                     {
                         log.Error("[bot, xprinter, Receipt not found] \r\n" + vps.ToString());
+                        return NotFound();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 2017.06.15 paulus:
+        /// 將 email receipt 集中由 xFilm5.Bot 處理，
+        /// 於是，xFilm5.VWG 同 xFilm5.REST 都可以用
+        /// </summary>
+        /// <param name="jsonData"></param>
+        /// <returns></returns>
+        [Route("email/receipt")]
+        public IHttpActionResult PostEmailReceipt([FromBody] JObject jsonData)
+        {
+            if (jsonData == null)
+            {
+                log.Error("[bot, email receipt] jsonData == null");
+                return NotFound();
+            }
+            else
+            {
+                int receiptId = jsonData["ReceiptId"].Value<int>();
+                int languageId = jsonData["LanguageId"].Value<int>();
+                string recipient = jsonData["Recipient"].Value<string>();
+
+                Config.CurrentLanguageId = languageId;
+
+                using (var ctx = new xFilmEntities())
+                {
+                    var vps = ctx.PrintQueue_VPS.FirstOrDefault(v => v.ID == receiptId);
+                    var hasRows = ctx.vwReceiptDetailsList_Ex.Where(x => x.ReceiptHeaderId == receiptId).Any();
+                    if (hasRows)
+                    {
+                        try
+                        {
+                            EmailHelper.EmailReceipt(receiptId, recipient);
+
+                            log.Info(String.Format("[bot, email receipt, success] \r\nReceipt Number = {0}\r\nLanguage Id = {1}\r\nRecipients = {2}", receiptId.ToString(), languageId.ToString(), recipient));
+                            return Ok();
+                        }
+                        catch (Exception ex)
+                        {
+                            log.Error(String.Format("[bot, email receipt, error found] \r\nExceptional Error = {0}", ex.ToString()));
+                            return NotFound();
+                        }
+                    }
+                    else
+                    {
+                        log.Error("[bot, email receipt, Receipt not found] \r\n" + vps.ToString());
                         return NotFound();
                     }
                 }
