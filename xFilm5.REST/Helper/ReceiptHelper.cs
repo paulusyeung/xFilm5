@@ -145,13 +145,12 @@ namespace xFilm5.REST.Helper
             String description = "";
             Decimal price = 0, discount = 0, amount = 0;
 
-            var orderType = (CommonHelper.Enums.OrderType)item.OrderType;
             var clientId = item.ClientID;
             using (var ctx = new xFilmEntities())
             {
-                switch (orderType)
+                switch (item.OrderType)
                 {
-                    case CommonHelper.Enums.OrderType.Blueprint:
+                    case (int)CommonHelper.Enums.OrderType.Blueprint:
                         #region 計價（藍紙）
                         var bpCode = String.Format("{0}-BP", item.VpsPlateSize);
                         var bp = ctx.T_BillingCode_Item.Where(x => x.ItemCode == bpCode).SingleOrDefault();
@@ -175,7 +174,7 @@ namespace xFilm5.REST.Helper
                         }
                         #endregion
                         break;
-                    case CommonHelper.Enums.OrderType.Film:
+                    case (int)CommonHelper.Enums.OrderType.Film:
                         #region 計價（菲林）
                         var fmCode = String.Format("{0}", item.VpsPlateSize);
                         var fm = ctx.T_BillingCode_Item.Where(x => x.ItemCode == fmCode).SingleOrDefault();
@@ -218,7 +217,7 @@ namespace xFilm5.REST.Helper
                         }
                         #endregion
                         break;
-                    case CommonHelper.Enums.OrderType.Plate:
+                    case (int)CommonHelper.Enums.OrderType.Plate:
                         #region 計價（鋅板）
                         var ptCode = String.Format("{0}", item.VpsPlateSize);
                         var pt = ctx.T_BillingCode_Item.Where(x => x.ItemCode == ptCode).SingleOrDefault();

@@ -95,7 +95,6 @@ namespace xFilm5.Bot.Helper
                 transmission.SubstitutionData["items"] = items;
                 #endregion
 
-
                 #region set recipients data
                 foreach (String r in Recipients)
                 {
@@ -111,12 +110,14 @@ namespace xFilm5.Bot.Helper
                 #endregion
 
                 var spclient = new SparkPost.Client(Config.SparkPost_ApiKey);
-                spclient.Transmissions.Send(transmission);
-                //var response = spclient.Transmissions.Send(transmission).Result;
-                // or client.Transmissions.Send(transmission).Wait();
 
-                //result = (response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false;
-                result = true;
+                spclient.CustomSettings.SendingMode = SparkPost.SendingModes.Sync;
+
+                var response = spclient.Transmissions.Send(transmission);
+
+                result = (response.Result.StatusCode == System.Net.HttpStatusCode.OK) ? true : false;
+
+                //result = true;
             }
             return result;
         }

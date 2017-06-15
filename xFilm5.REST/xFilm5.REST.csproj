@@ -152,8 +152,6 @@
     <Compile Include="Helper\BotHelper.cs" />
     <Compile Include="Helper\ClientHelper.cs" />
     <Compile Include="Helper\CommonHelper.cs" />
-    <Compile Include="Helper\EmailExHelper.cs" />
-    <Compile Include="Helper\EmailHelper.cs" />
     <Compile Include="Helper\InvoiceHelper.cs" />
     <Compile Include="Helper\ReceiptHelper.cs" />
     <Compile Include="Helper\UserExHelper.cs" />

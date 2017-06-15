@@ -29,9 +29,27 @@ namespace xFilm5.REST.Controllers
                 #region All clients
                 using (var ctx = new xFilmEntities())
                 {   // 菲林冇 QR Code scan，所以未攞就當 Ready / WiP
-                    var qryBp = String.Format("SELECT 1 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Blueprint WHERE [CreatedOn] >= '{0}' AND [IsReady] = 1 AND [IsReceived] = 0", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"));
-                    var qryFilm = String.Format("SELECT 2 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Film WHERE [CreatedOn] >= '{0}' AND [IsReceived] = 0", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"));
-                    var qryPlate = String.Format("SELECT 3 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Plate WHERE [CreatedOn] >= '{0}' AND [IsReady] = 1 AND [IsReceived] = 0", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"));
+                    var qryBp = String.Format(@"
+Select * from (
+SELECT 1 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Blueprint WHERE [CreatedOn] >= '{0}' AND [IsReady] = 1 AND [IsReceived] = 0
+) AS pk INNER JOIN
+dbo.OrderHeader AS o ON pk.OrderHeaderId = o.ID
+WHERE (o.Status <> 1)", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"));
+
+                    var qryFilm = String.Format(@"
+Select * from (
+SELECT 2 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Film WHERE [CreatedOn] >= '{0}' AND [IsReceived] = 0
+) AS pk INNER JOIN
+dbo.OrderHeader AS o ON pk.OrderHeaderId = o.ID
+WHERE (o.Status <> 1)", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"));
+
+                    var qryPlate = String.Format(@"
+Select * from (
+SELECT 3 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Plate WHERE [CreatedOn] >= '{0}' AND [IsReady] = 1 AND [IsReceived] = 0
+) AS pk INNER JOIN
+dbo.OrderHeader AS o ON pk.OrderHeaderId = o.ID
+WHERE (o.Status <> 1)", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"));
+
                     var bp = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryBp).ToList();
                     var film = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryFilm).ToList();
                     var plate = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryPlate).ToList();
@@ -47,9 +65,27 @@ namespace xFilm5.REST.Controllers
                 #region A single client
                 using (var ctx = new xFilmEntities())
                 {
-                    var qryBp = String.Format("SELECT 1 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Blueprint WHERE [CreatedOn] >= '{0}' AND [IsReady] = 1 AND [IsReceived] = 0 AND [ClientID] = {1}", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"), id.ToString());
-                    var qryFilm = String.Format("SELECT 2 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Film WHERE [CreatedOn] >= '{0}' AND [IsReceived] = 0 AND [ClientID] = {1}", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"), id.ToString());
-                    var qryPlate = String.Format("SELECT 3 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Plate WHERE [CreatedOn] >= '{0}' AND [IsReady] = 1 AND [IsReceived] = 0 AND [ClientID] = {1}", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"), id.ToString());
+                    var qryBp = String.Format(@"
+Select * from (
+SELECT 1 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Blueprint WHERE [CreatedOn] >= '{0}' AND [IsReady] = 1 AND [IsReceived] = 0 AND [ClientID] = {1}
+) AS pk INNER JOIN
+dbo.OrderHeader AS o ON pk.OrderHeaderId = o.ID
+WHERE (o.Status <> 1)", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"), id.ToString());
+
+                    var qryFilm = String.Format(@"
+Select * from (
+SELECT 2 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Film WHERE [CreatedOn] >= '{0}' AND [IsReceived] = 0 AND [ClientID] = {1}
+) AS pk INNER JOIN
+dbo.OrderHeader AS o ON pk.OrderHeaderId = o.ID
+WHERE (o.Status <> 1)", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"), id.ToString());
+
+                    var qryPlate = String.Format(@"
+Select * from (
+SELECT 3 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Plate WHERE [CreatedOn] >= '{0}' AND [IsReady] = 1 AND [IsReceived] = 0 AND [ClientID] = {1}
+) AS pk INNER JOIN
+dbo.OrderHeader AS o ON pk.OrderHeaderId = o.ID
+WHERE (o.Status <> 1)", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"), id.ToString());
+
                     var bp = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryBp).ToList();
                     var film = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryFilm).ToList();
                     var plate = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryPlate).ToList();
@@ -75,7 +111,7 @@ namespace xFilm5.REST.Controllers
                     //var qryBp = String.Format("SELECT 1 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Blueprint WHERE [CreatedOn] >= '{0}' AND [IsReady] = 0 AND [IsReceived] = 0", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"));
                     var qryBp = String.Format(@"
 Select * from (
-SELECT 3 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Blueprint WHERE [CreatedOn] >= '{0}' AND [IsReady] = 0 AND [IsReceived] = 0
+SELECT 1 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Blueprint WHERE [CreatedOn] >= '{0}' AND [IsReady] = 0 AND [IsReceived] = 0
 ) AS pk INNER JOIN
 dbo.OrderHeader AS o ON pk.OrderHeaderId = o.ID
 WHERE (o.Status <> 1)", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"));
@@ -83,7 +119,7 @@ WHERE (o.Status <> 1)", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"));
                     //var qryFilm = String.Format("SELECT 2 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Film WHERE [CreatedOn] >= '{0}' AND [IsReady] = 0 AND [IsReceived] = 0", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"));
                     var qryFilm = String.Format(@"
 Select * from (
-SELECT 3 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Film WHERE [CreatedOn] >= '{0}' AND [IsReady] = 0 AND [IsReceived] = 0
+SELECT 2 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Film WHERE [CreatedOn] >= '{0}' AND [IsReady] = 0 AND [IsReceived] = 0
 ) AS pk INNER JOIN
 dbo.OrderHeader AS o ON pk.OrderHeaderId = o.ID
 WHERE (o.Status <> 1)", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"));
@@ -114,7 +150,7 @@ WHERE (o.Status <> 1)", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"));
                     //var qryBp = String.Format("SELECT 1 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Blueprint WHERE [CreatedOn] >= '{0}' AND [IsReady] = 0 AND [IsReceived] = 0 AND [ClientID] = {1}", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"), id.ToString());
                     var qryBp = String.Format(@"
 Select * from (
-SELECT 3 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Blueprint WHERE [CreatedOn] >= '{0}' AND [IsReady] = 0 AND [IsReceived] = 0 AND [ClientID] = {1}
+SELECT 1 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Blueprint WHERE [CreatedOn] >= '{0}' AND [IsReady] = 0 AND [IsReceived] = 0 AND [ClientID] = {1}
 ) AS pk INNER JOIN
 dbo.OrderHeader AS o ON pk.OrderHeaderId = o.ID
 WHERE (o.Status <> 1)", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"), id.ToString());
@@ -122,7 +158,7 @@ WHERE (o.Status <> 1)", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"), id.ToString(
                     //var qryFilm = String.Format("SELECT 2 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Film WHERE [CreatedOn] >= '{0}' AND [IsReady] = 0 AND [IsReceived] = 0 AND [ClientID] = {1}", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"), id.ToString());
                     var qryFilm = String.Format(@"
 Select * from (
-SELECT 3 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Film WHERE [CreatedOn] >= '{0}' AND [IsReady] = 0 AND [IsReceived] = 0 AND [ClientID] = {1}
+SELECT 2 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Film WHERE [CreatedOn] >= '{0}' AND [IsReady] = 0 AND [IsReceived] = 0 AND [ClientID] = {1}
 ) AS pk INNER JOIN
 dbo.OrderHeader AS o ON pk.OrderHeaderId = o.ID
 WHERE (o.Status <> 1)", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"), id.ToString());
@@ -171,7 +207,7 @@ WHERE CONVERT(NVARCHAR(10), [ReceiptDate], 120) = '{0}')", date.ToString("yyyy-M
                     //var qryFilm = String.Format("SELECT 2 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Film WHERE CONVERT(NVARCHAR(10), [ModifiedOn], 120) = '{0}' AND [IsReceived] = 1", date.ToString("yyyy-MM-dd"));
                     var qryFilm = String.Format(@"
 SELECT * FROM (
-SELECT 1 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Film
+SELECT 2 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Film
 WHERE CONVERT(NVARCHAR(10), [ModifiedOn], 120) = '{0}' AND [IsReceived] = 1
 ) AS oops
 WHERE [PrintQueueVpsId] IN (
@@ -182,7 +218,7 @@ WHERE CONVERT(NVARCHAR(10), [ReceiptDate], 120) = '{0}')", date.ToString("yyyy-M
                     //var qryPlate = String.Format("SELECT 3 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Plate WHERE CONVERT(NVARCHAR(10), [ModifiedOn], 120) = '{0}' AND [IsReceived] = 1", date.ToString("yyyy-MM-dd"));
                     var qryPlate = String.Format(@"
 SELECT * FROM (
-SELECT 1 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Plate
+SELECT 3 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Plate
 WHERE CONVERT(NVARCHAR(10), [ModifiedOn], 120) = '{0}' AND [IsReceived] = 1
 ) AS oops
 WHERE [PrintQueueVpsId] IN (
@@ -219,7 +255,7 @@ WHERE CONVERT(NVARCHAR(10), [ReceiptDate], 120) = '{0}' AND [ClientID] = {1})", 
                     //var qryFilm = String.Format("SELECT 2 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Film WHERE CONVERT(NVARCHAR(10), [ModifiedOn], 120) = '{0}' AND [IsReceived] = 1 AND [ClientID] = {1}", date.ToString("yyyy-MM-dd"), id.ToString());
                     var qryFilm = String.Format(@"
 SELECT * FROM (
-SELECT 1 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Film
+SELECT 2 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Film
 WHERE CONVERT(NVARCHAR(10), [ModifiedOn], 120) = '{0}' AND [IsReceived] = 1 AND [ClientID] = {1}
 ) AS oops
 WHERE [PrintQueueVpsId] IN (
@@ -230,7 +266,7 @@ WHERE CONVERT(NVARCHAR(10), [ReceiptDate], 120) = '{0}' AND [ClientID] = {1})", 
                     //var qryPlate = String.Format("SELECT 3 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Plate WHERE CONVERT(NVARCHAR(10), [ModifiedOn], 120) = '{0}' AND [IsReceived] = 1 AND [ClientID] = {1}", date.ToString("yyyy-MM-dd"), id.ToString());
                     var qryPlate = String.Format(@"
 SELECT * FROM (
-SELECT 1 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Plate
+SELECT 3 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Plate
 WHERE CONVERT(NVARCHAR(10), [ModifiedOn], 120) = '{0}' AND [IsReceived] = 1 AND [ClientID] = {1}
 ) AS oops
 WHERE [PrintQueueVpsId] IN (
@@ -277,11 +313,12 @@ WHERE CONVERT(NVARCHAR(10), [ReceiptDate], 120) = '{0}' AND [ClientID] = {1})", 
                         // 由 xFilm5.Bot 負責打印小票據
                         if (Helper.ClientHelper.IsReceiptSlip(clientId))
                         {
-                            Helper.BotHelper.PostXprinter(receiptId);
+                            Helper.BotHelper.PostXprinter(receiptId, clientId);
                         }
 
-                        // 2017.05.14 paulus: 新增功能，可以 email 張單
-                        EmailHelper.EmailReceipt(receiptId, clientId);
+                        // 由 xFilm5.Bot 負責 email 張單
+                        var recipient = ClientHelper.GetEmailRecipient(clientId);
+                        BotHelper.PostEmailReceipt(receiptId, recipient, clientId);
 
                         return Ok();
                     }
@@ -323,8 +360,9 @@ WHERE CONVERT(NVARCHAR(10), [ReceiptDate], 120) = '{0}' AND [ClientID] = {1})", 
                                 Helper.InvoiceHelper.PrintToXprinter(invId);
                             }
 
-                            // 2017.05.14 paulus: 新增功能，可以 email 張單
-                            EmailHelper.EmailReceipt(receiptId, clientId);
+                            // 由 xFilm5.Bot 負責 email 張單
+                            var recipient = ClientHelper.GetEmailRecipient(clientId);
+                            BotHelper.PostEmailReceipt(receiptId, recipient, clientId);
 
                             return Ok();
                         }

@@ -205,5 +205,26 @@ namespace xFilm5.REST.Helper
 
             return result;
         }
+
+        /// <summary>
+        /// 1 = En, 2 = Chs, 3 =Cht
+        /// </summary>
+        /// <param name="clientId"></param>
+        /// <returns></returns>
+        public static int GetDefaultLanguageId(int clientId)
+        {
+            int result = 1;
+
+            using (var ctx = new EF6.xFilmEntities())
+            {
+                var cAddr = ctx.Client_AddressBook.Where(x => x.ClientID == clientId && x.PrimaryAddr == true).SingleOrDefault();
+                if (cAddr != null)
+                {
+                    result = cAddr.SMS_Lang.HasValue ? (cAddr.SMS_Lang.Value == 0 ? 1 : cAddr.SMS_Lang.Value) : 1;
+                }
+            }
+
+            return result;
+        }
     }
 }

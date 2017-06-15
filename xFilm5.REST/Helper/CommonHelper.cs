@@ -78,7 +78,7 @@ namespace xFilm5.REST
 
             public enum OrderType
             {
-                Blueprint,
+                Blueprint = 1,
                 Film,
                 Plate
             }

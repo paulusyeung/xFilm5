@@ -123,7 +123,7 @@ namespace xFilm5.REST.Helper
                 var receipt = ctx.ReceiptHeader.Where(x => x.INMasterId == invoiceId).SingleOrDefault();
 
                 if (receipt != null)
-                    Helper.BotHelper.PostXprinter(receipt.ReceiptHeaderId);
+                    Helper.BotHelper.PostXprinter(receipt.ReceiptHeaderId, receipt.ClientId);
             }
         }
     }

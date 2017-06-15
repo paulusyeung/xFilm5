@@ -87,7 +87,7 @@ namespace xFilm5.REST.Helper
             client.Execute(request);
         }
 
-        public static void PostXprinter(int receiptId)
+        public static void PostXprinter(int receiptId, int clientId)
         {
             String botServer = ConfigurationManager.AppSettings["BotServer"];
 //#if (DEBUG)
@@ -95,25 +95,10 @@ namespace xFilm5.REST.Helper
 //#endif
             var client = new RestClient(botServer);
             var request = new RestRequest("xprinter/", Method.POST);
-            //request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+
             request.RequestFormat = DataFormat.Json;
 
-            try
-            {
-                //serialize an object to JSON and set it as content for a request
-                //request.JsonSerializer = NewtonsoftJsonSerializer.Default;
-                //request.AddJsonBody(obj);
-                //PrintServer pServer = new PrintServer(@"\\192.168.2.223", PrintSystemDesiredAccess.EnumerateServer);
-                //var pQueues = pServer.GetPrintQueues();
-            }
-            catch { }
-
-            //LocalPrintServer server = new LocalPrintServer();
-            //var pq = server.DefaultPrintQueue;
-            //var pqs = server.GetPrintQueues();
-
-            String printerName = CommonHelper.Config.Xprinter_KT;   // @"\\192.168.2.223\KT-XP80C";
-                                                                        //String printerName = @"\\http://192.168.2.223:631\KT-XP80C";
+            String printerName = CommonHelper.Config.Xprinter_KT;
 
             #region 2017.05.14 paulus: 加個 SmallFont option
             bool smallFont = false;
@@ -127,18 +112,44 @@ namespace xFilm5.REST.Helper
             }
             #endregion
 
+            //request.AddBody(new
+            //{
+            //    ReceiptId = receiptId.ToString(),
+            //    LanguageId = CommonHelper.Config.CurrentLanguageId.ToString(),
+            //    PrinterName = printerName,
+            //    SmallFont = smallFont.ToString(),
+            //    AnotherParam = 19.99
+            //});
+            request.AddParameter("ReceiptId", receiptId.ToString());
+            request.AddParameter("LanguageId", ClientHelper.GetDefaultLanguageId(clientId).ToString());
+            request.AddParameter("PrinterName", printerName);
+            request.AddParameter("SmallFont", smallFont.ToString());
+            var result = client.Execute(request);
+        }
+
+        public static bool PostEmailReceipt(int receiptId, string recipients, int clientId)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            //#if (DEBUG)
+            //            botServer = "http://localhost:35543/";
+            //#endif
+            var client = new RestClient(botServer);
+            var request = new RestRequest("email/receipt/", Method.POST);
+            //request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+            request.RequestFormat = DataFormat.Json;
+
             //request.AddParameter("ReceiptId", receiptId.ToString());
             //request.AddParameter("LanguageId", DAL.Common.Config.CurrentLanguageId.ToString());
             //request.AddParameter("PrinterName", printerName);
             request.AddBody(new
             {
                 ReceiptId = receiptId.ToString(),
-                LanguageId = CommonHelper.Config.CurrentLanguageId.ToString(),
-                PrinterName = printerName,
-                SmallFont = smallFont.ToString(),
+                LanguageId = ClientHelper.GetDefaultLanguageId(clientId).ToString(),
+                Recipient = recipients,
                 AnotherParam = 19.99
             });
-            var result = client.Execute(request);
+            var response = client.Execute(request);
+            return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
         }
     }
 }

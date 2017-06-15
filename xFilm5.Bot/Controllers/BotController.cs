@@ -19,6 +19,11 @@ namespace xFilm5.Bot.Controllers
         private static log4net.ILog Log { get; set; }
         ILog log = log4net.LogManager.GetLogger(typeof(BotController));
 
+        /// <summary>
+        /// 抄藍紙檔案去打藍紙
+        /// </summary>
+        /// <param name="jsonData"></param>
+        /// <returns></returns>
         [Route("blueprint")]
         public IHttpActionResult PostBlueprint([FromBody] JObject jsonData)
         {
@@ -111,6 +116,11 @@ namespace xFilm5.Bot.Controllers
             }
         }
 
+        /// <summary>
+        /// 抄 Tiff 去出鋅
+        /// </summary>
+        /// <param name="jsonData"></param>
+        /// <returns></returns>
         [Route("plate")]
         public IHttpActionResult PostPlate([FromBody] JObject jsonData)
         {
@@ -271,6 +281,11 @@ namespace xFilm5.Bot.Controllers
             }
         }
 
+        /// <summary>
+        /// 抄 Tiff 去出菲林
+        /// </summary>
+        /// <param name="jsonData"></param>
+        /// <returns></returns>
         [Route("film")]
         public IHttpActionResult PostFilm([FromBody] JObject jsonData)
         {
@@ -358,6 +373,11 @@ namespace xFilm5.Bot.Controllers
             }
         }
 
+        /// <summary>
+        /// 打印 Xprinter 收貨單 (Delivery Note)
+        /// </summary>
+        /// <param name="jsonData"></param>
+        /// <returns></returns>
         [Route("xprinter")]
         public IHttpActionResult PostXprinter([FromBody] JObject jsonData)
         {
@@ -375,7 +395,6 @@ namespace xFilm5.Bot.Controllers
 
                 using (var ctx = new xFilmEntities())
                 {
-                    var vps = ctx.PrintQueue_VPS.FirstOrDefault(v => v.ID == receiptId);
                     var hasRows = ctx.vwReceiptDetailsList_Ex.Where(x => x.ReceiptHeaderId == receiptId).Any();
                     if (hasRows)
                     {
@@ -395,7 +414,7 @@ namespace xFilm5.Bot.Controllers
                     }
                     else
                     {
-                        log.Error("[bot, xprinter, Receipt not found] \r\n" + vps.ToString());
+                        log.Error("[bot, xprinter, Receipt not found] \r\n" + receiptId.ToString());
                         return NotFound();
                     }
                 }
@@ -414,20 +433,21 @@ namespace xFilm5.Bot.Controllers
         {
             if (jsonData == null)
             {
-                log.Error("[bot, email receipt] jsonData == null");
+                log.Fatal("[bot, email receipt] jsonData == null");
                 return NotFound();
             }
             else
             {
+                #region extra parameters from json data
                 int receiptId = jsonData["ReceiptId"].Value<int>();
                 int languageId = jsonData["LanguageId"].Value<int>();
                 string recipient = jsonData["Recipient"].Value<string>();
+                #endregion
 
                 Config.CurrentLanguageId = languageId;
 
                 using (var ctx = new xFilmEntities())
                 {
-                    var vps = ctx.PrintQueue_VPS.FirstOrDefault(v => v.ID == receiptId);
                     var hasRows = ctx.vwReceiptDetailsList_Ex.Where(x => x.ReceiptHeaderId == receiptId).Any();
                     if (hasRows)
                     {
@@ -446,7 +466,7 @@ namespace xFilm5.Bot.Controllers
                     }
                     else
                     {
-                        log.Error("[bot, email receipt, Receipt not found] \r\n" + vps.ToString());
+                        log.Error("[bot, email receipt, Receipt not found] \r\n" + receiptId.ToString());
                         return NotFound();
                     }
                 }

@@ -17,6 +17,7 @@ namespace xFilm5.Bot
     public class PrinterHelper
     {
         // 2017.04.26 paulus: 如果 local config.web 有 Xprinter 名，就用 local，否則就用 caller 嘅 printerName
+        // line 182: _Xprinter = Utility.Workshop.GetXprinter(orderHdr.ProofingOp.Value);
         String _Xprinter = "";
 
         // 2017.05.09 paulus: 如果係 現金單，印一式兩份
