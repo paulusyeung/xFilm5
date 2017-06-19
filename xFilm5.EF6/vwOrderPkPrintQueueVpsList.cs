@@ -14,10 +14,11 @@ namespace xFilm5.EF6
     
     public partial class vwOrderPkPrintQueueVpsList
     {
-        public int OrderHeaderId { get; set; }
+        public int OrderPkPrintQueueVpsId { get; set; }
+        public Nullable<int> OrderHeaderId { get; set; }
         public int ClientID { get; set; }
         public string ClientName { get; set; }
-        public int PrintQueueVpsId { get; set; }
+        public Nullable<int> PrintQueueVpsId { get; set; }
         public string VpsFileName { get; set; }
         public string VpsPlateSize { get; set; }
         public System.DateTime VpsCreatedOn { get; set; }

@@ -93,7 +93,7 @@
         <EntityTypeShape EntityType="xFilmModel.vwOrderPkPrintQueueVpsList" Width="1.5" PointX="0.75" PointY="10.75" />
         <EntityTypeShape EntityType="xFilmModel.vwOrderPkPrintQueueVpsList_Blueprint" Width="1.5" PointX="2.75" PointY="10.75" />
         <EntityTypeShape EntityType="xFilmModel.vwOrderPkPrintQueueVpsList_Film" Width="1.5" PointX="4.75" PointY="10.75" />
-        <EntityTypeShape EntityType="xFilmModel.vwOrderPkPrintQueueVpsList_Plate" Width="1.5" PointX="11.75" PointY="0.75" />
+        <EntityTypeShape EntityType="xFilmModel.vwOrderPkPrintQueueVpsList_Plate" Width="1.5" PointX="12.75" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

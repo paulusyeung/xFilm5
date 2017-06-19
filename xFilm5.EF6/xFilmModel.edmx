@@ -497,7 +497,7 @@
           <Key>
             <PropertyRef Name="UserId" />
           </Key>
-          <Property Name="UserId" Type="int" StoreGeneratedPattern="None" Nullable="false" />
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserType" Type="int" Nullable="false" />
           <Property Name="UserSid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="LoginName" Type="nvarchar" MaxLength="64" Nullable="false" />
@@ -567,24 +567,14 @@
 warning 6002: The table/view 'xFilm3_NuStar.dbo.vwOrderPkPrintQueueVpsList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vwOrderPkPrintQueueVpsList">
           <Key>
+            <PropertyRef Name="OrderPkPrintQueueVpsId" />
             <PropertyRef Name="ClientID" />
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            <PropertyRef Name="OrderHeaderId" />
-            <PropertyRef Name="PrintQueueVpsId" />
           </Key>
-          <Property Name="OrderHeaderId" Type="int" Nullable="false" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="int" Nullable="false" />
+          <Property Name="OrderHeaderId" Type="int" />
           <Property Name="ClientID" Type="int" Nullable="false" />
           <Property Name="ClientName" Type="nvarchar" MaxLength="128" />
-          <Property Name="PrintQueueVpsId" Type="int" Nullable="false" />
+          <Property Name="PrintQueueVpsId" Type="int" />
           <Property Name="VpsFileName" Type="nvarchar" MaxLength="256" Nullable="false" />
           <Property Name="VpsPlateSize" Type="nvarchar" MaxLength="16" />
           <Property Name="VpsCreatedOn" Type="datetime" Nullable="false" />
@@ -606,14 +596,14 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwOrderPkPrintQueueVpsList' does
 warning 6002: The table/view 'xFilm3_NuStar.dbo.vwOrderPkPrintQueueVpsList_Blueprint' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vwOrderPkPrintQueueVpsList_Blueprint">
           <Key>
+            <PropertyRef Name="OrderPkPrintQueueVpsId" />
             <PropertyRef Name="ClientID" />
-            <PropertyRef Name="OrderHeaderId" />
-            <PropertyRef Name="PrintQueueVpsId" />
           </Key>
-          <Property Name="OrderHeaderId" Type="int" Nullable="false" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="int" Nullable="false" />
+          <Property Name="OrderHeaderId" Type="int" />
           <Property Name="ClientID" Type="int" Nullable="false" />
           <Property Name="ClientName" Type="nvarchar" MaxLength="128" />
-          <Property Name="PrintQueueVpsId" Type="int" Nullable="false" />
+          <Property Name="PrintQueueVpsId" Type="int" />
           <Property Name="VpsFileName" Type="nvarchar" MaxLength="256" Nullable="false" />
           <Property Name="VpsPlateSize" Type="nvarchar" MaxLength="16" />
           <Property Name="VpsCreatedOn" Type="datetime" Nullable="false" />
@@ -635,19 +625,10 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwOrderPkPrintQueueVpsList_Bluep
 warning 6002: The table/view 'xFilm3_NuStar.dbo.vwOrderPkPrintQueueVpsList_Film' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vwOrderPkPrintQueueVpsList_Film">
           <Key>
+            <PropertyRef Name="OrderPkPrintQueueVpsId" />
             <PropertyRef Name="ClientID" />
-            <PropertyRef Name="VpsFileName" />
-            <PropertyRef Name="VpsCreatedOn" />
-            <PropertyRef Name="CheckedPlate" />
-            <PropertyRef Name="CheckedCip3" />
-            <PropertyRef Name="CheckedBlueprint" />
-            <PropertyRef Name="IsReady" />
-            <PropertyRef Name="IsReceived" />
-            <PropertyRef Name="IsBilled" />
-            <PropertyRef Name="CreatedOn" />
-            <PropertyRef Name="ModifiedOn" />
-            <PropertyRef Name="Retired" />
           </Key>
+          <Property Name="OrderPkPrintQueueVpsId" Type="int" Nullable="false" />
           <Property Name="OrderHeaderId" Type="int" />
           <Property Name="ClientID" Type="int" Nullable="false" />
           <Property Name="ClientName" Type="nvarchar" MaxLength="128" />
@@ -673,14 +654,14 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwOrderPkPrintQueueVpsList_Film'
 warning 6002: The table/view 'xFilm3_NuStar.dbo.vwOrderPkPrintQueueVpsList_Plate' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vwOrderPkPrintQueueVpsList_Plate">
           <Key>
+            <PropertyRef Name="OrderPkPrintQueueVpsId" />
             <PropertyRef Name="ClientID" />
-            <PropertyRef Name="OrderHeaderId" />
-            <PropertyRef Name="PrintQueueVpsId" />
           </Key>
-          <Property Name="OrderHeaderId" Type="int" Nullable="false" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="int" Nullable="false" />
+          <Property Name="OrderHeaderId" Type="int" />
           <Property Name="ClientID" Type="int" Nullable="false" />
           <Property Name="ClientName" Type="nvarchar" MaxLength="128" />
-          <Property Name="PrintQueueVpsId" Type="int" Nullable="false" />
+          <Property Name="PrintQueueVpsId" Type="int" />
           <Property Name="VpsFileName" Type="nvarchar" MaxLength="256" Nullable="false" />
           <Property Name="VpsPlateSize" Type="nvarchar" MaxLength="16" />
           <Property Name="VpsCreatedOn" Type="datetime" Nullable="false" />
@@ -1314,6 +1295,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
           <EntitySet Name="Z_WebColor" EntityType="Self.Z_WebColor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="vwOrderPkPrintQueueVpsList" EntityType="Self.vwOrderPkPrintQueueVpsList" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
+    [vwOrderPkPrintQueueVpsList].[OrderPkPrintQueueVpsId] AS [OrderPkPrintQueueVpsId], 
     [vwOrderPkPrintQueueVpsList].[OrderHeaderId] AS [OrderHeaderId], 
     [vwOrderPkPrintQueueVpsList].[ClientID] AS [ClientID], 
     [vwOrderPkPrintQueueVpsList].[ClientName] AS [ClientName], 
@@ -1338,6 +1320,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
           </EntitySet>
           <EntitySet Name="vwOrderPkPrintQueueVpsList_Blueprint" EntityType="Self.vwOrderPkPrintQueueVpsList_Blueprint" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
+    [vwOrderPkPrintQueueVpsList_Blueprint].[OrderPkPrintQueueVpsId] AS [OrderPkPrintQueueVpsId], 
     [vwOrderPkPrintQueueVpsList_Blueprint].[OrderHeaderId] AS [OrderHeaderId], 
     [vwOrderPkPrintQueueVpsList_Blueprint].[ClientID] AS [ClientID], 
     [vwOrderPkPrintQueueVpsList_Blueprint].[ClientName] AS [ClientName], 
@@ -1362,6 +1345,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
           </EntitySet>
           <EntitySet Name="vwOrderPkPrintQueueVpsList_Film" EntityType="Self.vwOrderPkPrintQueueVpsList_Film" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
+    [vwOrderPkPrintQueueVpsList_Film].[OrderPkPrintQueueVpsId] AS [OrderPkPrintQueueVpsId], 
     [vwOrderPkPrintQueueVpsList_Film].[OrderHeaderId] AS [OrderHeaderId], 
     [vwOrderPkPrintQueueVpsList_Film].[ClientID] AS [ClientID], 
     [vwOrderPkPrintQueueVpsList_Film].[ClientName] AS [ClientName], 
@@ -1386,6 +1370,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
           </EntitySet>
           <EntitySet Name="vwOrderPkPrintQueueVpsList_Plate" EntityType="Self.vwOrderPkPrintQueueVpsList_Plate" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
+    [vwOrderPkPrintQueueVpsList_Plate].[OrderPkPrintQueueVpsId] AS [OrderPkPrintQueueVpsId], 
     [vwOrderPkPrintQueueVpsList_Plate].[OrderHeaderId] AS [OrderHeaderId], 
     [vwOrderPkPrintQueueVpsList_Plate].[ClientID] AS [ClientID], 
     [vwOrderPkPrintQueueVpsList_Plate].[ClientName] AS [ClientName], 
@@ -3042,14 +3027,14 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
         </EntityType>
         <EntityType Name="vwOrderPkPrintQueueVpsList">
           <Key>
+            <PropertyRef Name="OrderPkPrintQueueVpsId" />
             <PropertyRef Name="ClientID" />
-            <PropertyRef Name="OrderHeaderId" />
-            <PropertyRef Name="PrintQueueVpsId" />
           </Key>
-          <Property Name="OrderHeaderId" Type="Int32" Nullable="false" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="Int32" Nullable="false" />
+          <Property Name="OrderHeaderId" Type="Int32" />
           <Property Name="ClientID" Type="Int32" Nullable="false" />
           <Property Name="ClientName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="PrintQueueVpsId" Type="Int32" Nullable="false" />
+          <Property Name="PrintQueueVpsId" Type="Int32" />
           <Property Name="VpsFileName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
           <Property Name="VpsPlateSize" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
           <Property Name="VpsCreatedOn" Type="DateTime" Nullable="false" Precision="3" />
@@ -3069,14 +3054,14 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
         </EntityType>
         <EntityType Name="vwOrderPkPrintQueueVpsList_Blueprint">
           <Key>
+            <PropertyRef Name="OrderPkPrintQueueVpsId" />
             <PropertyRef Name="ClientID" />
-            <PropertyRef Name="OrderHeaderId" />
-            <PropertyRef Name="PrintQueueVpsId" />
           </Key>
-          <Property Name="OrderHeaderId" Type="Int32" Nullable="false" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="Int32" Nullable="false" />
+          <Property Name="OrderHeaderId" Type="Int32" />
           <Property Name="ClientID" Type="Int32" Nullable="false" />
           <Property Name="ClientName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="PrintQueueVpsId" Type="Int32" Nullable="false" />
+          <Property Name="PrintQueueVpsId" Type="Int32" />
           <Property Name="VpsFileName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
           <Property Name="VpsPlateSize" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
           <Property Name="VpsCreatedOn" Type="DateTime" Nullable="false" Precision="3" />
@@ -3096,19 +3081,10 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
         </EntityType>
         <EntityType Name="vwOrderPkPrintQueueVpsList_Film">
           <Key>
+            <PropertyRef Name="OrderPkPrintQueueVpsId" />
             <PropertyRef Name="ClientID" />
-            <PropertyRef Name="VpsFileName" />
-            <PropertyRef Name="VpsCreatedOn" />
-            <PropertyRef Name="CheckedPlate" />
-            <PropertyRef Name="CheckedCip3" />
-            <PropertyRef Name="CheckedBlueprint" />
-            <PropertyRef Name="IsReady" />
-            <PropertyRef Name="IsReceived" />
-            <PropertyRef Name="IsBilled" />
-            <PropertyRef Name="CreatedOn" />
-            <PropertyRef Name="ModifiedOn" />
-            <PropertyRef Name="Retired" />
           </Key>
+          <Property Name="OrderPkPrintQueueVpsId" Type="Int32" Nullable="false" />
           <Property Name="OrderHeaderId" Type="Int32" />
           <Property Name="ClientID" Type="Int32" Nullable="false" />
           <Property Name="ClientName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
@@ -3132,14 +3108,14 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
         </EntityType>
         <EntityType Name="vwOrderPkPrintQueueVpsList_Plate">
           <Key>
+            <PropertyRef Name="OrderPkPrintQueueVpsId" />
             <PropertyRef Name="ClientID" />
-            <PropertyRef Name="OrderHeaderId" />
-            <PropertyRef Name="PrintQueueVpsId" />
           </Key>
-          <Property Name="OrderHeaderId" Type="Int32" Nullable="false" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="Int32" Nullable="false" />
+          <Property Name="OrderHeaderId" Type="Int32" />
           <Property Name="ClientID" Type="Int32" Nullable="false" />
           <Property Name="ClientName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="PrintQueueVpsId" Type="Int32" Nullable="false" />
+          <Property Name="PrintQueueVpsId" Type="Int32" />
           <Property Name="VpsFileName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
           <Property Name="VpsPlateSize" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
           <Property Name="VpsCreatedOn" Type="DateTime" Nullable="false" Precision="3" />
@@ -3835,6 +3811,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
                 <ScalarProperty Name="ClientName" ColumnName="ClientName" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
                 <ScalarProperty Name="OrderHeaderId" ColumnName="OrderHeaderId" />
+                <ScalarProperty Name="OrderPkPrintQueueVpsId" ColumnName="OrderPkPrintQueueVpsId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3861,6 +3838,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
                 <ScalarProperty Name="ClientName" ColumnName="ClientName" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
                 <ScalarProperty Name="OrderHeaderId" ColumnName="OrderHeaderId" />
+                <ScalarProperty Name="OrderPkPrintQueueVpsId" ColumnName="OrderPkPrintQueueVpsId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3887,6 +3865,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
                 <ScalarProperty Name="ClientName" ColumnName="ClientName" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
                 <ScalarProperty Name="OrderHeaderId" ColumnName="OrderHeaderId" />
+                <ScalarProperty Name="OrderPkPrintQueueVpsId" ColumnName="OrderPkPrintQueueVpsId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3913,6 +3892,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
                 <ScalarProperty Name="ClientName" ColumnName="ClientName" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
                 <ScalarProperty Name="OrderHeaderId" ColumnName="OrderHeaderId" />
+                <ScalarProperty Name="OrderPkPrintQueueVpsId" ColumnName="OrderPkPrintQueueVpsId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

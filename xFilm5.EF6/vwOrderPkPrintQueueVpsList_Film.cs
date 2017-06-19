@@ -14,6 +14,7 @@ namespace xFilm5.EF6
     
     public partial class vwOrderPkPrintQueueVpsList_Film
     {
+        public int OrderPkPrintQueueVpsId { get; set; }
         public Nullable<int> OrderHeaderId { get; set; }
         public int ClientID { get; set; }
         public string ClientName { get; set; }
