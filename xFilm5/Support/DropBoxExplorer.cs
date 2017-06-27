@@ -111,6 +111,8 @@ namespace xFilm5.Support
 
         private void SetAttribute()
         {
+            tvwClient.Margin = new Padding(0, 24, 0, 0);
+
             this.lvwFileExplorer.ListViewItemSorter = new ListViewItemSorter(this.lvwFileExplorer);
 
             toolTip1.SetToolTip(lvwFileExplorer, "Double click to download file");
