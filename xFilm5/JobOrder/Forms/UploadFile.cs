@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -1283,10 +1283,24 @@ namespace xFilm5.JobOrder.Forms
 
         private void cmdAttachment_Click(object sender, EventArgs e)
         {
+            /**
+            #region X3 uploader: ref ofdAttachment_FileOk
             ofdAttachment.MaxFileSize = Common.Config.MaxFileSize;
             ofdAttachment.Multiselect = false;
             ofdAttachment.Title = "Job Order > Upload File > Attachment";
             ofdAttachment.ShowDialog();
+            #endregion
+            */
+
+            #region X5 uploader: ref x5Uploader_FormClosed
+            nxStudio.BaseClass.WordDict oDict = new nxStudio.BaseClass.WordDict(Common.Config.CurrentWordDict, Common.Config.CurrentLanguageId);
+            xFilm5.Controls.Import.UploaderVWG x5Uploader = new xFilm5.Controls.Import.UploaderVWG();
+
+            x5Uploader.Text = oDict.GetWord("dropbox");
+            //uploader.UploadedFileType = @"^.*\.(gif|jpe?g|png)$";   // accept gif, jpg, jpeg, png
+            x5Uploader.FormClosed += new Form.FormClosedEventHandler(x5Uploader_FormClosed);
+            x5Uploader.ShowDialog();
+            #endregion
         }
 
         private void ofdAttachment_FileOk(object sender, CancelEventArgs e)
@@ -1313,6 +1327,34 @@ namespace xFilm5.JobOrder.Forms
                         txtAttachment.Text = String.Empty;
                     }
                     break;
+            }
+        }
+
+        private void x5Uploader_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            string FileName = string.Empty;
+            string FullName = string.Empty;
+            string inbox = Common.Client.InBox(_ClientId);
+
+            xFilm5.Controls.Import.UploaderVWG uploader = (xFilm5.Controls.Import.UploaderVWG)sender;
+            if (uploader.UploadedFiles.Count > 0)
+            {
+                foreach (String filepath in uploader.UploadedFiles)
+                {
+                    #region process uploaded file: 把已經上載到 temporary folder 的檔案抄至指定的檔案夾
+                    if (File.Exists(filepath))
+                    {
+                        //String filename = Path.GetFileName(filepath);       // VWG Uploader 會加個 Guid 在檔案名之前，要將佢去掉
+                        //int idx = filename.IndexOf('_');
+                        //filename = filename.Substring(idx + 1);
+                        String filename = Path.GetFileName(filepath).Substring(37);     // 32 + 4 + 1
+                        String dest = Path.Combine(inbox, filename);
+                        File.Copy(filepath, dest, true);
+
+                        txtAttachment.Text = filename;
+                    }
+                    #endregion
+                }
             }
         }
 
