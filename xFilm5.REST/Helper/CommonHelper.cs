@@ -76,13 +76,25 @@ namespace xFilm5.REST
                 Cash
             }
 
-            public enum OrderType
+            public enum OutputType
             {
                 Blueprint = 1,
                 Film,
                 Plate
             }
-
+/**
+            public enum OrderType
+            {
+                UploadFile = 1,
+                DirectPrint,
+                PsFile,
+                Others,
+                Plate,
+                Plate5,
+                Film5,
+                Vps5
+            }
+*/
             public enum Workflow
             {
                 Cancelled = 1,

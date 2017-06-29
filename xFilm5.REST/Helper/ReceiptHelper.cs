@@ -61,7 +61,7 @@ namespace xFilm5.REST.Helper
                                 var pkPq = ctx.OrderPkPrintQueueVps.Where(x => x.OrderHeaderId == item.OrderHeaderId && x.PrintQueueVpsId == item.PrintQueueVpsId).SingleOrDefault();
                                 if (pkPq != null)
                                 {
-                                    var orderType = (CommonHelper.Enums.OrderType)item.OrderType;
+                                    var orderType = (CommonHelper.Enums.OutputType)item.OrderType;
 
                                     #region 每隻 OrderPkPrintQueueVps InsRec: 一隻 dbo.ReceiptDetail
                                     var dtl = new EF6.ReceiptDetail();
@@ -150,7 +150,7 @@ namespace xFilm5.REST.Helper
             {
                 switch (item.OrderType)
                 {
-                    case (int)CommonHelper.Enums.OrderType.Blueprint:
+                    case (int)CommonHelper.Enums.OutputType.Blueprint:
                         #region 計價（藍紙）
                         var bpCode = String.Format("{0}-BP", item.VpsPlateSize);
                         var bp = ctx.T_BillingCode_Item.Where(x => x.ItemCode == bpCode).SingleOrDefault();
@@ -174,9 +174,9 @@ namespace xFilm5.REST.Helper
                         }
                         #endregion
                         break;
-                    case (int)CommonHelper.Enums.OrderType.Film:
+                    case (int)CommonHelper.Enums.OutputType.Film:
                         #region 計價（菲林）
-                        var fmCode = String.Format("{0}", item.VpsPlateSize);
+                        var fmCode = String.Format("{0}", item.VpsPlateSize.Substring(0, 1));
                         var fm = ctx.T_BillingCode_Item.Where(x => x.ItemCode == fmCode).SingleOrDefault();
                         if (fm != null)
                         {
@@ -189,7 +189,7 @@ namespace xFilm5.REST.Helper
                             discount = fmVip != null ? fmVip.Discount : 0;
                             amount = price * (100 - discount) / 100;
 
-                            var fmCodeMin = String.Format("{0}00", item.VpsFileName.Substring(0, 1));
+                            var fmCodeMin = String.Format("{0}00", item.VpsPlateSize.Substring(0, 1));
                             var fmMin = ctx.T_BillingCode_Item.Where(x => x.ItemCode == fmCodeMin).SingleOrDefault();
                             var fmVipMin = ctx.ClientPricing.Where(x => x.ClientId == clientId && x.ItemId == fmMin.ID).SingleOrDefault();
 
@@ -208,7 +208,7 @@ namespace xFilm5.REST.Helper
                             Decimal amt = minCharge ? unitPriceMm : Math.Round(xLength * yLength * amount);
 
                             // prx, disc, amt
-                            dtl.BillingCode = fmCode;
+                            dtl.BillingCode = item.VpsPlateSize;
                             dtl.Description = description;
                             dtl.Qty = 1;
                             dtl.UnitAmount = prx;
@@ -217,7 +217,7 @@ namespace xFilm5.REST.Helper
                         }
                         #endregion
                         break;
-                    case (int)CommonHelper.Enums.OrderType.Plate:
+                    case (int)CommonHelper.Enums.OutputType.Plate:
                         #region 計價（鋅板）
                         var ptCode = String.Format("{0}", item.VpsPlateSize);
                         var pt = ctx.T_BillingCode_Item.Where(x => x.ItemCode == ptCode).SingleOrDefault();

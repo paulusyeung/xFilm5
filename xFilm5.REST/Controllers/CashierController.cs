@@ -348,7 +348,7 @@ WHERE CONVERT(NVARCHAR(10), [ReceiptDate], 120) = '{0}' AND [ClientID] = {1})", 
                 var user = ctx.User.Where(x => x.UserSid == sid).SingleOrDefault();
                 if (user != null)
                 {
-                    var receiptId = ReceiptHelper.SaveReceipt(list, user.UserId, CommonHelper.Enums.PaymentType.OnAccount);
+                    var receiptId = ReceiptHelper.SaveReceipt(list, user.UserId, CommonHelper.Enums.PaymentType.Cash);
                     if (receiptId != 0)
                     {
                         var invId = InvoiceHelper.SaveCashInvoice(list, user.UserId, receiptId);
@@ -367,6 +367,79 @@ WHERE CONVERT(NVARCHAR(10), [ReceiptDate], 120) = '{0}' AND [ClientID] = {1})", 
                             return Ok();
                         }
                     }
+                }
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("api/Reprint/Receipt/{id}")]
+        [JwtAuthentication]
+        public async Task<IHttpActionResult> PostReprintReceipt(string id)
+        {
+            /**
+            var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+            string userSid = identity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault();
+
+            var json = Request.Content.ReadAsStringAsync().Result;
+            var list = JsonConvert.DeserializeObject<List<vwOrderPkPrintQueueVpsListEx>>(json);
+            */
+            int receiptId;
+            receiptId = Int32.TryParse(id, out receiptId) ? receiptId : 0;
+
+            using (var ctx = new xFilmEntities())
+            {
+                var hdr = ctx.ReceiptHeader.Where(x => x.ReceiptHeaderId == receiptId).SingleOrDefault();
+                if (hdr != null)
+                {
+                    // 由 xFilm5.Bot 負責打印小票據
+                    if (Helper.ClientHelper.IsReceiptSlip(hdr.ClientId))
+                    {
+                        Helper.BotHelper.PostXprinter(receiptId, hdr.ClientId);
+                    }
+                    /**
+                    // 由 xFilm5.Bot 負責 email 張單
+                    var recipient = ClientHelper.GetEmailRecipient(hdr.ClientId);
+                    BotHelper.PostEmailReceipt(receiptId, recipient, hdr.ClientId);
+                    */
+                    return Ok();
+                }
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("api/Reprint/Invoice/{id}")]
+        [JwtAuthentication]
+        public async Task<IHttpActionResult> PostReprintInvoice(string id)
+        {
+            /**
+            var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+            string userSid = identity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault();
+
+            var json = Request.Content.ReadAsStringAsync().Result;
+            var list = JsonConvert.DeserializeObject<List<vwOrderPkPrintQueueVpsListEx>>(json);
+            */
+            int invoiceId;
+            invoiceId = Int32.TryParse(id, out invoiceId) ? invoiceId : 0;
+
+            using (var ctx = new xFilmEntities())
+            {
+                var inv = ctx.Acct_INMaster.Where(x => x.ID == invoiceId).SingleOrDefault();
+                if (inv != null)
+                {
+                    var receipt = ctx.ReceiptHeader.Where(x => x.INMasterId == invoiceId).SingleOrDefault();
+                    // 由 xFilm5.Bot 負責打印小票據
+                    if (Helper.ClientHelper.IsReceiptSlip(inv.ClientID))
+                    {
+                        Helper.InvoiceHelper.PrintToXprinter(invoiceId);
+                    }
+                    /**
+                    // 由 xFilm5.Bot 負責 email 張單
+                    var recipient = ClientHelper.GetEmailRecipient(inv.ClientID);
+                    BotHelper.PostEmailReceipt(receipt.ReceiptHeaderId, recipient, inv.ClientID);
+                    */
+                    return Ok();
                 }
             }
             return NotFound();
