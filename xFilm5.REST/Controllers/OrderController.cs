@@ -21,20 +21,69 @@ namespace xFilm5.REST.Controllers
             var month = date.ToString("yyyy-MM");
             if (id == 0)
             {
-                #region All clients
+                #region All distinct clients within the same month
                 using (var ctx = new xFilmEntities())
                 {
-                    var list = ctx.vwOrderList.Where(x => x.DateReceived.Substring(0, 7) == month && x.OrderTypeID >= 6).OrderBy(x => x.OrderID).ToList();
+                    string qry = String.Format(@"
+select [OrderID]
+      ,[ClientID]
+      ,[ClientName]
+      ,[ClientStatus]
+      ,[PriorityID]
+      ,[Priority]
+      ,[Attachment]
+      ,[Remarks]
+      ,[DateReceived]
+      ,[DateCompleted]
+      ,[OrderTypeID]
+      ,[OrderType]
+      ,[OrderedBy]
+      ,[PrePressOp]
+      ,[RetouchBy]
+      ,[Workshop]
+      ,[StatusID]
+      ,[Status]
+      ,[DeliveryMethod]
+      ,[Comment]
+	  from (
+SELECT TOP (1000) [OrderID]
+      ,[ClientID]
+      ,[ClientName]
+      ,[ClientStatus]
+      ,[PriorityID]
+      ,[Priority]
+      ,[Attachment]
+      ,[Remarks]
+      ,[DateReceived]
+      ,[DateCompleted]
+      ,[OrderTypeID]
+      ,[OrderType]
+      ,[OrderedBy]
+      ,[PrePressOp]
+      ,[RetouchBy]
+      ,[Workshop]
+      ,[StatusID]
+      ,[Status]
+      ,[DeliveryMethod]
+      ,[Comment]
+	  ,row_number() OVER (partition BY [ClientName] order by [ClientName], [OrderID]) as Ln
+FROM [xFilm3_NuStar].[dbo].[vwOrderList]
+where (OrderTypeID >= 6) AND (substring([DateReceived], 1, 7) = '{0}')
+) as oops
+where Ln = 1
+order by [ClientName]", month);
+
+                    var list = ctx.Database.SqlQuery<vwOrderList>(qry).ToList();
                     return Json(list);
                 }
                 #endregion
             }
             else
             {
-                #region A single client
+                #region All orders of a single client within the same month
                 using (var ctx = new xFilmEntities())
                 {
-                    var list = ctx.vwOrderList.Where(x => x.DateReceived.Substring(0, 7) == month && x.ClientID == id && x.OrderTypeID >= 6).OrderBy(x => x.OrderID).ToList();
+                    var list = ctx.vwOrderList.Where(x => x.DateReceived.StartsWith(month) && x.ClientID == id && x.OrderTypeID >= 6).OrderBy(x => x.OrderID).ToList();
                     return Json(list);
                 }
                 #endregion
