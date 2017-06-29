@@ -172,6 +172,9 @@
     <Compile Include="UserPreference.cs">
       <DependentUpon>xFilmModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="vwOrderList.cs">
+      <DependentUpon>xFilmModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="vwOrderPkPrintQueueVpsList.cs">
       <DependentUpon>xFilmModel.tt</DependentUpon>
     </Compile>

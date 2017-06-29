@@ -564,11 +564,49 @@
           <Property Name="Name" Type="nvarchar" MaxLength="32" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'xFilm3_NuStar.dbo.vwOrderList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vwOrderList">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="int" Nullable="false" />
+          <Property Name="ClientID" Type="int" Nullable="false" />
+          <Property Name="ClientName" Type="nvarchar" MaxLength="128" />
+          <Property Name="ClientStatus" Type="smallint" />
+          <Property Name="PriorityID" Type="int" Nullable="false" />
+          <Property Name="Priority" Type="nvarchar" MaxLength="32" />
+          <Property Name="Attachment" Type="nvarchar" MaxLength="255" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="255" />
+          <Property Name="DateReceived" Type="varchar" MaxLength="16" />
+          <Property Name="DateCompleted" Type="varchar" MaxLength="16" />
+          <Property Name="OrderTypeID" Type="int" Nullable="false" />
+          <Property Name="OrderType" Type="nvarchar" MaxLength="32" />
+          <Property Name="OrderedBy" Type="nvarchar" MaxLength="64" />
+          <Property Name="PrePressOp" Type="nvarchar" MaxLength="64" />
+          <Property Name="RetouchBy" Type="nvarchar" MaxLength="64" />
+          <Property Name="Workshop" Type="nvarchar" MaxLength="64" />
+          <Property Name="StatusID" Type="int" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="32" />
+          <Property Name="DeliveryMethod" Type="int" />
+          <Property Name="Comment" Type="ntext" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'xFilm3_NuStar.dbo.vwOrderPkPrintQueueVpsList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vwOrderPkPrintQueueVpsList">
           <Key>
             <PropertyRef Name="OrderPkPrintQueueVpsId" />
             <PropertyRef Name="ClientID" />
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
           </Key>
           <Property Name="OrderPkPrintQueueVpsId" Type="int" Nullable="false" />
           <Property Name="OrderHeaderId" Type="int" />
@@ -598,6 +636,17 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwOrderPkPrintQueueVpsList_Bluep
           <Key>
             <PropertyRef Name="OrderPkPrintQueueVpsId" />
             <PropertyRef Name="ClientID" />
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
           </Key>
           <Property Name="OrderPkPrintQueueVpsId" Type="int" Nullable="false" />
           <Property Name="OrderHeaderId" Type="int" />
@@ -627,6 +676,17 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwOrderPkPrintQueueVpsList_Film'
           <Key>
             <PropertyRef Name="OrderPkPrintQueueVpsId" />
             <PropertyRef Name="ClientID" />
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
           </Key>
           <Property Name="OrderPkPrintQueueVpsId" Type="int" Nullable="false" />
           <Property Name="OrderHeaderId" Type="int" />
@@ -656,6 +716,17 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwOrderPkPrintQueueVpsList_Plate
           <Key>
             <PropertyRef Name="OrderPkPrintQueueVpsId" />
             <PropertyRef Name="ClientID" />
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
           </Key>
           <Property Name="OrderPkPrintQueueVpsId" Type="int" Nullable="false" />
           <Property Name="OrderHeaderId" Type="int" />
@@ -1293,6 +1364,30 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
           <EntitySet Name="UserPreference" EntityType="Self.UserPreference" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="X_Counter" EntityType="Self.X_Counter" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Z_WebColor" EntityType="Self.Z_WebColor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vwOrderList" EntityType="Self.vwOrderList" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vwOrderList].[OrderID] AS [OrderID], 
+    [vwOrderList].[ClientID] AS [ClientID], 
+    [vwOrderList].[ClientName] AS [ClientName], 
+    [vwOrderList].[ClientStatus] AS [ClientStatus], 
+    [vwOrderList].[PriorityID] AS [PriorityID], 
+    [vwOrderList].[Priority] AS [Priority], 
+    [vwOrderList].[Attachment] AS [Attachment], 
+    [vwOrderList].[Remarks] AS [Remarks], 
+    [vwOrderList].[DateReceived] AS [DateReceived], 
+    [vwOrderList].[DateCompleted] AS [DateCompleted], 
+    [vwOrderList].[OrderTypeID] AS [OrderTypeID], 
+    [vwOrderList].[OrderType] AS [OrderType], 
+    [vwOrderList].[OrderedBy] AS [OrderedBy], 
+    [vwOrderList].[PrePressOp] AS [PrePressOp], 
+    [vwOrderList].[RetouchBy] AS [RetouchBy], 
+    [vwOrderList].[Workshop] AS [Workshop], 
+    [vwOrderList].[StatusID] AS [StatusID], 
+    [vwOrderList].[Status] AS [Status], 
+    [vwOrderList].[DeliveryMethod] AS [DeliveryMethod], 
+    [vwOrderList].[Comment] AS [Comment]
+    FROM [dbo].[vwOrderList] AS [vwOrderList]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="vwOrderPkPrintQueueVpsList" EntityType="Self.vwOrderPkPrintQueueVpsList" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [vwOrderPkPrintQueueVpsList].[OrderPkPrintQueueVpsId] AS [OrderPkPrintQueueVpsId], 
@@ -2975,6 +3070,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
           <EntitySet Name="vwOrderPkPrintQueueVpsList_Blueprint" EntityType="xFilmModel.vwOrderPkPrintQueueVpsList_Blueprint" />
           <EntitySet Name="vwOrderPkPrintQueueVpsList_Film" EntityType="xFilmModel.vwOrderPkPrintQueueVpsList_Film" />
           <EntitySet Name="vwOrderPkPrintQueueVpsList_Plate" EntityType="xFilmModel.vwOrderPkPrintQueueVpsList_Plate" />
+          <EntitySet Name="vwOrderList" EntityType="xFilmModel.vwOrderList" />
         </EntityContainer>
         <EntityType Name="vwReceiptDetailsList_Ex">
           <Key>
@@ -3132,6 +3228,31 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
           <Property Name="Retired" Type="Boolean" Nullable="false" />
           <Property Name="RetiredOn" Type="DateTime" Precision="3" />
           <Property Name="RetiredBy" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="vwOrderList">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
+          <Property Name="ClientID" Type="Int32" Nullable="false" />
+          <Property Name="ClientName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ClientStatus" Type="Int16" />
+          <Property Name="PriorityID" Type="Int32" Nullable="false" />
+          <Property Name="Priority" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="Attachment" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Remarks" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DateReceived" Type="String" MaxLength="16" FixedLength="false" Unicode="false" />
+          <Property Name="DateCompleted" Type="String" MaxLength="16" FixedLength="false" Unicode="false" />
+          <Property Name="OrderTypeID" Type="Int32" Nullable="false" />
+          <Property Name="OrderType" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="OrderedBy" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="PrePressOp" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="RetouchBy" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Workshop" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="StatusID" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="DeliveryMethod" Type="Int32" />
+          <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -3893,6 +4014,32 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
                 <ScalarProperty Name="OrderHeaderId" ColumnName="OrderHeaderId" />
                 <ScalarProperty Name="OrderPkPrintQueueVpsId" ColumnName="OrderPkPrintQueueVpsId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vwOrderList">
+            <EntityTypeMapping TypeName="xFilmModel.vwOrderList">
+              <MappingFragment StoreEntitySet="vwOrderList">
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="DeliveryMethod" ColumnName="DeliveryMethod" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="Workshop" ColumnName="Workshop" />
+                <ScalarProperty Name="RetouchBy" ColumnName="RetouchBy" />
+                <ScalarProperty Name="PrePressOp" ColumnName="PrePressOp" />
+                <ScalarProperty Name="OrderedBy" ColumnName="OrderedBy" />
+                <ScalarProperty Name="OrderType" ColumnName="OrderType" />
+                <ScalarProperty Name="OrderTypeID" ColumnName="OrderTypeID" />
+                <ScalarProperty Name="DateCompleted" ColumnName="DateCompleted" />
+                <ScalarProperty Name="DateReceived" ColumnName="DateReceived" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="Attachment" ColumnName="Attachment" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="PriorityID" ColumnName="PriorityID" />
+                <ScalarProperty Name="ClientStatus" ColumnName="ClientStatus" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
