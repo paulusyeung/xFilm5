@@ -17,7 +17,7 @@ namespace xFilm5.REST.Controllers
 {
     public class CashierController : ApiController
     {
-        private DateTime _DateZero = new DateTime(2017, 6, 1);
+        private DateTime _DateZero = new DateTime(2017, 5, 1);
 
         [HttpGet]
         [Route("api/Cashier/Ready/{id:int}")]

@@ -11,7 +11,7 @@ namespace xFilm5.REST.Controllers
 {
     public class OrderController : ApiController
     {
-        private DateTime _DateZero = new DateTime(2017, 6, 1);
+        private DateTime _DateZero = new DateTime(2017, 5, 1);
 
         [HttpGet]
         [Route("api/Order/ByMonth/{id:int}/{date:DateTime}")]
@@ -46,7 +46,7 @@ select [OrderID]
       ,[DeliveryMethod]
       ,[Comment]
 	  from (
-SELECT TOP (1000) [OrderID]
+SELECT TOP 100 PERCENT [OrderID]
       ,[ClientID]
       ,[ClientName]
       ,[ClientStatus]

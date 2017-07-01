@@ -95,6 +95,7 @@
         <EntityTypeShape EntityType="xFilmModel.vwOrderPkPrintQueueVpsList_Film" Width="1.5" PointX="4.75" PointY="10.75" />
         <EntityTypeShape EntityType="xFilmModel.vwOrderPkPrintQueueVpsList_Plate" Width="1.5" PointX="12.75" PointY="0.75" />
         <EntityTypeShape EntityType="xFilmModel.vwOrderList" Width="1.5" PointX="12.375" PointY="6.75" />
+        <EntityTypeShape EntityType="xFilmModel.vwInvoiceList_All" Width="1.5" PointX="12.375" PointY="12.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

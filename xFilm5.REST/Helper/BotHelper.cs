@@ -96,8 +96,6 @@ namespace xFilm5.REST.Helper
             var client = new RestClient(botServer);
             var request = new RestRequest("xprinter/", Method.POST);
 
-            request.RequestFormat = DataFormat.Json;
-
             String printerName = CommonHelper.Config.Xprinter_KT;
 
             #region 2017.05.14 paulus: 加個 SmallFont option
@@ -112,18 +110,21 @@ namespace xFilm5.REST.Helper
             }
             #endregion
 
-            //request.AddBody(new
-            //{
-            //    ReceiptId = receiptId.ToString(),
-            //    LanguageId = CommonHelper.Config.CurrentLanguageId.ToString(),
-            //    PrinterName = printerName,
-            //    SmallFont = smallFont.ToString(),
-            //    AnotherParam = 19.99
-            //});
+            request.RequestFormat = DataFormat.Json;
+            request.AddBody(new
+            {
+                ReceiptId = receiptId.ToString(),
+                LanguageId = CommonHelper.Config.CurrentLanguageId.ToString(),
+                PrinterName = printerName,
+                SmallFont = smallFont.ToString(),
+                AnotherParam = 19.99
+            });
+            /** 好似 AddBody 係用 JsonSerializer 而 AddParameter 就冇
             request.AddParameter("ReceiptId", receiptId.ToString());
             request.AddParameter("LanguageId", ClientHelper.GetDefaultLanguageId(clientId).ToString());
             request.AddParameter("PrinterName", printerName);
             request.AddParameter("SmallFont", smallFont.ToString());
+            */
             var result = client.Execute(request);
         }
 
