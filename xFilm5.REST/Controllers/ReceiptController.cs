@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web.Http;
 using xFilm5.EF6;
 using xFilm5.REST.Filters;
@@ -343,6 +345,60 @@ SELECT TOP 100 PERCENT [ClientId]
             {
                 return null;
             }
+        }
+
+        [HttpGet]
+        [Route("api/Receipt/pdf/{id:int}")]
+        [JwtAuthentication]
+        public HttpResponseMessage GetReceiptPdf(int id)
+        {   // ref: https://stackoverflow.com/questions/36042614/how-to-return-a-pdf-from-a-web-api-application
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.BadRequest);
+
+            using (var ctx = new EF6.xFilmEntities())
+            {
+                var hasrow = ctx.vwReceiptDetailsList_Ex.Where(x => x.ReceiptHeaderId == id).Any();
+                if (hasrow)
+                {
+                    var docName = String.Format("Receipt_{0}.pdf", id.ToString());
+                    //var list = ctx.vwReceiptDetailsList_Ex.Where(x => x.ReceiptHeaderId == id).OrderBy(x => x.OrderPkPrintQueueVpsId).ToList();
+                    var list = ctx.vwReceiptDetailsList_Ex.Where(x => x.ReceiptHeaderId == id).OrderBy(x => x.ItemDescription).ToList();
+
+                    Reports.Receipt rptReceipt = new Reports.Receipt();
+                    rptReceipt.ReceiptId = id;
+                    rptReceipt.DataSource = list;
+                    rptReceipt.CreateDocument();
+
+                    MemoryStream memStream = new System.IO.MemoryStream();
+                    //rptOrder.ExportOptions.Pdf.NeverEmbeddedFonts = "MingLiU;Microsoft YaHei";
+                    rptReceipt.ExportToPdf(memStream);
+
+                    byte[] buffer = new byte[0];
+                    buffer = memStream.GetBuffer();
+                    var contentLength = buffer.Length;
+
+                    //200
+                    //successful
+                    var statuscode = HttpStatusCode.OK;
+                    response = Request.CreateResponse(statuscode);
+                    response.Content = new StreamContent(new MemoryStream(buffer));
+                    response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
+                    response.Content.Headers.ContentLength = contentLength;
+
+                    ContentDispositionHeaderValue contentDisposition = null;
+                    if (ContentDispositionHeaderValue.TryParse("inline; filename=" + docName, out contentDisposition))
+                    {
+                        response.Content.Headers.ContentDisposition = contentDisposition;
+                    }
+                }
+                else
+                {
+                    var message = String.Format("Unable to find resource. Resource \"{0}\" may not exist.", id.ToString());
+                    HttpError err = new HttpError(message);
+                    response = Request.CreateErrorResponse(HttpStatusCode.NotFound, err);
+                }
+            }
+
+            return response;
         }
     }
 }

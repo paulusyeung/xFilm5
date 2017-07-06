@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web.Http;
 using xFilm5.EF6;
 using xFilm5.REST.Filters;
@@ -111,6 +113,99 @@ order by [ClientName]", month);
             {
                 return null;
             }
+        }
+
+        [HttpGet]
+        [Route("api/Order/pdf/{id:int}")]
+        [JwtAuthentication]
+        public HttpResponseMessage GetOrderPdf(int id)
+        {   // ref: https://stackoverflow.com/questions/36042614/how-to-return-a-pdf-from-a-web-api-application
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.BadRequest);
+
+            using (var ctx = new EF6.xFilmEntities())
+            {
+                var hasrow = ctx.OrderHeader.Where(x => x.ID == id).Any();
+                if (hasrow)
+                {
+                    var docName = String.Format("Order_{0}.pdf", id.ToString());
+                    var list = ctx.vwOrderPkPrintQueueVpsList.Where(x => x.OrderHeaderId == id).OrderBy(x => x.VpsFileName).ToList();
+
+                    Reports.Order rptOrder = new Reports.Order();
+                    rptOrder.DataSource = list;
+                    //rptOrder.ClientId = clientId;
+                    rptOrder.CreateDocument();
+
+                    MemoryStream memStream = new System.IO.MemoryStream();
+                    //rptOrder.ExportOptions.Pdf.NeverEmbeddedFonts = "MingLiU;Microsoft YaHei";
+                    rptOrder.ExportToPdf(memStream);
+
+                    byte[] buffer = new byte[0];
+                    buffer = memStream.GetBuffer();
+                    var contentLength = buffer.Length;
+
+                    //200
+                    //successful
+                    var statuscode = HttpStatusCode.OK;
+                    response = Request.CreateResponse(statuscode);
+                    response.Content = new StreamContent(new MemoryStream(buffer));
+                    response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
+                    response.Content.Headers.ContentLength = contentLength;
+
+                    ContentDispositionHeaderValue contentDisposition = null;
+                    if (ContentDispositionHeaderValue.TryParse("inline; filename=" + docName, out contentDisposition))
+                    {
+                        response.Content.Headers.ContentDisposition = contentDisposition;
+                    }
+                }
+                else
+                {
+                    var message = String.Format("Unable to find resource. Resource \"{0}\" may not exist.", id.ToString());
+                    HttpError err = new HttpError(message);
+                    response = Request.CreateErrorResponse(HttpStatusCode.NotFound, err);
+                }
+            }
+
+            /**
+            var documents = reader.GetDocument(id);
+            if (documents != null && documents.Length == 1)
+            {
+                var document = documents[0];
+                id = document.docid;
+                byte[] buffer = new byte[0];
+
+                //generate pdf document
+                MemoryStream memoryStream = new MemoryStream();
+                MyPDFGenerator.New().PrintToStream(document, memoryStream);
+
+                //get buffer
+                buffer = memoryStream.GetBuffer();
+
+                //content length for use in header
+                var contentLength = buffer.Length;
+
+                //200
+                //successful
+                var statuscode = HttpStatusCode.OK;
+                response = Request.CreateResponse(statuscode);
+                response.Content = new StreamContent(new MemoryStream(buffer));
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
+                response.Content.Headers.ContentLength = contentLength;
+
+                ContentDispositionHeaderValue contentDisposition = null;
+                if (ContentDispositionHeaderValue.TryParse("inline; filename=" + document.Name + ".pdf", out contentDisposition))
+                {
+                    response.Content.Headers.ContentDisposition = contentDisposition;
+                }
+            }
+            else
+            {
+                var message = String.Format("Unable to find resource. Resource \"{0}\" may not exist.", id.ToString());
+                HttpError err = new HttpError(message);
+                response = Request.CreateErrorResponse(HttpStatusCode.NotFound, err);
+            }
+            */
+
+            return response;
         }
     }
 }

@@ -172,6 +172,9 @@
     <Compile Include="UserPreference.cs">
       <DependentUpon>xFilmModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="vwInv5DetailsList.cs">
+      <DependentUpon>xFilmModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="vwInvoiceList_All.cs">
       <DependentUpon>xFilmModel.tt</DependentUpon>
     </Compile>

@@ -28,6 +28,12 @@ namespace xFilm5.REST
                 Power
             }
 
+            public enum DeliveryMethod
+            {
+                PickUp = 1,
+                DeliverTo
+            }
+
             /// <summary>
             /// 用於 dbo.UserAuth 同埋 dbo.UserNotification
             /// </summary>
@@ -210,7 +216,8 @@ namespace xFilm5.REST
                 get
                 {
                     string result = "WordDict.xml";
-                    return Path.Combine(VWGContext.Current.Config.GetDirectory("UserData"), result);
+                    //return Path.Combine(VWGContext.Current.Config.GetDirectory("UserData"), result);
+                    return Path.Combine(HttpContext.Current.Server.MapPath("~"), "WordDict.xml");
                 }
             }
 
