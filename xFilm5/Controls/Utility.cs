@@ -187,7 +187,9 @@ namespace xFilm5.Controls
                 DAL.Client_User user = DAL.Client_User.Load(workshopId);
                 if (user != null)
                 {
-                    result = ConfigurationManager.AppSettings[user.FullName] != null ? ConfigurationManager.AppSettings[user.FullName].ToString() : user.FullName;
+                    //result = ConfigurationManager.AppSettings[user.FullName] != null ? ConfigurationManager.AppSettings[user.FullName].ToString() : user.FullName;
+                    var key = String.Format("Workshop_Address_{0}", user.FullName.Substring(0, 2));
+                    result = ConfigurationManager.AppSettings[key] != null ? ConfigurationManager.AppSettings[key].ToString() : user.FullName;
                 }
 
                 return result;

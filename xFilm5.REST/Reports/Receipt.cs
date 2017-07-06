@@ -65,10 +65,6 @@ namespace xFilm5.REST.Reports
                         {
                             this.Watermark.Text = "RE-PRINT";
                             this.Watermark.ShowBehind = true;
-
-                            //this.txtBarcode.Visible = false;
-                            //this.txtInvoiceNumber.Visible = false;
-                            //this.txtInvoiceDate.Visible = false;
                         }
                     }
                     #endregion
@@ -88,9 +84,6 @@ namespace xFilm5.REST.Reports
                     #region HACK: 攞第一隻 dbo.OrderHeader 做代表
                     var receiptDtl = ctx.ReceiptDetail.Where(x => x.ReceiptHeaderId == _ReceiptId).FirstOrDefault();
                     var pk = ctx.OrderPkPrintQueueVps.Where(x => x.OrderPkPrintQueueVpsId == receiptDtl.OrderPkPrintQueueVpsId).SingleOrDefault();
-                    //sql = String.Format("ReceiptHeaderId = {0}", _ReceiptId.ToString());
-                    //DAL.ReceiptDetail receiptDtl = DAL.ReceiptDetail.LoadWhere(sql);
-                    //DAL.OrderPkPrintQueueVps pk = DAL.OrderPkPrintQueueVps.Load(receiptDtl.OrderPkPrintQueueVpsId);
                     #endregion
 
                     var order = ctx.OrderHeader.Where(x => x.ID == pk.OrderHeaderId).SingleOrDefault();
@@ -122,17 +115,7 @@ namespace xFilm5.REST.Reports
                             }
                         }
                         #endregion
-
-                        //if (order.Status == (int)Common.Enums.Workflow.Completed)
-                        //{
-                        //    this.Watermark.Text = "RE-PRINT";
-                        //    this.Watermark.ShowBehind = true;
-                        //}
                     }
-
-                    // 原本想印埋個 Staff Full Name，不過如果中文名就唔掂
-                    //DAL.Client_User creaatedBy = DAL.Client_User.Load(receipt.CreatedBy);
-                    //txtBarcode.Text = creaatedBy != null ? String.Format("{0} {1}", receipt.ReceiptNumber, creaatedBy.FullName) : receipt.ReceiptNumber;
                 }
             }
 
