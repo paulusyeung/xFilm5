@@ -15,6 +15,28 @@ namespace xFilm5.REST.Controllers
     {
         private DateTime _DateZero = new DateTime(2017, 5, 1);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>vwPrintQueueVpsList_Ordered json object list</returns>
+        [HttpGet]
+        [Route("api/Order/{id:int}")]
+        [JwtAuthentication]
+        public IHttpActionResult GetOrder(int id)
+        {
+            using (var ctx = new xFilmEntities())
+            {
+                if (ctx.vwPrintQueueVpsList_Ordered.Where(x => x.OrderHeaderId == id).Any())
+                {
+                    var list = ctx.vwPrintQueueVpsList_Ordered.Where(x => x.OrderHeaderId == id).OrderBy(x => x.VpsFileName).ToList();
+                    return Json(list);
+                }
+            }
+
+            return null;
+        }
+
         [HttpGet]
         [Route("api/Order/ByMonth/{id:int}/{date:DateTime}")]
         [JwtAuthentication]

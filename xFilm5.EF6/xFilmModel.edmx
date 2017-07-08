@@ -567,7 +567,11 @@
 warning 6002: The table/view 'xFilm3_NuStar.dbo.vwInv5DetailsList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vwInv5DetailsList">
           <Key>
+            
             <PropertyRef Name="InvoiceHeaderId" />
+            
+            
+            
             <PropertyRef Name="ItemDescription" />
           </Key>
           <Property Name="ClientId" Type="int" Nullable="false" />
@@ -818,6 +822,45 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwOrderPkPrintQueueVpsList_Plate
           <Property Name="Retired" Type="bit" Nullable="false" />
           <Property Name="RetiredOn" Type="datetime" />
           <Property Name="RetiredBy" Type="nvarchar" MaxLength="64" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'xFilm3_NuStar.dbo.vwPrintQueueVpsList_Ordered' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vwPrintQueueVpsList_Ordered">
+          <Key>
+            <PropertyRef Name="OrderPkPrintQueueVpsId" />
+            <PropertyRef Name="OrderHeaderId" />
+          </Key>
+          <Property Name="ClientID" Type="int" />
+          <Property Name="ClientName" Type="nvarchar" MaxLength="128" />
+          <Property Name="OrderID" Type="int" />
+          <Property Name="CupsJobID" Type="nvarchar" MaxLength="16" />
+          <Property Name="CupsJobTitle" Type="nvarchar" MaxLength="255" />
+          <Property Name="PlateSize" Type="nvarchar" MaxLength="16" />
+          <Property Name="BlueprintOrdered" Type="bit" />
+          <Property Name="PrintQueueID" Type="int" />
+          <Property Name="Status" Type="int" />
+          <Property Name="PrintedOn" Type="datetime" />
+          <Property Name="Retired" Type="bit" />
+          <Property Name="VpsPrintQueueID" Type="int" />
+          <Property Name="VpsFileName" Type="nvarchar" MaxLength="256" />
+          <Property Name="VpsCreatedOn" Type="datetime" />
+          <Property Name="VpsPlateOrdered" Type="bit" />
+          <Property Name="VpsRetired" Type="bit" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="int" Nullable="false" />
+          <Property Name="OrderHeaderId" Type="int" Nullable="false" />
+          <Property Name="CheckedPlate" Type="bit" Nullable="false" />
+          <Property Name="CheckedCip3" Type="bit" Nullable="false" />
+          <Property Name="CheckedBlueprint" Type="bit" Nullable="false" />
+          <Property Name="IsReady" Type="bit" Nullable="false" />
+          <Property Name="IsReceived" Type="bit" Nullable="false" />
+          <Property Name="IsBilled" Type="bit" Nullable="false" />
+          <Property Name="pkCreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="pkCreatedBy" Type="int" Nullable="false" />
+          <Property Name="pkModifiedOn" Type="datetime" Nullable="false" />
+          <Property Name="pkModifiedBy" Type="int" />
+          <Property Name="pkRetired" Type="bit" Nullable="false" />
+          <Property Name="pkRetiredOn" Type="datetime" />
+          <Property Name="pkRetiredBy" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -1612,6 +1655,41 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
     [vwOrderPkPrintQueueVpsList_Plate].[RetiredOn] AS [RetiredOn], 
     [vwOrderPkPrintQueueVpsList_Plate].[RetiredBy] AS [RetiredBy]
     FROM [dbo].[vwOrderPkPrintQueueVpsList_Plate] AS [vwOrderPkPrintQueueVpsList_Plate]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vwPrintQueueVpsList_Ordered" EntityType="Self.vwPrintQueueVpsList_Ordered" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vwPrintQueueVpsList_Ordered].[ClientID] AS [ClientID], 
+    [vwPrintQueueVpsList_Ordered].[ClientName] AS [ClientName], 
+    [vwPrintQueueVpsList_Ordered].[OrderID] AS [OrderID], 
+    [vwPrintQueueVpsList_Ordered].[CupsJobID] AS [CupsJobID], 
+    [vwPrintQueueVpsList_Ordered].[CupsJobTitle] AS [CupsJobTitle], 
+    [vwPrintQueueVpsList_Ordered].[PlateSize] AS [PlateSize], 
+    [vwPrintQueueVpsList_Ordered].[BlueprintOrdered] AS [BlueprintOrdered], 
+    [vwPrintQueueVpsList_Ordered].[PrintQueueID] AS [PrintQueueID], 
+    [vwPrintQueueVpsList_Ordered].[Status] AS [Status], 
+    [vwPrintQueueVpsList_Ordered].[PrintedOn] AS [PrintedOn], 
+    [vwPrintQueueVpsList_Ordered].[Retired] AS [Retired], 
+    [vwPrintQueueVpsList_Ordered].[VpsPrintQueueID] AS [VpsPrintQueueID], 
+    [vwPrintQueueVpsList_Ordered].[VpsFileName] AS [VpsFileName], 
+    [vwPrintQueueVpsList_Ordered].[VpsCreatedOn] AS [VpsCreatedOn], 
+    [vwPrintQueueVpsList_Ordered].[VpsPlateOrdered] AS [VpsPlateOrdered], 
+    [vwPrintQueueVpsList_Ordered].[VpsRetired] AS [VpsRetired], 
+    [vwPrintQueueVpsList_Ordered].[OrderPkPrintQueueVpsId] AS [OrderPkPrintQueueVpsId], 
+    [vwPrintQueueVpsList_Ordered].[OrderHeaderId] AS [OrderHeaderId], 
+    [vwPrintQueueVpsList_Ordered].[CheckedPlate] AS [CheckedPlate], 
+    [vwPrintQueueVpsList_Ordered].[CheckedCip3] AS [CheckedCip3], 
+    [vwPrintQueueVpsList_Ordered].[CheckedBlueprint] AS [CheckedBlueprint], 
+    [vwPrintQueueVpsList_Ordered].[IsReady] AS [IsReady], 
+    [vwPrintQueueVpsList_Ordered].[IsReceived] AS [IsReceived], 
+    [vwPrintQueueVpsList_Ordered].[IsBilled] AS [IsBilled], 
+    [vwPrintQueueVpsList_Ordered].[pkCreatedOn] AS [pkCreatedOn], 
+    [vwPrintQueueVpsList_Ordered].[pkCreatedBy] AS [pkCreatedBy], 
+    [vwPrintQueueVpsList_Ordered].[pkModifiedOn] AS [pkModifiedOn], 
+    [vwPrintQueueVpsList_Ordered].[pkModifiedBy] AS [pkModifiedBy], 
+    [vwPrintQueueVpsList_Ordered].[pkRetired] AS [pkRetired], 
+    [vwPrintQueueVpsList_Ordered].[pkRetiredOn] AS [pkRetiredOn], 
+    [vwPrintQueueVpsList_Ordered].[pkRetiredBy] AS [pkRetiredBy]
+    FROM [dbo].[vwPrintQueueVpsList_Ordered] AS [vwPrintQueueVpsList_Ordered]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="vwReceiptDetailsList_Ex" EntityType="Self.vwReceiptDetailsList_Ex" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -3198,6 +3276,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
           <EntitySet Name="vwOrderList" EntityType="xFilmModel.vwOrderList" />
           <EntitySet Name="vwInvoiceList_All" EntityType="xFilmModel.vwInvoiceList_All" />
           <EntitySet Name="vwInv5DetailsList" EntityType="xFilmModel.vwInv5DetailsList" />
+          <EntitySet Name="vwPrintQueueVpsList_Ordered" EntityType="xFilmModel.vwPrintQueueVpsList_Ordered" />
         </EntityContainer>
         <EntityType Name="vwReceiptDetailsList_Ex">
           <Key>
@@ -3439,6 +3518,43 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
           <Property Name="ItemAmount" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="OrderPkPrintQueueVpsId" Type="Int32" Nullable="false" />
           <Property Name="OrderHeaderId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="vwPrintQueueVpsList_Ordered">
+          <Key>
+            <PropertyRef Name="OrderPkPrintQueueVpsId" />
+            <PropertyRef Name="OrderHeaderId" />
+          </Key>
+          <Property Name="ClientID" Type="Int32" />
+          <Property Name="ClientName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="OrderID" Type="Int32" />
+          <Property Name="CupsJobID" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="CupsJobTitle" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PlateSize" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="BlueprintOrdered" Type="Boolean" />
+          <Property Name="PrintQueueID" Type="Int32" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="PrintedOn" Type="DateTime" Precision="3" />
+          <Property Name="Retired" Type="Boolean" />
+          <Property Name="VpsPrintQueueID" Type="Int32" />
+          <Property Name="VpsFileName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="VpsCreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="VpsPlateOrdered" Type="Boolean" />
+          <Property Name="VpsRetired" Type="Boolean" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="Int32" Nullable="false" />
+          <Property Name="OrderHeaderId" Type="Int32" Nullable="false" />
+          <Property Name="CheckedPlate" Type="Boolean" Nullable="false" />
+          <Property Name="CheckedCip3" Type="Boolean" Nullable="false" />
+          <Property Name="CheckedBlueprint" Type="Boolean" Nullable="false" />
+          <Property Name="IsReady" Type="Boolean" Nullable="false" />
+          <Property Name="IsReceived" Type="Boolean" Nullable="false" />
+          <Property Name="IsBilled" Type="Boolean" Nullable="false" />
+          <Property Name="pkCreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="pkCreatedBy" Type="Int32" Nullable="false" />
+          <Property Name="pkModifiedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="pkModifiedBy" Type="Int32" />
+          <Property Name="pkRetired" Type="Boolean" Nullable="false" />
+          <Property Name="pkRetiredOn" Type="DateTime" Precision="3" />
+          <Property Name="pkRetiredBy" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4286,6 +4402,43 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
                 <ScalarProperty Name="ClientAddress" ColumnName="ClientAddress" />
                 <ScalarProperty Name="ClientName" ColumnName="ClientName" />
                 <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vwPrintQueueVpsList_Ordered">
+            <EntityTypeMapping TypeName="xFilmModel.vwPrintQueueVpsList_Ordered">
+              <MappingFragment StoreEntitySet="vwPrintQueueVpsList_Ordered">
+                <ScalarProperty Name="pkRetiredBy" ColumnName="pkRetiredBy" />
+                <ScalarProperty Name="pkRetiredOn" ColumnName="pkRetiredOn" />
+                <ScalarProperty Name="pkRetired" ColumnName="pkRetired" />
+                <ScalarProperty Name="pkModifiedBy" ColumnName="pkModifiedBy" />
+                <ScalarProperty Name="pkModifiedOn" ColumnName="pkModifiedOn" />
+                <ScalarProperty Name="pkCreatedBy" ColumnName="pkCreatedBy" />
+                <ScalarProperty Name="pkCreatedOn" ColumnName="pkCreatedOn" />
+                <ScalarProperty Name="IsBilled" ColumnName="IsBilled" />
+                <ScalarProperty Name="IsReceived" ColumnName="IsReceived" />
+                <ScalarProperty Name="IsReady" ColumnName="IsReady" />
+                <ScalarProperty Name="CheckedBlueprint" ColumnName="CheckedBlueprint" />
+                <ScalarProperty Name="CheckedCip3" ColumnName="CheckedCip3" />
+                <ScalarProperty Name="CheckedPlate" ColumnName="CheckedPlate" />
+                <ScalarProperty Name="OrderHeaderId" ColumnName="OrderHeaderId" />
+                <ScalarProperty Name="OrderPkPrintQueueVpsId" ColumnName="OrderPkPrintQueueVpsId" />
+                <ScalarProperty Name="VpsRetired" ColumnName="VpsRetired" />
+                <ScalarProperty Name="VpsPlateOrdered" ColumnName="VpsPlateOrdered" />
+                <ScalarProperty Name="VpsCreatedOn" ColumnName="VpsCreatedOn" />
+                <ScalarProperty Name="VpsFileName" ColumnName="VpsFileName" />
+                <ScalarProperty Name="VpsPrintQueueID" ColumnName="VpsPrintQueueID" />
+                <ScalarProperty Name="Retired" ColumnName="Retired" />
+                <ScalarProperty Name="PrintedOn" ColumnName="PrintedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="PrintQueueID" ColumnName="PrintQueueID" />
+                <ScalarProperty Name="BlueprintOrdered" ColumnName="BlueprintOrdered" />
+                <ScalarProperty Name="PlateSize" ColumnName="PlateSize" />
+                <ScalarProperty Name="CupsJobTitle" ColumnName="CupsJobTitle" />
+                <ScalarProperty Name="CupsJobID" ColumnName="CupsJobID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
