@@ -50,6 +50,9 @@ namespace xFilm5.REST.Controllers
                 userEx.RetiredOn = user.RetiredOn;
                 userEx.RetiredBy = user.RetiredBy;
                 userEx.UserRole = UserHelper.GetSecurityLevel(user.UserId);
+                userEx.UserAuth = null;
+                userEx.UserNotification = null;
+                userEx.UserPreference = null;
 
                 return Json(userEx);
             }
