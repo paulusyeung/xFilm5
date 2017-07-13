@@ -949,9 +949,9 @@
     <cht>短訊號碼</cht>
   </keyword>
   <keyword key="sms_language">
-    <en>SMS Language</en>
-    <chs>短讯语言</chs>
-    <cht>短訊語言</cht>
+    <en>Docs Language</en>
+    <chs>单据语言</chs>
+    <cht>單據語言</cht>
   </keyword>
   <keyword key="days">
     <en>Days</en>
