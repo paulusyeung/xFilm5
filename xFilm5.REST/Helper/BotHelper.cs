@@ -98,7 +98,8 @@ namespace xFilm5.REST.Helper
 
             String printerName = CommonHelper.Config.Xprinter_KT;
 
-            #region 2017.05.14 paulus: 加個 SmallFont option
+            #region 2017.05.14 paulus: 加個 SmallFont option & Language Id
+            int languageId = 1; // default 英文
             bool smallFont = false;
             using (var ctx = new EF6.xFilmEntities())
             {
@@ -106,6 +107,8 @@ namespace xFilm5.REST.Helper
                 if (rHdr != null)
                 {
                     smallFont = Helper.ClientHelper.IsReceiptSmallFont(rHdr.ClientId);
+
+                    languageId = Helper.ClientHelper.GetDefaultLanguageId(rHdr.ClientId);
                 }
             }
             #endregion
@@ -114,7 +117,7 @@ namespace xFilm5.REST.Helper
             request.AddBody(new
             {
                 ReceiptId = receiptId.ToString(),
-                LanguageId = CommonHelper.Config.CurrentLanguageId.ToString(),
+                LanguageId = languageId.ToString(),
                 PrinterName = printerName,
                 SmallFont = smallFont.ToString(),
                 AnotherParam = 19.99
@@ -130,6 +133,22 @@ namespace xFilm5.REST.Helper
 
         public static bool PostEmailReceipt(int receiptId, string recipients, int clientId)
         {
+
+            #region 2017.05.14 paulus: 加個 SmallFont option & Language Id
+            int languageId = 1; // default 英文
+            bool smallFont = false;
+            using (var ctx = new EF6.xFilmEntities())
+            {
+                var rHdr = ctx.ReceiptHeader.Where(x => x.ReceiptHeaderId == receiptId).SingleOrDefault();
+                if (rHdr != null)
+                {
+                    smallFont = Helper.ClientHelper.IsReceiptSmallFont(rHdr.ClientId);
+
+                    languageId = Helper.ClientHelper.GetDefaultLanguageId(rHdr.ClientId);
+                }
+            }
+            #endregion
+
             String botServer = ConfigurationManager.AppSettings["BotServer"];
             //#if (DEBUG)
             //            botServer = "http://localhost:35543/";
@@ -145,7 +164,7 @@ namespace xFilm5.REST.Helper
             request.AddBody(new
             {
                 ReceiptId = receiptId.ToString(),
-                LanguageId = ClientHelper.GetDefaultLanguageId(clientId).ToString(),
+                LanguageId = languageId.ToString(),
                 Recipient = recipients,
                 AnotherParam = 19.99
             });

@@ -294,7 +294,7 @@ namespace xFilm5.REST
             {
                 get
                 {
-                    return ConfigurationManager.AppSettings["Xprinter_KT"] != null ? ConfigurationManager.AppSettings["Xprinter_KT"] : "";
+                    return ConfigurationManager.AppSettings["Workshop_Xprinter_KT"] != null ? ConfigurationManager.AppSettings["Workshop_Xprinter_KT"] : "";
                 }
             }
 
