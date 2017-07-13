@@ -41,7 +41,7 @@ namespace xFilm5.EF6
         public Nullable<decimal> ItemUnitAmt { get; set; }
         public Nullable<decimal> ItemDiscount { get; set; }
         public Nullable<decimal> ItemAmount { get; set; }
-        public int OrderPkPrintQueueVpsId { get; set; }
+        public Nullable<int> OrderPkPrintQueueVpsId { get; set; }
         public Nullable<int> OrderHeaderId { get; set; }
     }
 }

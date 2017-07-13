@@ -74,7 +74,7 @@ namespace xFilm5.EF6
         public virtual DbSet<vwOrderPkPrintQueueVpsList_Plate> vwOrderPkPrintQueueVpsList_Plate { get; set; }
         public virtual DbSet<vwOrderList> vwOrderList { get; set; }
         public virtual DbSet<vwInvoiceList_All> vwInvoiceList_All { get; set; }
-        public virtual DbSet<vwInv5DetailsList> vwInv5DetailsList { get; set; }
         public virtual DbSet<vwPrintQueueVpsList_Ordered> vwPrintQueueVpsList_Ordered { get; set; }
+        public virtual DbSet<vwInv5DetailsList> vwInv5DetailsList { get; set; }
     }
 }
