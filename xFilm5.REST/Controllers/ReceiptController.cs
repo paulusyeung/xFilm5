@@ -332,7 +332,7 @@ SELECT TOP 100 PERCENT [ClientId]
       ,[IsBilled]
 	  ,row_number() OVER (partition BY [ReceiptNumber] order by [ReceiptNumber], [ItemDescription]) as Ln
   FROM [xFilm3_NuStar].[dbo].[vwReceiptDetailsList_Ex]
-  where (convert(nvarchar, [ReceiptNumber]) like '%{0}%') or (convert(nvarchar(7), ReceiptDate , 120) like '%{0}%' or [ClientName] like '%{0}%' or (convert(nvarchar, ClientId) like '%{0}%') or (convert(nvarchar(10), ReceiptDate, 120) like '%{0}%'))
+  where (convert(nvarchar, [ReceiptNumber]) like '%{0}%') or (convert(nvarchar(7), ReceiptDate , 120) like '%{0}%' or [ClientName] like '%{0}%' or (convert(nvarchar, ClientId) like '%{0}%') or (convert(nvarchar(10), ReceiptDate, 120) like '%{0}%') or convert(nvarchar, [OrderHeaderId]) like '%{0}%')
   ) as oops
   where Ln = 1
   order by [ReceiptNumber]", keyword);
