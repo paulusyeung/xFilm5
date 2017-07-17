@@ -124,14 +124,26 @@ namespace xFilm5.REST.Reports
             //String description = (System.String)GetCurrentColumnValue("ItemDescription");
             //txtRemarks.Text = description.Substring(10);
 
-            int pqId = (int)GetCurrentColumnValue("OrderPkPrintQueueVpsId");
+            int pqId = GetCurrentColumnValue("OrderPkPrintQueueVpsId") != null ? (int)GetCurrentColumnValue("OrderPkPrintQueueVpsId") : 0;
             using (var ctx = new EF6.xFilmEntities())
             {
-                var receiptDtl = ctx.ReceiptDetail.Where(x => x.OrderPkPrintQueueVpsId == pqId).SingleOrDefault();
-                if (receiptDtl != null)
+                if (pqId != 0)
                 {
-                    txtDate.Text = receiptDtl.ReceiptHeader.ReceiptDate.Value.ToString("yyyy-MM-dd");
-                    txtDNNumber.Text = receiptDtl.ReceiptHeader.ReceiptNumber;
+                    var receiptDtl = ctx.ReceiptDetail.Where(x => x.OrderPkPrintQueueVpsId == pqId).SingleOrDefault();
+                    if (receiptDtl != null)
+                    {
+                        txtDate.Text = receiptDtl.ReceiptHeader.ReceiptDate.Value.ToString("yyyy-MM-dd");
+                        txtDNNumber.Text = receiptDtl.ReceiptHeader.ReceiptNumber;
+                    }
+                }
+                else
+                {   // x3 Invoice
+                    int invId = (int)GetCurrentColumnValue("InvoiceHeaderId");
+                    var invHdr = ctx.Acct_INMaster.Where(x => x.ID == invId).SingleOrDefault();
+                    
+                    txtDate.Text = "";
+                    txtDNNumber.Text = "x3";
+                    txtOrderNumber.Text = invHdr.OrderID.ToString();
                 }
             }
 

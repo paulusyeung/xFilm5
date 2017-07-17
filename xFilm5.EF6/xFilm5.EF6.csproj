@@ -106,6 +106,7 @@
     <Compile Include="ReceiptHeader.cs">
       <DependentUpon>xFilmModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Score.cs" />
     <Compile Include="Staff.cs">
       <DependentUpon>xFilmModel.tt</DependentUpon>
     </Compile>
