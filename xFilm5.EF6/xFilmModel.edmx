@@ -519,8 +519,8 @@
           <Property Name="AuthId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="DeviceId" Type="nvarchar" MaxLength="64" Nullable="false" />
-          <Property Name="DeviceType" Type="int" Nullable="false" />
-          <Property Name="Plateform" Type="int" Nullable="false" />
+          <Property Name="AuthType" Type="int" Nullable="false" />
+          <Property Name="Platform" Type="int" Nullable="false" />
           <Property Name="MetadataXml" Type="xml" />
         </EntityType>
         <EntityType Name="UserNotification">
@@ -530,8 +530,8 @@
           <Property Name="NotifyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="DeviceId" Type="nvarchar" MaxLength="64" Nullable="false" />
-          <Property Name="DeviceType" Type="int" Nullable="false" />
-          <Property Name="Plateform" Type="int" Nullable="false" />
+          <Property Name="NotifyType" Type="int" Nullable="false" />
+          <Property Name="Platform" Type="int" Nullable="false" />
           <Property Name="MetadataXml" Type="xml" />
         </EntityType>
         <EntityType Name="UserPreference">
@@ -567,8 +567,11 @@
 warning 6002: The table/view 'xFilm3_NuStar.dbo.vwInv5DetailsList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vwInv5DetailsList">
           <Key>
+            
             <PropertyRef Name="InvoiceHeaderId" />
             <PropertyRef Name="ItemDescription" />
+            
+            
           </Key>
           <Property Name="ClientId" Type="int" Nullable="false" />
           <Property Name="ClientName" Type="nvarchar" MaxLength="128" />
@@ -2501,33 +2504,9 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
           <Property Name="Retired" Type="Boolean" Nullable="false" />
           <Property Name="RetiredOn" Type="DateTime" Precision="3" />
           <Property Name="RetiredBy" Type="Int32" />
-          <NavigationProperty Name="UserAuth" Relationship="Self.FK_User_UserAuth" FromRole="User" ToRole="UserAuth" />
-          <NavigationProperty Name="UserNotification" Relationship="Self.FK_User_UserNotification" FromRole="User" ToRole="UserNotification" />
           <NavigationProperty Name="UserPreference" Relationship="Self.FK_User_UserPreference" FromRole="User" ToRole="UserPreference" />
-        </EntityType>
-        <EntityType Name="UserAuth">
-          <Key>
-            <PropertyRef Name="AuthId" />
-          </Key>
-          <Property Name="AuthId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserId" Type="Int32" Nullable="false" />
-          <Property Name="DeviceId" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="DeviceType" Type="Int32" Nullable="false" />
-          <Property Name="Plateform" Type="Int32" Nullable="false" />
-          <Property Name="MetadataXml" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="User" Relationship="Self.FK_User_UserAuth" FromRole="UserAuth" ToRole="User" />
-        </EntityType>
-        <EntityType Name="UserNotification">
-          <Key>
-            <PropertyRef Name="NotifyId" />
-          </Key>
-          <Property Name="NotifyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserId" Type="Int32" Nullable="false" />
-          <Property Name="DeviceId" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="DeviceType" Type="Int32" Nullable="false" />
-          <Property Name="Plateform" Type="Int32" Nullable="false" />
-          <Property Name="MetadataXml" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="User" Relationship="Self.FK_User_UserNotification" FromRole="UserNotification" ToRole="User" />
+          <NavigationProperty Name="UserAuth" Relationship="xFilmModel.FK_User_UserAuth" FromRole="User" ToRole="UserAuth" />
+          <NavigationProperty Name="UserNotification" Relationship="xFilmModel.FK_User_UserNotification" FromRole="User" ToRole="UserNotification" />
         </EntityType>
         <EntityType Name="UserPreference">
           <Key>
@@ -3027,30 +3006,6 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_User_UserAuth">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="UserAuth" Type="Self.UserAuth" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="UserId" />
-            </Principal>
-            <Dependent Role="UserAuth">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_User_UserNotification">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="UserNotification" Type="Self.UserNotification" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="UserId" />
-            </Principal>
-            <Dependent Role="UserNotification">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_User_UserPreference">
           <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="UserPreference" Type="Self.UserPreference" Multiplicity="*" />
@@ -3101,8 +3056,6 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
           <EntitySet Name="T_Status" EntityType="Self.T_Status" />
           <EntitySet Name="T_Workflow" EntityType="Self.T_Workflow" />
           <EntitySet Name="User" EntityType="Self.User" />
-          <EntitySet Name="UserAuth" EntityType="Self.UserAuth" />
-          <EntitySet Name="UserNotification" EntityType="Self.UserNotification" />
           <EntitySet Name="UserPreference" EntityType="Self.UserPreference" />
           <EntitySet Name="X_Counter" EntityType="Self.X_Counter" />
           <EntitySet Name="Z_WebColor" EntityType="Self.Z_WebColor" />
@@ -3262,14 +3215,6 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
             <End Role="T_Software" EntitySet="T_Software" />
             <End Role="T_SoftwareVersion" EntitySet="T_SoftwareVersion" />
           </AssociationSet>
-          <AssociationSet Name="FK_User_UserAuth" Association="Self.FK_User_UserAuth">
-            <End Role="User" EntitySet="User" />
-            <End Role="UserAuth" EntitySet="UserAuth" />
-          </AssociationSet>
-          <AssociationSet Name="FK_User_UserNotification" Association="Self.FK_User_UserNotification">
-            <End Role="User" EntitySet="User" />
-            <End Role="UserNotification" EntitySet="UserNotification" />
-          </AssociationSet>
           <AssociationSet Name="FK_User_UserPreference" Association="Self.FK_User_UserPreference">
             <End Role="User" EntitySet="User" />
             <End Role="UserPreference" EntitySet="UserPreference" />
@@ -3283,6 +3228,16 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
           <EntitySet Name="vwInvoiceList_All" EntityType="xFilmModel.vwInvoiceList_All" />
           <EntitySet Name="vwPrintQueueVpsList_Ordered" EntityType="xFilmModel.vwPrintQueueVpsList_Ordered" />
           <EntitySet Name="vwInv5DetailsList" EntityType="xFilmModel.vwInv5DetailsList" />
+          <EntitySet Name="UserAuth" EntityType="xFilmModel.UserAuth" />
+          <EntitySet Name="UserNotification" EntityType="xFilmModel.UserNotification" />
+          <AssociationSet Name="FK_User_UserAuth" Association="xFilmModel.FK_User_UserAuth">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserAuth" EntitySet="UserAuth" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_UserNotification" Association="xFilmModel.FK_User_UserNotification">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserNotification" EntitySet="UserNotification" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="vwReceiptDetailsList_Ex">
           <Key>
@@ -3562,6 +3517,54 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
           <Property Name="OrderPkPrintQueueVpsId" Type="Int32" />
           <Property Name="OrderHeaderId" Type="Int32" />
         </EntityType>
+        <EntityType Name="UserAuth">
+          <Key>
+            <PropertyRef Name="AuthId" />
+          </Key>
+          <Property Name="AuthId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="DeviceId" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="AuthType" Type="Int32" Nullable="false" />
+          <Property Name="Platform" Type="Int32" Nullable="false" />
+          <Property Name="MetadataXml" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="User" Relationship="xFilmModel.FK_User_UserAuth" FromRole="UserAuth" ToRole="User" />
+        </EntityType>
+        <EntityType Name="UserNotification">
+          <Key>
+            <PropertyRef Name="NotifyId" />
+          </Key>
+          <Property Name="NotifyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="DeviceId" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="NotifyType" Type="Int32" Nullable="false" />
+          <Property Name="Platform" Type="Int32" Nullable="false" />
+          <Property Name="MetadataXml" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="User" Relationship="xFilmModel.FK_User_UserNotification" FromRole="UserNotification" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_User_UserAuth">
+          <End Type="xFilmModel.User" Role="User" Multiplicity="1" />
+          <End Type="xFilmModel.UserAuth" Role="UserAuth" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserAuth">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_UserNotification">
+          <End Type="xFilmModel.User" Role="User" Multiplicity="1" />
+          <End Type="xFilmModel.UserNotification" Role="UserNotification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserNotification">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4112,30 +4115,6 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="UserAuth">
-            <EntityTypeMapping TypeName="xFilmModel.UserAuth">
-              <MappingFragment StoreEntitySet="UserAuth">
-                <ScalarProperty Name="AuthId" ColumnName="AuthId" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
-                <ScalarProperty Name="DeviceType" ColumnName="DeviceType" />
-                <ScalarProperty Name="Plateform" ColumnName="Plateform" />
-                <ScalarProperty Name="MetadataXml" ColumnName="MetadataXml" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserNotification">
-            <EntityTypeMapping TypeName="xFilmModel.UserNotification">
-              <MappingFragment StoreEntitySet="UserNotification">
-                <ScalarProperty Name="NotifyId" ColumnName="NotifyId" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
-                <ScalarProperty Name="DeviceType" ColumnName="DeviceType" />
-                <ScalarProperty Name="Plateform" ColumnName="Plateform" />
-                <ScalarProperty Name="MetadataXml" ColumnName="MetadataXml" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="UserPreference">
             <EntityTypeMapping TypeName="xFilmModel.UserPreference">
               <MappingFragment StoreEntitySet="UserPreference">
@@ -4445,6 +4424,30 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
                 <ScalarProperty Name="ClientAddress" ColumnName="ClientAddress" />
                 <ScalarProperty Name="ClientName" ColumnName="ClientName" />
                 <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserAuth">
+            <EntityTypeMapping TypeName="xFilmModel.UserAuth">
+              <MappingFragment StoreEntitySet="UserAuth">
+                <ScalarProperty Name="MetadataXml" ColumnName="MetadataXml" />
+                <ScalarProperty Name="Platform" ColumnName="Platform" />
+                <ScalarProperty Name="AuthType" ColumnName="AuthType" />
+                <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="AuthId" ColumnName="AuthId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserNotification">
+            <EntityTypeMapping TypeName="xFilmModel.UserNotification">
+              <MappingFragment StoreEntitySet="UserNotification">
+                <ScalarProperty Name="MetadataXml" ColumnName="MetadataXml" />
+                <ScalarProperty Name="Platform" ColumnName="Platform" />
+                <ScalarProperty Name="NotifyType" ColumnName="NotifyType" />
+                <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="NotifyId" ColumnName="NotifyId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

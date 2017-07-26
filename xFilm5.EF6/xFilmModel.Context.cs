@@ -62,8 +62,6 @@ namespace xFilm5.EF6
         public virtual DbSet<T_Status> T_Status { get; set; }
         public virtual DbSet<T_Workflow> T_Workflow { get; set; }
         public virtual DbSet<User> User { get; set; }
-        public virtual DbSet<UserAuth> UserAuth { get; set; }
-        public virtual DbSet<UserNotification> UserNotification { get; set; }
         public virtual DbSet<UserPreference> UserPreference { get; set; }
         public virtual DbSet<X_Counter> X_Counter { get; set; }
         public virtual DbSet<Z_WebColor> Z_WebColor { get; set; }
@@ -76,5 +74,7 @@ namespace xFilm5.EF6
         public virtual DbSet<vwInvoiceList_All> vwInvoiceList_All { get; set; }
         public virtual DbSet<vwPrintQueueVpsList_Ordered> vwPrintQueueVpsList_Ordered { get; set; }
         public virtual DbSet<vwInv5DetailsList> vwInv5DetailsList { get; set; }
+        public virtual DbSet<UserAuth> UserAuth { get; set; }
+        public virtual DbSet<UserNotification> UserNotification { get; set; }
     }
 }

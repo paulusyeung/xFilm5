@@ -17,8 +17,8 @@ namespace xFilm5.EF6
         public int AuthId { get; set; }
         public int UserId { get; set; }
         public string DeviceId { get; set; }
-        public int DeviceType { get; set; }
-        public int Plateform { get; set; }
+        public int AuthType { get; set; }
+        public int Platform { get; set; }
         public string MetadataXml { get; set; }
     
         public virtual User User { get; set; }

@@ -17,9 +17,9 @@ namespace xFilm5.EF6
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
+            this.UserPreference = new HashSet<UserPreference>();
             this.UserAuth = new HashSet<UserAuth>();
             this.UserNotification = new HashSet<UserNotification>();
-            this.UserPreference = new HashSet<UserPreference>();
         }
     
         public int UserId { get; set; }
@@ -38,10 +38,10 @@ namespace xFilm5.EF6
         public Nullable<int> RetiredBy { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserPreference> UserPreference { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserAuth> UserAuth { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserNotification> UserNotification { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserPreference> UserPreference { get; set; }
     }
 }
