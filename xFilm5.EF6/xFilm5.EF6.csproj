@@ -69,6 +69,7 @@
     <Compile Include="Client_User.cs">
       <DependentUpon>xFilmModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="EnumHelper.cs" />
     <Compile Include="OrderComment.cs">
       <DependentUpon>xFilmModel.tt</DependentUpon>
     </Compile>
