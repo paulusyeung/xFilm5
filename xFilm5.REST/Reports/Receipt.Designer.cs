@@ -255,7 +255,7 @@ namespace xFilm5.REST.Reports
             // txtCompanyAddress
             // 
             this.txtCompanyAddress.Dpi = 254F;
-            this.txtCompanyAddress.Font = new System.Drawing.Font("Arial Narrow", 6F);
+            this.txtCompanyAddress.Font = new System.Drawing.Font("Arial Unicode MS", 6F);
             this.txtCompanyAddress.LocationFloat = new DevExpress.Utils.PointFloat(351.7114F, 0F);
             this.txtCompanyAddress.Multiline = true;
             this.txtCompanyAddress.Name = "txtCompanyAddress";

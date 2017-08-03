@@ -60,7 +60,7 @@ namespace xFilm5.REST.Controllers
                             {
                                 #region overwrite existing dbo.UserAuth record
                                 auth.UserId = user.UserId;
-                                auth.DeviceId = deviceId;
+                                //auth.DeviceId = deviceId;
                                 auth.AuthType = (int)EnumHelper.User.AuthType.Firebase;
                                 auth.Platform = platform;
                                 auth.MetadataXml = json;
