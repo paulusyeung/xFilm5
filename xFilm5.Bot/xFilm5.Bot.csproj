@@ -130,6 +130,7 @@
   <ItemGroup>
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\FCMController.cs" />
     <Compile Include="Helper\Config.cs" />
     <Compile Include="Controllers\BotController.cs" />
     <Compile Include="Helper\DirectoryHelper.cs" />
@@ -138,6 +139,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\FCMHelper.cs" />
     <Compile Include="Helper\NetworkConnection.cs" />
     <Compile Include="Helper\PrinterHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

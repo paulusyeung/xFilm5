@@ -136,5 +136,21 @@ namespace xFilm5.Bot
                 return ConfigurationManager.AppSettings["SparkPost_ApiKey"] != null ? ConfigurationManager.AppSettings["SparkPost_ApiKey"] : "";
             }
         }
+
+        public static string FCM_ServerKey
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["FCM_ServerKey"] != null ? ConfigurationManager.AppSettings["FCM_ServerKey"] : "";
+            }
+        }
+
+        public static string FCM_SenderId
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["FCM_SenderId"] != null ? ConfigurationManager.AppSettings["FCM_SenderId"] : "";
+            }
+        }
     }
 }
