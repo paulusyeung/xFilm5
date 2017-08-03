@@ -76,5 +76,6 @@ namespace xFilm5.EF6
         public virtual DbSet<vwInv5DetailsList> vwInv5DetailsList { get; set; }
         public virtual DbSet<UserAuth> UserAuth { get; set; }
         public virtual DbSet<UserNotification> UserNotification { get; set; }
+        public virtual DbSet<vwClientList> vwClientList { get; set; }
     }
 }
