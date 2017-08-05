@@ -568,6 +568,8 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwClientList' does not have a pr
         <EntityType Name="vwClientList">
           <Key>
             <PropertyRef Name="ID" />
+            
+            
           </Key>
           <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="128" />
@@ -968,6 +970,28 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
           <Property Name="IsReady" Type="bit" Nullable="false" />
           <Property Name="IsReceived" Type="bit" Nullable="false" />
           <Property Name="IsBilled" Type="bit" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vwUserNotificationList">
+          <Key>
+            <PropertyRef Name="NotifyId" />
+            <PropertyRef Name="NotifyType" />
+            <PropertyRef Name="ClientId" />
+          </Key>
+          <Property Name="NotifyId" Type="int" Nullable="false" />
+          <Property Name="DeviceId" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="NotifyType" Type="int" Nullable="false" />
+          <Property Name="Platform" Type="int" Nullable="false" />
+          <Property Name="NotifyXml" Type="xml" />
+          <Property Name="AuthType" Type="int" Nullable="false" />
+          <Property Name="AuthXml" Type="xml" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="UserAlias" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="SecurityLevel" Type="smallint" />
+          <Property Name="PrimaryUser" Type="bit" Nullable="false" />
+          <Property Name="ClientId" Type="int" Nullable="false" />
+          <Property Name="ClientName" Type="nvarchar" MaxLength="128" />
         </EntityType>
         <Association Name="FK_Acct_INMaster_Acct_INDetails">
           <End Role="Acct_INMaster" Type="Self.Acct_INMaster" Multiplicity="1" />
@@ -1805,6 +1829,23 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
     [vwReceiptDetailsList_Ex].[IsReceived] AS [IsReceived], 
     [vwReceiptDetailsList_Ex].[IsBilled] AS [IsBilled]
     FROM [dbo].[vwReceiptDetailsList_Ex] AS [vwReceiptDetailsList_Ex]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vwUserNotificationList" EntityType="Self.vwUserNotificationList" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vwUserNotificationList].[NotifyId] AS [NotifyId], 
+    [vwUserNotificationList].[DeviceId] AS [DeviceId], 
+    [vwUserNotificationList].[NotifyType] AS [NotifyType], 
+    [vwUserNotificationList].[Platform] AS [Platform], 
+    [vwUserNotificationList].[NotifyXml] AS [NotifyXml], 
+    [vwUserNotificationList].[AuthType] AS [AuthType], 
+    [vwUserNotificationList].[AuthXml] AS [AuthXml], 
+    [vwUserNotificationList].[UserId] AS [UserId], 
+    [vwUserNotificationList].[UserAlias] AS [UserAlias], 
+    [vwUserNotificationList].[SecurityLevel] AS [SecurityLevel], 
+    [vwUserNotificationList].[PrimaryUser] AS [PrimaryUser], 
+    [vwUserNotificationList].[ClientId] AS [ClientId], 
+    [vwUserNotificationList].[ClientName] AS [ClientName]
+    FROM [dbo].[vwUserNotificationList] AS [vwUserNotificationList]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_Acct_INMaster_Acct_INDetails" Association="Self.FK_Acct_INMaster_Acct_INDetails">
             <End Role="Acct_INMaster" EntitySet="Acct_INMaster" />
@@ -3298,6 +3339,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
             <End Role="UserNotification" EntitySet="UserNotification" />
           </AssociationSet>
           <EntitySet Name="vwClientList" EntityType="xFilmModel.vwClientList" />
+          <EntitySet Name="vwUserNotificationList" EntityType="xFilmModel.vwUserNotificationList" />
         </EntityContainer>
         <EntityType Name="vwReceiptDetailsList_Ex">
           <Key>
@@ -3653,6 +3695,26 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
           <Property Name="BranchName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
           <Property Name="CreatedOn" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="Int16" />
+        </EntityType>
+        <EntityType Name="vwUserNotificationList">
+          <Key>
+            <PropertyRef Name="NotifyId" />
+            <PropertyRef Name="NotifyType" />
+            <PropertyRef Name="ClientId" />
+          </Key>
+          <Property Name="NotifyId" Type="Int32" Nullable="false" />
+          <Property Name="DeviceId" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="NotifyType" Type="Int32" Nullable="false" />
+          <Property Name="Platform" Type="Int32" Nullable="false" />
+          <Property Name="NotifyXml" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AuthType" Type="Int32" Nullable="false" />
+          <Property Name="AuthXml" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="UserAlias" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityLevel" Type="Int16" />
+          <Property Name="PrimaryUser" Type="Boolean" Nullable="false" />
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="ClientName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4567,6 +4629,25 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
                 <ScalarProperty Name="PrimaryAddr" ColumnName="PrimaryAddr" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vwUserNotificationList">
+            <EntityTypeMapping TypeName="xFilmModel.vwUserNotificationList">
+              <MappingFragment StoreEntitySet="vwUserNotificationList">
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="PrimaryUser" ColumnName="PrimaryUser" />
+                <ScalarProperty Name="SecurityLevel" ColumnName="SecurityLevel" />
+                <ScalarProperty Name="UserAlias" ColumnName="UserAlias" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="AuthXml" ColumnName="AuthXml" />
+                <ScalarProperty Name="AuthType" ColumnName="AuthType" />
+                <ScalarProperty Name="NotifyXml" ColumnName="NotifyXml" />
+                <ScalarProperty Name="Platform" ColumnName="Platform" />
+                <ScalarProperty Name="NotifyType" ColumnName="NotifyType" />
+                <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
+                <ScalarProperty Name="NotifyId" ColumnName="NotifyId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

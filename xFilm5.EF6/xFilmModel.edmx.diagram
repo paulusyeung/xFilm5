@@ -99,6 +99,7 @@
         <AssociationConnector Association="xFilmModel.FK_User_UserAuth" />
         <AssociationConnector Association="xFilmModel.FK_User_UserNotification" />
         <EntityTypeShape EntityType="xFilmModel.vwClientList" Width="1.5" PointX="13.75" PointY="8.75" />
+        <EntityTypeShape EntityType="xFilmModel.vwUserNotificationList" Width="1.5" PointX="14.375" PointY="15.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
