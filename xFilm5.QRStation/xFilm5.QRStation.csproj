@@ -88,6 +88,7 @@
     <Compile Include="Desktop.Designer.cs">
       <DependentUpon>Desktop.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helper\BotHelper.cs" />
     <Compile Include="NetworkConnection.cs" />
     <Compile Include="PictureBoxZoom.cs">
       <SubType>UserControl</SubType>

@@ -167,6 +167,8 @@ namespace xFilm5.QRStation
                                         }
 
                                         ShowPrintQLifeCycle(pQueue.ID, filename.Substring(0, filename.IndexOf('(')));       //   顯示同一隻 PrintQueue 嘅 log file
+
+                                        Helper.BotHelper.PostSendFcmOnOrder(pQueueVpsId);       // 2017.08.04 paulus: 叫 xFIlm5.Bot server 發短訊
                                     }
                                     catch { }
                                 }
