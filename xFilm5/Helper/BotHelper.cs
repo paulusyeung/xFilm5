@@ -222,5 +222,28 @@ namespace xFilm5.Helper
             var response = client.Execute(request);
             return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
         }
+
+        public static bool PostBroadcastFcm(String topic, String msg)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            //#if (DEBUG)
+            //            botServer = "http://localhost:35543/";
+            //#endif
+            var client = new RestClient(botServer);
+            var request = new RestRequest(string.Format("FCM/BroadcastMessage/{0}/{1}/", topic, msg), Method.POST);
+            //request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+            request.RequestFormat = DataFormat.Json;
+
+            //request.AddParameter("ReceiptId", receiptId.ToString());
+            //request.AddParameter("LanguageId", DAL.Common.Config.CurrentLanguageId.ToString());
+            //request.AddParameter("PrinterName", printerName);
+            request.AddBody(new
+            {
+                Topic = topic,
+                AnotherParam = 19.99
+            });
+            var response = client.Execute(request);
+            return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
+        }
     }
 }

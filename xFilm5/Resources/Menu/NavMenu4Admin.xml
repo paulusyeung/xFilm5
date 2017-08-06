@@ -32,7 +32,8 @@
 	</accounting>
 	<admin Caption="Admin">
 		<item Caption="Staff" ImageUrl="16x16.staff16.png" Tag="Admin_Staff" />
-	</admin>
+    <item Caption="FCM" ImageUrl="16x16.jobOrder_comment.png" Tag="Admin_FCM" />
+  </admin>
 	<settings Caption="Settings">
 		<item Caption="System Parameters" ImageUrl="16x16.settings16.png" Tag="System_Parameters" />
 	</settings>

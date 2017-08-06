@@ -629,6 +629,12 @@
     <Compile Include="Admin\Staff\StaffRecord.Designer.cs">
       <DependentUpon>StaffRecord.cs</DependentUpon>
     </Compile>
+    <Compile Include="Admin\FCMConsole.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Admin\FCMConsole.designer.cs">
+      <DependentUpon>FCMConsole.cs</DependentUpon>
+    </Compile>
     <Compile Include="AtsPane\AccountingAts.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1135,6 +1141,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Admin\Staff\StaffRecord.resx">
       <DependentUpon>StaffRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\FCMConsole.resx">
+      <DependentUpon>FCMConsole.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AtsPane\AccountingAts.resx">
       <DependentUpon>AccountingAts.cs</DependentUpon>

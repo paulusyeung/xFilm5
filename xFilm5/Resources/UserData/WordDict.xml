@@ -1398,4 +1398,34 @@
     <chs>确定要开发票？</chs>
     <cht>確定要開發票？</cht>
   </keyword>
+  <keyword key="fcm">
+    <en>FCM Console</en>
+    <chs>短讯广播</chs>
+    <cht>短訊廣播</cht>
+  </keyword>
+  <keyword key="fcm_everyone">
+    <en>Everyone</en>
+    <chs>大众广播</chs>
+    <cht>大眾廣播</cht>
+  </keyword>
+  <keyword key="fcm_staffonly">
+    <en>Staff Only</en>
+    <chs>内部广播</chs>
+    <cht>內部廣播</cht>
+  </keyword>
+  <keyword key="fcm_recipient">
+    <en>Recipient</en>
+    <chs>收讯人</chs>
+    <cht>收訊人</cht>
+  </keyword>
+  <keyword key="fcm_message">
+    <en>Message</en>
+    <chs>短讯内容</chs>
+    <cht>短訊內容</cht>
+  </keyword>
+  <keyword key="fcm_send_message">
+    <en>Send out FCM</en>
+    <chs>发出短讯</chs>
+    <cht>發出短訊</cht>
+  </keyword>
 </root>
