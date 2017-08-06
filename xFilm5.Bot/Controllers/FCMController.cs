@@ -79,12 +79,31 @@ namespace xFilm5.Bot.Controllers
 
             if (result)
             {
-                log.Info(String.Format("[bot, FCM, PostSendMessage] \r\nFirebase return success\r\nOrder Id = {0}", orderId.ToString()));
+                log.Info(String.Format("[bot, FCM, PostSendMessage OnOrder] \r\nFirebase return success\r\nOrder Id = {0}", orderId.ToString()));
                 return Ok();
             }
             else
             {
-                log.Error(String.Format("[bot, FCM, PostSendMessage] \r\nFirebase return failure\r\nOrder Id = {0}", orderId.ToString()));
+                log.Error(String.Format("[bot, FCM, PostSendMessage OnOrder] \r\nFirebase return failure\r\nOrder Id = {0}", orderId.ToString()));
+            }
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("FCM/SendMessage/OnReady/{vpsId}")]
+        public IHttpActionResult PostSendOnReady(int vpsId)
+        {
+            var result = FCMHelper.SendOnReady(vpsId);
+
+            if (result)
+            {
+                log.Info(String.Format("[bot, FCM, PostSendMessage OnReady] \r\nFirebase return success\r\nVPS Id = {0}", vpsId.ToString()));
+                return Ok();
+            }
+            else
+            {
+                log.Error(String.Format("[bot, FCM, PostSendMessage OnReady] \r\nFirebase return failure\r\nVPS Id = {0}", vpsId.ToString()));
             }
 
             return NotFound();

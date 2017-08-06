@@ -36,75 +36,79 @@ namespace xFilm5.Bot.Helper
             bool result = false;
             try
             {
-                #region 砌個 message 出嚟
-                //string applicationID = "AIz..........Fep0";
-                //string senderId = "30............8";
-                //string deviceId = "ch_G60NPga4:APA9............T_LH8up40Ghi-J";
-
-                WebRequest tRequest = WebRequest.Create("https://fcm.googleapis.com/fcm/send");
-                tRequest.Method = "post";
-                tRequest.ContentType = "application/json";
-
-                var data = new
+                var list = deviceId.Split(',');
+                foreach (string id in list)
                 {
-                    to = deviceId,
-                    notification = new
+                    #region 砌個 message 出嚟
+                    //string applicationID = "AIz..........Fep0";
+                    //string senderId = "30............8";
+                    //string deviceId = "ch_G60NPga4:APA9............T_LH8up40Ghi-J";
+
+                    WebRequest tRequest = WebRequest.Create("https://fcm.googleapis.com/fcm/send");
+                    tRequest.Method = "post";
+                    tRequest.ContentType = "application/json";
+
+                    var data = new
                     {
-                        body = msgBody,
-                        title = msgTitle,
-                        sound = "Enabled"
-
-                    },
-                    /**
-                    // refer: https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/42279260#42279260
-                    //data = new
-                    //{
-                    //    body = msgBody,
-                    //    title = msgTitle,
-                    //    sound = "Enabled"
-
-                    //},
-                    */
-                    priority = "high"
-                };
-                //var serializer = new JavaScriptSerializer();
-                //var json = serializer.Serialize(data);
-                var json = JsonConvert.SerializeObject(data);
-                Byte[] byteArray = Encoding.UTF8.GetBytes(json);
-                tRequest.Headers.Add(string.Format("Authorization: key={0}", applicationID));
-                tRequest.Headers.Add(string.Format("Sender: id={0}", senderId));
-                tRequest.ContentLength = byteArray.Length;
-                #endregion
-
-                #region 將個 message 發出去
-                using (Stream dataStream = tRequest.GetRequestStream())
-                {
-                    dataStream.Write(byteArray, 0, byteArray.Length);
-                    using (WebResponse tResponse = tRequest.GetResponse())
-                    {
-                        using (Stream dataStreamResponse = tResponse.GetResponseStream())
+                        to = id,
+                        notification = new
                         {
-                            using (StreamReader tReader = new StreamReader(dataStreamResponse))
-                            {
-                                String sResponseFromServer = tReader.ReadToEnd();
-                                string str = sResponseFromServer;
+                            body = msgBody,
+                            title = msgTitle,
+                            sound = "Enabled"
 
-                                FCMResponse response = JsonConvert.DeserializeObject<FCMResponse>(sResponseFromServer);
-                                if (response.success == 1)
+                        },
+                        /**
+                        // refer: https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/42279260#42279260
+                        //data = new
+                        //{
+                        //    body = msgBody,
+                        //    title = msgTitle,
+                        //    sound = "Enabled"
+
+                        //},
+                        */
+                        priority = "high"
+                    };
+                    //var serializer = new JavaScriptSerializer();
+                    //var json = serializer.Serialize(data);
+                    var json = JsonConvert.SerializeObject(data);
+                    Byte[] byteArray = Encoding.UTF8.GetBytes(json);
+                    tRequest.Headers.Add(string.Format("Authorization: key={0}", applicationID));
+                    tRequest.Headers.Add(string.Format("Sender: id={0}", senderId));
+                    tRequest.ContentLength = byteArray.Length;
+                    #endregion
+
+                    #region 將個 message 發出去
+                    using (Stream dataStream = tRequest.GetRequestStream())
+                    {
+                        dataStream.Write(byteArray, 0, byteArray.Length);
+                        using (WebResponse tResponse = tRequest.GetResponse())
+                        {
+                            using (Stream dataStreamResponse = tResponse.GetResponseStream())
+                            {
+                                using (StreamReader tReader = new StreamReader(dataStreamResponse))
                                 {
-                                    //new NotificationBLL().InsertNotificationLog(dayNumber, notification, true);
-                                    result = true;
-                                }
-                                else if (response.failure == 1)
-                                {
-                                    //new NotificationBLL().InsertNotificationLog(dayNumber, notification, false);
-                                    //sbLogger.AppendLine(string.Format("Error sent from FCM server, after sending request : {0} , for following device info: {1}", sResponseFromServer, jsonNotificationFormat));
+                                    String sResponseFromServer = tReader.ReadToEnd();
+                                    string str = sResponseFromServer;
+
+                                    FCMResponse response = JsonConvert.DeserializeObject<FCMResponse>(sResponseFromServer);
+                                    if (response.success == 1)
+                                    {
+                                        //new NotificationBLL().InsertNotificationLog(dayNumber, notification, true);
+                                        result = true;
+                                    }
+                                    else if (response.failure == 1)
+                                    {
+                                        //new NotificationBLL().InsertNotificationLog(dayNumber, notification, false);
+                                        //sbLogger.AppendLine(string.Format("Error sent from FCM server, after sending request : {0} , for following device info: {1}", sResponseFromServer, jsonNotificationFormat));
+                                    }
                                 }
                             }
                         }
                     }
+                    #endregion
                 }
-                #endregion
             }
             catch (Exception ex)
             {
@@ -134,28 +138,53 @@ namespace xFilm5.Bot.Helper
                 var vps = ctx.PrintQueue_VPS.Where(x => x.ID == pQueueVpsId).SingleOrDefault();
                 if (vps != null)
                 {
-                    var pkVps = ctx.OrderPkPrintQueueVps.Where(x => x.PrintQueueVpsId == pQueueVpsId).FirstOrDefault();
-                    var client = ctx.vwClientList.Where(x => x.ID == vps.PrintQueue.ClientID).SingleOrDefault();
-                    var users = ctx.Client_User.Where(x => x.ClientID == vps.PrintQueue.ClientID || x.SecurityLevel > 1);     // client + staff
+                    var pkVps = ctx.vwOrderPkPrintQueueVpsList.Where(x => x.PrintQueueVpsId == pQueueVpsId).FirstOrDefault();
+                    var order = ctx.vwOrderList.Where(x => x.OrderID == pkVps.OrderHeaderId).SingleOrDefault();
+                    //var client = ctx.vwClientList.Where(x => x.ID == vps.PrintQueue.ClientID).SingleOrDefault();
+                    //var users = ctx.Client_User.Where(x => x.ClientID == vps.PrintQueue.ClientID || x.SecurityLevel > 1);     // client + staff
 
                     #region 將有開嘅 user fcm token 加入 recipient list
-                    foreach (Client_User user in users)
-                    {
-                        switch (client.BranchName.Substring(0, 2).ToLower())
-                        {   // staff 可以分開 branch
-                            case "kf":
-                                var kf = ctx.UserNotification.Where(x => x.UserId == user.ID && x.NotifyType == notifyKF).SingleOrDefault();
-                                if (kf != null) recipient.Add(GetFcmToken(kf.UserId));
-                                break;
-                            case "kt":
-                                var kt = ctx.UserNotification.Where(x => x.UserId == user.ID && x.NotifyType == notifyKT).SingleOrDefault();
-                                if (kt != null) recipient.Add(GetFcmToken(kt.UserId));
-                                break;
-                            case "tw":
-                                var tw = ctx.UserNotification.Where(x => x.UserId == user.ID && x.NotifyType == notifyTW).SingleOrDefault();
-                                if (tw != null) recipient.Add(GetFcmToken(tw.UserId));
-                                break;
-                        }
+                    switch (order.Workshop.Substring(0, 2).ToLower())
+                    {   // staff 可以分開 branch
+                        case "kf":
+                            var kf = ctx.vwUserNotificationList.Where(x => x.NotifyType == notifyKF && (x.SecurityLevel >= 1 || x.ClientId == order.ClientID)).ToList();
+                            #region 每隻登記咗嘅 device 都要發 FCM
+                            if (kf.Count > 0)
+                            {
+                                for (int i = 0; i < kf.Count; i++)
+                                {
+                                    dynamic expando = JsonConvert.DeserializeObject<ExpandoObject>(kf[i].AuthXml);
+                                    if (expando != null) recipient.Add(expando.FCM.Token);
+                                }
+                            }
+                            #endregion
+                            break;
+                        case "kt":
+                            var kt = ctx.vwUserNotificationList.Where(x => x.NotifyType == notifyKT && (x.SecurityLevel >= 1 || x.ClientId == order.ClientID)).ToList();
+                            #region 每隻登記咗嘅 device 都要發 FCM
+                            if (kt.Count > 0)
+                            {
+                                for (int i = 0; i < kt.Count; i++)
+                                {
+                                    dynamic expando = JsonConvert.DeserializeObject<ExpandoObject>(kt[i].AuthXml);
+                                    if (expando != null) recipient.Add(expando.FCM.Token);
+                                }
+                            }
+                            #endregion
+                            break;
+                        case "tw":
+                            var tw = ctx.vwUserNotificationList.Where(x => x.NotifyType == notifyKT && (x.SecurityLevel >= 1 || x.ClientId == order.ClientID)).ToList();
+                            #region 每隻登記咗嘅 device 都要發 FCM
+                            if (tw.Count > 0)
+                            {
+                                for (int i = 0; i < tw.Count; i++)
+                                {
+                                    dynamic expando = JsonConvert.DeserializeObject<ExpandoObject>(tw[i].AuthXml);
+                                    if (expando != null) recipient.Add(expando.FCM.Token);
+                                }
+                            }
+                            #endregion
+                            break;
                     }
                     #endregion
 
@@ -190,30 +219,51 @@ namespace xFilm5.Bot.Helper
 
             using (var ctx = new xFilmEntities())
             {
-                var hdr = ctx.OrderHeader.Where(x => x.ID == orderId).SingleOrDefault();
-                if (hdr != null)
+                var order = ctx.vwOrderList.Where(x => x.OrderID == orderId).SingleOrDefault();
+                if (order != null)
                 {
-                    var client = ctx.vwClientList.Where(x => x.ID == hdr.ClientID).SingleOrDefault();
-                    var users = ctx.Client_User.Where(x => x.ClientID == hdr.ClientID || x.SecurityLevel > 1);     // client + staff
-
                     #region 將有開嘅 user fcm token 加入 recipient list
-                    foreach (Client_User user in users)
-                    {
-                        switch (client.BranchName.Substring(0,2).ToLower())
-                        {   // staff 可以分開 branch
-                            case "kf":
-                                var kf = ctx.UserNotification.Where(x => x.UserId == user.ID && x.NotifyType == notifyKF).SingleOrDefault();
-                                if (kf != null) recipient.Add(GetFcmToken(kf.UserId));
-                                break;
-                            case "kt":
-                                var kt = ctx.UserNotification.Where(x => x.UserId == user.ID && x.NotifyType == notifyKT).SingleOrDefault();
-                                if (kt != null) recipient.Add(GetFcmToken(kt.UserId));
-                                break;
-                            case "tw":
-                                var tw = ctx.UserNotification.Where(x => x.UserId == user.ID && x.NotifyType == notifyTW).SingleOrDefault();
-                                if (tw != null) recipient.Add(GetFcmToken(tw.UserId));
-                                break;
-                        }
+                    switch (order.Workshop.Substring(0, 2).ToLower())
+                    {   // staff 可以分開 branch
+                        case "kf":
+                            var kf = ctx.vwUserNotificationList.Where(x => x.NotifyType == notifyKF && (x.SecurityLevel >= 1 || x.ClientId == order.ClientID)).ToList();
+                            #region 每隻登記咗嘅 device 都要發 FCM
+                            if (kf.Count > 0)
+                            {
+                                for (int i = 0; i < kf.Count; i++)
+                                {
+                                    dynamic expando = JsonConvert.DeserializeObject<ExpandoObject>(kf[i].AuthXml);
+                                    if (expando != null) recipient.Add(expando.FCM.Token);
+                                }
+                            }
+                            #endregion
+                            break;
+                        case "kt":
+                            var kt = ctx.vwUserNotificationList.Where(x => x.NotifyType == notifyKT && (x.SecurityLevel >= 1 || x.ClientId == order.ClientID)).ToList();
+                            #region 每隻登記咗嘅 device 都要發 FCM
+                            if (kt.Count > 0)
+                            {
+                                for (int i = 0; i < kt.Count; i++)
+                                {
+                                    dynamic expando = JsonConvert.DeserializeObject<ExpandoObject>(kt[i].AuthXml);
+                                    if (expando != null) recipient.Add(expando.FCM.Token);
+                                }
+                            }
+                            #endregion
+                            break;
+                        case "tw":
+                            var tw = ctx.vwUserNotificationList.Where(x => x.NotifyType == notifyTW && (x.SecurityLevel >= 1 || x.ClientId == order.ClientID)).ToList();
+                            #region 每隻登記咗嘅 device 都要發 FCM
+                            if (tw.Count > 0)
+                            {
+                                for (int i = 0; i < tw.Count; i++)
+                                {
+                                    dynamic expando = JsonConvert.DeserializeObject<ExpandoObject>(tw[i].AuthXml);
+                                    if (expando != null) recipient.Add(expando.FCM.Token);
+                                }
+                            }
+                            #endregion
+                            break;
                     }
                     #endregion
 
@@ -221,7 +271,7 @@ namespace xFilm5.Bot.Helper
                     {
                         var deviceIds = string.Join(",", recipient.ToArray());
                         var msgTitle = "xFilm5 有單";
-                        var msgBody = String.Format("單號 {0}，客名 {1}", orderId.ToString(), client.Name);
+                        var msgBody = String.Format("單號 {0}，客名 {1}", orderId.ToString(), order.ClientName);
 
                         result = SendPushNotification(Config.FCM_ServerKey, deviceIds, Config.FCM_SenderId, msgTitle, msgBody);
                     }
@@ -264,6 +314,21 @@ namespace xFilm5.Bot.Helper
                 {
                     dynamic expando = JsonConvert.DeserializeObject<ExpandoObject>(user.MetadataXml);
                     if (expando != null) result = expando.FCM.Token;
+                }
+            }
+            return result;
+        }
+        private static string GetFcmToken(int userId, string deviceId)
+        {
+            string result = "";
+
+            using (var ctx = new xFilmEntities())
+            {
+                var user = ctx.UserAuth.Where(x => x.UserId == userId && x.DeviceId == deviceId).SingleOrDefault();
+                if (user != null)
+                {
+                    dynamic expando = JsonConvert.DeserializeObject<ExpandoObject>(user.MetadataXml);
+                    if (expando != null) result = string.Format("{0}", expando.FCM.Token);
                 }
             }
             return result;
