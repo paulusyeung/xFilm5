@@ -93,6 +93,11 @@ namespace xFilm5.Bot.Helper
                                     string str = sResponseFromServer;
 
                                     FCMResponse response = JsonConvert.DeserializeObject<FCMResponse>(sResponseFromServer);
+
+                                    // HACK: 好難講，有可能係暫時收唔倒，Firebase default 係 4 分鐘內都收唔倒先叫 failure，仲有，如果係 broadcast 入面有啲收到有啲收唔倒又點計？
+                                    //       都係全部算 true 除咗 exceptional error
+                                    result = true;
+                                    /**
                                     if (response.success == 1)
                                     {
                                         //new NotificationBLL().InsertNotificationLog(dayNumber, notification, true);
@@ -103,6 +108,7 @@ namespace xFilm5.Bot.Helper
                                         //new NotificationBLL().InsertNotificationLog(dayNumber, notification, false);
                                         //sbLogger.AppendLine(string.Format("Error sent from FCM server, after sending request : {0} , for following device info: {1}", sResponseFromServer, jsonNotificationFormat));
                                     }
+                                    */
                                 }
                             }
                         }
@@ -296,6 +302,11 @@ namespace xFilm5.Bot.Helper
             return result;
         }
 
+        #region FCMResponse + FCMResult: objects used to deserialize Firebase response result
+        /// <summary>
+        /// refer: https://developers.google.com/cloud-messaging/http-server-ref#interpret-downstream
+        /// eg. failure = 0 means all success no failure
+        /// </summary>
         private class FCMResponse
         {
             public long multicast_id { get; set; }
@@ -308,7 +319,9 @@ namespace xFilm5.Bot.Helper
         {
             public string message_id { get; set; }
         }
+        #endregion
 
+        /** deprecated
         private static string GetFcmToken(UserNotification user)
         {
             string result = "";
@@ -348,5 +361,6 @@ namespace xFilm5.Bot.Helper
             }
             return result;
         }
+        */
     }
 }
