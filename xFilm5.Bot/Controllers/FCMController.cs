@@ -110,47 +110,21 @@ namespace xFilm5.Bot.Controllers
         }
 
         [HttpPost]
-        [Route("FCM/BroadcastMessage/{id}")]
-        public IHttpActionResult PostBroadcastMessage([FromBody] JObject jsonData)
+        [Route("FCM/BroadcastMessage/{topic}/{msg}")]
+        public IHttpActionResult PostBroadcastMessage(string topic, string msg)
         {
-            if (jsonData == null)
+            var result = FCMHelper.SendEveryone(topic, msg);
+
+            if (result)
             {
-                //log.Error("[bot, xprinter] jsonData == null");
-                return NotFound();
+                log.Info(String.Format("[bot, FCM, PostSendMessage Boradcast] \r\nFirebase return success\r\nTopic = {0}", topic));
+                return Ok();
             }
             else
             {
-                int receiptId = jsonData["ReceiptId"].Value<int>();
-                int languageId = jsonData["LanguageId"].Value<int>();
-                string printerName = jsonData["PrinterName"].Value<string>();
-                bool smallFont = jsonData["SmallFont"].Value<bool>();
-
-                using (var ctx = new xFilmEntities())
-                {
-                    var hasRows = ctx.vwReceiptDetailsList_Ex.Where(x => x.ReceiptHeaderId == receiptId).Any();
-                    if (hasRows)
-                    {
-                        try
-                        {
-                            //var xp80 = new PrinterHelper();
-                            //xp80.Print(receiptId, languageId, printerName, smallFont);
-
-                            //log.Info(String.Format("[bot, xprinter, receipt printed] \r\nReceipt Number = {0}\r\nLanguage Id = {1}\r\nPrinter Name = {2}", receiptId.ToString(), languageId.ToString(), printerName));
-                            return Ok();
-                        }
-                        catch (Exception ex)
-                        {
-                            //log.Error(String.Format("[bot, xprinter, print error] \r\nExceptional Error = {0}", ex.ToString()));
-                            return NotFound();
-                        }
-                    }
-                    else
-                    {
-                        //log.Error("[bot, xprinter, Receipt not found] \r\n" + receiptId.ToString());
-                        return NotFound();
-                    }
-                }
+                log.Error(String.Format("[bot, FCM, PostSendMessage Boradcast] \r\nFirebase return failure\r\nTopic = {0}", topic));
             }
+            return NotFound();
         }
     }
 }

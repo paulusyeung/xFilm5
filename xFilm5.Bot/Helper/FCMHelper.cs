@@ -281,6 +281,21 @@ namespace xFilm5.Bot.Helper
             return result;
         }
 
+        public static bool SendEveryone(string topic, string msg)
+        {
+            bool result = false;
+
+            var deviceIds = string.Format("/topics/{0}", topic);
+
+            string msgTitle = topic.ToLower() == "everyone" ? "xFilm5 大眾廣播" : "xFilm5 內部廣播";
+
+            var msgBody = msg;
+
+            result = SendPushNotification(Config.FCM_ServerKey, deviceIds, Config.FCM_SenderId, msgTitle, msgBody);
+
+            return result;
+        }
+
         private class FCMResponse
         {
             public long multicast_id { get; set; }
