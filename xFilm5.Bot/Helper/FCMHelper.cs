@@ -276,7 +276,7 @@ namespace xFilm5.Bot.Helper
                     if (recipient.Count > 0)
                     {
                         var deviceIds = string.Join(",", recipient.ToArray());
-                        var msgTitle = "xFilm5 有荷打";
+                        var msgTitle = "xFilm5 有柯打";
                         var msgBody = String.Format("單號：{0}，客名：{1}", orderId.ToString(), order.ClientName);
 
                         result = SendPushNotification(Config.FCM_ServerKey, deviceIds, Config.FCM_SenderId, msgTitle, msgBody);
