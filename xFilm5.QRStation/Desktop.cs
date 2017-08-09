@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Principal;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WhatsAppApi;
@@ -19,6 +20,8 @@ namespace xFilm5.QRStation
     public partial class Desktop : Form
     {
         #region private properties
+        private string _LastQRCode = "";
+
         private enum SourceType
         {
             None,
@@ -95,116 +98,121 @@ namespace xFilm5.QRStation
         {
             if (e.KeyValue == (char)Keys.Return)
             {
-                // QR Code data 有三行 text，即係入面有 CR/LF，唯有認住最後一隻 character ) 先做嘢
-                if (txtQrCodeData.Text.IndexOf(')') >= 0 )
+                // 2017.08.09 paulus: 如果同一個 QR Code 就 skip，唔好重做
+                if (txtQrCodeData.Text != _LastQRCode)
                 {
-                    e.Handled = true;
-
-                    // select 哂所有 text，下一個 scanned data 可以 overwrite 之前嘅
-                    txtQrCodeData.Select(0, txtQrCodeData.TextLength);
-
-                    String[] qrCodeData = txtQrCodeData.Text.Trim().Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-
-                    // 2016.11.15 paulus: QR Code 有 3 行 text,
-                    //   line1 = Machine Type (藍紙 or 鋅板);
-                    //   line2 = 時間;
-                    //   line3 = Customer Number . Cups Job Id - File Name . p#(CMYK)
-                    if (qrCodeData.Length == 3)
+                    // QR Code data 有三行 text，即係入面有 CR/LF，唯有認住最後一隻 character ) 先做嘢
+                    if (txtQrCodeData.Text.IndexOf(')') >= 0)
                     {
-                        #region QR Code 有料，做嘢
-                        SourceType sourceType = IdentifySourceType(qrCodeData[0]);
+                        e.Handled = true;
 
-                        String line3 = qrCodeData[2];
-                        String[] line3parts = line3.Split('.');
+                        // select 哂所有 text，下一個 scanned data 可以 overwrite 之前嘅
+                        txtQrCodeData.Select(0, txtQrCodeData.TextLength);
 
-                        int clientId = Convert.ToInt32(line3parts[0]);
-                        String cupsJobId = line3parts[1].Split('-')[0];
-                        String filename = line3.Replace(clientId.ToString() + ".", "");
+                        String[] qrCodeData = txtQrCodeData.Text.Trim().Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
-                        #region 清空原有畫面上的資料
-                        txtClientInfo.Text = String.Empty;
-                        if (lvwLifeCycle.Items.Count > 0) lvwLifeCycle.Items.Clear();
-                        if (picPreview.Image != null) picPreview.Image.Dispose();
-                        lblOrderNumber.Text = "";
-                        #endregion
-
-                        #region 開始顯示新嘅資料
-                        ShowClientInfo(clientId);                                                                   // 目前淨係顯示 Client 名，日後可以顯示其他資料
-
-                        using (var ctx = new EF6.xFilmEntities())
+                        // 2016.11.15 paulus: QR Code 有 3 行 text,
+                        //   line1 = Machine Type (藍紙 or 鋅板);
+                        //   line2 = 時間;
+                        //   line3 = Customer Number . Cups Job Id - File Name . p#(CMYK)
+                        if (qrCodeData.Length == 3)
                         {
-                            var pQueue = ctx.PrintQueue.Where(x => x.ClientID == clientId && x.CupsJobID == cupsJobId).SingleOrDefault();
-                            if (pQueue != null)
+                            #region QR Code 有料，做嘢
+                            SourceType sourceType = IdentifySourceType(qrCodeData[0]);
+
+                            String line3 = qrCodeData[2];
+                            String[] line3parts = line3.Split('.');
+
+                            int clientId = Convert.ToInt32(line3parts[0]);
+                            String cupsJobId = line3parts[1].Split('-')[0];
+                            String filename = line3.Replace(clientId.ToString() + ".", "");
+
+                            #region 清空原有畫面上的資料
+                            txtClientInfo.Text = String.Empty;
+                            if (lvwLifeCycle.Items.Count > 0) lvwLifeCycle.Items.Clear();
+                            if (picPreview.Image != null) picPreview.Image.Dispose();
+                            lblOrderNumber.Text = "";
+                            #endregion
+
+                            #region 開始顯示新嘅資料
+                            ShowClientInfo(clientId);                                                                   // 目前淨係顯示 Client 名，日後可以顯示其他資料
+
+                            using (var ctx = new EF6.xFilmEntities())
                             {
-                                String vpsFileName = (sourceType == SourceType.Plate) ? filename + ".vps" : filename.Substring(0, filename.IndexOf('('));
-                                var pQueueVps = ctx.PrintQueue_VPS.Where(x => x.PrintQueueID == pQueue.ID && x.VpsFileName.Contains(vpsFileName)).FirstOrDefault();
-                                if (pQueueVps != null)
+                                var pQueue = ctx.PrintQueue.Where(x => x.ClientID == clientId && x.CupsJobID == cupsJobId).SingleOrDefault();
+                                if (pQueue != null)
                                 {
-                                    try
+                                    String vpsFileName = (sourceType == SourceType.Plate) ? filename + ".vps" : filename.Substring(0, filename.IndexOf('('));
+                                    var pQueueVps = ctx.PrintQueue_VPS.Where(x => x.PrintQueueID == pQueue.ID && x.VpsFileName.Contains(vpsFileName)).FirstOrDefault();
+                                    if (pQueueVps != null)
                                     {
-                                        EF6.OrderPkPrintQueueVps orderPq = null;
-                                        switch (sourceType)
+                                        try
                                         {
-                                            case SourceType.Plate:
-                                                orderPq = ctx.OrderPkPrintQueueVps.Where(x => x.PrintQueueVpsId == pQueueVps.ID && x.CheckedPlate == true).FirstOrDefault();
-                                                break;
-                                            case SourceType.Blueprint:
-                                                orderPq = ctx.OrderPkPrintQueueVps.Where(x => x.PrintQueueVpsId == pQueueVps.ID && x.CheckedBlueprint == true).FirstOrDefault();
-                                                break;
+                                            EF6.OrderPkPrintQueueVps orderPq = null;
+                                            switch (sourceType)
+                                            {
+                                                case SourceType.Plate:
+                                                    orderPq = ctx.OrderPkPrintQueueVps.Where(x => x.PrintQueueVpsId == pQueueVps.ID && x.CheckedPlate == true).FirstOrDefault();
+                                                    break;
+                                                case SourceType.Blueprint:
+                                                    orderPq = ctx.OrderPkPrintQueueVps.Where(x => x.PrintQueueVpsId == pQueueVps.ID && x.CheckedBlueprint == true).FirstOrDefault();
+                                                    break;
+                                            }
+
+                                            int pQueueVpsId = (pQueueVps == null) ? 0 : pQueueVps.ID;
+                                            LogLifeCycle(sourceType, pQueue.ID, pQueueVpsId);                                   //   update Log File
+
+                                            if (orderPq != null)
+                                            {
+                                                orderPq.IsReady = true;
+                                                ctx.SaveChanges();
+
+                                                var xQty = ctx.OrderPkPrintQueueVps.Where(x => x.OrderHeaderId == orderPq.OrderHeaderId.Value && x.CheckedPlate == true).Count();
+                                                var yQty = ctx.OrderPkPrintQueueVps.Where(x => x.OrderHeaderId == orderPq.OrderHeaderId.Value && x.CheckedPlate == true && x.IsReady == true).Count();
+                                                lblOrderNumber.Text = String.Format("{0}/{1}", orderPq.OrderHeaderId.Value.ToString("###"), (xQty - yQty).ToString());              // 顯示 Order ID as Order Number
+                                            }
+
+                                            ShowPrintQLifeCycle(pQueue.ID, filename.Substring(0, filename.IndexOf('(')));       //   顯示同一隻 PrintQueue 嘅 log file
+
+                                            Helper.BotHelper.PostSendFcmOnOrder(pQueueVpsId);       // 2017.08.04 paulus: 叫 xFIlm5.Bot server 發短訊
                                         }
-
-                                        int pQueueVpsId = (pQueueVps == null) ? 0 : pQueueVps.ID;
-                                        LogLifeCycle(sourceType, pQueue.ID, pQueueVpsId);                                   //   update Log File
-
-                                        if (orderPq != null)
-                                        {
-                                            orderPq.IsReady = true;
-                                            ctx.SaveChanges();
-
-                                            var xQty = ctx.OrderPkPrintQueueVps.Where(x => x.OrderHeaderId == orderPq.OrderHeaderId.Value && x.CheckedPlate == true).Count();
-                                            var yQty = ctx.OrderPkPrintQueueVps.Where(x => x.OrderHeaderId == orderPq.OrderHeaderId.Value && x.CheckedPlate == true  && x.IsReady == true).Count();
-                                            lblOrderNumber.Text = String.Format("{0}/{1}", orderPq.OrderHeaderId.Value.ToString("###"), (xQty - yQty).ToString());              // 顯示 Order ID as Order Number
-                                        }
-
-                                        ShowPrintQLifeCycle(pQueue.ID, filename.Substring(0, filename.IndexOf('(')));       //   顯示同一隻 PrintQueue 嘅 log file
-
-                                        Helper.BotHelper.PostSendFcmOnOrder(pQueueVpsId);       // 2017.08.04 paulus: 叫 xFIlm5.Bot server 發短訊
+                                        catch { }
                                     }
-                                    catch { }
                                 }
                             }
+                            ShowPreview(sourceType, qrCodeData[2]);                                                     // 顯示 thumbnail
+                            #endregion
+
+                            InitializeCounter();
+
+                            /**
+                            String sql = String.Format("ClientID = {0} AND CupsJobID = N'{1}'", clientId.ToString(), cupsJobId);
+                            DAL4Win.PrintQueue pq = DAL4Win.PrintQueue.LoadWhere(sql);
+
+                            // 清空原有的資料
+                            txtClientInfo.Text = String.Empty;
+                            if (lvwLifeCycle.Items.Count > 0) lvwLifeCycle.Items.Clear();
+                            if (picPreview.Image != null) picPreview.Image.Dispose();
+
+                            ShowClientInfo(clientId);                           // 目前淨係顯示 Client 名，日後可以顯示其他資料
+                            if (pq != null)                                     // 如果已經有 PrintQueue
+                            {
+                                sql = String.Format("PrintQueueID = '{0}' AND VpsFileName = N'{1}.vps'", pq.ID.ToString(), filename);
+                                DAL4Win.PrintQueue_VPS pQueueVps = DAL4Win.PrintQueue_VPS.LoadWhere(sql);
+                                int pQueueVpsId = (pQueueVps == null) ? 0 : pQueueVps.ID;
+
+                                LogLifeCycle(sourceType, pq.ID, pQueueVpsId);   //   update Log File
+                                ShowPrintQLifeCycle(pq.ID, filename.Substring(0, filename.IndexOf('(')));                     //   顯示同一隻 PrintQueue 嘅 log file
+                            }
+                            ShowPreview(sourceType, qrCodeData[2]);             // 顯示 thumbnail
+
+                            InitializeCounter();
+                            //IncrementCounter(sourceType);
+                            */
+                            #endregion
                         }
-                        ShowPreview(sourceType, qrCodeData[2]);                                                     // 顯示 thumbnail
-                        #endregion
-
-                        InitializeCounter();
-
-                        /**
-                        String sql = String.Format("ClientID = {0} AND CupsJobID = N'{1}'", clientId.ToString(), cupsJobId);
-                        DAL4Win.PrintQueue pq = DAL4Win.PrintQueue.LoadWhere(sql);
-
-                        // 清空原有的資料
-                        txtClientInfo.Text = String.Empty;
-                        if (lvwLifeCycle.Items.Count > 0) lvwLifeCycle.Items.Clear();
-                        if (picPreview.Image != null) picPreview.Image.Dispose();
-
-                        ShowClientInfo(clientId);                           // 目前淨係顯示 Client 名，日後可以顯示其他資料
-                        if (pq != null)                                     // 如果已經有 PrintQueue
-                        {
-                            sql = String.Format("PrintQueueID = '{0}' AND VpsFileName = N'{1}.vps'", pq.ID.ToString(), filename);
-                            DAL4Win.PrintQueue_VPS pQueueVps = DAL4Win.PrintQueue_VPS.LoadWhere(sql);
-                            int pQueueVpsId = (pQueueVps == null) ? 0 : pQueueVps.ID;
-
-                            LogLifeCycle(sourceType, pq.ID, pQueueVpsId);   //   update Log File
-                            ShowPrintQLifeCycle(pq.ID, filename.Substring(0, filename.IndexOf('(')));                     //   顯示同一隻 PrintQueue 嘅 log file
-                        }
-                        ShowPreview(sourceType, qrCodeData[2]);             // 顯示 thumbnail
-
-                        InitializeCounter();
-                        //IncrementCounter(sourceType);
-                        */
-                        #endregion
                     }
+                    _LastQRCode = txtQrCodeData.Text;
                 }
             }
         }
