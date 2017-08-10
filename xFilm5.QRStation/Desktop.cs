@@ -98,24 +98,24 @@ namespace xFilm5.QRStation
         {
             if (e.KeyValue == (char)Keys.Return)
             {
-                // 2017.08.09 paulus: 如果同一個 QR Code 就 skip，唔好重做
-                if (txtQrCodeData.Text != _LastQRCode)
+                // QR Code data 有三行 text，即係入面有 CR/LF，唯有認住最後一隻 character ) 先做嘢
+                if (txtQrCodeData.Text.IndexOf(')') >= 0)
                 {
-                    // QR Code data 有三行 text，即係入面有 CR/LF，唯有認住最後一隻 character ) 先做嘢
-                    if (txtQrCodeData.Text.IndexOf(')') >= 0)
+                    e.Handled = true;
+
+                    // select 哂所有 text，下一個 scanned data 可以 overwrite 之前嘅
+                    txtQrCodeData.Select(0, txtQrCodeData.TextLength);
+
+                    String[] qrCodeData = txtQrCodeData.Text.Trim().Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+                    // 2016.11.15 paulus: QR Code 有 3 行 text,
+                    //   line1 = Machine Type (藍紙 or 鋅板);
+                    //   line2 = 時間;
+                    //   line3 = Customer Number . Cups Job Id - File Name . p#(CMYK)
+                    if (qrCodeData.Length == 3)
                     {
-                        e.Handled = true;
-
-                        // select 哂所有 text，下一個 scanned data 可以 overwrite 之前嘅
-                        txtQrCodeData.Select(0, txtQrCodeData.TextLength);
-
-                        String[] qrCodeData = txtQrCodeData.Text.Trim().Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-
-                        // 2016.11.15 paulus: QR Code 有 3 行 text,
-                        //   line1 = Machine Type (藍紙 or 鋅板);
-                        //   line2 = 時間;
-                        //   line3 = Customer Number . Cups Job Id - File Name . p#(CMYK)
-                        if (qrCodeData.Length == 3)
+                        // 2017.08.09 paulus: 如果同一個 QR Code 就 skip，唔好重做
+                        if (_LastQRCode != qrCodeData[2])
                         {
                             #region QR Code 有料，做嘢
                             SourceType sourceType = IdentifySourceType(qrCodeData[0]);
@@ -210,9 +210,10 @@ namespace xFilm5.QRStation
                             //IncrementCounter(sourceType);
                             */
                             #endregion
+
+                            _LastQRCode = qrCodeData[2];
                         }
                     }
-                    _LastQRCode = txtQrCodeData.Text;
                 }
             }
         }
