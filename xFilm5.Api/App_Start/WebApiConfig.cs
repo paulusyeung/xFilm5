@@ -7,7 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using System.Web.OData.Extensions;
-using xFilm5.Api.Models;
+//using xFilm5.Api.Models;
+using xFilm5.EF6;
 
 namespace xFilm5.Api
 {
@@ -32,7 +33,7 @@ namespace xFilm5.Api
 
         public static void RegisterXFilm5Api(HttpConfiguration config, HttpServer server)
         {
-            config.MapRestierRoute<EntityFrameworkApi<xFilm5ApiEdm>>(
+            config.MapRestierRoute<EntityFrameworkApi<xFilmEntities>>(
                 "xFilm5",
                 "api/xFilm5",
                 new RestierBatchHandler(server));

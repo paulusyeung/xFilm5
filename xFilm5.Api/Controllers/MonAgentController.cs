@@ -8,7 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using xFilm5.Api.Models;
+//using xFilm5.Api.Models;
 using xFilm5.DAL;
 
 namespace xFilm5.Api.Controllers

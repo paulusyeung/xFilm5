@@ -149,54 +149,19 @@
   <ItemGroup>
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\MonAgentController.cs" />
+    <Compile Include="Controllers\OrderPkPrintQueneVpsController.cs" />
+    <Compile Include="Controllers\PrintQueueController.cs" />
+    <Compile Include="Controllers\PrintQueueVpsController.cs" />
+    <Compile Include="Controllers\PrintQueue_LifeCycleController.cs" />
+    <Compile Include="Controllers\TiffController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\DateTimeHelper.cs" />
-    <Compile Include="Models\Acct_INDetails.cs" />
-    <Compile Include="Models\Acct_INMaster.cs" />
-    <Compile Include="Models\Client.cs" />
-    <Compile Include="Models\ClientPricing.cs" />
-    <Compile Include="Models\Client_AddressBook.cs" />
-    <Compile Include="Models\Client_User.cs" />
-    <Compile Include="Models\OrderComment.cs" />
-    <Compile Include="Models\OrderHeader.cs" />
-    <Compile Include="Models\OrderPkPrintQ.cs" />
-    <Compile Include="Models\Order_Details.cs" />
-    <Compile Include="Models\Order_Internal.cs" />
-    <Compile Include="Models\Order_Journal.cs" />
-    <Compile Include="Models\PosTx.cs" />
-    <Compile Include="Models\PrintQueue.cs" />
-    <Compile Include="Models\PrintQueue_LifeCycle.cs" />
-    <Compile Include="Models\PrintQueue_VPS.cs" />
-    <Compile Include="Models\ReceiptDetail.cs" />
-    <Compile Include="Models\ReceiptHeader.cs" />
-    <Compile Include="Models\Staff.cs" />
-    <Compile Include="Models\T_BillingCode_Dept.cs" />
-    <Compile Include="Models\T_BillingCode_Item.cs" />
-    <Compile Include="Models\T_DeliveryMethod.cs" />
-    <Compile Include="Models\T_FriendlyService.cs" />
-    <Compile Include="Models\T_JobTitle.cs" />
-    <Compile Include="Models\T_LSR.cs" />
-    <Compile Include="Models\T_Media.cs" />
-    <Compile Include="Models\T_PaperSize.cs" />
-    <Compile Include="Models\T_PaymentType.cs" />
-    <Compile Include="Models\T_Platform.cs" />
-    <Compile Include="Models\T_Priority.cs" />
-    <Compile Include="Models\T_ProofingMaterial.cs" />
-    <Compile Include="Models\T_Service.cs" />
-    <Compile Include="Models\T_Software.cs" />
-    <Compile Include="Models\T_SoftwareVersion.cs" />
-    <Compile Include="Models\T_Status.cs" />
-    <Compile Include="Models\T_Workflow.cs" />
-    <Compile Include="Models\User.cs" />
-    <Compile Include="Models\UserAuth.cs" />
-    <Compile Include="Models\UserNotification.cs" />
-    <Compile Include="Models\UserPreference.cs" />
-    <Compile Include="Models\xFilm5ApiEdm.cs" />
-    <Compile Include="Models\X_Counter.cs" />
-    <Compile Include="Models\Z_WebColor.cs" />
+    <Compile Include="Helper\Impersonation.cs" />
+    <Compile Include="NetworkConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
