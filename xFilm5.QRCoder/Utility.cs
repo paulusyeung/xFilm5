@@ -20,7 +20,7 @@ namespace xFilm5.QRCoder
         public static void GenQRCode()
         {
             // 600 = 1040x1040
-            GenQRCode(600);     //唔講明用咩 size，就當作 300
+            GenQRCode(420);     //改 Size 要改埋 Offset.  Size: KT = 600, TW = 480  Offset: KT = 1040, TW = 1260     that is: TW = KT 60%
         }
 
         public static void GenQRCode(int QRCodeSize)
@@ -78,7 +78,7 @@ namespace xFilm5.QRCoder
             {
                 if (bitmap != null)
                 {
-                    int offset = 1040;  // 等於隻 QR Code (600 size) 嘅 pixel Width or Height
+                    int offset = 1260;   // 1040;  // 等於隻 QR Code (600 size) 嘅 pixel Width or Height
                     //int margin = 600;
                     int marginX = 1, marginY = 900; // 1450; TW = 1560, KT = 900
                     //int x0 = (bitmap.Width - _QRCode.Width) - margin, y0 = (bitmap.Height - _QRCode.Height) - margin;     //右下角

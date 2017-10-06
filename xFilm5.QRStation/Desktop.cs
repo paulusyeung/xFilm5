@@ -14,6 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WhatsAppApi;
+using xFilm5.QRStation.Helper;
 
 namespace xFilm5.QRStation
 {
@@ -139,11 +140,13 @@ namespace xFilm5.QRStation
 
                             using (var ctx = new EF6.xFilmEntities())
                             {
-                                var pQueue = ctx.PrintQueue.Where(x => x.ClientID == clientId && x.CupsJobID == cupsJobId).SingleOrDefault();
+                                //var pQueue = ctx.PrintQueue.Where(x => x.ClientID == clientId && x.CupsJobID == cupsJobId).SingleOrDefault();
+                                var pQueue = ApiHelper.GetPrintQueue(clientId, cupsJobId);
                                 if (pQueue != null)
                                 {
                                     String vpsFileName = (sourceType == SourceType.Plate) ? filename + ".vps" : filename.Substring(0, filename.IndexOf('('));
-                                    var pQueueVps = ctx.PrintQueue_VPS.Where(x => x.PrintQueueID == pQueue.ID && x.VpsFileName.Contains(vpsFileName)).FirstOrDefault();
+                                    //var pQueueVps = ctx.PrintQueue_VPS.Where(x => x.PrintQueueID == pQueue.ID && x.VpsFileName.Contains(vpsFileName)).FirstOrDefault();
+                                    var pQueueVps = ApiHelper.GetPrintQueueVps(pQueue.ID, vpsFileName);
                                     if (pQueueVps != null)
                                     {
                                         try
@@ -152,10 +155,12 @@ namespace xFilm5.QRStation
                                             switch (sourceType)
                                             {
                                                 case SourceType.Plate:
-                                                    orderPq = ctx.OrderPkPrintQueueVps.Where(x => x.PrintQueueVpsId == pQueueVps.ID && x.CheckedPlate == true).FirstOrDefault();
+                                                    //orderPq = ctx.OrderPkPrintQueueVps.Where(x => x.PrintQueueVpsId == pQueueVps.ID && x.CheckedPlate == true).FirstOrDefault();
+                                                    orderPq = ApiHelper.GetOrderPkPrintQueueVps_Plate(pQueueVps.ID);
                                                     break;
                                                 case SourceType.Blueprint:
-                                                    orderPq = ctx.OrderPkPrintQueueVps.Where(x => x.PrintQueueVpsId == pQueueVps.ID && x.CheckedBlueprint == true).FirstOrDefault();
+                                                    //orderPq = ctx.OrderPkPrintQueueVps.Where(x => x.PrintQueueVpsId == pQueueVps.ID && x.CheckedBlueprint == true).FirstOrDefault();
+                                                    orderPq = ApiHelper.GetOrderPkPrintQueueVps_Blueprint(pQueueVps.ID);
                                                     break;
                                             }
 
@@ -167,8 +172,11 @@ namespace xFilm5.QRStation
                                                 orderPq.IsReady = true;
                                                 ctx.SaveChanges();
 
-                                                var xQty = ctx.OrderPkPrintQueueVps.Where(x => x.OrderHeaderId == orderPq.OrderHeaderId.Value && x.CheckedPlate == true).Count();
-                                                var yQty = ctx.OrderPkPrintQueueVps.Where(x => x.OrderHeaderId == orderPq.OrderHeaderId.Value && x.CheckedPlate == true && x.IsReady == true).Count();
+                                                //var xQty = ctx.OrderPkPrintQueueVps.Where(x => x.OrderHeaderId == orderPq.OrderHeaderId.Value && x.CheckedPlate == true).Count();
+                                                var xQty = ApiHelper.GetOrderPkPrintQueueVps_Plate_Count(orderPq.OrderHeaderId.Value);
+                                                //var yQty = ctx.OrderPkPrintQueueVps.Where(x => x.OrderHeaderId == orderPq.OrderHeaderId.Value && x.CheckedPlate == true && x.IsReady == true).Count();
+                                                var yQty = ApiHelper.GetOrderPkPrintQueueVps_Plate_IsReadyCount(orderPq.OrderHeaderId.Value);
+
                                                 lblOrderNumber.Text = String.Format("{0}/{1}", orderPq.OrderHeaderId.Value.ToString("###"), (xQty - yQty).ToString());              // 顯示 Order ID as Order Number
                                             }
 
@@ -176,7 +184,7 @@ namespace xFilm5.QRStation
 
                                             Helper.BotHelper.PostSendFcmOnOrder(pQueueVpsId);       // 2017.08.04 paulus: 叫 xFIlm5.Bot server 發短訊
                                         }
-                                        catch { }
+                                        catch (Exception ex) { }
                                     }
                                 }
                             }
@@ -258,7 +266,8 @@ namespace xFilm5.QRStation
         {
             using (var ctx = new EF6.xFilmEntities())
             {
-                var client = ctx.Client.Where(x => x.ID == clientId).SingleOrDefault();
+                //var client = ctx.Client.Where(x => x.ID == clientId).SingleOrDefault();
+                var client = ApiHelper.GetClient(clientId);
                 if (client != null)
                 {
                     txtClientInfo.Text = client.Name;
@@ -277,7 +286,8 @@ namespace xFilm5.QRStation
         {
             using (var ctx = new EF6.xFilmEntities())
             {
-                var allCycle = ctx.PrintQueue_LifeCycle.Where(x => x.PrintQueueId == printQueueId).OrderBy(x => x.CreatedOn).ToList();
+                //var allCycle = ctx.PrintQueue_LifeCycle.Where(x => x.PrintQueueId == printQueueId).OrderBy(x => x.CreatedOn).ToList();
+                var allCycle = ApiHelper.GetPrintQueue_LifeCycle(printQueueId);
 
                 for (int i = 0; i < allCycle.Count; i++)
                 {
@@ -286,11 +296,20 @@ namespace xFilm5.QRStation
                     bool samepage = true;
                     if (cycle.PrintQueueVpsId != null)
                     {
+                        /** 改用 xFilm5.Api
                         //DAL4Win.PrintQueue_VPS vps = DAL4Win.PrintQueue_VPS.Load(cycle.PrintQueueVpsId);
                         //var vps = ctx.PrintQueue_VPS.Where(x => x.ID == cycle.PrintQueueVpsId).SingleOrDefault();
 
                         //if (vps.VpsFileName.IndexOf(pageName) >= 0)
+
                         if (cycle.PrintQueue_VPS.VpsFileName.IndexOf(pageName) >= 0)
+                            samepage = true;
+                        else
+                            samepage = false;
+                        */
+
+                        var pqVps = ApiHelper.GetPrintQueueVps(cycle.PrintQueueVpsId.Value);
+                        if (pqVps.VpsFileName.IndexOf(pageName) >= 0)
                             samepage = true;
                         else
                             samepage = false;
@@ -331,7 +350,14 @@ namespace xFilm5.QRStation
 
                         #region 拆色資料
                         String color = String.Empty;
-                        String vpsFileName = (cycle.PrintQueue_VPS == null) ? "" : cycle.PrintQueue_VPS.VpsFileName;
+
+                        //String vpsFileName = (cycle.PrintQueue_VPS == null) ? "" : cycle.PrintQueue_VPS.VpsFileName;
+                        // 改為:
+                        var pqVps = new EF6.PrintQueue_VPS();
+                        if (cycle.PrintQueueVpsId != null)
+                            pqVps = ApiHelper.GetPrintQueueVps(cycle.PrintQueueVpsId.Value);
+                        String vpsFileName = (pqVps.VpsFileName == null) ? "" : pqVps.VpsFileName;
+
                         color = (vpsFileName != "") ? vpsFileName.Substring(vpsFileName.IndexOf('(') + 1, vpsFileName.IndexOf(')') - vpsFileName.IndexOf('(') - 1) : "";
                         item.SubItems.Add(color);
                         #endregion
@@ -340,8 +366,9 @@ namespace xFilm5.QRStation
             }
         }
 
-        private void ShowPreview(SourceType type, String filename)
+        private async void ShowPreview(SourceType type, String filename)
         {
+            /** 取消，改用 xFilm5.Api
             var uri = new Uri(Properties.Settings.Default.BitmapUri);
             String imgFile = String.Empty;
 
@@ -382,6 +409,12 @@ namespace xFilm5.QRStation
                     }
                 }
             }
+            */
+
+            var stream = await ApiHelper.GetProductPicture((int)type, filename);
+            picPreview.SizeMode = PictureBoxSizeMode.Zoom;
+            picPreview.Image = Image.FromStream(stream);
+
         }
 
         private bool LogLifeCycle(SourceType type, int pQueueId, int pQueueVpsId)
