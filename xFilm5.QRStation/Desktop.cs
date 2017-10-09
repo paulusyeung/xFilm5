@@ -13,7 +13,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WhatsAppApi;
 using xFilm5.QRStation.Helper;
 
 namespace xFilm5.QRStation
@@ -464,34 +463,6 @@ namespace xFilm5.QRStation
             }
 
             return result;
-        }
-
-        private void SendWhatsAppMsg()
-        {
-            String from = "85260620034", pwd = "AgoOF4qWeQ4pkdH7okR6grxJ0mE=", name = "Support@NuStar";
-
-            WhatsApp wa = new WhatsApp(from, pwd, name, true, false);
-            wa.OnConnectSuccess += () =>
-            {
-                Console.WriteLine("Connected...");
-                wa.OnLoginSuccess += (phno, data) =>
-                {
-                    Console.WriteLine("\r\nConnection success!");
-                    wa.SendMessage("85298384761", "from c#");
-                    Console.WriteLine("\r\nMessage sent!");
-                };
-
-                wa.OnLoginFailed += (data) =>
-                {
-                    Console.WriteLine(String.Format("\r\nLogin failed {0}", data));
-                };
-                wa.Login();
-            };
-            wa.OnConnectFailed += (ex) =>
-            {
-                Console.WriteLine(String.Format("\r\nConnection failed {0}"), ex.StackTrace);
-            };
-            wa.Connect();
         }
 
         #region RestSharp samples
