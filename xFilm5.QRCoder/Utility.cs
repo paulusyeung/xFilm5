@@ -17,10 +17,14 @@ namespace xFilm5.QRCoder
 {
     class Utility
     {
+        /*  Workshop    QR Size             offset  marginY
+         *  KT          600 = 10mm/950      1040    900
+         *  TW          420 = 7mm/660       730     1560
+         */
         public static void GenQRCode()
         {
             // 600 = 1040x1040
-            GenQRCode(420);     //改 Size 要改埋 Offset.  Size: KT = 600, TW = 480  Offset: KT = 1040, TW = 1260     that is: TW = KT 60%
+            GenQRCode(420);     //改 Size 要改埋 Offset.  Size: KT = 600, TW = 420  Offset: KT = 1040, TW = 1370
         }
 
         public static void GenQRCode(int QRCodeSize)
@@ -78,9 +82,9 @@ namespace xFilm5.QRCoder
             {
                 if (bitmap != null)
                 {
-                    int offset = 1260;   // 1040;  // 等於隻 QR Code (600 size) 嘅 pixel Width or Height
+                    int offset = 730;  // 等於隻 QR Code (600 size) 嘅 pixel Width or Height
                     //int margin = 600;
-                    int marginX = 1, marginY = 900; // 1450; TW = 1560, KT = 900
+                    int marginX = 1, marginY = 1560; // TW = 1560, KT = 900
                     //int x0 = (bitmap.Width - _QRCode.Width) - margin, y0 = (bitmap.Height - _QRCode.Height) - margin;     //右下角
                     //int x0 = marginX, y0 = (bitmap.Height - GlobalVar.QRCode.Height) - marginY;                             //左下角
                     int x0 = (Math.Abs(bitmap.Width/2) - 8400 - offset), y0 = (bitmap.Height - offset) - marginY;  //左中下
