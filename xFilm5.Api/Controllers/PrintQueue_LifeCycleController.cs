@@ -1,5 +1,10 @@
-﻿using System;
+﻿using log4net;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Dynamic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -10,6 +15,39 @@ namespace xFilm5.Api.Controllers
 {
     public class PrintQueue_LifeCycleController : ApiController
     {
+        private static log4net.ILog Log { get; set; }
+        ILog log = log4net.LogManager.GetLogger(typeof(MonAgentController));
+
+        [HttpGet]
+        [Route("api/PrintQueue_LifeCycle/Counter/Plate/")]
+        public IHttpActionResult GetCounterPlate()
+        {
+            using (var ctx = new xFilmEntities())
+            {
+                ctx.Configuration.LazyLoadingEnabled = false;
+
+                var count = ctx.PrintQueue_LifeCycle.Where(x => x.PrintQSubitemType == (int)EnumHelper.PrintQSubitemType.Plate && DbFunctions.TruncateTime(x.CreatedOn) == DbFunctions.TruncateTime(DateTime.Now)).Count();
+                dynamic plates = new ExpandoObject();
+                plates.Count = count;
+                return Json(JsonConvert.SerializeObject(plates));
+            }
+        }
+
+        [HttpGet]
+        [Route("api/PrintQueue_LifeCycle/Counter/Blueprint/")]
+        public IHttpActionResult GetCounterBlueprint()
+        {
+            using (var ctx = new xFilmEntities())
+            {
+                ctx.Configuration.LazyLoadingEnabled = false;
+
+                var count = ctx.PrintQueue_LifeCycle.Where(x => x.PrintQSubitemType == (int)EnumHelper.PrintQSubitemType.Blueprint && DbFunctions.TruncateTime(x.CreatedOn) == DbFunctions.TruncateTime(DateTime.Now)).Count();
+                dynamic bp = new ExpandoObject();
+                bp.Count = count;
+                return Json(JsonConvert.SerializeObject(bp));
+            }
+        }
+
         [HttpGet]
         [Route("api/PrintQueue_LifeCycle/{printQueueId:int}/")]
         public IHttpActionResult GetPrintQueueVps(int printQueueId)
@@ -20,6 +58,45 @@ namespace xFilm5.Api.Controllers
 
                 var pQueue = ctx.PrintQueue_LifeCycle.Where(x => x.PrintQueueId == printQueueId).OrderBy(x => x.CreatedOn).ToList();
                 return Json(pQueue);
+            }
+        }
+
+        [HttpPost]
+        [Route("api/PrintQueue_LifeCycle/")]
+        public IHttpActionResult PostPrintQueue_LifeCycle([FromBody] JObject jsonData)
+        {
+            if (jsonData == null)
+            {
+                log.Error("[api, PrintQueue_LifeCycle] jsonData == null");
+                return NotFound();
+            }
+            else
+            {
+                try
+                {
+                    var item = jsonData.ToObject<PrintQueue_LifeCycle>();
+
+                    using (var ctx = new xFilmEntities())
+                    {
+                        var cycle = ctx.PrintQueue_LifeCycle.Where(x => x.PrintQueueId == item.PrintQueueId && x.PrintQueueVpsId == item.PrintQueueVpsId && x.PrintQSubitemType == item.PrintQSubitemType).SingleOrDefault();
+                        if (cycle == null)
+                        {
+                            ctx.PrintQueue_LifeCycle.Add(item);
+                            ctx.SaveChanges();
+                            return Ok();
+                        }
+                        else
+                        {
+                            log.Error("[api, PrintQueue_LifeCycle duplicated] \r\n" + item.ToString());
+                            return NotFound();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    log.Error("[api, PrintQueue_LifeCycle exception error] \r\n" + ex);
+                    return NotFound();
+                }
             }
         }
     }

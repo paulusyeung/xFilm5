@@ -1,4 +1,7 @@
-﻿using System;
+﻿using log4net;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -11,6 +14,9 @@ namespace xFilm5.Api.Controllers
 {
     public class OrderPkPrintQueneVpsController : ApiController
     {
+        private static log4net.ILog Log { get; set; }
+        ILog log = log4net.LogManager.GetLogger(typeof(MonAgentController));
+
         [HttpGet]
         [Route("api/OrderPq/Plate/{id:int}")]
         public IHttpActionResult GetOrderPq_Plate(int id)
@@ -78,5 +84,45 @@ namespace xFilm5.Api.Controllers
                 return Json(orderPq);
             }
         }
+
+        [HttpPost]
+        [Route("api/OrderPq/IsReady")]
+        public IHttpActionResult PostOrderPqIsReady([FromBody] JObject jsonData)
+        {
+            if (jsonData == null)
+            {
+                log.Error("[api, PostOrderPqIsReady] jsonData == null");
+                return NotFound();
+            }
+            else
+            {
+                try
+                {
+                    var item = jsonData.ToObject<OrderPkPrintQueueVps>();
+
+                    using (var ctx = new xFilmEntities())
+                    {
+                        var orderPqVps = ctx.OrderPkPrintQueueVps.FirstOrDefault(v => v.OrderPkPrintQueueVpsId == item.OrderPkPrintQueueVpsId);
+                        if (orderPqVps != null)
+                        {
+                            orderPqVps.IsReady = true;
+                            ctx.SaveChanges();
+                            return Ok();
+                        }
+                        else
+                        {
+                            log.Error("[api, OrderPkPrintQueueVps not found] \r\n" + item.ToString());
+                            return NotFound();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    log.Error("[api, PostOrderPqIsReady exception error] \r\n" + ex);
+                    return NotFound();
+                }
+            }
+        }
+
     }
 }
