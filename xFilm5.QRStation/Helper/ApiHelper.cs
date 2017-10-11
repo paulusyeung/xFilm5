@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 using RestSharp.Extensions.MonoHttp;
 using System;
@@ -17,6 +19,52 @@ namespace xFilm5.QRStation.Helper
     {
         //String apiServer = "http://192.168.12.143/xFilm5.Api";  // HACK: 唔想搞隻 App.Config :)     ConfigurationManager.AppSettings["ApiServer"];
         static string apiServer = "http://192.168.12.143/xFilm5.Api";
+
+        public static int GetCounter_Plate()
+        {
+            int result = 0;
+            try
+            {
+                var client = new RestClient(apiServer);
+                var request = new RestRequest("api/PrintQueue_LifeCycle/Counter/Plate/", Method.GET);
+                request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+                var queryResult = client.Execute(request);
+
+                // 個 Content 多咗啲 black slashes "\"，唔可以直接用
+                var str = JToken.Parse(queryResult.Content).ToString();
+
+                dynamic plate = JsonConvert.DeserializeObject<ExpandoObject>(str);
+                result = (int)plate.Count;
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+            }
+            return result;
+        }
+
+        public static int GetCounter_Blueprint()
+        {
+            int result = 0;
+            try
+            {
+                var client = new RestClient(apiServer);
+                var request = new RestRequest("api/PrintQueue_LifeCycle/Counter/Blueprint/", Method.GET);
+                request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+                var queryResult = client.Execute(request);
+
+                // 個 Content 多咗啲 black slashes "\"，唔可以直接用
+                var str = JToken.Parse(queryResult.Content).ToString();
+
+                dynamic plate = JsonConvert.DeserializeObject<ExpandoObject>(str);
+                result = (int)plate.Count;
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+            }
+            return result;
+        }
 
         public static Client GetClient(int clientId)
         {
@@ -123,6 +171,64 @@ namespace xFilm5.QRStation.Helper
             {
                 return null;
             }
+        }
+
+        public static bool PostOrderPqVpsIsReady(OrderPkPrintQueueVps orderPqVps)
+        {
+            //var url = apiServer + string.Format("/api/OrderPq/IsReady/{0}/{1}/", orderPqVpsId.ToString());
+
+            //String botServer = "http://192.168.12.143/xFilm5.Bot";  // HACK: 唔想搞隻 App.Config :)     ConfigurationManager.AppSettings["BotServer"];
+            //#if (DEBUG)
+            //            botServer = "http://localhost:35543/";
+            //#endif
+
+            var json = JsonConvert.SerializeObject(orderPqVps);
+            var client = new RestClient(apiServer);
+            var request = new RestRequest("api/OrderPq/IsReady", Method.POST);
+
+            //request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+            //request.RequestFormat = DataFormat.Json;
+            request.AddParameter("text/json", json, ParameterType.RequestBody);
+            //request.AddParameter("ReceiptId", receiptId.ToString());
+            //request.AddParameter("LanguageId", DAL.Common.Config.CurrentLanguageId.ToString());
+            //request.AddParameter("PrinterName", printerName);
+            //request.AddBody(new
+            //{
+            //    OrderId = vpsId.ToString(),
+            //    AnotherParam = 19.99
+            //});
+            //request.AddObject(orderPqVps);
+            var response = client.Execute(request);
+            return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
+        }
+
+        public static bool PostLifeCycle(PrintQueue_LifeCycle cycle)
+        {
+            //var url = apiServer + string.Format("/api/OrderPq/IsReady/{0}/{1}/", orderPqVpsId.ToString());
+
+            //String botServer = "http://192.168.12.143/xFilm5.Bot";  // HACK: 唔想搞隻 App.Config :)     ConfigurationManager.AppSettings["BotServer"];
+            //#if (DEBUG)
+            //            botServer = "http://localhost:35543/";
+            //#endif
+
+            var json = JsonConvert.SerializeObject(cycle);
+            var client = new RestClient(apiServer);
+            var request = new RestRequest("api/PrintQueue_LifeCycle", Method.POST);
+
+            //request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+            //request.RequestFormat = DataFormat.Json;
+            request.AddParameter("text/json", json, ParameterType.RequestBody);
+            //request.AddParameter("ReceiptId", receiptId.ToString());
+            //request.AddParameter("LanguageId", DAL.Common.Config.CurrentLanguageId.ToString());
+            //request.AddParameter("PrinterName", printerName);
+            //request.AddBody(new
+            //{
+            //    OrderId = vpsId.ToString(),
+            //    AnotherParam = 19.99
+            //});
+            //request.AddObject(orderPqVps);
+            var response = client.Execute(request);
+            return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
         }
     }
 }

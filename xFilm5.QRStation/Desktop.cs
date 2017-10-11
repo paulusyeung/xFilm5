@@ -61,6 +61,7 @@ namespace xFilm5.QRStation
 
         private void InitializeCounter()
         {
+            /**
             using (var ctx = new EF6.xFilmEntities())
             {
                 try
@@ -72,6 +73,12 @@ namespace xFilm5.QRStation
                 }
                 catch { }
             }
+            */
+
+            var plates = ApiHelper.GetCounter_Plate();
+            var blueprints = ApiHelper.GetCounter_Blueprint();
+            lblGoodCount.Text = plates.ToString("##0");
+            lblBadCount.Text = blueprints.ToString("##0");
 
             /**
             String sql = "";
@@ -137,8 +144,8 @@ namespace xFilm5.QRStation
                             #region 開始顯示新嘅資料
                             ShowClientInfo(clientId);                                                                   // 目前淨係顯示 Client 名，日後可以顯示其他資料
 
-                            using (var ctx = new EF6.xFilmEntities())
-                            {
+                            //using (var ctx = new EF6.xFilmEntities())
+                            //{
                                 //var pQueue = ctx.PrintQueue.Where(x => x.ClientID == clientId && x.CupsJobID == cupsJobId).SingleOrDefault();
                                 var pQueue = ApiHelper.GetPrintQueue(clientId, cupsJobId);
                                 if (pQueue != null)
@@ -168,8 +175,9 @@ namespace xFilm5.QRStation
 
                                             if (orderPq != null)
                                             {
-                                                orderPq.IsReady = true;
-                                                ctx.SaveChanges();
+                                                //orderPq.IsReady = true;
+                                                //ctx.SaveChanges();
+                                                var updated = ApiHelper.PostOrderPqVpsIsReady(orderPq);
 
                                                 //var xQty = ctx.OrderPkPrintQueueVps.Where(x => x.OrderHeaderId == orderPq.OrderHeaderId.Value && x.CheckedPlate == true).Count();
                                                 var xQty = ApiHelper.GetOrderPkPrintQueueVps_Plate_Count(orderPq.OrderHeaderId.Value);
@@ -186,7 +194,7 @@ namespace xFilm5.QRStation
                                         catch (Exception ex) { }
                                     }
                                 }
-                            }
+                            //}
                             ShowPreview(sourceType, qrCodeData[2]);                                                     // 顯示 thumbnail
                             #endregion
 
@@ -263,15 +271,15 @@ namespace xFilm5.QRStation
 
         private void ShowClientInfo(int clientId)
         {
-            using (var ctx = new EF6.xFilmEntities())
-            {
+            //using (var ctx = new EF6.xFilmEntities())
+            //{
                 //var client = ctx.Client.Where(x => x.ID == clientId).SingleOrDefault();
                 var client = ApiHelper.GetClient(clientId);
                 if (client != null)
                 {
                     txtClientInfo.Text = client.Name;
                 }
-            }
+            //}
             /*
             DAL4Win.Client client = DAL4Win.Client.Load(clientId);
             if (client != null)
@@ -283,8 +291,8 @@ namespace xFilm5.QRStation
 
         private void ShowPrintQLifeCycle(int printQueueId, String pageName)
         {
-            using (var ctx = new EF6.xFilmEntities())
-            {
+            //using (var ctx = new EF6.xFilmEntities())
+            //{
                 //var allCycle = ctx.PrintQueue_LifeCycle.Where(x => x.PrintQueueId == printQueueId).OrderBy(x => x.CreatedOn).ToList();
                 var allCycle = ApiHelper.GetPrintQueue_LifeCycle(printQueueId);
 
@@ -362,7 +370,7 @@ namespace xFilm5.QRStation
                         #endregion
                     }
                 }
-            }
+            //}
         }
 
         private async void ShowPreview(SourceType type, String filename)
@@ -438,6 +446,7 @@ namespace xFilm5.QRStation
             }
             */
 
+            /**
             using (var ctx = new EF6.xFilmEntities())
             {
                 var cycle = ctx.PrintQueue_LifeCycle.Where(x => x.PrintQueueId == pQueueId && x.PrintQueueVpsId == pQueueVpsId && x.PrintQSubitemType == (int)type).SingleOrDefault();
@@ -461,6 +470,16 @@ namespace xFilm5.QRStation
                     catch { }
                 }
             }
+            */
+
+            var cycle = new EF6.PrintQueue_LifeCycle();
+            cycle.PrintQueueId = pQueueId;
+            cycle.PrintQueueVpsId = pQueueVpsId;
+            cycle.PrintQSubitemType = (int)type;
+            cycle.Status = (int)Common.Enums.Status.Active;
+            cycle.CreatedOn = DateTime.Now;
+            cycle.CreatedBy = 0;
+            result = ApiHelper.PostLifeCycle(cycle);
 
             return result;
         }
