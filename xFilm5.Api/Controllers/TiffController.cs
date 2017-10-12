@@ -38,7 +38,7 @@ namespace xFilm5.Api.Controllers
             {
                 case 1:
                     #region tiff = 202020.A1245-745x605-TEST.p1(CMYK).tif
-                    imgFile = Path.Combine(sourecPath, filename.Substring(0, filename.IndexOf('(')) + "(CMYK).tif");
+                    imgFile = Path.Combine(sourecPath, filename.Substring(0, filename.LastIndexOf('(')) + "(CMYK).tif");
                     #endregion
                     break;
                 case 2:
