@@ -19,14 +19,14 @@ namespace xFilm5.Api.Controllers
         ILog log = log4net.LogManager.GetLogger(typeof(MonAgentController));
 
         [HttpGet]
-        [Route("api/PrintQueue_LifeCycle/Counter/Plate/")]
-        public IHttpActionResult GetCounterPlate()
+        [Route("api/PrintQueue_LifeCycle/Counter/Plate/{workshop}/")]
+        public IHttpActionResult GetCounterPlate(String workshop)
         {
             using (var ctx = new xFilmEntities())
             {
                 ctx.Configuration.LazyLoadingEnabled = false;
 
-                var count = ctx.PrintQueue_LifeCycle.Where(x => x.PrintQSubitemType == (int)EnumHelper.PrintQSubitemType.Plate && DbFunctions.TruncateTime(x.CreatedOn) == DbFunctions.TruncateTime(DateTime.Now)).Count();
+                var count = ctx.vwPrintQueue_LifeCycleListWithWorkshop.Where(x => x.PrintQSubitemType == (int)EnumHelper.PrintQSubitemType.Plate && x.Workshop.StartsWith(workshop) && DbFunctions.TruncateTime(x.CreatedOn) == DbFunctions.TruncateTime(DateTime.Now)).Count();
                 dynamic plates = new ExpandoObject();
                 plates.Count = count;
                 return Json(JsonConvert.SerializeObject(plates));
@@ -34,14 +34,14 @@ namespace xFilm5.Api.Controllers
         }
 
         [HttpGet]
-        [Route("api/PrintQueue_LifeCycle/Counter/Blueprint/")]
-        public IHttpActionResult GetCounterBlueprint()
+        [Route("api/PrintQueue_LifeCycle/Counter/Blueprint/{workshop}/")]
+        public IHttpActionResult GetCounterBlueprint(String workshop)
         {
             using (var ctx = new xFilmEntities())
             {
                 ctx.Configuration.LazyLoadingEnabled = false;
 
-                var count = ctx.PrintQueue_LifeCycle.Where(x => x.PrintQSubitemType == (int)EnumHelper.PrintQSubitemType.Blueprint && DbFunctions.TruncateTime(x.CreatedOn) == DbFunctions.TruncateTime(DateTime.Now)).Count();
+                var count = ctx.vwPrintQueue_LifeCycleListWithWorkshop.Where(x => x.PrintQSubitemType == (int)EnumHelper.PrintQSubitemType.Blueprint && x.Workshop.StartsWith(workshop) && DbFunctions.TruncateTime(x.CreatedOn) == DbFunctions.TruncateTime(DateTime.Now)).Count();
                 dynamic bp = new ExpandoObject();
                 bp.Count = count;
                 return Json(JsonConvert.SerializeObject(bp));
