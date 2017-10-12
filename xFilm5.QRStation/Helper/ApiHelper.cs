@@ -134,7 +134,7 @@ namespace xFilm5.QRStation.Helper
         public static OrderPkPrintQueueVps GetOrderPkPrintQueueVps_Blueprint(int vpsId)
         {
             var client = new RestClient(apiServer);
-            var request = new RestRequest(string.Format("api/PrintQueueVps/Plate/{0}/", vpsId.ToString()), Method.GET);
+            var request = new RestRequest(string.Format("api/OrderPq/Blueprint/{0}/", vpsId.ToString()), Method.GET);
             request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
             var queryResult = client.Execute(request);
             return JsonConvert.DeserializeObject<OrderPkPrintQueueVps>(queryResult.Content);
