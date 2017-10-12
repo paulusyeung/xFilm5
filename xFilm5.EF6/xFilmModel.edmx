@@ -497,7 +497,7 @@
           <Key>
             <PropertyRef Name="UserId" />
           </Key>
-          <Property Name="UserId" Type="int" StoreGeneratedPattern="None" Nullable="false" />
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserType" Type="int" Nullable="false" />
           <Property Name="UserSid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="LoginName" Type="nvarchar" MaxLength="64" Nullable="false" />
@@ -856,6 +856,22 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwOrderPkPrintQueueVpsList_Plate
           <Property Name="RetiredBy" Type="nvarchar" MaxLength="64" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'xFilm3_NuStar.dbo.vwPrintQueue_LifeCycleListWithWorkshop' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vwPrintQueue_LifeCycleListWithWorkshop">
+          <Key>
+            <PropertyRef Name="LifeCycleId" />
+          </Key>
+          <Property Name="LifeCycleId" Type="int" Nullable="false" />
+          <Property Name="PrintQueueId" Type="int" Nullable="false" />
+          <Property Name="PrintQueueVpsId" Type="int" />
+          <Property Name="PrintQSubitemType" Type="int" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" Nullable="false" />
+          <Property Name="OrderHeaderId" Type="int" />
+          <Property Name="Workshop" Type="nvarchar" MaxLength="64" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'xFilm3_NuStar.dbo.vwPrintQueueVpsList_Ordered' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vwPrintQueueVpsList_Ordered">
           <Key>
@@ -976,7 +992,13 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
         <EntityType Name="vwUserNotificationList">
           <Key>
             <PropertyRef Name="NotifyId" />
+            
             <PropertyRef Name="NotifyType" />
+            
+            
+            
+            
+            
             <PropertyRef Name="ClientId" />
           </Key>
           <Property Name="NotifyId" Type="int" Nullable="false" />
@@ -1747,6 +1769,19 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
     [vwOrderPkPrintQueueVpsList_Plate].[RetiredOn] AS [RetiredOn], 
     [vwOrderPkPrintQueueVpsList_Plate].[RetiredBy] AS [RetiredBy]
     FROM [dbo].[vwOrderPkPrintQueueVpsList_Plate] AS [vwOrderPkPrintQueueVpsList_Plate]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vwPrintQueue_LifeCycleListWithWorkshop" EntityType="Self.vwPrintQueue_LifeCycleListWithWorkshop" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vwPrintQueue_LifeCycleListWithWorkshop].[LifeCycleId] AS [LifeCycleId], 
+    [vwPrintQueue_LifeCycleListWithWorkshop].[PrintQueueId] AS [PrintQueueId], 
+    [vwPrintQueue_LifeCycleListWithWorkshop].[PrintQueueVpsId] AS [PrintQueueVpsId], 
+    [vwPrintQueue_LifeCycleListWithWorkshop].[PrintQSubitemType] AS [PrintQSubitemType], 
+    [vwPrintQueue_LifeCycleListWithWorkshop].[Status] AS [Status], 
+    [vwPrintQueue_LifeCycleListWithWorkshop].[CreatedOn] AS [CreatedOn], 
+    [vwPrintQueue_LifeCycleListWithWorkshop].[CreatedBy] AS [CreatedBy], 
+    [vwPrintQueue_LifeCycleListWithWorkshop].[OrderHeaderId] AS [OrderHeaderId], 
+    [vwPrintQueue_LifeCycleListWithWorkshop].[Workshop] AS [Workshop]
+    FROM [dbo].[vwPrintQueue_LifeCycleListWithWorkshop] AS [vwPrintQueue_LifeCycleListWithWorkshop]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="vwPrintQueueVpsList_Ordered" EntityType="Self.vwPrintQueueVpsList_Ordered" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -3340,6 +3375,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
           </AssociationSet>
           <EntitySet Name="vwClientList" EntityType="xFilmModel.vwClientList" />
           <EntitySet Name="vwUserNotificationList" EntityType="xFilmModel.vwUserNotificationList" />
+          <EntitySet Name="vwPrintQueue_LifeCycleListWithWorkshop" EntityType="xFilmModel.vwPrintQueue_LifeCycleListWithWorkshop" />
         </EntityContainer>
         <EntityType Name="vwReceiptDetailsList_Ex">
           <Key>
@@ -3715,6 +3751,20 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
           <Property Name="PrimaryUser" Type="Boolean" Nullable="false" />
           <Property Name="ClientId" Type="Int32" Nullable="false" />
           <Property Name="ClientName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="vwPrintQueue_LifeCycleListWithWorkshop">
+          <Key>
+            <PropertyRef Name="LifeCycleId" />
+          </Key>
+          <Property Name="LifeCycleId" Type="Int32" Nullable="false" />
+          <Property Name="PrintQueueId" Type="Int32" Nullable="false" />
+          <Property Name="PrintQueueVpsId" Type="Int32" />
+          <Property Name="PrintQSubitemType" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+          <Property Name="OrderHeaderId" Type="Int32" />
+          <Property Name="Workshop" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4648,6 +4698,21 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
                 <ScalarProperty Name="NotifyType" ColumnName="NotifyType" />
                 <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
                 <ScalarProperty Name="NotifyId" ColumnName="NotifyId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vwPrintQueue_LifeCycleListWithWorkshop">
+            <EntityTypeMapping TypeName="xFilmModel.vwPrintQueue_LifeCycleListWithWorkshop">
+              <MappingFragment StoreEntitySet="vwPrintQueue_LifeCycleListWithWorkshop">
+                <ScalarProperty Name="Workshop" ColumnName="Workshop" />
+                <ScalarProperty Name="OrderHeaderId" ColumnName="OrderHeaderId" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="PrintQSubitemType" ColumnName="PrintQSubitemType" />
+                <ScalarProperty Name="PrintQueueVpsId" ColumnName="PrintQueueVpsId" />
+                <ScalarProperty Name="PrintQueueId" ColumnName="PrintQueueId" />
+                <ScalarProperty Name="LifeCycleId" ColumnName="LifeCycleId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -201,6 +201,9 @@
     <Compile Include="vwPrintQueueVpsList_Ordered.cs">
       <DependentUpon>xFilmModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="vwPrintQueue_LifeCycleListWithWorkshop.cs">
+      <DependentUpon>xFilmModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="vwReceiptDetailsList_Ex.cs">
       <DependentUpon>xFilmModel.tt</DependentUpon>
     </Compile>
