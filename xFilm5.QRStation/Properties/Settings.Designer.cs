@@ -34,15 +34,6 @@ namespace xFilm5.QRStation.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("TG-A, TG-B")]
-        public string CtpMachines {
-            get {
-                return ((string)(this["CtpMachines"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=10.240.0.4;Initial Catalog=xFilm3_NuStar;Persist Security Info=True;U" +
             "ser ID=sa;Password=sa-9602")]
@@ -85,6 +76,24 @@ namespace xFilm5.QRStation.Properties {
         public string ApiUri {
             get {
                 return ((string)(this["ApiUri"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("PT-A, TG-A, TG-B")]
+        public string CtpMachines {
+            get {
+                return ((string)(this["CtpMachines"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("KT")]
+        public string Workshop {
+            get {
+                return ((string)(this["Workshop"]));
             }
         }
     }

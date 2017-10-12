@@ -26,7 +26,7 @@ namespace xFilm5.QRStation.Helper
             try
             {
                 var client = new RestClient(apiServer);
-                var request = new RestRequest("api/PrintQueue_LifeCycle/Counter/Plate/", Method.GET);
+                var request = new RestRequest(String.Format("api/PrintQueue_LifeCycle/Counter/Plate/{0}/", Properties.Settings.Default.Workshop), Method.GET);
                 request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
                 var queryResult = client.Execute(request);
 
@@ -49,7 +49,7 @@ namespace xFilm5.QRStation.Helper
             try
             {
                 var client = new RestClient(apiServer);
-                var request = new RestRequest("api/PrintQueue_LifeCycle/Counter/Blueprint/", Method.GET);
+                var request = new RestRequest(String.Format("api/PrintQueue_LifeCycle/Counter/Blueprint/{0}/", Properties.Settings.Default.Workshop), Method.GET);
                 request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
                 var queryResult = client.Execute(request);
 
@@ -96,7 +96,7 @@ namespace xFilm5.QRStation.Helper
         public static PrintQueue_VPS GetPrintQueueVps(int clientId, string vpsFileName)
         {
             var client = new RestClient(apiServer);
-            var request = new RestRequest(string.Format("api/PrintQueueVps/{0}/{1}/", clientId.ToString(), vpsFileName), Method.GET);
+            var request = new RestRequest(string.Format("api/PrintQueueVps/{0}/{1}/", clientId.ToString(), HttpUtility.UrlEncode(vpsFileName)), Method.GET);
             request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
             var queryResult = client.Execute(request);
             return JsonConvert.DeserializeObject<PrintQueue_VPS>(queryResult.Content);
@@ -159,7 +159,7 @@ namespace xFilm5.QRStation.Helper
         /// <returns></returns>
         public static async Task<Stream> GetProductPicture(int type, string filename)
         {
-            var url = apiServer + string.Format("/api/Tiff/Preview/{0}/{1}/", (type - 3).ToString(), filename);
+            var url = apiServer + string.Format("/api/Tiff/Preview/{0}/{1}/", (type - 3).ToString(), HttpUtility.UrlEncode(filename));
 
             var httpClient = new HttpClient();
             try
