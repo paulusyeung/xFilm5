@@ -70,6 +70,9 @@
       <DependentUpon>xFilmModel.tt</DependentUpon>
     </Compile>
     <Compile Include="EnumHelper.cs" />
+    <Compile Include="FCMHistory.cs">
+      <DependentUpon>xFilmModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="OrderComment.cs">
       <DependentUpon>xFilmModel.tt</DependentUpon>
     </Compile>

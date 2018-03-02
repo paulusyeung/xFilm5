@@ -108,6 +108,18 @@
           <Property Name="RetiredOn" Type="datetime" />
           <Property Name="RetiredBy" Type="int" />
         </EntityType>
+        <EntityType Name="FCMHistory">
+          <Key>
+            <PropertyRef Name="FCMHistoryId" />
+          </Key>
+          <Property Name="FCMHistoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MessageTitle" Type="nvarchar" MaxLength="64" />
+          <Property Name="MessageBody" Type="nvarchar" MaxLength="256" />
+          <Property Name="DeliveredOn" Type="datetime" Nullable="false" />
+          <Property Name="Topic" Type="nvarchar" MaxLength="64" />
+          <Property Name="RecipientList" Type="nvarchar" MaxLength="1024" />
+          <Property Name="UserIdList" Type="nvarchar" MaxLength="512" />
+        </EntityType>
         <EntityType Name="Order_Details">
           <Key>
             <PropertyRef Name="ID" />
@@ -860,6 +872,11 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwPrintQueue_LifeCycleListWithWo
         <EntityType Name="vwPrintQueue_LifeCycleListWithWorkshop">
           <Key>
             <PropertyRef Name="LifeCycleId" />
+            
+            
+            
+            
+            
           </Key>
           <Property Name="LifeCycleId" Type="int" Nullable="false" />
           <Property Name="PrintQueueId" Type="int" Nullable="false" />
@@ -1526,6 +1543,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
           <EntitySet Name="Client_AddressBook" EntityType="Self.Client_AddressBook" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Client_User" EntityType="Self.Client_User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ClientPricing" EntityType="Self.ClientPricing" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FCMHistory" EntityType="Self.FCMHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Order_Details" EntityType="Self.Order_Details" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Order_Internal" EntityType="Self.Order_Internal" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Order_Journal" EntityType="Self.Order_Journal" Schema="dbo" store:Type="Tables" />
@@ -3376,6 +3394,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
           <EntitySet Name="vwClientList" EntityType="xFilmModel.vwClientList" />
           <EntitySet Name="vwUserNotificationList" EntityType="xFilmModel.vwUserNotificationList" />
           <EntitySet Name="vwPrintQueue_LifeCycleListWithWorkshop" EntityType="xFilmModel.vwPrintQueue_LifeCycleListWithWorkshop" />
+          <EntitySet Name="FCMHistory" EntityType="xFilmModel.FCMHistory" />
         </EntityContainer>
         <EntityType Name="vwReceiptDetailsList_Ex">
           <Key>
@@ -3765,6 +3784,18 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
           <Property Name="CreatedBy" Type="Int32" Nullable="false" />
           <Property Name="OrderHeaderId" Type="Int32" />
           <Property Name="Workshop" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="FCMHistory">
+          <Key>
+            <PropertyRef Name="FCMHistoryId" />
+          </Key>
+          <Property Name="FCMHistoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MessageTitle" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="MessageBody" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="DeliveredOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Topic" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="RecipientList" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <Property Name="UserIdList" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4713,6 +4744,19 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
                 <ScalarProperty Name="PrintQueueVpsId" ColumnName="PrintQueueVpsId" />
                 <ScalarProperty Name="PrintQueueId" ColumnName="PrintQueueId" />
                 <ScalarProperty Name="LifeCycleId" ColumnName="LifeCycleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FCMHistory">
+            <EntityTypeMapping TypeName="xFilmModel.FCMHistory">
+              <MappingFragment StoreEntitySet="FCMHistory">
+                <ScalarProperty Name="UserIdList" ColumnName="UserIdList" />
+                <ScalarProperty Name="RecipientList" ColumnName="RecipientList" />
+                <ScalarProperty Name="Topic" ColumnName="Topic" />
+                <ScalarProperty Name="DeliveredOn" ColumnName="DeliveredOn" />
+                <ScalarProperty Name="MessageBody" ColumnName="MessageBody" />
+                <ScalarProperty Name="MessageTitle" ColumnName="MessageTitle" />
+                <ScalarProperty Name="FCMHistoryId" ColumnName="FCMHistoryId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
