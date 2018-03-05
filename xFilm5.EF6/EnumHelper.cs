@@ -63,7 +63,11 @@ namespace xFilm5.EF6
                 OnOrder_KF,
                 OnReady_TW = 20,
                 OnReady_KT,
-                OnReady_KF
+                OnReady_KF,
+                OnOrder = 30,
+                OnVps,
+                OnReady,
+                OnCompleted
             }
         }
     }

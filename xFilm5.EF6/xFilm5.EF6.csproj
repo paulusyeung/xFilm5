@@ -180,6 +180,9 @@
     <Compile Include="vwClientList.cs">
       <DependentUpon>xFilmModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="vwClientUserList.cs">
+      <DependentUpon>xFilmModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="vwInv5DetailsList.cs">
       <DependentUpon>xFilmModel.tt</DependentUpon>
     </Compile>

@@ -34,9 +34,9 @@
         <EntityTypeShape EntityType="xFilmModel.T_PaperSize" Width="1.5" PointX="11.25" PointY="47" IsExpanded="true" />
         <EntityTypeShape EntityType="xFilmModel.T_PaymentType" Width="1.5" PointX="0.75" PointY="25.625" IsExpanded="true" />
         <EntityTypeShape EntityType="xFilmModel.T_Platform" Width="1.5" PointX="11.25" PointY="49.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.T_Priority" Width="1.5" PointX="3" PointY="25.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.T_Priority" Width="1.5" PointX="3" PointY="35.375" IsExpanded="true" />
         <EntityTypeShape EntityType="xFilmModel.T_ProofingMaterial" Width="1.5" PointX="9.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="xFilmModel.T_Service" Width="1.5" PointX="3" PointY="35.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="xFilmModel.T_Service" Width="1.5" PointX="3" PointY="25.625" IsExpanded="true" />
         <EntityTypeShape EntityType="xFilmModel.T_Software" Width="1.5" PointX="5.75" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="xFilmModel.T_SoftwareVersion" Width="1.5" PointX="8" PointY="0.875" IsExpanded="true" />
         <EntityTypeShape EntityType="xFilmModel.T_Status" Width="1.5" PointX="3" PointY="47" IsExpanded="true" />
@@ -102,6 +102,7 @@
         <EntityTypeShape EntityType="xFilmModel.vwUserNotificationList" Width="1.5" PointX="15.75" PointY="0.75" />
         <EntityTypeShape EntityType="xFilmModel.vwPrintQueue_LifeCycleListWithWorkshop" Width="1.5" PointX="15.75" PointY="5.75" />
         <EntityTypeShape EntityType="xFilmModel.FCMHistory" Width="1.5" PointX="15.75" PointY="9.75" />
+        <EntityTypeShape EntityType="xFilmModel.vwClientUserList" Width="1.5" PointX="15.75" PointY="13.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

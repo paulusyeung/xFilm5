@@ -80,5 +80,6 @@ namespace xFilm5.EF6
         public virtual DbSet<vwUserNotificationList> vwUserNotificationList { get; set; }
         public virtual DbSet<vwPrintQueue_LifeCycleListWithWorkshop> vwPrintQueue_LifeCycleListWithWorkshop { get; set; }
         public virtual DbSet<FCMHistory> FCMHistory { get; set; }
+        public virtual DbSet<vwClientUserList> vwClientUserList { get; set; }
     }
 }
