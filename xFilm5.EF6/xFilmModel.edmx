@@ -915,9 +915,9 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwPrintQueue_LifeCycleListWithWo
 warning 6002: The table/view 'xFilm3_NuStar.dbo.vwPrintQueueVpsList_AvailableFilm' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vwPrintQueueVpsList_AvailableFilm">
           <Key>
-            <PropertyRef Name="ClientID" />
-            <PropertyRef Name="VpsPrintQueueID" />
             <PropertyRef Name="VpsFileName" />
+            
+            
           </Key>
           <Property Name="ClientID" Type="int" Nullable="false" />
           <Property Name="OrderID" Type="int" Nullable="false" />
@@ -935,14 +935,13 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwPrintQueueVpsList_AvailableFil
           <Property Name="VpsPlateOrdered" Type="bit" Nullable="false" />
           <Property Name="VpsRetired" Type="bit" />
           <Property Name="VpsAge" Type="int" />
+          <Property Name="ClientName" Type="nvarchar" MaxLength="128" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'xFilm3_NuStar.dbo.vwPrintQueueVpsList_AvailablePlate' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vwPrintQueueVpsList_AvailablePlate">
           <Key>
             <PropertyRef Name="VpsFileName" />
-            <PropertyRef Name="VpsPrintQueueID" />
-            <PropertyRef Name="ClientID" />
           </Key>
           <Property Name="ClientID" Type="int" Nullable="false" />
           <Property Name="OrderID" Type="int" Nullable="false" />
@@ -960,6 +959,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwPrintQueueVpsList_AvailablePla
           <Property Name="VpsPlateOrdered" Type="bit" Nullable="false" />
           <Property Name="VpsRetired" Type="bit" />
           <Property Name="VpsAge" Type="int" />
+          <Property Name="ClientName" Type="nvarchar" MaxLength="128" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'xFilm3_NuStar.dbo.vwPrintQueueVpsList_Ordered' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -1909,7 +1909,8 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
     [vwPrintQueueVpsList_AvailableFilm].[VpsCreatedOn] AS [VpsCreatedOn], 
     [vwPrintQueueVpsList_AvailableFilm].[VpsPlateOrdered] AS [VpsPlateOrdered], 
     [vwPrintQueueVpsList_AvailableFilm].[VpsRetired] AS [VpsRetired], 
-    [vwPrintQueueVpsList_AvailableFilm].[VpsAge] AS [VpsAge]
+    [vwPrintQueueVpsList_AvailableFilm].[VpsAge] AS [VpsAge], 
+    [vwPrintQueueVpsList_AvailableFilm].[ClientName] AS [ClientName]
     FROM [dbo].[vwPrintQueueVpsList_AvailableFilm] AS [vwPrintQueueVpsList_AvailableFilm]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="vwPrintQueueVpsList_AvailablePlate" EntityType="Self.vwPrintQueueVpsList_AvailablePlate" store:Type="Views" store:Schema="dbo">
@@ -1929,7 +1930,8 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
     [vwPrintQueueVpsList_AvailablePlate].[VpsCreatedOn] AS [VpsCreatedOn], 
     [vwPrintQueueVpsList_AvailablePlate].[VpsPlateOrdered] AS [VpsPlateOrdered], 
     [vwPrintQueueVpsList_AvailablePlate].[VpsRetired] AS [VpsRetired], 
-    [vwPrintQueueVpsList_AvailablePlate].[VpsAge] AS [VpsAge]
+    [vwPrintQueueVpsList_AvailablePlate].[VpsAge] AS [VpsAge], 
+    [vwPrintQueueVpsList_AvailablePlate].[ClientName] AS [ClientName]
     FROM [dbo].[vwPrintQueueVpsList_AvailablePlate] AS [vwPrintQueueVpsList_AvailablePlate]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="vwPrintQueueVpsList_Ordered" EntityType="Self.vwPrintQueueVpsList_Ordered" store:Type="Views" store:Schema="dbo">
@@ -3953,8 +3955,6 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
         </EntityType>
         <EntityType Name="vwPrintQueueVpsList_AvailableFilm">
           <Key>
-            <PropertyRef Name="ClientID" />
-            <PropertyRef Name="VpsPrintQueueID" />
             <PropertyRef Name="VpsFileName" />
           </Key>
           <Property Name="ClientID" Type="Int32" Nullable="false" />
@@ -3973,12 +3973,11 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
           <Property Name="VpsPlateOrdered" Type="Boolean" Nullable="false" />
           <Property Name="VpsRetired" Type="Boolean" />
           <Property Name="VpsAge" Type="Int32" />
+          <Property Name="ClientName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="vwPrintQueueVpsList_AvailablePlate">
           <Key>
             <PropertyRef Name="VpsFileName" />
-            <PropertyRef Name="VpsPrintQueueID" />
-            <PropertyRef Name="ClientID" />
           </Key>
           <Property Name="ClientID" Type="Int32" Nullable="false" />
           <Property Name="OrderID" Type="Int32" Nullable="false" />
@@ -3996,6 +3995,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
           <Property Name="VpsPlateOrdered" Type="Boolean" Nullable="false" />
           <Property Name="VpsRetired" Type="Boolean" />
           <Property Name="VpsAge" Type="Int32" />
+          <Property Name="ClientName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4983,6 +4983,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
           <EntitySetMapping Name="vwPrintQueueVpsList_AvailableFilm">
             <EntityTypeMapping TypeName="xFilmModel.vwPrintQueueVpsList_AvailableFilm">
               <MappingFragment StoreEntitySet="vwPrintQueueVpsList_AvailableFilm">
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
                 <ScalarProperty Name="VpsAge" ColumnName="VpsAge" />
                 <ScalarProperty Name="VpsRetired" ColumnName="VpsRetired" />
                 <ScalarProperty Name="VpsPlateOrdered" ColumnName="VpsPlateOrdered" />
@@ -5005,6 +5006,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
           <EntitySetMapping Name="vwPrintQueueVpsList_AvailablePlate">
             <EntityTypeMapping TypeName="xFilmModel.vwPrintQueueVpsList_AvailablePlate">
               <MappingFragment StoreEntitySet="vwPrintQueueVpsList_AvailablePlate">
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
                 <ScalarProperty Name="VpsAge" ColumnName="VpsAge" />
                 <ScalarProperty Name="VpsRetired" ColumnName="VpsRetired" />
                 <ScalarProperty Name="VpsPlateOrdered" ColumnName="VpsPlateOrdered" />

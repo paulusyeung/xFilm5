@@ -30,5 +30,6 @@ namespace xFilm5.EF6
         public bool VpsPlateOrdered { get; set; }
         public Nullable<bool> VpsRetired { get; set; }
         public Nullable<int> VpsAge { get; set; }
+        public string ClientName { get; set; }
     }
 }
