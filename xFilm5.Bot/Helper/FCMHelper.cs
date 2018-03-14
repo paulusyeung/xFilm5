@@ -134,6 +134,8 @@ namespace xFilm5.Bot.Helper
             bool result = false;
 
             List<string> recipient = new List<string>();
+            List<string> deviceList = new List<string>();       // 2018.03.14 paulus: log 邊個 device 會收到 FCM
+            List<string> useridList = new List<string>();       // 2018.03.14 paulus: log 邊個 user 會收到 FCM
 
             int notifyKF = (int)EnumHelper.User.NotifyType.OnReady_KF;
             int notifyKT = (int)EnumHelper.User.NotifyType.OnReady_KT;
@@ -160,7 +162,13 @@ namespace xFilm5.Bot.Helper
                                 for (int i = 0; i < kf.Count; i++)
                                 {
                                     dynamic expando = JsonConvert.DeserializeObject<ExpandoObject>(kf[i].AuthXml);
-                                    if (expando != null) recipient.Add(expando.FCM.Token);
+                                    if (expando != null)
+                                    {
+                                        recipient.Add(expando.FCM.Token);
+
+                                        deviceList.Add(kf[i].DeviceId);
+                                        useridList.Add(kf[i].UserId.ToString());
+                                    }
                                 }
                             }
                             #endregion
@@ -173,7 +181,13 @@ namespace xFilm5.Bot.Helper
                                 for (int i = 0; i < kt.Count; i++)
                                 {
                                     dynamic expando = JsonConvert.DeserializeObject<ExpandoObject>(kt[i].AuthXml);
-                                    if (expando != null) recipient.Add(expando.FCM.Token);
+                                    if (expando != null)
+                                    {
+                                        recipient.Add(expando.FCM.Token);
+
+                                        deviceList.Add(kt[i].DeviceId);
+                                        useridList.Add(kt[i].UserId.ToString());
+                                    }
                                 }
                             }
                             #endregion
@@ -186,7 +200,13 @@ namespace xFilm5.Bot.Helper
                                 for (int i = 0; i < tw.Count; i++)
                                 {
                                     dynamic expando = JsonConvert.DeserializeObject<ExpandoObject>(tw[i].AuthXml);
-                                    if (expando != null) recipient.Add(expando.FCM.Token);
+                                    if (expando != null)
+                                    {
+                                        recipient.Add(expando.FCM.Token);
+
+                                        deviceList.Add(tw[i].DeviceId);
+                                        useridList.Add(tw[i].UserId.ToString());
+                                    }
                                 }
                             }
                             #endregion
@@ -201,6 +221,23 @@ namespace xFilm5.Bot.Helper
                         var msgBody = String.Format("{0}: {1}", pkVps.OrderHeaderId.ToString(), vps.VpsFileName);
 
                         result = SendPushNotification(Config.FCM_ServerKey, deviceIds, Config.FCM_SenderId, msgTitle, msgBody);
+
+                        #region 有 userid，log it
+                        if (useridList.Count > 0)
+                        {
+                            var devIds = string.Join(",", deviceList.ToArray());
+                            var userIds = string.Join(",", useridList.ToArray());
+                            var hst = new FCMHistory();
+                            hst.MessageTitle = msgTitle;
+                            hst.MessageBody = msgBody;
+                            hst.DeliveredOn = DateTime.Now;
+                            hst.Topic = "Device";
+                            hst.RecipientList = deviceIds;
+                            hst.UserIdList = userIds;
+
+                            var okay = FCMHistoryHelper.WriteHistory(hst);
+                        }
+                        #endregion
                     }
                 }
             }
@@ -218,6 +255,8 @@ namespace xFilm5.Bot.Helper
             bool result = false;
 
             List<string> recipient = new List<string>();
+            List<string> deviceList = new List<string>();       // 2018.03.14 paulus: log 邊個 device 會收到 FCM
+            List<string> useridList = new List<string>();       // 2018.03.14 paulus: log 邊個 user 會收到 FCM
 
             int notifyKF = (int)EnumHelper.User.NotifyType.OnOrder_KF;
             int notifyKT = (int)EnumHelper.User.NotifyType.OnOrder_KT;
@@ -239,7 +278,13 @@ namespace xFilm5.Bot.Helper
                                 for (int i = 0; i < kf.Count; i++)
                                 {
                                     dynamic expando = JsonConvert.DeserializeObject<ExpandoObject>(kf[i].AuthXml);
-                                    if (expando != null) recipient.Add(expando.FCM.Token);
+                                    if (expando != null)
+                                    {
+                                        recipient.Add(expando.FCM.Token);
+
+                                        deviceList.Add(kf[i].DeviceId);
+                                        useridList.Add(kf[i].UserId.ToString());
+                                    }
                                 }
                             }
                             #endregion
@@ -252,7 +297,13 @@ namespace xFilm5.Bot.Helper
                                 for (int i = 0; i < kt.Count; i++)
                                 {
                                     dynamic expando = JsonConvert.DeserializeObject<ExpandoObject>(kt[i].AuthXml);
-                                    if (expando != null) recipient.Add(expando.FCM.Token);
+                                    if (expando != null)
+                                    {
+                                        recipient.Add(expando.FCM.Token);
+
+                                        deviceList.Add(kt[i].DeviceId);
+                                        useridList.Add(kt[i].UserId.ToString());
+                                    }
                                 }
                             }
                             #endregion
@@ -265,7 +316,13 @@ namespace xFilm5.Bot.Helper
                                 for (int i = 0; i < tw.Count; i++)
                                 {
                                     dynamic expando = JsonConvert.DeserializeObject<ExpandoObject>(tw[i].AuthXml);
-                                    if (expando != null) recipient.Add(expando.FCM.Token);
+                                    if (expando != null)
+                                    {
+                                        recipient.Add(expando.FCM.Token);
+
+                                        deviceList.Add(tw[i].DeviceId);
+                                        useridList.Add(tw[i].UserId.ToString());
+                                    }
                                 }
                             }
                             #endregion
@@ -280,6 +337,23 @@ namespace xFilm5.Bot.Helper
                         var msgBody = String.Format("單號：{0}，客名：{1}", orderId.ToString(), order.ClientName);
 
                         result = SendPushNotification(Config.FCM_ServerKey, deviceIds, Config.FCM_SenderId, msgTitle, msgBody);
+
+                        #region 有 userid，log it
+                        if (useridList.Count > 0)
+                        {
+                            var devIds = string.Join(",", deviceList.ToArray());
+                            var userIds = string.Join(",", useridList.ToArray());
+                            var hst = new FCMHistory();
+                            hst.MessageTitle = msgTitle;
+                            hst.MessageBody = msgBody;
+                            hst.DeliveredOn = DateTime.Now;
+                            hst.Topic = "Device";
+                            hst.RecipientList = deviceIds;
+                            hst.UserIdList = userIds;
+
+                            var okay = FCMHistoryHelper.WriteHistory(hst);
+                        }
+                        #endregion
                     }
                 }
             }
@@ -293,11 +367,23 @@ namespace xFilm5.Bot.Helper
 
             var deviceIds = string.Format("/topics/{0}", topic);
 
-            string msgTitle = topic.ToLower() == "everyone" ? "xFilm5 大眾廣播" : "xFilm5 內部廣播";
+            string msgTitle = topic.ToLower() == "everyone" ? "x5 大眾廣播" : "x5 內部廣播";
 
             var msgBody = msg;
 
             result = SendPushNotification(Config.FCM_ServerKey, deviceIds, Config.FCM_SenderId, msgTitle, msgBody);
+
+            #region 2018.03.14 paulus: log it
+            var hst = new FCMHistory();
+            hst.MessageTitle = msgTitle;
+            hst.MessageBody = msgBody;
+            hst.DeliveredOn = DateTime.Now;
+            hst.Topic = topic;
+            hst.RecipientList = "";
+            hst.UserIdList = "";
+
+            var okay = FCMHistoryHelper.WriteHistory(hst);
+            #endregion
 
             return result;
         }

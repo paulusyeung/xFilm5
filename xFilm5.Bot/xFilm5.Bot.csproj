@@ -140,6 +140,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\FCMHelper.cs" />
+    <Compile Include="Helper\FCMHistoryHelper.cs" />
     <Compile Include="Helper\NetworkConnection.cs" />
     <Compile Include="Helper\PrinterHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
