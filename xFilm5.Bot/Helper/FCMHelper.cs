@@ -168,8 +168,9 @@ namespace xFilm5.Bot.Helper
 
                                         if (!(deviceList.Any(x => x.Contains(kf[i].DeviceId))))
                                             deviceList.Add(kf[i].DeviceId);
-                                        if (!(useridList.Any(x => x.Contains(kf[i].UserId.ToString()))))
-                                            useridList.Add(kf[i].UserId.ToString());
+                                        var userSid = UserHelper.GetUserSid(kf[i].UserId);
+                                        if (!(useridList.Any(x => x.Contains(userSid.ToString()))))
+                                            useridList.Add(userSid.ToString());
                                     }
                                 }
                             }
@@ -189,8 +190,9 @@ namespace xFilm5.Bot.Helper
 
                                         if (!(deviceList.Any(x => x.Contains(kt[i].DeviceId))))
                                             deviceList.Add(kt[i].DeviceId);
-                                        if (!(useridList.Any(x => x.Contains(kt[i].UserId.ToString()))))
-                                            useridList.Add(kt[i].UserId.ToString());
+                                        var userSid = UserHelper.GetUserSid(kt[i].UserId);
+                                        if (!(useridList.Any(x => x.Contains(userSid.ToString()))))
+                                            useridList.Add(userSid.ToString());
                                     }
                                 }
                             }
@@ -210,8 +212,9 @@ namespace xFilm5.Bot.Helper
 
                                         if (!(deviceList.Any(x => x.Contains(tw[i].DeviceId))))
                                             deviceList.Add(tw[i].DeviceId);
-                                        if (!(useridList.Any(x => x.Contains(tw[i].UserId.ToString()))))
-                                            useridList.Add(tw[i].UserId.ToString());
+                                        var userSid = UserHelper.GetUserSid(tw[i].UserId);
+                                        if (!(useridList.Any(x => x.Contains(userSid.ToString()))))
+                                            useridList.Add(userSid.ToString());
                                     }
                                 }
                             }
@@ -290,8 +293,9 @@ namespace xFilm5.Bot.Helper
 
                                         if (!(deviceList.Any(x => x.Contains(kf[i].DeviceId))))
                                             deviceList.Add(kf[i].DeviceId);
-                                        if (!(useridList.Any(x => x.Contains(kf[i].UserId.ToString()))))
-                                            useridList.Add(kf[i].UserId.ToString());
+                                        var userSid = UserHelper.GetUserSid(kf[i].UserId);
+                                        if (!(useridList.Any(x => x.Contains(userSid.ToString()))))
+                                            useridList.Add(userSid.ToString());
                                     }
                                 }
                             }
@@ -311,8 +315,9 @@ namespace xFilm5.Bot.Helper
 
                                         if (!(deviceList.Any(x => x.Contains(kt[i].DeviceId))))
                                             deviceList.Add(kt[i].DeviceId);
-                                        if (!(useridList.Any(x => x.Contains(kt[i].UserId.ToString()))))
-                                            useridList.Add(kt[i].UserId.ToString());
+                                        var userSid = UserHelper.GetUserSid(kt[i].UserId);
+                                        if (!(useridList.Any(x => x.Contains(userSid.ToString()))))
+                                            useridList.Add(userSid.ToString());
                                     }
                                 }
                             }
@@ -332,8 +337,9 @@ namespace xFilm5.Bot.Helper
 
                                         if (!(deviceList.Any(x => x.Contains(tw[i].DeviceId))))
                                             deviceList.Add(tw[i].DeviceId);
-                                        if (!(useridList.Any(x => x.Contains(tw[i].UserId.ToString()))))
-                                            useridList.Add(tw[i].UserId.ToString());
+                                        var userSid = UserHelper.GetUserSid(tw[i].UserId);
+                                        if (!(useridList.Any(x => x.Contains(userSid.ToString()))))
+                                            useridList.Add(userSid.ToString());
                                     }
                                 }
                             }
