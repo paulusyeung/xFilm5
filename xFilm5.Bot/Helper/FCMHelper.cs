@@ -166,8 +166,10 @@ namespace xFilm5.Bot.Helper
                                     {
                                         recipient.Add(expando.FCM.Token);
 
-                                        deviceList.Add(kf[i].DeviceId);
-                                        useridList.Add(kf[i].UserId.ToString());
+                                        if (!(deviceList.Any(x => x.Contains(kf[i].DeviceId))))
+                                            deviceList.Add(kf[i].DeviceId);
+                                        if (!(useridList.Any(x => x.Contains(kf[i].UserId.ToString()))))
+                                            useridList.Add(kf[i].UserId.ToString());
                                     }
                                 }
                             }
@@ -185,8 +187,10 @@ namespace xFilm5.Bot.Helper
                                     {
                                         recipient.Add(expando.FCM.Token);
 
-                                        deviceList.Add(kt[i].DeviceId);
-                                        useridList.Add(kt[i].UserId.ToString());
+                                        if (!(deviceList.Any(x => x.Contains(kt[i].DeviceId))))
+                                            deviceList.Add(kt[i].DeviceId);
+                                        if (!(useridList.Any(x => x.Contains(kt[i].UserId.ToString()))))
+                                            useridList.Add(kt[i].UserId.ToString());
                                     }
                                 }
                             }
@@ -204,8 +208,10 @@ namespace xFilm5.Bot.Helper
                                     {
                                         recipient.Add(expando.FCM.Token);
 
-                                        deviceList.Add(tw[i].DeviceId);
-                                        useridList.Add(tw[i].UserId.ToString());
+                                        if (!(deviceList.Any(x => x.Contains(tw[i].DeviceId))))
+                                            deviceList.Add(tw[i].DeviceId);
+                                        if (!(useridList.Any(x => x.Contains(tw[i].UserId.ToString()))))
+                                            useridList.Add(tw[i].UserId.ToString());
                                     }
                                 }
                             }
@@ -282,8 +288,10 @@ namespace xFilm5.Bot.Helper
                                     {
                                         recipient.Add(expando.FCM.Token);
 
-                                        deviceList.Add(kf[i].DeviceId);
-                                        useridList.Add(kf[i].UserId.ToString());
+                                        if (!(deviceList.Any(x => x.Contains(kf[i].DeviceId))))
+                                            deviceList.Add(kf[i].DeviceId);
+                                        if (!(useridList.Any(x => x.Contains(kf[i].UserId.ToString()))))
+                                            useridList.Add(kf[i].UserId.ToString());
                                     }
                                 }
                             }
@@ -301,8 +309,10 @@ namespace xFilm5.Bot.Helper
                                     {
                                         recipient.Add(expando.FCM.Token);
 
-                                        deviceList.Add(kt[i].DeviceId);
-                                        useridList.Add(kt[i].UserId.ToString());
+                                        if (!(deviceList.Any(x => x.Contains(kt[i].DeviceId))))
+                                            deviceList.Add(kt[i].DeviceId);
+                                        if (!(useridList.Any(x => x.Contains(kt[i].UserId.ToString()))))
+                                            useridList.Add(kt[i].UserId.ToString());
                                     }
                                 }
                             }
@@ -320,8 +330,10 @@ namespace xFilm5.Bot.Helper
                                     {
                                         recipient.Add(expando.FCM.Token);
 
-                                        deviceList.Add(tw[i].DeviceId);
-                                        useridList.Add(tw[i].UserId.ToString());
+                                        if (!(deviceList.Any(x => x.Contains(tw[i].DeviceId))))
+                                            deviceList.Add(tw[i].DeviceId);
+                                        if (!(useridList.Any(x => x.Contains(tw[i].UserId.ToString()))))
+                                            useridList.Add(tw[i].UserId.ToString());
                                     }
                                 }
                             }
