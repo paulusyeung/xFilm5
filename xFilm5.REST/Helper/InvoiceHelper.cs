@@ -126,5 +126,66 @@ namespace xFilm5.REST.Helper
                     Helper.BotHelper.PostXprinter(receipt.ReceiptHeaderId, receipt.ClientId);
             }
         }
+
+        public static List<vwReceiptDetailsList_Invoice> SplittedInvoice(List<vwReceiptDetailsList_Invoice> list)
+        {
+            var result = new List<vwReceiptDetailsList_Invoice>();
+
+            var baseMaxAmount = (decimal)2000;
+            var baseInvNumber = list[0].InvoiceNumber;
+            decimal subTotalAmount = 0;
+            int splitCount = 0;
+
+            var curReceiptNumber = String.Empty;
+            var curReceiptAmount = (decimal)0;
+            var curInvoiceNumber = baseInvNumber.ToString() + Convert.ToChar(65 + splitCount);
+            var curInvoiceAmount = (decimal)0;
+            //
+            for (int i = 0; i < list.Count; i++)
+            {
+                var item = list[i];
+
+                if (curReceiptNumber != item.ReceiptNumber)
+                {
+                    #region diff Receipt Number
+                    if (subTotalAmount + item.ReceiptAmount <= baseMaxAmount)
+                    {
+                        #region within safe level
+                        subTotalAmount += item.ReceiptAmount.Value;
+                        #endregion
+                    }
+                    else
+                    {
+                        #region overflow
+                        // 首先將前面啲 InvoiceAmount 更正
+                        list.Where(x => x.InvoiceNumber == curInvoiceNumber).ToList().ForEach(x => x.InvoiceAmount = subTotalAmount);
+                        //
+                        ++splitCount;
+                        curInvoiceNumber = baseInvNumber.ToString() + Convert.ToChar(65 + splitCount);
+                        subTotalAmount = item.ReceiptAmount.Value;
+                        #endregion
+                    }
+                    //
+                    curReceiptNumber = item.ReceiptNumber;
+                    curReceiptAmount = item.ReceiptAmount.Value;
+                    #endregion
+                }
+                else
+                {
+                    #region same Receipt Number, hide Receipt fields
+                    item.ReceiptNumber = "";
+                    item.ReceiptDate = DateTime.Parse("1900-01-01 00:00:00.000");
+                    item.ReceiptAmount = (decimal)0;
+                    #endregion
+                }
+                item.InvoiceNumber = curInvoiceNumber;
+
+                result.Add(item);
+            }
+            // 最後，將最後加嘅 InvoiceAmount 更正
+            result.Where(x => x.InvoiceNumber == curInvoiceNumber).ToList().ForEach(x => x.InvoiceAmount = subTotalAmount);
+
+            return result;
+        }
     }
 }

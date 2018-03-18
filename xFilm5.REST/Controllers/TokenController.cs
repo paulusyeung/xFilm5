@@ -10,7 +10,6 @@ namespace xFilm5.REST.Controllers
 {
     public class TokenController : ApiController
     {
-        /**
         /// <summary>
         /// 將 username + password 放在 header 內
         /// </summary>
@@ -57,7 +56,6 @@ namespace xFilm5.REST.Controllers
 
             throw new HttpResponseException(HttpStatusCode.Unauthorized);
         }
-        */
 
         /// <summary>
         /// 將 username + password 放在 header 內

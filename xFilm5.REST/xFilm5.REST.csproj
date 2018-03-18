@@ -99,7 +99,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Swashbuckle.Core.5.5.3\lib\net40\Swashbuckle.Core.dll</HintPath>
+      <HintPath>..\packages\Swashbuckle.Core.5.6.0\lib\net40\Swashbuckle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
@@ -150,7 +150,10 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\CashierController.cs" />
+    <Compile Include="Controllers\ClientController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\FCMController.cs" />
+    <Compile Include="Controllers\FCMHistoryController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ReceiptController.cs" />
@@ -176,6 +179,12 @@
     <Compile Include="Models\UserEx.cs" />
     <Compile Include="Models\vwOrderPkPrintQueueVpsListEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\InvoiceSplitted.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\InvoiceSplitted.Designer.cs">
+      <DependentUpon>InvoiceSplitted.cs</DependentUpon>
+    </Compile>
     <Compile Include="Reports\Receipt.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -215,6 +224,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Reports\InvoiceSplitted.resx">
+      <DependentUpon>InvoiceSplitted.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\Receipt.resx">
       <DependentUpon>Receipt.cs</DependentUpon>
     </EmbeddedResource>

@@ -1,10 +1,14 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Http;
 using xFilm5.EF6;
 using xFilm5.REST.Filters;
@@ -228,6 +232,133 @@ order by [ClientName]", month);
             */
 
             return response;
+        }
+
+        [HttpGet]
+        [Route("api/Order/Available/Plate/{id:int}")]
+        [JwtAuthentication]
+        public IHttpActionResult GetOrder_AvailablePlate(int id)
+        {
+            using (var ctx = new xFilmEntities())
+            {
+                if (id == 0)
+                {
+                    if (ctx.vwPrintQueueVpsList_AvailablePlate.Any())
+                    {
+                        var list = ctx.vwPrintQueueVpsList_AvailablePlate.OrderBy(x => x.ClientName).ThenBy(x => x.VpsFileName).ToList();
+                        return Json(list);
+                    }
+                }
+                else
+                {
+                    if (ctx.vwPrintQueueVpsList_AvailablePlate.Where(x => x.ClientID == id).Any())
+                    {
+                        var list = ctx.vwPrintQueueVpsList_AvailablePlate.Where(x => x.ClientID == id).OrderBy(x => x.VpsFileName).ToList();
+                        return Json(list);
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        [HttpGet]
+        [Route("api/Order/Available/Film/{id:int}")]
+        [JwtAuthentication]
+        public IHttpActionResult GetOrder_AvailableFilm(int id)
+        {
+            using (var ctx = new xFilmEntities())
+            {
+                if (id == 0)
+                {
+                    if (ctx.vwPrintQueueVpsList_AvailableFilm.Any())
+                    {
+                        var list = ctx.vwPrintQueueVpsList_AvailableFilm.OrderBy(x => x.ClientName).ThenBy(x => x.VpsFileName).ToList();
+                        return Json(list);
+                    }
+                }
+                else
+                {
+                    if (ctx.vwPrintQueueVpsList_AvailableFilm.Where(x => x.ClientID == id).Any())
+                    {
+                        var list = ctx.vwPrintQueueVpsList_AvailableFilm.Where(x => x.ClientID == id).OrderBy(x => x.VpsFileName).ToList();
+                        return Json(list);
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        [HttpGet]
+        [Route("api/Order/Available/Blueprint/{id:int}")]
+        [JwtAuthentication]
+        public IHttpActionResult GetOrder_AvailableBlueprint(int id)
+        {
+            using (var ctx = new xFilmEntities())
+            {
+                if (id == 0)
+                {
+                    if (ctx.vwPrintQueueVpsList_AvailablePlate.Where(x => x.BlueprintOrdered == false).Any())
+                    {
+                        var list = ctx.vwPrintQueueVpsList_AvailablePlate.Where(x => x.BlueprintOrdered == false).OrderBy(x => x.ClientName).ThenBy(x => x.VpsFileName).ToList();
+                        return Json(list);
+                    }
+                }
+                else
+                {
+                    if (ctx.vwPrintQueueVpsList_AvailablePlate.Where(x => x.ClientID == id && x.BlueprintOrdered == false).Any())
+                    {
+                        var list = ctx.vwPrintQueueVpsList_AvailablePlate.Where(x => x.ClientID == id && x.BlueprintOrdered == false).OrderBy(x => x.VpsFileName).ToList();
+                        return Json(list);
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        [HttpPost]
+        [Route("api/Order/Placing/Plate/{id}")]
+        [JwtAuthentication]
+        public async Task<IHttpActionResult> PostPlacingOrder_Plate(string id)
+        {
+            var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+            string userSid = identity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault();
+
+            var json = Request.Content.ReadAsStringAsync().Result;
+            var items = JsonConvert.DeserializeObject<List<vwPrintQueueVpsList_AvailablePlate>>(json);
+
+            int clientId;
+            clientId = Int32.TryParse(id, out clientId) ? clientId : 0;
+            clientId = (clientId == 0) ? items[0].ClientID : clientId;
+
+            using (var ctx = new xFilmEntities())
+            {
+                var sid = Guid.Parse(userSid);
+                var user = ctx.User.Where(x => x.UserSid == sid).SingleOrDefault();
+                if (user != null)
+                {
+                    /**
+                    var receiptId = ReceiptHelper.SaveReceipt(items, user.UserId, CommonHelper.Enums.PaymentType.OnAccount);
+                    if (receiptId != 0)
+                    {
+                        // 由 xFilm5.Bot 負責打印小票據
+                        if (Helper.ClientHelper.IsReceiptSlip(clientId))
+                        {
+                            Helper.BotHelper.PostXprinter(receiptId, clientId);
+                        }
+
+                        // 由 xFilm5.Bot 負責 email 張單
+                        var recipient = ClientHelper.GetEmailRecipient(clientId);
+                        BotHelper.PostEmailReceipt(receiptId, recipient, clientId);
+
+                        return Ok();
+                    }
+                    */
+                }
+            }
+            return NotFound();
         }
     }
 }

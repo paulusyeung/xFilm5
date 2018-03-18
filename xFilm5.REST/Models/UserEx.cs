@@ -10,5 +10,6 @@ namespace xFilm5.REST.Models
     public partial class UserEx : User
     {
         public int UserRole { get; set; }
+        public String UserRoleName{ get; set; }
     }
 }

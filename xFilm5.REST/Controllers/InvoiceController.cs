@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using xFilm5.EF6;
 using xFilm5.REST.Filters;
+using xFilm5.REST.Helper;
 
 namespace xFilm5.REST.Controllers
 {
@@ -249,6 +251,76 @@ order by [InvoiceNumber]", _DateZero.ToString("yyyy-MM-dd"), keyword);
                 response = Request.CreateErrorResponse(HttpStatusCode.NotFound, err);
             }
             */
+
+            return response;
+        }
+
+        /// <summary>
+        /// 2018.03.17 paulus: 將張單分拆成 ABC，每張唔可以超出上限金額，專門俾 Power Logistics Limited 用
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("api/Invoice/pdf/splitted/{id:int}")]
+        [JwtAuthentication]
+        public HttpResponseMessage GetInvoicePdf_Splitted(int id)
+        {   // ref: https://stackoverflow.com/questions/36042614/how-to-return-a-pdf-from-a-web-api-application
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.BadRequest);
+
+            using (var ctx = new EF6.xFilmEntities())
+            {
+                var hasrow = ctx.Acct_INMaster.Where(x => x.ID == id).Any();
+                if (hasrow)
+                {
+                    var docName = String.Format("Invoice_{0}.pdf", id.ToString());
+                    var list = ctx.vwReceiptDetailsList_Invoice.Where(x => x.INMasterId == id).OrderBy(x => x.ItemDescription).ToList();
+                    var splitted = (InvoiceHelper.SplittedInvoice(list)).OrderBy(x => x.ItemDescription);
+
+                    var invoices = splitted.GroupBy(x => x.InvoiceNumber).Select(x => x.First()).ToList();
+
+                    Reports.InvoiceSplitted rptInvoice = new Reports.InvoiceSplitted();
+                    rptInvoice.DataSource = splitted.Where(x => x.InvoiceNumber == invoices[0].InvoiceNumber).ToList();
+                    rptInvoice.CreateDocument();
+                    rptInvoice.PrintingSystem.ContinuousPageNumbering = false;
+                    for (int i = 1; i < invoices.Count; i++)
+                    {
+                        Reports.InvoiceSplitted rpt = new Reports.InvoiceSplitted();
+                        rpt.DataSource = splitted.Where(x => x.InvoiceNumber == invoices[i].InvoiceNumber).ToList();
+                        rpt.CreateDocument();
+                        rpt.PrintingSystem.ContinuousPageNumbering = false;
+                        rptInvoice.Pages.AddRange(rpt.Pages);
+                    }
+                    
+                    MemoryStream memStream = new System.IO.MemoryStream();
+                    //rptOrder.ExportOptions.Pdf.NeverEmbeddedFonts = "MingLiU;Microsoft YaHei";
+                    rptInvoice.ExportToPdf(memStream);
+                    //
+
+                    byte[] buffer = new byte[0];
+                    buffer = memStream.GetBuffer();
+                    var contentLength = buffer.Length;
+
+                    //200
+                    //successful
+                    var statuscode = HttpStatusCode.OK;
+                    response = Request.CreateResponse(statuscode);
+                    response.Content = new StreamContent(new MemoryStream(buffer));
+                    response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
+                    response.Content.Headers.ContentLength = contentLength;
+
+                    ContentDispositionHeaderValue contentDisposition = null;
+                    if (ContentDispositionHeaderValue.TryParse("inline; filename=" + docName, out contentDisposition))
+                    {
+                        response.Content.Headers.ContentDisposition = contentDisposition;
+                    }
+                }
+                else
+                {
+                    var message = String.Format("Unable to find resource. Resource \"{0}\" may not exist.", id.ToString());
+                    HttpError err = new HttpError(message);
+                    response = Request.CreateErrorResponse(HttpStatusCode.NotFound, err);
+                }
+            }
 
             return response;
         }
