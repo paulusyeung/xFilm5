@@ -219,6 +219,9 @@
     <Compile Include="vwReceiptDetailsList_Ex.cs">
       <DependentUpon>xFilmModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="vwReceiptDetailsList_Invoice.cs">
+      <DependentUpon>xFilmModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="vwUserNotificationList.cs">
       <DependentUpon>xFilmModel.tt</DependentUpon>
     </Compile>

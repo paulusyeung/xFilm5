@@ -915,6 +915,15 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwPrintQueue_LifeCycleListWithWo
 warning 6002: The table/view 'xFilm3_NuStar.dbo.vwPrintQueueVpsList_AvailableFilm' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vwPrintQueueVpsList_AvailableFilm">
           <Key>
+            
+            
+            
+            
+            
+            
+            
+            
+            
             <PropertyRef Name="VpsFileName" />
             
             
@@ -941,7 +950,18 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwPrintQueueVpsList_AvailableFil
 warning 6002: The table/view 'xFilm3_NuStar.dbo.vwPrintQueueVpsList_AvailablePlate' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vwPrintQueueVpsList_AvailablePlate">
           <Key>
+            
+            
+            
+            
+            
+            
+            
+            
+            
             <PropertyRef Name="VpsFileName" />
+            
+            
           </Key>
           <Property Name="ClientID" Type="int" Nullable="false" />
           <Property Name="OrderID" Type="int" Nullable="false" />
@@ -1076,6 +1096,50 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
           <Property Name="IsReady" Type="bit" Nullable="false" />
           <Property Name="IsReceived" Type="bit" Nullable="false" />
           <Property Name="IsBilled" Type="bit" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Invoice' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vwReceiptDetailsList_Invoice">
+          <Key>
+            <PropertyRef Name="InvoiceNumber" />
+            <PropertyRef Name="ItemDescription" />
+          </Key>
+          <Property Name="ClientId" Type="int" Nullable="false" />
+          <Property Name="ClientName" Type="nvarchar" MaxLength="128" />
+          <Property Name="ClientAddress" Type="nvarchar" MaxLength="255" />
+          <Property Name="ClientTel" Type="nvarchar" MaxLength="32" />
+          <Property Name="ClientFax" Type="nvarchar" MaxLength="32" />
+          <Property Name="ReceiptHeaderId" Type="int" Nullable="false" />
+          <Property Name="ReceiptNumber" Type="nvarchar" MaxLength="16" />
+          <Property Name="ReceiptDate" Type="datetime" />
+          <Property Name="ReceiptAmount" Type="money" />
+          <Property Name="PaymentType" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="INMasterId" Type="int" />
+          <Property Name="ClientUserId" Type="int" />
+          <Property Name="ClientUserName" Type="nvarchar" MaxLength="64" />
+          <Property Name="Paid" Type="bit" Nullable="false" />
+          <Property Name="PaidOn" Type="datetime" />
+          <Property Name="PaidAmount" Type="money" Nullable="false" />
+          <Property Name="PaidRef" Type="nvarchar" MaxLength="128" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="255" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="64" />
+          <Property Name="ModifiedOn" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedBy" Type="nvarchar" MaxLength="64" />
+          <Property Name="ReceiptDetailId" Type="int" Nullable="false" />
+          <Property Name="ItemCode" Type="nvarchar" MaxLength="16" />
+          <Property Name="ItemDescription" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="ItemQty" Type="smallint" />
+          <Property Name="ItemUoM" Type="nvarchar" MaxLength="32" />
+          <Property Name="ItemUnitAmt" Type="money" />
+          <Property Name="ItemDiscount" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="ItemAmount" Type="money" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="int" Nullable="false" />
+          <Property Name="OrderHeaderId" Type="int" />
+          <Property Name="InvoiceNumber" Type="int" Nullable="false" />
+          <Property Name="InvoiceAmount" Type="money" />
+          <Property Name="InvoiceDate" Type="datetime" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -2015,6 +2079,46 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
     [vwReceiptDetailsList_Ex].[IsReceived] AS [IsReceived], 
     [vwReceiptDetailsList_Ex].[IsBilled] AS [IsBilled]
     FROM [dbo].[vwReceiptDetailsList_Ex] AS [vwReceiptDetailsList_Ex]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vwReceiptDetailsList_Invoice" EntityType="Self.vwReceiptDetailsList_Invoice" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vwReceiptDetailsList_Invoice].[ClientId] AS [ClientId], 
+    [vwReceiptDetailsList_Invoice].[ClientName] AS [ClientName], 
+    [vwReceiptDetailsList_Invoice].[ClientAddress] AS [ClientAddress], 
+    [vwReceiptDetailsList_Invoice].[ClientTel] AS [ClientTel], 
+    [vwReceiptDetailsList_Invoice].[ClientFax] AS [ClientFax], 
+    [vwReceiptDetailsList_Invoice].[ReceiptHeaderId] AS [ReceiptHeaderId], 
+    [vwReceiptDetailsList_Invoice].[ReceiptNumber] AS [ReceiptNumber], 
+    [vwReceiptDetailsList_Invoice].[ReceiptDate] AS [ReceiptDate], 
+    [vwReceiptDetailsList_Invoice].[ReceiptAmount] AS [ReceiptAmount], 
+    [vwReceiptDetailsList_Invoice].[PaymentType] AS [PaymentType], 
+    [vwReceiptDetailsList_Invoice].[INMasterId] AS [INMasterId], 
+    [vwReceiptDetailsList_Invoice].[ClientUserId] AS [ClientUserId], 
+    [vwReceiptDetailsList_Invoice].[ClientUserName] AS [ClientUserName], 
+    [vwReceiptDetailsList_Invoice].[Paid] AS [Paid], 
+    [vwReceiptDetailsList_Invoice].[PaidOn] AS [PaidOn], 
+    [vwReceiptDetailsList_Invoice].[PaidAmount] AS [PaidAmount], 
+    [vwReceiptDetailsList_Invoice].[PaidRef] AS [PaidRef], 
+    [vwReceiptDetailsList_Invoice].[Remarks] AS [Remarks], 
+    [vwReceiptDetailsList_Invoice].[Status] AS [Status], 
+    [vwReceiptDetailsList_Invoice].[CreatedOn] AS [CreatedOn], 
+    [vwReceiptDetailsList_Invoice].[CreatedBy] AS [CreatedBy], 
+    [vwReceiptDetailsList_Invoice].[ModifiedOn] AS [ModifiedOn], 
+    [vwReceiptDetailsList_Invoice].[ModifiedBy] AS [ModifiedBy], 
+    [vwReceiptDetailsList_Invoice].[ReceiptDetailId] AS [ReceiptDetailId], 
+    [vwReceiptDetailsList_Invoice].[ItemCode] AS [ItemCode], 
+    [vwReceiptDetailsList_Invoice].[ItemDescription] AS [ItemDescription], 
+    [vwReceiptDetailsList_Invoice].[ItemQty] AS [ItemQty], 
+    [vwReceiptDetailsList_Invoice].[ItemUoM] AS [ItemUoM], 
+    [vwReceiptDetailsList_Invoice].[ItemUnitAmt] AS [ItemUnitAmt], 
+    [vwReceiptDetailsList_Invoice].[ItemDiscount] AS [ItemDiscount], 
+    [vwReceiptDetailsList_Invoice].[ItemAmount] AS [ItemAmount], 
+    [vwReceiptDetailsList_Invoice].[OrderPkPrintQueueVpsId] AS [OrderPkPrintQueueVpsId], 
+    [vwReceiptDetailsList_Invoice].[OrderHeaderId] AS [OrderHeaderId], 
+    [vwReceiptDetailsList_Invoice].[InvoiceNumber] AS [InvoiceNumber], 
+    [vwReceiptDetailsList_Invoice].[InvoiceAmount] AS [InvoiceAmount], 
+    [vwReceiptDetailsList_Invoice].[InvoiceDate] AS [InvoiceDate]
+    FROM [dbo].[vwReceiptDetailsList_Invoice] AS [vwReceiptDetailsList_Invoice]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="vwUserNotificationList" EntityType="Self.vwUserNotificationList" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -3531,6 +3635,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
           <EntitySet Name="vwClientUserList" EntityType="xFilmModel.vwClientUserList" />
           <EntitySet Name="vwPrintQueueVpsList_AvailableFilm" EntityType="xFilmModel.vwPrintQueueVpsList_AvailableFilm" />
           <EntitySet Name="vwPrintQueueVpsList_AvailablePlate" EntityType="xFilmModel.vwPrintQueueVpsList_AvailablePlate" />
+          <EntitySet Name="vwReceiptDetailsList_Invoice" EntityType="xFilmModel.vwReceiptDetailsList_Invoice" />
         </EntityContainer>
         <EntityType Name="vwReceiptDetailsList_Ex">
           <Key>
@@ -3996,6 +4101,48 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
           <Property Name="VpsRetired" Type="Boolean" />
           <Property Name="VpsAge" Type="Int32" />
           <Property Name="ClientName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="vwReceiptDetailsList_Invoice">
+          <Key>
+            <PropertyRef Name="InvoiceNumber" />
+            <PropertyRef Name="ItemDescription" />
+          </Key>
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="ClientName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ClientAddress" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ClientTel" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="ClientFax" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiptHeaderId" Type="Int32" Nullable="false" />
+          <Property Name="ReceiptNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiptDate" Type="DateTime" Precision="3" />
+          <Property Name="ReceiptAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="PaymentType" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="INMasterId" Type="Int32" />
+          <Property Name="ClientUserId" Type="Int32" />
+          <Property Name="ClientUserName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Paid" Type="Boolean" Nullable="false" />
+          <Property Name="PaidOn" Type="DateTime" Precision="3" />
+          <Property Name="PaidAmount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="PaidRef" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Remarks" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="ModifiedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedBy" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiptDetailId" Type="Int32" Nullable="false" />
+          <Property Name="ItemCode" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="ItemDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ItemQty" Type="Int16" />
+          <Property Name="ItemUoM" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="ItemUnitAmt" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ItemDiscount" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="ItemAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="OrderPkPrintQueueVpsId" Type="Int32" Nullable="false" />
+          <Property Name="OrderHeaderId" Type="Int32" />
+          <Property Name="InvoiceNumber" Type="Int32" Nullable="false" />
+          <Property Name="InvoiceAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="InvoiceDate" Type="DateTime" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -5023,6 +5170,48 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
                 <ScalarProperty Name="CupsJobID" ColumnName="CupsJobID" />
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vwReceiptDetailsList_Invoice">
+            <EntityTypeMapping TypeName="xFilmModel.vwReceiptDetailsList_Invoice">
+              <MappingFragment StoreEntitySet="vwReceiptDetailsList_Invoice">
+                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+                <ScalarProperty Name="InvoiceAmount" ColumnName="InvoiceAmount" />
+                <ScalarProperty Name="InvoiceNumber" ColumnName="InvoiceNumber" />
+                <ScalarProperty Name="OrderHeaderId" ColumnName="OrderHeaderId" />
+                <ScalarProperty Name="OrderPkPrintQueueVpsId" ColumnName="OrderPkPrintQueueVpsId" />
+                <ScalarProperty Name="ItemAmount" ColumnName="ItemAmount" />
+                <ScalarProperty Name="ItemDiscount" ColumnName="ItemDiscount" />
+                <ScalarProperty Name="ItemUnitAmt" ColumnName="ItemUnitAmt" />
+                <ScalarProperty Name="ItemUoM" ColumnName="ItemUoM" />
+                <ScalarProperty Name="ItemQty" ColumnName="ItemQty" />
+                <ScalarProperty Name="ItemDescription" ColumnName="ItemDescription" />
+                <ScalarProperty Name="ItemCode" ColumnName="ItemCode" />
+                <ScalarProperty Name="ReceiptDetailId" ColumnName="ReceiptDetailId" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="PaidRef" ColumnName="PaidRef" />
+                <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
+                <ScalarProperty Name="PaidOn" ColumnName="PaidOn" />
+                <ScalarProperty Name="Paid" ColumnName="Paid" />
+                <ScalarProperty Name="ClientUserName" ColumnName="ClientUserName" />
+                <ScalarProperty Name="ClientUserId" ColumnName="ClientUserId" />
+                <ScalarProperty Name="INMasterId" ColumnName="INMasterId" />
+                <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
+                <ScalarProperty Name="ReceiptAmount" ColumnName="ReceiptAmount" />
+                <ScalarProperty Name="ReceiptDate" ColumnName="ReceiptDate" />
+                <ScalarProperty Name="ReceiptNumber" ColumnName="ReceiptNumber" />
+                <ScalarProperty Name="ReceiptHeaderId" ColumnName="ReceiptHeaderId" />
+                <ScalarProperty Name="ClientFax" ColumnName="ClientFax" />
+                <ScalarProperty Name="ClientTel" ColumnName="ClientTel" />
+                <ScalarProperty Name="ClientAddress" ColumnName="ClientAddress" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
