@@ -1102,6 +1102,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Invoice' do
         <EntityType Name="vwReceiptDetailsList_Invoice">
           <Key>
             <PropertyRef Name="InvoiceNumber" />
+            <PropertyRef Name="INMasterId" />
             <PropertyRef Name="ItemDescription" />
           </Key>
           <Property Name="ClientId" Type="int" Nullable="false" />
@@ -1114,7 +1115,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Invoice' do
           <Property Name="ReceiptDate" Type="datetime" />
           <Property Name="ReceiptAmount" Type="money" />
           <Property Name="PaymentType" Type="nvarchar" MaxLength="32" Nullable="false" />
-          <Property Name="INMasterId" Type="int" />
+          <Property Name="INMasterId" Type="int" Nullable="false" />
           <Property Name="ClientUserId" Type="int" />
           <Property Name="ClientUserName" Type="nvarchar" MaxLength="64" />
           <Property Name="Paid" Type="bit" Nullable="false" />
@@ -1137,9 +1138,9 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Invoice' do
           <Property Name="ItemAmount" Type="money" />
           <Property Name="OrderPkPrintQueueVpsId" Type="int" Nullable="false" />
           <Property Name="OrderHeaderId" Type="int" />
-          <Property Name="InvoiceNumber" Type="int" Nullable="false" />
+          <Property Name="InvoiceNumber" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="InvoiceAmount" Type="money" />
-          <Property Name="InvoiceDate" Type="datetime" />
+          <Property Name="InvoiceDate" Type="nvarchar" MaxLength="10" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -4105,6 +4106,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
         <EntityType Name="vwReceiptDetailsList_Invoice">
           <Key>
             <PropertyRef Name="InvoiceNumber" />
+            <PropertyRef Name="INMasterId" />
             <PropertyRef Name="ItemDescription" />
           </Key>
           <Property Name="ClientId" Type="Int32" Nullable="false" />
@@ -4117,7 +4119,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
           <Property Name="ReceiptDate" Type="DateTime" Precision="3" />
           <Property Name="ReceiptAmount" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="PaymentType" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
-          <Property Name="INMasterId" Type="Int32" />
+          <Property Name="INMasterId" Type="Int32" Nullable="false" />
           <Property Name="ClientUserId" Type="Int32" />
           <Property Name="ClientUserName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
           <Property Name="Paid" Type="Boolean" Nullable="false" />
@@ -4140,9 +4142,9 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
           <Property Name="ItemAmount" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="OrderPkPrintQueueVpsId" Type="Int32" Nullable="false" />
           <Property Name="OrderHeaderId" Type="Int32" />
-          <Property Name="InvoiceNumber" Type="Int32" Nullable="false" />
+          <Property Name="InvoiceNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="InvoiceAmount" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="InvoiceDate" Type="DateTime" Precision="3" />
+          <Property Name="InvoiceDate" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>

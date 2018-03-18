@@ -24,7 +24,7 @@ namespace xFilm5.EF6
         public Nullable<System.DateTime> ReceiptDate { get; set; }
         public Nullable<decimal> ReceiptAmount { get; set; }
         public string PaymentType { get; set; }
-        public Nullable<int> INMasterId { get; set; }
+        public int INMasterId { get; set; }
         public Nullable<int> ClientUserId { get; set; }
         public string ClientUserName { get; set; }
         public bool Paid { get; set; }
@@ -47,8 +47,8 @@ namespace xFilm5.EF6
         public Nullable<decimal> ItemAmount { get; set; }
         public int OrderPkPrintQueueVpsId { get; set; }
         public Nullable<int> OrderHeaderId { get; set; }
-        public int InvoiceNumber { get; set; }
+        public string InvoiceNumber { get; set; }
         public Nullable<decimal> InvoiceAmount { get; set; }
-        public Nullable<System.DateTime> InvoiceDate { get; set; }
+        public string InvoiceDate { get; set; }
     }
 }
