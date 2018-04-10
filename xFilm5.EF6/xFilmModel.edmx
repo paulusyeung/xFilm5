@@ -576,6 +576,40 @@
           <Property Name="Name" Type="nvarchar" MaxLength="32" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'xFilm3_NuStar.dbo.vwClientAddressList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vwClientAddressList">
+          <Key>
+            <PropertyRef Name="ClientId" />
+            <PropertyRef Name="AddressId" />
+            <PropertyRef Name="PrimaryAddr" />
+          </Key>
+          <Property Name="ClientId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="128" />
+          <Property Name="AddressId" Type="int" Nullable="false" />
+          <Property Name="PrimaryAddr" Type="bit" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="255" />
+          <Property Name="Tel" Type="nvarchar" MaxLength="32" />
+          <Property Name="Fax" Type="nvarchar" MaxLength="32" />
+          <Property Name="ContactPerson" Type="nvarchar" MaxLength="64" />
+          <Property Name="Mobile" Type="nvarchar" MaxLength="32" />
+          <Property Name="Pager" Type="nvarchar" MaxLength="32" />
+          <Property Name="SMS" Type="nvarchar" MaxLength="32" />
+          <Property Name="SMS_Lang" Type="int" />
+          <Property Name="PrimaryUser" Type="bit" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="64" />
+          <Property Name="Password" Type="nvarchar" MaxLength="32" />
+          <Property Name="SecurityLevel" Type="smallint" />
+          <Property Name="CreditLimit" Type="smallint" />
+          <Property Name="PaymentTerms" Type="smallint" />
+          <Property Name="PaymentType" Type="smallint" />
+          <Property Name="PaymentTypeName" Type="nvarchar" MaxLength="32" />
+          <Property Name="PIN" Type="nvarchar" MaxLength="16" />
+          <Property Name="Branch" Type="int" />
+          <Property Name="BranchName" Type="nvarchar" MaxLength="64" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="Status" Type="smallint" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'xFilm3_NuStar.dbo.vwClientList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vwClientList">
           <Key>
@@ -1101,9 +1135,19 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Ex' does no
 warning 6002: The table/view 'xFilm3_NuStar.dbo.vwReceiptDetailsList_Invoice' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vwReceiptDetailsList_Invoice">
           <Key>
-            <PropertyRef Name="InvoiceNumber" />
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             <PropertyRef Name="INMasterId" />
             <PropertyRef Name="ItemDescription" />
+            <PropertyRef Name="InvoiceNumber" />
           </Key>
           <Property Name="ClientId" Type="int" Nullable="false" />
           <Property Name="ClientName" Type="nvarchar" MaxLength="128" />
@@ -1718,6 +1762,35 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
           <EntitySet Name="UserPreference" EntityType="Self.UserPreference" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="X_Counter" EntityType="Self.X_Counter" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Z_WebColor" EntityType="Self.Z_WebColor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vwClientAddressList" EntityType="Self.vwClientAddressList" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vwClientAddressList].[ClientId] AS [ClientId], 
+    [vwClientAddressList].[Name] AS [Name], 
+    [vwClientAddressList].[AddressId] AS [AddressId], 
+    [vwClientAddressList].[PrimaryAddr] AS [PrimaryAddr], 
+    [vwClientAddressList].[Address] AS [Address], 
+    [vwClientAddressList].[Tel] AS [Tel], 
+    [vwClientAddressList].[Fax] AS [Fax], 
+    [vwClientAddressList].[ContactPerson] AS [ContactPerson], 
+    [vwClientAddressList].[Mobile] AS [Mobile], 
+    [vwClientAddressList].[Pager] AS [Pager], 
+    [vwClientAddressList].[SMS] AS [SMS], 
+    [vwClientAddressList].[SMS_Lang] AS [SMS_Lang], 
+    [vwClientAddressList].[PrimaryUser] AS [PrimaryUser], 
+    [vwClientAddressList].[Email] AS [Email], 
+    [vwClientAddressList].[Password] AS [Password], 
+    [vwClientAddressList].[SecurityLevel] AS [SecurityLevel], 
+    [vwClientAddressList].[CreditLimit] AS [CreditLimit], 
+    [vwClientAddressList].[PaymentTerms] AS [PaymentTerms], 
+    [vwClientAddressList].[PaymentType] AS [PaymentType], 
+    [vwClientAddressList].[PaymentTypeName] AS [PaymentTypeName], 
+    [vwClientAddressList].[PIN] AS [PIN], 
+    [vwClientAddressList].[Branch] AS [Branch], 
+    [vwClientAddressList].[BranchName] AS [BranchName], 
+    [vwClientAddressList].[CreatedOn] AS [CreatedOn], 
+    [vwClientAddressList].[Status] AS [Status]
+    FROM [dbo].[vwClientAddressList] AS [vwClientAddressList]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="vwClientList" EntityType="Self.vwClientList" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [vwClientList].[ID] AS [ID], 
@@ -3637,6 +3710,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
           <EntitySet Name="vwPrintQueueVpsList_AvailableFilm" EntityType="xFilmModel.vwPrintQueueVpsList_AvailableFilm" />
           <EntitySet Name="vwPrintQueueVpsList_AvailablePlate" EntityType="xFilmModel.vwPrintQueueVpsList_AvailablePlate" />
           <EntitySet Name="vwReceiptDetailsList_Invoice" EntityType="xFilmModel.vwReceiptDetailsList_Invoice" />
+          <EntitySet Name="vwClientAddressList" EntityType="xFilmModel.vwClientAddressList" />
         </EntityContainer>
         <EntityType Name="vwReceiptDetailsList_Ex">
           <Key>
@@ -4145,6 +4219,38 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
           <Property Name="InvoiceNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="InvoiceAmount" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="InvoiceDate" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="vwClientAddressList">
+          <Key>
+            <PropertyRef Name="ClientId" />
+            <PropertyRef Name="AddressId" />
+            <PropertyRef Name="PrimaryAddr" />
+          </Key>
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="AddressId" Type="Int32" Nullable="false" />
+          <Property Name="PrimaryAddr" Type="Boolean" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Tel" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="Fax" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="ContactPerson" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Mobile" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="Pager" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="SMS" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="SMS_Lang" Type="Int32" />
+          <Property Name="PrimaryUser" Type="Boolean" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityLevel" Type="Int16" />
+          <Property Name="CreditLimit" Type="Int16" />
+          <Property Name="PaymentTerms" Type="Int16" />
+          <Property Name="PaymentType" Type="Int16" />
+          <Property Name="PaymentTypeName" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="PIN" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Branch" Type="Int32" />
+          <Property Name="BranchName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int16" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -5213,6 +5319,37 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
                 <ScalarProperty Name="ClientTel" ColumnName="ClientTel" />
                 <ScalarProperty Name="ClientAddress" ColumnName="ClientAddress" />
                 <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vwClientAddressList">
+            <EntityTypeMapping TypeName="xFilmModel.vwClientAddressList">
+              <MappingFragment StoreEntitySet="vwClientAddressList">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+                <ScalarProperty Name="Branch" ColumnName="Branch" />
+                <ScalarProperty Name="PIN" ColumnName="PIN" />
+                <ScalarProperty Name="PaymentTypeName" ColumnName="PaymentTypeName" />
+                <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
+                <ScalarProperty Name="PaymentTerms" ColumnName="PaymentTerms" />
+                <ScalarProperty Name="CreditLimit" ColumnName="CreditLimit" />
+                <ScalarProperty Name="SecurityLevel" ColumnName="SecurityLevel" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PrimaryUser" ColumnName="PrimaryUser" />
+                <ScalarProperty Name="SMS_Lang" ColumnName="SMS_Lang" />
+                <ScalarProperty Name="SMS" ColumnName="SMS" />
+                <ScalarProperty Name="Pager" ColumnName="Pager" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="PrimaryAddr" ColumnName="PrimaryAddr" />
+                <ScalarProperty Name="AddressId" ColumnName="AddressId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ClientId" ColumnName="ClientId" />
               </MappingFragment>
             </EntityTypeMapping>
