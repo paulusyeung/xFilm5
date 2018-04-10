@@ -114,5 +114,36 @@ namespace xFilm5.REST.Controllers
 
             return NotFound();
         }
+
+        /// <summary>
+        /// Get dbo.vwClientAddressList for attached id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("api/Client/Address/{id:int}")]
+        [JwtAuthentication]
+        public IHttpActionResult GetClientAddress(int id)
+        {
+            var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+            Guid userSid = Guid.Empty;
+            userSid = Guid.TryParse(identity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault(), out userSid) ? userSid : Guid.Empty;
+
+            using (var ctx = new xFilmEntities())
+            {
+                ctx.Configuration.LazyLoadingEnabled = false;
+                try
+                {
+                    var client = ctx.vwClientAddressList.Where(x => x.ClientId == id).OrderByDescending(x => x.PrimaryAddr).ThenBy(x => x.AddressId).ToList();
+                    if (client != null)
+                    {
+                        return Json(client);
+                    }
+                }
+                catch { }
+            }
+
+            return NotFound();
+        }
     }
 }
