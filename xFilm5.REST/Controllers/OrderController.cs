@@ -119,19 +119,34 @@ order by [ClientName]", month);
         }
 
         [HttpGet]
-        [Route("api/Order/ByKeyword/{keyword}")]
+        [Route("api/Order/ByKeyword/{id:int}/{keyword}")]
         [JwtAuthentication]
-        public IHttpActionResult GetOrderByKeyword(String keyword)
+        public IHttpActionResult GetOrderByKeyword(int id, String keyword)
         {
             if ((keyword != "") && (keyword.Length >= 3))
             {
                 #region All
                 using (var ctx = new xFilmEntities())
                 {
-                    var list = ctx.vwOrderList.Where(x => x.OrderTypeID >= 6 
-                        && (x.OrderID.ToString().Contains(keyword) || x.ClientID.ToString().Contains(keyword) || x.ClientName.Contains(keyword) || x.DateReceived.Contains(keyword) || x.Remarks.Contains(keyword)))
-                        .OrderBy(x => x.OrderID).ToList();
-                    return Json(list);
+                    if (id == 0)
+                    {
+                        #region Staff, all Client
+                        var list = ctx.vwOrderList.Where(x => x.OrderTypeID >= 6
+                            && (x.OrderID.ToString().Contains(keyword) || x.ClientID.ToString().Contains(keyword) || x.ClientName.Contains(keyword) || x.DateReceived.Contains(keyword) || x.Remarks.Contains(keyword)))
+                            .OrderBy(x => x.OrderID).ToList();
+                        return Json(list);
+                        #endregion
+                    }
+                    else
+                    {
+                        #region Client, one client
+                        var list = ctx.vwOrderList.Where(x => x.OrderTypeID >= 6
+                            && x.ClientID == id
+                            && (x.OrderID.ToString().Contains(keyword) || x.ClientName.Contains(keyword) || x.DateReceived.Contains(keyword) || x.Remarks.Contains(keyword)))
+                            .OrderBy(x => x.OrderID).ToList();
+                        return Json(list);
+                        #endregion
+                    }
                 }
                 #endregion
             }

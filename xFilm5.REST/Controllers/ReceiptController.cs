@@ -450,16 +450,19 @@ SELECT TOP 100 PERCENT [ClientId]
         }
 
         [HttpGet]
-        [Route("api/Receipt/ByKeyword/{keyword}")]
+        [Route("api/Receipt/ByKeyword/{id:int}/{keyword}")]
         [JwtAuthentication]
-        public IHttpActionResult GetReceiptByKeyword(String keyword)
+        public IHttpActionResult GetReceiptByKeyword(int id, String keyword)
         {
             if ((keyword != "") && (keyword.Length >= 3))
             {
                 #region All
                 using (var ctx = new xFilmEntities())
                 {
-                    var qry = String.Format(@"
+                    if (id == 0)
+                    {
+                        #region Staff, all client
+                        var qry = String.Format(@"
 select [ClientId]
       ,[ClientName]
       ,[ClientAddress]
@@ -553,8 +556,111 @@ SELECT TOP 100 PERCENT [ClientId]
   ) as oops
   where Ln = 1
   order by [ReceiptNumber]", keyword);
-                    var list = ctx.Database.SqlQuery<vwReceiptDetailsList_Ex>(qry).ToList();
-                    return Json(list);
+                        var list = ctx.Database.SqlQuery<vwReceiptDetailsList_Ex>(qry).ToList();
+                        return Json(list);
+                        #endregion
+                    }
+                    else
+                    {
+                        #region client, one client
+                        var qry = String.Format(@"
+select [ClientId]
+      ,[ClientName]
+      ,[ClientAddress]
+      ,[ClientTel]
+      ,[ClientFax]
+      ,[ReceiptHeaderId]
+      ,[ReceiptNumber]
+      ,[ReceiptDate]
+      ,[ReceiptAmount]
+      ,[PaymentType]
+      ,[INMasterId]
+      ,[ClientUserId]
+      ,[ClientUserName]
+      ,[Paid]
+      ,[PaidOn]
+      ,[PaidAmount]
+      ,[PaidRef]
+      ,[Remarks]
+      ,[Status]
+      ,[CreatedOn]
+      ,[CreatedBy]
+      ,[ModifiedOn]
+      ,[ModifiedBy]
+      ,[ReceiptDetailId]
+      ,[ItemCode]
+      ,[ItemDescription]
+      ,[ItemQty]
+      ,[ItemUoM]
+      ,[ItemUnitAmt]
+      ,[ItemDiscount]
+      ,[ItemAmount]
+      ,[OrderPkPrintQueueVpsId]
+      ,[OrderHeaderId]
+      ,[OrderedOn]
+      ,[OrderedClientUserId]
+      ,[OrderedClientUserName]
+      ,[PrintQueueVpsId]
+      ,[CheckedPlate]
+      ,[CheckedCip3]
+      ,[CheckedBlueprint]
+      ,[IsReady]
+      ,[IsReceived]
+      ,[IsBilled]
+from (
+SELECT TOP 100 PERCENT [ClientId]
+      ,[ClientName]
+      ,[ClientAddress]
+      ,[ClientTel]
+      ,[ClientFax]
+      ,[ReceiptHeaderId]
+      ,[ReceiptNumber]
+      ,[ReceiptDate]
+      ,[ReceiptAmount]
+      ,[PaymentType]
+      ,[INMasterId]
+      ,[ClientUserId]
+      ,[ClientUserName]
+      ,[Paid]
+      ,[PaidOn]
+      ,[PaidAmount]
+      ,[PaidRef]
+      ,[Remarks]
+      ,[Status]
+      ,[CreatedOn]
+      ,[CreatedBy]
+      ,[ModifiedOn]
+      ,[ModifiedBy]
+      ,[ReceiptDetailId]
+      ,[ItemCode]
+      ,[ItemDescription]
+      ,[ItemQty]
+      ,[ItemUoM]
+      ,[ItemUnitAmt]
+      ,[ItemDiscount]
+      ,[ItemAmount]
+      ,[OrderPkPrintQueueVpsId]
+      ,[OrderHeaderId]
+      ,[OrderedOn]
+      ,[OrderedClientUserId]
+      ,[OrderedClientUserName]
+      ,[PrintQueueVpsId]
+      ,[CheckedPlate]
+      ,[CheckedCip3]
+      ,[CheckedBlueprint]
+      ,[IsReady]
+      ,[IsReceived]
+      ,[IsBilled]
+	  ,row_number() OVER (partition BY [ReceiptNumber] order by [ReceiptNumber], [ItemDescription]) as Ln
+  FROM [dbo].[vwReceiptDetailsList_Ex]
+  where (ClientId = {0}) and (convert(nvarchar, [ReceiptNumber]) like '%{1}%') or (convert(nvarchar(7), ReceiptDate , 120) like '%{1}%' or [ClientName] like '%{1}%' or  (convert(nvarchar(10), ReceiptDate, 120) like '%{1}%') or convert(nvarchar, [OrderHeaderId]) like '%{1}%')
+  ) as oops
+  where Ln = 1
+  order by [ReceiptNumber]", id.ToString(), keyword);
+                        var list = ctx.Database.SqlQuery<vwReceiptDetailsList_Ex>(qry).ToList();
+                        return Json(list);
+                        #endregion
+                    }
                 }
                 #endregion
             }

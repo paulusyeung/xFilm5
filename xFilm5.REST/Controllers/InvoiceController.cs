@@ -117,16 +117,20 @@ order by [InvoiceNumber]", _DateZero.ToString("yyyy-MM-dd"), id.ToString(), mont
         }
 
         [HttpGet]
-        [Route("api/Invoice/ByKeyword/{keyword}")]
+        [Route("api/Invoice/ByKeyword/{id:int}/{keyword}")]
         [JwtAuthentication]
-        public IHttpActionResult GetInvoiceByKeyword(String keyword)
+        public IHttpActionResult GetInvoiceByKeyword(int id, String keyword)
         {
             if ((keyword != "") && (keyword.Length >= 3))
             {
                 #region All
                 using (var ctx = new xFilmEntities())
                 {
-                    string qry = String.Format(@"
+                    String qry = String.Empty;
+                    if (id == 0)
+                    {
+                        #region Staff, all client
+                        qry = String.Format(@"
 SELECT TOP (1000) [ClientId]
       ,[ClientName]
       ,[ClientStatus]
@@ -149,6 +153,36 @@ SELECT TOP (1000) [ClientId]
 FROM [xFilm3_NuStar].[dbo].[vwInvoiceList_All]
 where ([ClientStatus] = 1) and [InvoiceDate] >= '{0}' and ((convert(nvarchar, ClientId) like '%{1}%') or (ClientName like '%{1}%') or (InvoiceNumber like '%{1}%' or (convert(nvarchar(10), InvoiceDate, 120) like '%{1}%')))
 order by [InvoiceNumber]", _DateZero.ToString("yyyy-MM-dd"), keyword);
+                        #endregion
+                    }
+                    else
+                    {
+                        #region one Client
+                        qry = String.Format(@"
+SELECT TOP (1000) [ClientId]
+      ,[ClientName]
+      ,[ClientStatus]
+      ,[InvoiceID]
+      ,[InvoiceNumber]
+      ,[InvoiceDate]
+      ,[OsAmount]
+      ,[InvoiceAmount]
+      ,[Status]
+      ,[Paid]
+      ,[PaidOn]
+      ,[PaidAmount]
+      ,[PaidRef]
+      ,[Remarks]
+      ,[OrderID]
+      ,[CreatedOn]
+      ,[CreatedBy]
+      ,[LastModifiedOn]
+      ,[LastModifiedBy]
+FROM [xFilm3_NuStar].[dbo].[vwInvoiceList_All]
+where ([ClientStatus] = 1) and [InvoiceDate] >= '{0}' and (ClientId = {1}) and ((ClientName like '%{2}%') or (InvoiceNumber like '%{2}%' or (convert(nvarchar(10), InvoiceDate, 120) like '%{2}%')))
+order by [InvoiceNumber]", _DateZero.ToString("yyyy-MM-dd"), id.ToString(), keyword);
+                        #endregion
+                    }
 
                     var list = ctx.Database.SqlQuery<vwInvoiceList_All>(qry).ToList();
 
