@@ -653,7 +653,7 @@ SELECT TOP 100 PERCENT [ClientId]
       ,[IsBilled]
 	  ,row_number() OVER (partition BY [ReceiptNumber] order by [ReceiptNumber], [ItemDescription]) as Ln
   FROM [dbo].[vwReceiptDetailsList_Ex]
-  where (ClientId = {0}) and (convert(nvarchar, [ReceiptNumber]) like '%{1}%') or (convert(nvarchar(7), ReceiptDate , 120) like '%{1}%' or [ClientName] like '%{1}%' or  (convert(nvarchar(10), ReceiptDate, 120) like '%{1}%') or convert(nvarchar, [OrderHeaderId]) like '%{1}%')
+  where (ClientId = {0}) and ((convert(nvarchar, [ReceiptNumber]) like '%{1}%') or (convert(nvarchar(7), ReceiptDate , 120) like '%{1}%' or [ClientName] like '%{1}%' or  (convert(nvarchar(10), ReceiptDate, 120) like '%{1}%') or convert(nvarchar, [OrderHeaderId]) like '%{1}%'))
   ) as oops
   where Ln = 1
   order by [ReceiptNumber]", id.ToString(), keyword);
