@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -52,6 +53,37 @@ namespace xFilm5.REST.Controllers
             if (oUser != null)
             {
                 return JwtManager.GenerateToken(oUser.UserSid.ToString());
+            }
+
+            throw new HttpResponseException(HttpStatusCode.Unauthorized);
+        }
+
+        /// <summary>
+        /// 將 username + password 放在 querystring 內
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns>token</returns>
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("api/Token/{username}/{password}/{expiry}")]
+        public string Get(string username, string password, string expiry)
+        {
+            var oUser = CheckUser(username, password);
+            if (oUser != null)
+            {
+                var expiryDate = DateTime.Now;
+
+                if (DateTime.TryParseExact(expiry, "yyyyMMddHHmmss", CultureInfo.InvariantCulture, DateTimeStyles.None, out expiryDate))
+                {
+                    TimeSpan t = (expiryDate - DateTime.Now);
+                    var expiryInMinutes = t.TotalMinutes;
+                    return JwtManager.GenerateToken(oUser.UserSid.ToString(), (int)t.TotalMinutes);
+                }
+                else
+                {
+                    return JwtManager.GenerateToken(oUser.UserSid.ToString());
+                }
             }
 
             throw new HttpResponseException(HttpStatusCode.Unauthorized);
