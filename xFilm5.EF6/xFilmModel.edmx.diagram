@@ -92,21 +92,22 @@
         <EntityTypeShape EntityType="xFilmModel.vwOrderPkPrintQueueVpsList_Plate" Width="1.5" PointX="11.75" PointY="0.75" />
         <EntityTypeShape EntityType="xFilmModel.vwOrderList" Width="1.5" PointX="11.75" PointY="6.75" />
         <EntityTypeShape EntityType="xFilmModel.vwInvoiceList_All" Width="1.5" PointX="6.75" PointY="12.75" />
-        <EntityTypeShape EntityType="xFilmModel.vwPrintQueueVpsList_Ordered" Width="1.5" PointX="11.75" PointY="12.75" />
-        <EntityTypeShape EntityType="xFilmModel.vwInv5DetailsList" Width="1.5" PointX="13.75" PointY="0.75" />
+        <EntityTypeShape EntityType="xFilmModel.vwInv5DetailsList" Width="1.5" PointX="11.75" PointY="12.75" />
         <EntityTypeShape EntityType="xFilmModel.UserAuth" Width="1.5" PointX="3" PointY="1.25" />
         <EntityTypeShape EntityType="xFilmModel.UserNotification" Width="1.5" PointX="3" PointY="7.25" />
         <AssociationConnector Association="xFilmModel.FK_User_UserAuth" />
         <AssociationConnector Association="xFilmModel.FK_User_UserNotification" />
-        <EntityTypeShape EntityType="xFilmModel.vwClientList" Width="1.5" PointX="13.75" PointY="8.75" />
-        <EntityTypeShape EntityType="xFilmModel.vwUserNotificationList" Width="1.5" PointX="15.75" PointY="0.75" />
-        <EntityTypeShape EntityType="xFilmModel.vwPrintQueue_LifeCycleListWithWorkshop" Width="1.5" PointX="15.75" PointY="5.75" />
-        <EntityTypeShape EntityType="xFilmModel.FCMHistory" Width="1.5" PointX="15.75" PointY="9.75" />
-        <EntityTypeShape EntityType="xFilmModel.vwClientUserList" Width="1.5" PointX="15.75" PointY="13.75" />
-        <EntityTypeShape EntityType="xFilmModel.vwPrintQueueVpsList_AvailableFilm" Width="1.5" PointX="0.75" PointY="16.75" />
-        <EntityTypeShape EntityType="xFilmModel.vwPrintQueueVpsList_AvailablePlate" Width="1.5" PointX="17.75" PointY="0.75" />
-        <EntityTypeShape EntityType="xFilmModel.vwReceiptDetailsList_Invoice" Width="1.5" PointX="17.75" PointY="6.75" />
-        <EntityTypeShape EntityType="xFilmModel.vwClientAddressList" Width="1.5" PointX="6.375" PointY="18.75" />
+        <EntityTypeShape EntityType="xFilmModel.vwClientList" Width="1.5" PointX="13.75" PointY="0.75" />
+        <EntityTypeShape EntityType="xFilmModel.vwUserNotificationList" Width="1.5" PointX="13.75" PointY="7.75" />
+        <EntityTypeShape EntityType="xFilmModel.vwPrintQueue_LifeCycleListWithWorkshop" Width="1.5" PointX="13.75" PointY="12.75" />
+        <EntityTypeShape EntityType="xFilmModel.FCMHistory" Width="1.5" PointX="15.75" PointY="0.75" />
+        <EntityTypeShape EntityType="xFilmModel.vwClientUserList" Width="1.5" PointX="15.75" PointY="4.75" />
+        <EntityTypeShape EntityType="xFilmModel.vwPrintQueueVpsList_AvailableFilm" Width="1.5" PointX="15.75" PointY="9.75" />
+        <EntityTypeShape EntityType="xFilmModel.vwReceiptDetailsList_Invoice" Width="1.5" PointX="15.75" PointY="15.75" />
+        <EntityTypeShape EntityType="xFilmModel.vwClientAddressList" Width="1.5" PointX="17.75" PointY="0.75" />
+        <EntityTypeShape EntityType="xFilmModel.vwPrintQueueVpsList_AvailablePlate" Width="1.5" PointX="17.75" PointY="7.75" />
+        <EntityTypeShape EntityType="xFilmModel.vwPrintQueueVpsList_Ordered" Width="1.5" PointX="17.75" PointY="13.75" />
+        <EntityTypeShape EntityType="xFilmModel.vwWorkshopList" Width="1.5" PointX="0.75" PointY="16.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
