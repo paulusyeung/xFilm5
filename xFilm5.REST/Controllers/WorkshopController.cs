@@ -25,9 +25,9 @@ namespace xFilm5.REST.Controllers
             using (var ctx = new xFilmEntities())
             {
                 ctx.Configuration.LazyLoadingEnabled = false;
-                var items = ctx.Client_User.Where(x => x.SecurityLevel == 6).OrderBy(x => x.FullName).ToList();
-
-                return Json(items);
+                //var items = ctx.Client_User.Where(x => x.SecurityLevel == 6).OrderBy(x => x.FullName).ToList();
+                var wkshop = ctx.vwWorkshopList.OrderBy(x => x.WorkshopName).ToList();
+                return Json(wkshop);
             }
 
             return NotFound();

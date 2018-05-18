@@ -250,27 +250,49 @@ order by [ClientName]", month);
         }
 
         [HttpGet]
-        [Route("api/Order/Available/Plate/{id:int}")]
+        [Route("api/Order/Available/Plate/{id:int}/{workshop?}")]
         [JwtAuthentication]
-        public IHttpActionResult GetOrder_AvailablePlate(int id)
+        public IHttpActionResult GetOrder_AvailablePlate(int id, string workshop = null)
         {
             using (var ctx = new xFilmEntities())
             {
                 if (id == 0)
                 {
+                    #region Staff
                     if (ctx.vwPrintQueueVpsList_AvailablePlate.Any())
                     {
-                        var list = ctx.vwPrintQueueVpsList_AvailablePlate.OrderBy(x => x.ClientName).ThenBy(x => x.VpsFileName).ToList();
-                        return Json(list);
+                        if (String.IsNullOrEmpty(workshop))
+                        {
+                            var list = ctx.vwPrintQueueVpsList_AvailablePlate.OrderBy(x => x.ClientName).ThenBy(x => x.VpsFileName).ToList();
+                            return Json(list);
+                        }
+                        else
+                        {
+                            #region 如果 workshop 係 exist 嘅，淨係 return 同一個 workshop 嘅 order；否則就 return 所有 workshops 嘅 orders
+                            if (ctx.vwWorkshopList.Where(x => x.WorkshopName == workshop).Any())
+                            {
+                                var list = ctx.vwPrintQueueVpsList_AvailablePlate.Where(x => x.WorkshopName == workshop).OrderBy(x => x.ClientName).ThenBy(x => x.VpsFileName).ToList();
+                                return Json(list);
+                            }
+                            else
+                            {
+                                var list = ctx.vwPrintQueueVpsList_AvailablePlate.OrderBy(x => x.ClientName).ThenBy(x => x.VpsFileName).ToList();
+                                return Json(list);
+                            }
+                            #endregion
+                        }
                     }
+                    #endregion
                 }
                 else
                 {
+                    #region Client
                     if (ctx.vwPrintQueueVpsList_AvailablePlate.Where(x => x.ClientID == id).Any())
                     {
                         var list = ctx.vwPrintQueueVpsList_AvailablePlate.Where(x => x.ClientID == id).OrderBy(x => x.VpsFileName).ToList();
                         return Json(list);
                     }
+                    #endregion
                 }
             }
 
@@ -278,27 +300,49 @@ order by [ClientName]", month);
         }
 
         [HttpGet]
-        [Route("api/Order/Available/Film/{id:int}")]
+        [Route("api/Order/Available/Film/{id:int}/{workshop?}")]
         [JwtAuthentication]
-        public IHttpActionResult GetOrder_AvailableFilm(int id)
+        public IHttpActionResult GetOrder_AvailableFilm(int id, string workshop = null)
         {
             using (var ctx = new xFilmEntities())
             {
                 if (id == 0)
                 {
+                    #region Staff
                     if (ctx.vwPrintQueueVpsList_AvailableFilm.Any())
                     {
-                        var list = ctx.vwPrintQueueVpsList_AvailableFilm.OrderBy(x => x.ClientName).ThenBy(x => x.VpsFileName).ToList();
-                        return Json(list);
+                        if (String.IsNullOrEmpty(workshop))
+                        {
+                            var list = ctx.vwPrintQueueVpsList_AvailableFilm.OrderBy(x => x.ClientName).ThenBy(x => x.VpsFileName).ToList();
+                            return Json(list);
+                        }
+                        else
+                        {
+                            #region 如果 workshop 係 exist 嘅，淨係 return 同一個 workshop 嘅 order；否則就 return 所有 workshops 嘅 orders
+                            if (ctx.vwWorkshopList.Where(x => x.WorkshopName == workshop).Any())
+                            {
+                                var list = ctx.vwPrintQueueVpsList_AvailableFilm.Where(x => x.WorkshopName == workshop).OrderBy(x => x.ClientName).ThenBy(x => x.VpsFileName).ToList();
+                                return Json(list);
+                            }
+                            else
+                            {
+                                var list = ctx.vwPrintQueueVpsList_AvailableFilm.OrderBy(x => x.ClientName).ThenBy(x => x.VpsFileName).ToList();
+                                return Json(list);
+                            }
+                            #endregion
+                        }
                     }
+                    #endregion
                 }
                 else
                 {
+                    #region Client
                     if (ctx.vwPrintQueueVpsList_AvailableFilm.Where(x => x.ClientID == id).Any())
                     {
                         var list = ctx.vwPrintQueueVpsList_AvailableFilm.Where(x => x.ClientID == id).OrderBy(x => x.VpsFileName).ToList();
                         return Json(list);
                     }
+                    #endregion
                 }
             }
 
@@ -306,27 +350,48 @@ order by [ClientName]", month);
         }
 
         [HttpGet]
-        [Route("api/Order/Available/Blueprint/{id:int}")]
+        [Route("api/Order/Available/Blueprint/{id:int}/{workshop?}")]
         [JwtAuthentication]
-        public IHttpActionResult GetOrder_AvailableBlueprint(int id)
+        public IHttpActionResult GetOrder_AvailableBlueprint(int id, string workshop = null)
         {
             using (var ctx = new xFilmEntities())
             {
                 if (id == 0)
                 {
+                    #region Staff
                     if (ctx.vwPrintQueueVpsList_AvailablePlate.Where(x => x.BlueprintOrdered == false).Any())
                     {
-                        var list = ctx.vwPrintQueueVpsList_AvailablePlate.Where(x => x.BlueprintOrdered == false).OrderBy(x => x.ClientName).ThenBy(x => x.VpsFileName).ToList();
-                        return Json(list);
+                        if (String.IsNullOrEmpty(workshop))
+                        {
+                            var list = ctx.vwPrintQueueVpsList_AvailablePlate.Where(x => x.BlueprintOrdered == false).OrderBy(x => x.ClientName).ThenBy(x => x.VpsFileName).ToList();
+                            return Json(list);
+                        }
+                        {
+                            #region 如果 workshop 係 exist 嘅，淨係 return 同一個 workshop 嘅 order；否則就 return 所有 workshops 嘅 orders
+                            if (ctx.vwWorkshopList.Where(x => x.WorkshopName == workshop).Any())
+                            {
+                                var list = ctx.vwPrintQueueVpsList_AvailablePlate.Where(x => x.WorkshopName == workshop && x.BlueprintOrdered == false).OrderBy(x => x.ClientName).ThenBy(x => x.VpsFileName).ToList();
+                                return Json(list);
+                            }
+                            else
+                            {
+                                var list = ctx.vwPrintQueueVpsList_AvailablePlate.Where(x => x.BlueprintOrdered == false).OrderBy(x => x.ClientName).ThenBy(x => x.VpsFileName).ToList();
+                                return Json(list);
+                            }
+                            #endregion
+                        }
                     }
+                    #endregion
                 }
                 else
                 {
+                    #region Client
                     if (ctx.vwPrintQueueVpsList_AvailablePlate.Where(x => x.ClientID == id && x.BlueprintOrdered == false).Any())
                     {
                         var list = ctx.vwPrintQueueVpsList_AvailablePlate.Where(x => x.ClientID == id && x.BlueprintOrdered == false).OrderBy(x => x.VpsFileName).ToList();
                         return Json(list);
                     }
+                    #endregion
                 }
             }
 
