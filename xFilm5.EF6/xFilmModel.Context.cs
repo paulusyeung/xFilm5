@@ -80,11 +80,11 @@ namespace xFilm5.EF6
         public virtual DbSet<vwPrintQueue_LifeCycleListWithWorkshop> vwPrintQueue_LifeCycleListWithWorkshop { get; set; }
         public virtual DbSet<FCMHistory> FCMHistory { get; set; }
         public virtual DbSet<vwClientUserList> vwClientUserList { get; set; }
-        public virtual DbSet<vwPrintQueueVpsList_AvailableFilm> vwPrintQueueVpsList_AvailableFilm { get; set; }
         public virtual DbSet<vwReceiptDetailsList_Invoice> vwReceiptDetailsList_Invoice { get; set; }
         public virtual DbSet<vwClientAddressList> vwClientAddressList { get; set; }
-        public virtual DbSet<vwPrintQueueVpsList_AvailablePlate> vwPrintQueueVpsList_AvailablePlate { get; set; }
         public virtual DbSet<vwPrintQueueVpsList_Ordered> vwPrintQueueVpsList_Ordered { get; set; }
         public virtual DbSet<vwWorkshopList> vwWorkshopList { get; set; }
+        public virtual DbSet<vwPrintQueueVpsList_AvailableFilm> vwPrintQueueVpsList_AvailableFilm { get; set; }
+        public virtual DbSet<vwPrintQueueVpsList_AvailablePlate> vwPrintQueueVpsList_AvailablePlate { get; set; }
     }
 }
