@@ -271,7 +271,7 @@ order by [ClientName]", month);
                             #region 如果 workshop 係 exist 嘅，淨係 return 同一個 workshop 嘅 order；否則就 return 所有 workshops 嘅 orders
                             if (ctx.vwWorkshopList.Where(x => x.WorkshopName == workshop).Any())
                             {
-                                var list = ctx.vwPrintQueueVpsList_AvailablePlate.Where(x => x.WorkshopName == workshop).OrderBy(x => x.ClientName).ThenBy(x => x.VpsFileName).ToList();
+                                var list = ctx.vwPrintQueueVpsList_AvailablePlate.Where(x => x.DefaultWorkshopName == workshop).OrderBy(x => x.ClientName).ThenBy(x => x.VpsFileName).ToList();
                                 return Json(list);
                             }
                             else
@@ -321,7 +321,7 @@ order by [ClientName]", month);
                             #region 如果 workshop 係 exist 嘅，淨係 return 同一個 workshop 嘅 order；否則就 return 所有 workshops 嘅 orders
                             if (ctx.vwWorkshopList.Where(x => x.WorkshopName == workshop).Any())
                             {
-                                var list = ctx.vwPrintQueueVpsList_AvailableFilm.Where(x => x.WorkshopName == workshop).OrderBy(x => x.ClientName).ThenBy(x => x.VpsFileName).ToList();
+                                var list = ctx.vwPrintQueueVpsList_AvailableFilm.Where(x => x.DefaultWorkshopName == workshop).OrderBy(x => x.ClientName).ThenBy(x => x.VpsFileName).ToList();
                                 return Json(list);
                             }
                             else
@@ -370,7 +370,7 @@ order by [ClientName]", month);
                             #region 如果 workshop 係 exist 嘅，淨係 return 同一個 workshop 嘅 order；否則就 return 所有 workshops 嘅 orders
                             if (ctx.vwWorkshopList.Where(x => x.WorkshopName == workshop).Any())
                             {
-                                var list = ctx.vwPrintQueueVpsList_AvailablePlate.Where(x => x.WorkshopName == workshop && x.BlueprintOrdered == false).OrderBy(x => x.ClientName).ThenBy(x => x.VpsFileName).ToList();
+                                var list = ctx.vwPrintQueueVpsList_AvailablePlate.Where(x => x.DefaultWorkshopName == workshop && x.BlueprintOrdered == false).OrderBy(x => x.ClientName).ThenBy(x => x.VpsFileName).ToList();
                                 return Json(list);
                             }
                             else
