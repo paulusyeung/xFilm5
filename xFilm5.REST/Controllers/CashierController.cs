@@ -20,15 +20,25 @@ namespace xFilm5.REST.Controllers
         private DateTime _DateZero = new DateTime(2017, 5, 1);
 
         [HttpGet]
-        [Route("api/Cashier/Ready/{id:int}")]
+        [Route("api/Cashier/Ready/{id:int}/{workshop?}")]
         [JwtAuthentication]
-        public IHttpActionResult GetReady(int id)
+        public IHttpActionResult GetReady(int id, string workshop = null)
         {
             if (id == 0)
             {
                 #region All clients
                 using (var ctx = new xFilmEntities())
                 {   // 菲林冇 QR Code scan，所以未攞就當 Ready / WiP
+
+                    #region 睇吓使唔使 filter by workshop
+                    var addFilter = false;
+                    if (!(String.IsNullOrEmpty(workshop)))
+                    {
+                        //如果 workshop 係 exist 嘅，淨係 return 同一個 workshop 嘅 order
+                        addFilter = ctx.vwWorkshopList.Where(x => x.WorkshopName == workshop).Any();
+                    }
+                    #endregion
+
                     var qryBp = String.Format(@"
 Select * from (
 SELECT 1 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Blueprint WHERE [CreatedOn] >= '{0}' AND [IsReady] = 1 AND [IsReceived] = 0
@@ -50,13 +60,26 @@ SELECT 3 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Plate WHERE [Crea
 dbo.OrderHeader AS o ON pk.OrderHeaderId = o.ID
 WHERE (o.Status <> 1)", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"));
 
-                    var bp = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryBp).ToList();
-                    var film = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryFilm).ToList();
-                    var plate = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryPlate).ToList();
-                    plate.AddRange(bp);
-                    plate.AddRange(film);
-                    var all = plate.OrderBy(x => x.OrderHeaderId).ThenBy(x => x.VpsFileName);
-                    return Json(all);
+                    if (addFilter)
+                    {
+                        var bp = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryBp).Where(x => x.WorkshopName == workshop).ToList();
+                        var film = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryFilm).Where(x => x.WorkshopName == workshop).ToList();
+                        var plate = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryPlate).Where(x => x.WorkshopName == workshop).ToList();
+                        plate.AddRange(bp);
+                        plate.AddRange(film);
+                        var all = plate.OrderBy(x => x.OrderHeaderId).ThenBy(x => x.VpsFileName);
+                        return Json(all);
+                    }
+                    else
+                    {
+                        var bp = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryBp).ToList();
+                        var film = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryFilm).ToList();
+                        var plate = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryPlate).ToList();
+                        plate.AddRange(bp);
+                        plate.AddRange(film);
+                        var all = plate.OrderBy(x => x.OrderHeaderId).ThenBy(x => x.VpsFileName);
+                        return Json(all);
+                    }
                 }
                 #endregion
             }
@@ -99,15 +122,25 @@ WHERE (o.Status <> 1)", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"), id.ToString(
         }
 
         [HttpGet]
-        [Route("api/Cashier/WiP/{id:int}")]
+        [Route("api/Cashier/WiP/{id:int}/{workshop?}")]
         [JwtAuthentication]
-        public IHttpActionResult GetWiP(int id)
+        public IHttpActionResult GetWiP(int id, string workshop = null)
         {
             if (id == 0)
             {
+                
                 #region All clients
                 using (var ctx = new xFilmEntities())
                 {
+                    #region 睇吓使唔使 filter by workshop
+                    var addFilter = false;
+                    if (!(String.IsNullOrEmpty(workshop)))
+                    {
+                        //如果 workshop 係 exist 嘅，淨係 return 同一個 workshop 嘅 order
+                        addFilter = ctx.vwWorkshopList.Where(x => x.WorkshopName == workshop).Any();
+                    }
+                    #endregion
+
                     //var qryBp = String.Format("SELECT 1 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Blueprint WHERE [CreatedOn] >= '{0}' AND [IsReady] = 0 AND [IsReceived] = 0", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"));
                     var qryBp = String.Format(@"
 Select * from (
@@ -132,13 +165,26 @@ SELECT 3 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Plate WHERE [Crea
 dbo.OrderHeader AS o ON pk.OrderHeaderId = o.ID
 WHERE (o.Status <> 1)", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"));
 
-                    var bp = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryBp).ToList();
-                    var film = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryFilm).ToList();
-                    var plate = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryPlate).ToList();
-                    plate.AddRange(bp);
-                    plate.AddRange(film);
-                    var all = plate.OrderBy(x => x.OrderHeaderId).OrderBy(x => x.VpsFileName);
-                    return Json(all);
+                    if (addFilter)
+                    {
+                        var bp = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryBp).Where(x => x.WorkshopName == workshop).ToList();
+                        var film = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryFilm).Where(x => x.WorkshopName == workshop).ToList();
+                        var plate = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryPlate).Where(x => x.WorkshopName == workshop).ToList();
+                        plate.AddRange(bp);
+                        plate.AddRange(film);
+                        var all = plate.OrderBy(x => x.OrderHeaderId).OrderBy(x => x.VpsFileName);
+                        return Json(all);
+                    }
+                    else
+                    {
+                        var bp = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryBp).ToList();
+                        var film = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryFilm).ToList();
+                        var plate = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryPlate).ToList();
+                        plate.AddRange(bp);
+                        plate.AddRange(film);
+                        var all = plate.OrderBy(x => x.OrderHeaderId).OrderBy(x => x.VpsFileName);
+                        return Json(all);
+                    }
                 }
                 #endregion
             }
@@ -184,15 +230,24 @@ WHERE (o.Status <> 1)", _DateZero.ToString("yyyy-MM-dd hh:mm:sss"), id.ToString(
         }
 
         [HttpGet]
-        [Route("api/Cashier/Completed/{id:int}/{date:DateTime}")]
+        [Route("api/Cashier/Completed/{id:int}/{date:DateTime}/{workshop?}")]
         [JwtAuthentication]
-        public IHttpActionResult GetCompleted(int id, DateTime date)
+        public IHttpActionResult GetCompleted(int id, DateTime date, string workshop = null)
         {
             if (id == 0)
             {
                 #region All clients
                 using (var ctx = new xFilmEntities())
                 {
+                    #region 睇吓使唔使 filter by workshop
+                    var addFilter = false;
+                    if (!(String.IsNullOrEmpty(workshop)))
+                    {
+                        //如果 workshop 係 exist 嘅，淨係 return 同一個 workshop 嘅 order
+                        addFilter = ctx.vwWorkshopList.Where(x => x.WorkshopName == workshop).Any();
+                    }
+                    #endregion
+
                     //var qryBp = String.Format("SELECT 1 AS [OrderType], * FROM dbo.vwOrderPkPrintQueueVpsList_Blueprint WHERE CONVERT(NVARCHAR(10), [ModifiedOn], 120) = '{0}' AND [IsReceived] = 1", date.ToString("yyyy-MM-dd"));
                     var qryBp = String.Format(@"
 SELECT * FROM (
@@ -226,13 +281,26 @@ SELECT DISTINCT [PrintQueueVpsId]
 FROM dbo.vwReceiptDetailsList_Ex
 WHERE CONVERT(NVARCHAR(10), [ReceiptDate], 120) = '{0}')", date.ToString("yyyy-MM-dd"));
 
-                    var bp = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryBp).ToList();
-                    var film = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryFilm).ToList();
-                    var plate = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryPlate).ToList();
-                    plate.AddRange(bp);
-                    plate.AddRange(film);
-                    var all = plate.OrderBy(x => x.OrderHeaderId).ThenBy(x => x.VpsFileName);
-                    return Json(all);
+                    if (addFilter)
+                    {
+                        var bp = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryBp).Where(x => x.WorkshopName == workshop).ToList();
+                        var film = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryFilm).Where(x => x.WorkshopName == workshop).ToList();
+                        var plate = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryPlate).Where(x => x.WorkshopName == workshop).ToList();
+                        plate.AddRange(bp);
+                        plate.AddRange(film);
+                        var all = plate.OrderBy(x => x.OrderHeaderId).ThenBy(x => x.VpsFileName);
+                        return Json(all);
+                    }
+                    else
+                    {
+                        var bp = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryBp).ToList();
+                        var film = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryFilm).ToList();
+                        var plate = ctx.Database.SqlQuery<vwOrderPkPrintQueueVpsListEx>(qryPlate).ToList();
+                        plate.AddRange(bp);
+                        plate.AddRange(film);
+                        var all = plate.OrderBy(x => x.OrderHeaderId).ThenBy(x => x.VpsFileName);
+                        return Json(all);
+                    }
                 }
                 #endregion
             }
