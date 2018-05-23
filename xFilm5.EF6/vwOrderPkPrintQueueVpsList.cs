@@ -35,5 +35,7 @@ namespace xFilm5.EF6
         public bool Retired { get; set; }
         public Nullable<System.DateTime> RetiredOn { get; set; }
         public string RetiredBy { get; set; }
+        public Nullable<int> WorkshopId { get; set; }
+        public string WorkshopName { get; set; }
     }
 }
