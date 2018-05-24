@@ -75,7 +75,6 @@ namespace xFilm5.EF6
         public virtual DbSet<vwPrintQueue_LifeCycleListWithWorkshop> vwPrintQueue_LifeCycleListWithWorkshop { get; set; }
         public virtual DbSet<FCMHistory> FCMHistory { get; set; }
         public virtual DbSet<vwClientUserList> vwClientUserList { get; set; }
-        public virtual DbSet<vwReceiptDetailsList_Invoice> vwReceiptDetailsList_Invoice { get; set; }
         public virtual DbSet<vwClientAddressList> vwClientAddressList { get; set; }
         public virtual DbSet<vwPrintQueueVpsList_Ordered> vwPrintQueueVpsList_Ordered { get; set; }
         public virtual DbSet<vwWorkshopList> vwWorkshopList { get; set; }
@@ -86,5 +85,6 @@ namespace xFilm5.EF6
         public virtual DbSet<vwOrderPkPrintQueueVpsList_Film> vwOrderPkPrintQueueVpsList_Film { get; set; }
         public virtual DbSet<vwOrderPkPrintQueueVpsList_Plate> vwOrderPkPrintQueueVpsList_Plate { get; set; }
         public virtual DbSet<vwInvoiceList_All> vwInvoiceList_All { get; set; }
+        public virtual DbSet<vwReceiptDetailsList_Invoice> vwReceiptDetailsList_Invoice { get; set; }
     }
 }

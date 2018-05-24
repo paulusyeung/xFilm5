@@ -57,5 +57,7 @@ namespace xFilm5.EF6
         public bool IsReady { get; set; }
         public bool IsReceived { get; set; }
         public bool IsBilled { get; set; }
+        public int WorkshopId { get; set; }
+        public string WorkshopName { get; set; }
     }
 }

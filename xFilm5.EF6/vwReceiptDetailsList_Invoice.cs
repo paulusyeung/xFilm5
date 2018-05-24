@@ -50,5 +50,7 @@ namespace xFilm5.EF6
         public string InvoiceNumber { get; set; }
         public Nullable<decimal> InvoiceAmount { get; set; }
         public string InvoiceDate { get; set; }
+        public int WorkshopId { get; set; }
+        public string WorkshopName { get; set; }
     }
 }
