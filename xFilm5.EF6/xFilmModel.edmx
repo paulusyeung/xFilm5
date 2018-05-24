@@ -711,8 +711,6 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwInvoiceList_All' does not have
         <EntityType Name="vwInvoiceList_All">
           <Key>
             <PropertyRef Name="InvoiceID" />
-            
-            
           </Key>
           <Property Name="ClientId" Type="int" />
           <Property Name="ClientName" Type="nvarchar" MaxLength="128" />
@@ -733,6 +731,8 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwInvoiceList_All' does not have
           <Property Name="CreatedBy" Type="nvarchar" MaxLength="64" />
           <Property Name="LastModifiedOn" Type="datetime" />
           <Property Name="LastModifiedBy" Type="nvarchar" MaxLength="64" />
+          <Property Name="WorkshopId" Type="int" />
+          <Property Name="WorkshopName" Type="nvarchar" MaxLength="64" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'xFilm3_NuStar.dbo.vwOrderList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -771,6 +771,17 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwOrderPkPrintQueueVpsList' does
           <Key>
             <PropertyRef Name="OrderPkPrintQueueVpsId" />
             <PropertyRef Name="ClientID" />
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
           </Key>
           <Property Name="OrderPkPrintQueueVpsId" Type="int" Nullable="false" />
           <Property Name="OrderHeaderId" Type="int" />
@@ -802,6 +813,17 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwOrderPkPrintQueueVpsList_Bluep
           <Key>
             <PropertyRef Name="OrderPkPrintQueueVpsId" />
             <PropertyRef Name="ClientID" />
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
           </Key>
           <Property Name="OrderPkPrintQueueVpsId" Type="int" Nullable="false" />
           <Property Name="OrderHeaderId" Type="int" />
@@ -833,6 +855,17 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwOrderPkPrintQueueVpsList_Film'
           <Key>
             <PropertyRef Name="OrderPkPrintQueueVpsId" />
             <PropertyRef Name="ClientID" />
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
           </Key>
           <Property Name="OrderPkPrintQueueVpsId" Type="int" Nullable="false" />
           <Property Name="OrderHeaderId" Type="int" />
@@ -864,6 +897,17 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwOrderPkPrintQueueVpsList_Plate
           <Key>
             <PropertyRef Name="OrderPkPrintQueueVpsId" />
             <PropertyRef Name="ClientID" />
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
           </Key>
           <Property Name="OrderPkPrintQueueVpsId" Type="int" Nullable="false" />
           <Property Name="OrderHeaderId" Type="int" />
@@ -1879,7 +1923,9 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwWorkshopList' does not have a 
     [vwInvoiceList_All].[CreatedOn] AS [CreatedOn], 
     [vwInvoiceList_All].[CreatedBy] AS [CreatedBy], 
     [vwInvoiceList_All].[LastModifiedOn] AS [LastModifiedOn], 
-    [vwInvoiceList_All].[LastModifiedBy] AS [LastModifiedBy]
+    [vwInvoiceList_All].[LastModifiedBy] AS [LastModifiedBy], 
+    [vwInvoiceList_All].[WorkshopId] AS [WorkshopId], 
+    [vwInvoiceList_All].[WorkshopName] AS [WorkshopName]
     FROM [dbo].[vwInvoiceList_All] AS [vwInvoiceList_All]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="vwOrderList" EntityType="Self.vwOrderList" store:Type="Views" store:Schema="dbo">
@@ -3700,7 +3746,6 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwWorkshopList' does not have a 
           </AssociationSet>
           <EntitySet Name="vwReceiptDetailsList_Ex" EntityType="xFilmModel.vwReceiptDetailsList_Ex" />
           <EntitySet Name="vwOrderList" EntityType="xFilmModel.vwOrderList" />
-          <EntitySet Name="vwInvoiceList_All" EntityType="xFilmModel.vwInvoiceList_All" />
           <EntitySet Name="vwInv5DetailsList" EntityType="xFilmModel.vwInv5DetailsList" />
           <EntitySet Name="UserAuth" EntityType="xFilmModel.UserAuth" />
           <EntitySet Name="UserNotification" EntityType="xFilmModel.UserNotification" />
@@ -3727,6 +3772,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwWorkshopList' does not have a 
           <EntitySet Name="vwOrderPkPrintQueueVpsList_Blueprint" EntityType="xFilmModel.vwOrderPkPrintQueueVpsList_Blueprint" />
           <EntitySet Name="vwOrderPkPrintQueueVpsList_Film" EntityType="xFilmModel.vwOrderPkPrintQueueVpsList_Film" />
           <EntitySet Name="vwOrderPkPrintQueueVpsList_Plate" EntityType="xFilmModel.vwOrderPkPrintQueueVpsList_Plate" />
+          <EntitySet Name="vwInvoiceList_All" EntityType="xFilmModel.vwInvoiceList_All" />
         </EntityContainer>
         <EntityType Name="vwReceiptDetailsList_Ex">
           <Key>
@@ -3801,30 +3847,6 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwWorkshopList' does not have a 
           <Property Name="Status" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
           <Property Name="DeliveryMethod" Type="Int32" />
           <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="vwInvoiceList_All">
-          <Key>
-            <PropertyRef Name="InvoiceID" />
-          </Key>
-          <Property Name="ClientId" Type="Int32" />
-          <Property Name="ClientName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="ClientStatus" Type="Int16" />
-          <Property Name="InvoiceID" Type="Int32" Nullable="false" />
-          <Property Name="InvoiceNumber" Type="Int32" />
-          <Property Name="InvoiceDate" Type="DateTime" Precision="3" />
-          <Property Name="OsAmount" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="InvoiceAmount" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="Status" Type="Int16" />
-          <Property Name="Paid" Type="Boolean" Nullable="false" />
-          <Property Name="PaidOn" Type="DateTime" Precision="3" />
-          <Property Name="PaidAmount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
-          <Property Name="PaidRef" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="Remarks" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="OrderID" Type="Int32" />
-          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
-          <Property Name="CreatedBy" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="LastModifiedOn" Type="DateTime" Precision="3" />
-          <Property Name="LastModifiedBy" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="vwInv5DetailsList">
           <Key>
@@ -4294,6 +4316,32 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwWorkshopList' does not have a 
           <Property Name="Retired" Type="Boolean" Nullable="false" />
           <Property Name="RetiredOn" Type="DateTime" Precision="3" />
           <Property Name="RetiredBy" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="WorkshopId" Type="Int32" />
+          <Property Name="WorkshopName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="vwInvoiceList_All">
+          <Key>
+            <PropertyRef Name="InvoiceID" />
+          </Key>
+          <Property Name="ClientId" Type="Int32" />
+          <Property Name="ClientName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ClientStatus" Type="Int16" />
+          <Property Name="InvoiceID" Type="Int32" Nullable="false" />
+          <Property Name="InvoiceNumber" Type="Int32" />
+          <Property Name="InvoiceDate" Type="DateTime" Precision="3" />
+          <Property Name="OsAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="InvoiceAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Status" Type="Int16" />
+          <Property Name="Paid" Type="Boolean" Nullable="false" />
+          <Property Name="PaidOn" Type="DateTime" Precision="3" />
+          <Property Name="PaidAmount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="PaidRef" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Remarks" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="OrderID" Type="Int32" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="LastModifiedOn" Type="DateTime" Precision="3" />
+          <Property Name="LastModifiedBy" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
           <Property Name="WorkshopId" Type="Int32" />
           <Property Name="WorkshopName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
         </EntityType>
@@ -4954,31 +5002,6 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwWorkshopList' does not have a 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="vwInvoiceList_All">
-            <EntityTypeMapping TypeName="xFilmModel.vwInvoiceList_All">
-              <MappingFragment StoreEntitySet="vwInvoiceList_All">
-                <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
-                <ScalarProperty Name="LastModifiedOn" ColumnName="LastModifiedOn" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
-                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
-                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
-                <ScalarProperty Name="PaidRef" ColumnName="PaidRef" />
-                <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
-                <ScalarProperty Name="PaidOn" ColumnName="PaidOn" />
-                <ScalarProperty Name="Paid" ColumnName="Paid" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="InvoiceAmount" ColumnName="InvoiceAmount" />
-                <ScalarProperty Name="OsAmount" ColumnName="OsAmount" />
-                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
-                <ScalarProperty Name="InvoiceNumber" ColumnName="InvoiceNumber" />
-                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
-                <ScalarProperty Name="ClientStatus" ColumnName="ClientStatus" />
-                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
-                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="vwInv5DetailsList">
             <EntityTypeMapping TypeName="xFilmModel.vwInv5DetailsList">
               <MappingFragment StoreEntitySet="vwInv5DetailsList">
@@ -5424,6 +5447,33 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwWorkshopList' does not have a 
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
                 <ScalarProperty Name="OrderHeaderId" ColumnName="OrderHeaderId" />
                 <ScalarProperty Name="OrderPkPrintQueueVpsId" ColumnName="OrderPkPrintQueueVpsId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vwInvoiceList_All">
+            <EntityTypeMapping TypeName="xFilmModel.vwInvoiceList_All">
+              <MappingFragment StoreEntitySet="vwInvoiceList_All">
+                <ScalarProperty Name="WorkshopName" ColumnName="WorkshopName" />
+                <ScalarProperty Name="WorkshopId" ColumnName="WorkshopId" />
+                <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
+                <ScalarProperty Name="LastModifiedOn" ColumnName="LastModifiedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="PaidRef" ColumnName="PaidRef" />
+                <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
+                <ScalarProperty Name="PaidOn" ColumnName="PaidOn" />
+                <ScalarProperty Name="Paid" ColumnName="Paid" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="InvoiceAmount" ColumnName="InvoiceAmount" />
+                <ScalarProperty Name="OsAmount" ColumnName="OsAmount" />
+                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+                <ScalarProperty Name="InvoiceNumber" ColumnName="InvoiceNumber" />
+                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+                <ScalarProperty Name="ClientStatus" ColumnName="ClientStatus" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

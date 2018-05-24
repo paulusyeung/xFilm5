@@ -33,5 +33,7 @@ namespace xFilm5.EF6
         public string CreatedBy { get; set; }
         public Nullable<System.DateTime> LastModifiedOn { get; set; }
         public string LastModifiedBy { get; set; }
+        public Nullable<int> WorkshopId { get; set; }
+        public string WorkshopName { get; set; }
     }
 }
