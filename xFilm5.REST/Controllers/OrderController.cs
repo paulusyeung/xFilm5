@@ -136,9 +136,9 @@ order by [ClientName]", month);
         }
 
         [HttpGet]
-        [Route("api/Order/ByKeyword/{id:int}/{keyword}")]
+        [Route("api/Order/ByKeyword/{id:int}/{keyword}/{workshop?}")]
         [JwtAuthentication]
-        public IHttpActionResult GetOrderByKeyword(int id, String keyword)
+        public IHttpActionResult GetOrderByKeyword(int id, String keyword, string workshop = null)
         {
             if ((keyword != "") && (keyword.Length >= 3))
             {
@@ -148,10 +148,29 @@ order by [ClientName]", month);
                     if (id == 0)
                     {
                         #region Staff, all Client
-                        var list = ctx.vwOrderList.Where(x => x.OrderTypeID >= 6
-                            && (x.OrderID.ToString().Contains(keyword) || x.ClientID.ToString().Contains(keyword) || x.ClientName.Contains(keyword) || x.DateReceived.Contains(keyword) || x.Remarks.Contains(keyword)))
-                            .OrderBy(x => x.OrderID).ToList();
-                        return Json(list);
+                        #region 睇吓使唔使 filter by workshop
+                        var addFilter = false;
+                        if (!(String.IsNullOrEmpty(workshop)))
+                        {
+                            //如果 workshop 係 exist 嘅，淨係 return 同一個 workshop 嘅 order
+                            addFilter = ctx.vwWorkshopList.Where(x => x.WorkshopName == workshop).Any();
+                        }
+                        #endregion
+
+                        if (addFilter)
+                        {
+                            var list = ctx.vwOrderList.Where(x => x.OrderTypeID >= 6 && x.Workshop == workshop
+                                && (x.OrderID.ToString().Contains(keyword) || x.ClientID.ToString().Contains(keyword) || x.ClientName.Contains(keyword) || x.DateReceived.Contains(keyword) || x.Remarks.Contains(keyword)))
+                                .OrderBy(x => x.OrderID).ToList();
+                            return Json(list);
+                        }
+                        else
+                        {
+                            var list = ctx.vwOrderList.Where(x => x.OrderTypeID >= 6
+                                && (x.OrderID.ToString().Contains(keyword) || x.ClientID.ToString().Contains(keyword) || x.ClientName.Contains(keyword) || x.DateReceived.Contains(keyword) || x.Remarks.Contains(keyword)))
+                                .OrderBy(x => x.OrderID).ToList();
+                            return Json(list);
+                        }
                         #endregion
                     }
                     else
