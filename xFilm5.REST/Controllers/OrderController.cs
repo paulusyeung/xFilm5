@@ -42,9 +42,9 @@ namespace xFilm5.REST.Controllers
         }
 
         [HttpGet]
-        [Route("api/Order/ByMonth/{id:int}/{date:DateTime}")]
+        [Route("api/Order/ByMonth/{id:int}/{date:DateTime}/{workshop?}")]
         [JwtAuthentication]
-        public IHttpActionResult GetOrderByMonth(int id, DateTime date)
+        public IHttpActionResult GetOrderByMonth(int id, DateTime date, string workshop = null)
         {
             var month = date.ToString("yyyy-MM");
             if (id == 0)
@@ -52,6 +52,15 @@ namespace xFilm5.REST.Controllers
                 #region All distinct clients within the same month
                 using (var ctx = new xFilmEntities())
                 {
+                    #region 睇吓使唔使 filter by workshop
+                    var addFilter = false;
+                    if (!(String.IsNullOrEmpty(workshop)))
+                    {
+                        //如果 workshop 係 exist 嘅，淨係 return 同一個 workshop 嘅 order
+                        addFilter = ctx.vwWorkshopList.Where(x => x.WorkshopName == workshop).Any();
+                    }
+                    #endregion
+
                     string qry = String.Format(@"
 select [OrderID]
       ,[ClientID]
@@ -101,8 +110,16 @@ where (OrderTypeID >= 6) AND (substring([DateReceived], 1, 7) = '{0}')
 where Ln = 1
 order by [ClientName]", month);
 
-                    var list = ctx.Database.SqlQuery<vwOrderList>(qry).ToList();
-                    return Json(list);
+                    if (addFilter)
+                    {
+                        var list = ctx.Database.SqlQuery<vwOrderList>(qry).Where(x => x.Workshop == workshop).ToList();
+                        return Json(list);
+                    }
+                    else
+                    {
+                        var list = ctx.Database.SqlQuery<vwOrderList>(qry).ToList();
+                        return Json(list);
+                    }
                 }
                 #endregion
             }
