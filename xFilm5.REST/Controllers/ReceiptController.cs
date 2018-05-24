@@ -16,9 +16,9 @@ namespace xFilm5.REST.Controllers
         private DateTime _DateZero = new DateTime(2017, 5, 1);
 
         [HttpGet]
-        [Route("api/Receipt/ByDay/{id:int}/{date:DateTime}")]
+        [Route("api/Receipt/ByDay/{id:int}/{date:DateTime}/{workshop?}")]
         [JwtAuthentication]
-        public IHttpActionResult GetReceiptByDay(int id, DateTime date)
+        public IHttpActionResult GetReceiptByDay(int id, DateTime date, string workshop = null)
         {
             var month = date.ToString("yyyy-MM-dd");
             if (id == 0)
@@ -26,6 +26,15 @@ namespace xFilm5.REST.Controllers
                 #region All distinct clients within the same month
                 using (var ctx = new xFilmEntities())
                 {
+                    #region 睇吓使唔使 filter by workshop
+                    var addFilter = false;
+                    if (!(String.IsNullOrEmpty(workshop)))
+                    {
+                        //如果 workshop 係 exist 嘅，淨係 return 同一個 workshop 嘅 order
+                        addFilter = ctx.vwWorkshopList.Where(x => x.WorkshopName == workshop).Any();
+                    }
+                    #endregion
+
                     string qry = String.Format(@"
 select [ClientId]
       ,[ClientName]
@@ -121,8 +130,16 @@ SELECT TOP 100 PERCENT [ClientId]
   where Ln = 1
   order by [ReceiptNumber]", month);
 
-                    var list = ctx.Database.SqlQuery<vwReceiptDetailsList_Ex>(qry).ToList();
-                    return Json(list);
+                    if (addFilter)
+                    {
+                        var list = ctx.Database.SqlQuery<vwReceiptDetailsList_Ex>(qry).Where(x => x.WorkshopName == workshop).ToList();
+                        return Json(list);
+                    }
+                    else
+                    {
+                        var list = ctx.Database.SqlQuery<vwReceiptDetailsList_Ex>(qry).ToList();
+                        return Json(list);
+                    }
                 }
                 #endregion
             }
@@ -233,9 +250,9 @@ SELECT TOP 100 PERCENT [ClientId]
         }
 
         [HttpGet]
-        [Route("api/Receipt/ByMonth/{id:int}/{date:DateTime}")]
+        [Route("api/Receipt/ByMonth/{id:int}/{date:DateTime}/{workshop?}")]
         [JwtAuthentication]
-        public IHttpActionResult GetReceiptByMonth(int id, DateTime date)
+        public IHttpActionResult GetReceiptByMonth(int id, DateTime date, string workshop = null)
         {
             var month = date.ToString("yyyy-MM");
             if (id == 0)
@@ -243,6 +260,15 @@ SELECT TOP 100 PERCENT [ClientId]
                 #region All distinct clients within the same month
                 using (var ctx = new xFilmEntities())
                 {
+                    #region 睇吓使唔使 filter by workshop
+                    var addFilter = false;
+                    if (!(String.IsNullOrEmpty(workshop)))
+                    {
+                        //如果 workshop 係 exist 嘅，淨係 return 同一個 workshop 嘅 order
+                        addFilter = ctx.vwWorkshopList.Where(x => x.WorkshopName == workshop).Any();
+                    }
+                    #endregion
+
                     string qry = String.Format(@"
 select [ClientId]
       ,[ClientName]
@@ -338,8 +364,16 @@ SELECT TOP 100 PERCENT [ClientId]
   where Ln = 1
   order by [ClientName]", month);
 
-                    var list = ctx.Database.SqlQuery<vwReceiptDetailsList_Ex>(qry).ToList();
-                    return Json(list);
+                    if (addFilter)
+                    {
+                        var list = ctx.Database.SqlQuery<vwReceiptDetailsList_Ex>(qry).Where(x => x.WorkshopName == workshop).ToList();
+                        return Json(list);
+                    }
+                    else
+                    {
+                        var list = ctx.Database.SqlQuery<vwReceiptDetailsList_Ex>(qry).ToList();
+                        return Json(list);
+                    }
                 }
                 #endregion
             }
@@ -450,9 +484,9 @@ SELECT TOP 100 PERCENT [ClientId]
         }
 
         [HttpGet]
-        [Route("api/Receipt/ByKeyword/{id:int}/{keyword}")]
+        [Route("api/Receipt/ByKeyword/{id:int}/{keyword}/{workshop?}")]
         [JwtAuthentication]
-        public IHttpActionResult GetReceiptByKeyword(int id, String keyword)
+        public IHttpActionResult GetReceiptByKeyword(int id, String keyword, string workshop = null)
         {
             if ((keyword != "") && (keyword.Length >= 3))
             {
@@ -462,6 +496,16 @@ SELECT TOP 100 PERCENT [ClientId]
                     if (id == 0)
                     {
                         #region Staff, all client
+
+                        #region 睇吓使唔使 filter by workshop
+                        var addFilter = false;
+                        if (!(String.IsNullOrEmpty(workshop)))
+                        {
+                            //如果 workshop 係 exist 嘅，淨係 return 同一個 workshop 嘅 order
+                            addFilter = ctx.vwWorkshopList.Where(x => x.WorkshopName == workshop).Any();
+                        }
+                        #endregion
+
                         var qry = String.Format(@"
 select [ClientId]
       ,[ClientName]
@@ -556,8 +600,17 @@ SELECT TOP 100 PERCENT [ClientId]
   ) as oops
   where Ln = 1
   order by [ReceiptNumber]", keyword);
-                        var list = ctx.Database.SqlQuery<vwReceiptDetailsList_Ex>(qry).ToList();
-                        return Json(list);
+
+                        if (addFilter)
+                        {
+                            var list = ctx.Database.SqlQuery<vwReceiptDetailsList_Ex>(qry).Where(x => x.WorkshopName == workshop).ToList();
+                            return Json(list);
+                        }
+                        else
+                        {
+                            var list = ctx.Database.SqlQuery<vwReceiptDetailsList_Ex>(qry).ToList();
+                            return Json(list);
+                        }
                         #endregion
                     }
                     else

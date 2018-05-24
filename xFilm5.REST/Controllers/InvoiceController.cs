@@ -18,9 +18,9 @@ namespace xFilm5.REST.Controllers
         private DateTime _DateZero = new DateTime(2017, 5, 1);
 
         [HttpGet]
-        [Route("api/Invoice/ByMonth/{id:int}/{date:DateTime}")]
+        [Route("api/Invoice/ByMonth/{id:int}/{date:DateTime}/{workshop?}")]
         [JwtAuthentication]
-        public IHttpActionResult GetInvoiceByMonth(int id, DateTime date)
+        public IHttpActionResult GetInvoiceByMonth(int id, DateTime date, string workshop = null)
         {
             var month = date.ToString("yyyy-MM");
             if (id == 0)
@@ -28,6 +28,15 @@ namespace xFilm5.REST.Controllers
                 #region All distinct clients within the same month
                 using (var ctx = new xFilmEntities())
                 {
+                    #region 睇吓使唔使 filter by workshop
+                    var addFilter = false;
+                    if (!(String.IsNullOrEmpty(workshop)))
+                    {
+                        //如果 workshop 係 exist 嘅，淨係 return 同一個 workshop 嘅 order
+                        addFilter = ctx.vwWorkshopList.Where(x => x.WorkshopName == workshop).Any();
+                    }
+                    #endregion
+
                     string qry = String.Format(@"
 select [ClientId]
       ,[ClientName]
@@ -75,8 +84,16 @@ where ([ClientStatus] = 1) and ([InvoiceDate] >= '{0}') and (convert(nvarchar(7)
 where Ln = 1
 order by [ClientName]", _DateZero.ToString("yyyy-MM-dd"), month);
 
-                    var list = ctx.Database.SqlQuery<vwInvoiceList_All>(qry).ToList();
-                    return Json(list);
+                    if (addFilter)
+                    {
+                        var list = ctx.Database.SqlQuery<vwInvoiceList_All>(qry).Where(x => x.WorkshopName == workshop).ToList();
+                        return Json(list);
+                    }
+                    else
+                    {
+                        var list = ctx.Database.SqlQuery<vwInvoiceList_All>(qry).ToList();
+                        return Json(list);
+                    }
                 }
                 #endregion
             }
@@ -117,9 +134,9 @@ order by [InvoiceNumber]", _DateZero.ToString("yyyy-MM-dd"), id.ToString(), mont
         }
 
         [HttpGet]
-        [Route("api/Invoice/ByKeyword/{id:int}/{keyword}")]
+        [Route("api/Invoice/ByKeyword/{id:int}/{keyword}/{workshop?}")]
         [JwtAuthentication]
-        public IHttpActionResult GetInvoiceByKeyword(int id, String keyword)
+        public IHttpActionResult GetInvoiceByKeyword(int id, String keyword, string workshop = null)
         {
             if ((keyword != "") && (keyword.Length >= 3))
             {
@@ -130,7 +147,45 @@ order by [InvoiceNumber]", _DateZero.ToString("yyyy-MM-dd"), id.ToString(), mont
                     if (id == 0)
                     {
                         #region Staff, all client
-                        qry = String.Format(@"
+
+                        #region 睇吓使唔使 filter by workshop
+                        var addFilter = false;
+                        if (!(String.IsNullOrEmpty(workshop)))
+                        {
+                            //如果 workshop 係 exist 嘅，淨係 return 同一個 workshop 嘅 order
+                            addFilter = ctx.vwWorkshopList.Where(x => x.WorkshopName == workshop).Any();
+                        }
+                        #endregion
+
+                        if (addFilter)
+                        {
+                            qry = String.Format(@"
+SELECT TOP (1000) [ClientId]
+      ,[ClientName]
+      ,[ClientStatus]
+      ,[InvoiceID]
+      ,[InvoiceNumber]
+      ,[InvoiceDate]
+      ,[OsAmount]
+      ,[InvoiceAmount]
+      ,[Status]
+      ,[Paid]
+      ,[PaidOn]
+      ,[PaidAmount]
+      ,[PaidRef]
+      ,[Remarks]
+      ,[OrderID]
+      ,[CreatedOn]
+      ,[CreatedBy]
+      ,[LastModifiedOn]
+      ,[LastModifiedBy]
+FROM [xFilm3_NuStar].[dbo].[vwInvoiceList_All]
+where ([ClientStatus] = 1) and [InvoiceDate] >= '{0}' and ((convert(nvarchar, ClientId) like '%{1}%') or (ClientName like '%{1}%') or (InvoiceNumber like '%{1}%' or (convert(nvarchar(10), InvoiceDate, 120) like '%{1}%'))) and [WorkshopName] = N'{2}'
+order by [InvoiceNumber]", _DateZero.ToString("yyyy-MM-dd"), keyword, workshop);
+                        }
+                        else
+                        {
+                            qry = String.Format(@"
 SELECT TOP (1000) [ClientId]
       ,[ClientName]
       ,[ClientStatus]
@@ -153,6 +208,7 @@ SELECT TOP (1000) [ClientId]
 FROM [xFilm3_NuStar].[dbo].[vwInvoiceList_All]
 where ([ClientStatus] = 1) and [InvoiceDate] >= '{0}' and ((convert(nvarchar, ClientId) like '%{1}%') or (ClientName like '%{1}%') or (InvoiceNumber like '%{1}%' or (convert(nvarchar(10), InvoiceDate, 120) like '%{1}%')))
 order by [InvoiceNumber]", _DateZero.ToString("yyyy-MM-dd"), keyword);
+                        }
                         #endregion
                     }
                     else
