@@ -82,7 +82,7 @@ SELECT [ClientId]
       ,[WorkshopId]
       ,[WorkshopName]
 	  ,row_number() OVER (partition BY ClientName ORDER BY ClientName, InvoiceNumber) AS Ln
-FROM [xFilm3_NuStar].[dbo].[vwInvoiceList_All]
+FROM [dbo].[vwInvoiceList_All]
 where ([ClientStatus] = 1) and ([InvoiceDate] >= '{0}') and (convert(nvarchar(7), InvoiceDate, 120) = '{1}')
 ) as opps
 where Ln = 1
@@ -128,7 +128,7 @@ SELECT TOP (1000) [ClientId]
       ,[LastModifiedBy]
       ,[WorkshopId]
       ,[WorkshopName]
-FROM [xFilm3_NuStar].[dbo].[vwInvoiceList_All]
+FROM [dbo].[vwInvoiceList_All]
 where ([ClientStatus] = 1) and ([InvoiceDate] >= '{0}') and (ClientId = {1}) and (convert(nvarchar(7), InvoiceDate, 120) = '{2}')
 order by [InvoiceNumber]", _DateZero.ToString("yyyy-MM-dd"), id.ToString(), month);
 
@@ -187,7 +187,7 @@ SELECT TOP (1000) [ClientId]
       ,[LastModifiedBy]
       ,[WorkshopId]
       ,[WorkshopName]
-FROM [xFilm3_NuStar].[dbo].[vwInvoiceList_All]
+FROM [dbo].[vwInvoiceList_All]
 where ([ClientStatus] = 1) and [InvoiceDate] >= '{0}' and ((convert(nvarchar, ClientId) like '%{1}%') or (ClientName like '%{1}%') or (InvoiceNumber like '%{1}%' or (convert(nvarchar(10), InvoiceDate, 120) like '%{1}%'))) and [WorkshopName] = N'{2}'
 order by [InvoiceNumber]", _DateZero.ToString("yyyy-MM-dd"), keyword, workshop);
                         }
@@ -215,7 +215,7 @@ SELECT TOP (1000) [ClientId]
       ,[LastModifiedBy]
       ,[WorkshopId]
       ,[WorkshopName]
-FROM [xFilm3_NuStar].[dbo].[vwInvoiceList_All]
+FROM [dbo].[vwInvoiceList_All]
 where ([ClientStatus] = 1) and [InvoiceDate] >= '{0}' and ((convert(nvarchar, ClientId) like '%{1}%') or (ClientName like '%{1}%') or (InvoiceNumber like '%{1}%' or (convert(nvarchar(10), InvoiceDate, 120) like '%{1}%')))
 order by [InvoiceNumber]", _DateZero.ToString("yyyy-MM-dd"), keyword);
                         }
@@ -246,7 +246,7 @@ SELECT TOP (1000) [ClientId]
       ,[LastModifiedBy]
       ,[WorkshopId]
       ,[WorkshopName]
-FROM [xFilm3_NuStar].[dbo].[vwInvoiceList_All]
+FROM [dbo].[vwInvoiceList_All]
 where ([ClientStatus] = 1) and [InvoiceDate] >= '{0}' and (ClientId = {1}) and ((ClientName like '%{2}%') or (InvoiceNumber like '%{2}%' or (convert(nvarchar(10), InvoiceDate, 120) like '%{2}%')))
 order by [InvoiceNumber]", _DateZero.ToString("yyyy-MM-dd"), id.ToString(), keyword);
                         #endregion

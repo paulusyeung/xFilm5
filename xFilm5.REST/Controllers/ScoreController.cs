@@ -15,13 +15,14 @@ namespace xFilm5.REST.Controllers
         private DateTime _DateZero = new DateTime(2017, 5, 1);
 
         [HttpGet]
-        [Route("api/Score/ByMonth/{id:int}/{date:DateTime}")]
+        [Route("api/Score/ByMonth/{id:int}/{date:DateTime}/{workshop?}")]
         [JwtAuthentication]
-        public IHttpActionResult GetScoreByMonth(int id, DateTime date)
+        public IHttpActionResult GetScoreByMonth(int id, DateTime date, String workshop = null)
         {
             var pClient = new SqlParameter("@ClientId", id);
             var pYear = new SqlParameter("@Year", date.Year);
             var pMonth = new SqlParameter("@Month", date.Month);
+            var pWorkshop = new SqlParameter("@Workshop", workshop);
 
             if (id == 0)
             {
@@ -30,8 +31,25 @@ namespace xFilm5.REST.Controllers
                 {
                     try
                     {
-                        var list = ctx.Database.SqlQuery<Score>("dbo.apRESTscoreByMonth @Year, @Month", pYear, pMonth).ToList(); ;
-                        return Json(list);
+                        #region 睇吓使唔使 filter by workshop
+                        var addFilter = false;
+                        if (!(String.IsNullOrEmpty(workshop)))
+                        {
+                            //如果 workshop 係 exist 嘅，淨係 return 同一個 workshop 嘅 order
+                            addFilter = ctx.vwWorkshopList.Where(x => x.WorkshopName == workshop).Any();
+                        }
+                        #endregion
+
+                        if (addFilter)
+                        {
+                            var list = ctx.Database.SqlQuery<Score>("dbo.apRESTscoreByMonthByWorkshop @Year, @Month, @Workshop", pYear, pMonth, pWorkshop).ToList();
+                            return Json(list);
+                        }
+                        else
+                        {
+                            var list = ctx.Database.SqlQuery<Score>("dbo.apRESTscoreByMonth @Year, @Month", pYear, pMonth).ToList(); ;
+                            return Json(list);
+                        }
                     }
                     catch (Exception e)
                     {
@@ -60,13 +78,14 @@ namespace xFilm5.REST.Controllers
         }
 
         [HttpGet]
-        [Route("api/Score/ByYear/{id:int}/{date:DateTime}")]
+        [Route("api/Score/ByYear/{id:int}/{date:DateTime}/{workshop?}")]
         [JwtAuthentication]
-        public IHttpActionResult GetScoreByYear(int id, DateTime date)
+        public IHttpActionResult GetScoreByYear(int id, DateTime date, String workshop = null)
         {
             var pClient = new SqlParameter("@ClientId", id);
             var pYear = new SqlParameter("@Year", date.Year);
             var pMonth = new SqlParameter("@Month", Convert.ToInt32(0));
+            var pWorkshop = new SqlParameter("@Workshop", workshop);
 
             if (id == 0)
             {
@@ -75,8 +94,25 @@ namespace xFilm5.REST.Controllers
                 {
                     try
                     {
-                        var list = ctx.Database.SqlQuery<Score>("dbo.apRESTscoreByMonth @Year, @Month", pYear, pMonth).ToList(); ;
-                        return Json(list);
+                        #region 睇吓使唔使 filter by workshop
+                        var addFilter = false;
+                        if (!(String.IsNullOrEmpty(workshop)))
+                        {
+                            //如果 workshop 係 exist 嘅，淨係 return 同一個 workshop 嘅 order
+                            addFilter = ctx.vwWorkshopList.Where(x => x.WorkshopName == workshop).Any();
+                        }
+                        #endregion
+
+                        if (addFilter)
+                        {
+                            var list = ctx.Database.SqlQuery<Score>("dbo.apRESTscoreByMonthByWorkshop @Year, @Month, @Workshop", pYear, pMonth, pWorkshop).ToList(); ;
+                            return Json(list);
+                        }
+                        else
+                        {
+                            var list = ctx.Database.SqlQuery<Score>("dbo.apRESTscoreByMonth @Year, @Month", pYear, pMonth).ToList(); ;
+                            return Json(list);
+                        }
                     }
                     catch (Exception e)
                     {

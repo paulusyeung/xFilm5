@@ -104,7 +104,7 @@ SELECT TOP 100 PERCENT [OrderID]
       ,[DeliveryMethod]
       ,[Comment]
 	  ,row_number() OVER (partition BY [ClientName] order by [ClientName], [OrderID]) as Ln
-FROM [xFilm3_NuStar].[dbo].[vwOrderList]
+FROM [dbo].[vwOrderList]
 where (OrderTypeID >= 6) AND (substring([DateReceived], 1, 7) = '{0}')
 ) as oops
 where Ln = 1
