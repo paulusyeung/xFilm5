@@ -70,5 +70,71 @@ namespace xFilm5.EF6
                 OnCompleted
             }
         }
+
+        public class Order
+        {
+            public enum OrderType
+            {
+                UploadFile = 1,
+                DirectPrint,
+                PsFile,
+                Others,
+                Plate,
+                Plate5,
+                Film5,
+                Vps5
+            }
+
+            public enum Priority
+            {
+                Rush = 1,
+                Express,
+                Regular
+            }
+
+            public enum Workflow
+            {
+                Cancelled = 1,
+                Queuing,
+                Retouch,
+                Printing,
+                ProofingOutgoing,
+                ProofingIncoming,
+                Ready,
+                Dispatch,
+                Completed
+            }
+
+            public enum DeliveryMethod
+            {
+                PickUp = 1,
+                DeliverTo
+            }
+
+            public enum PrintQSubitemType
+            {
+                Ps,             // 收到 ps
+                Vps,            // 有 vps
+                Tiff,           // 有 tiff
+                Cip3,           // 有 cip3
+                Blueprint,      // 有 藍紙
+                Plate,          // 有 鋅
+                Order,          // 落咗荷打
+                Receipt,        // 收咗貸
+                Invoice,        // 開咗單
+                Film            // 2017 追加
+            }
+        }
+
+        public class Common
+        {
+            public enum Status
+            {
+                Inactive = -1,
+                Draft = 0,
+                Active,
+                Power
+            }
+        }
     }
 }
