@@ -31,9 +31,6 @@ namespace xFilm5.EF6
         public Nullable<bool> VpsRetired { get; set; }
         public Nullable<int> VpsAge { get; set; }
         public string ClientName { get; set; }
-        public Nullable<int> OrderHeaderId { get; set; }
-        public Nullable<int> WorkshopId { get; set; }
-        public string WorkshopName { get; set; }
         public int DefaultWorkshopId { get; set; }
         public string DefaultWorkshopName { get; set; }
     }
