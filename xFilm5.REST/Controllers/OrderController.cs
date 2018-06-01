@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -9,9 +11,12 @@ using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using xFilm5.EF6;
 using xFilm5.REST.Filters;
+using xFilm5.REST.Helper;
+using xFilm5.REST.Models;
 
 namespace xFilm5.REST.Controllers
 {
@@ -435,44 +440,121 @@ order by [ClientName]", month);
         }
 
         [HttpPost]
-        [Route("api/Order/Placing/Plate/{id}")]
+        [Route("api/Order/Place/Plate/{id}")]
         [JwtAuthentication]
-        public async Task<IHttpActionResult> PostPlacingOrder_Plate(string id)
+        public async Task<IHttpActionResult> PostPlaceOrder_Plate(string id)
         {
             var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
             string userSid = identity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault();
 
-            var json = Request.Content.ReadAsStringAsync().Result;
-            var items = JsonConvert.DeserializeObject<List<vwPrintQueueVpsList_AvailablePlate>>(json);
-
-            int clientId;
-            clientId = Int32.TryParse(id, out clientId) ? clientId : 0;
-            clientId = (clientId == 0) ? items[0].ClientID : clientId;
-
-            using (var ctx = new xFilmEntities())
+            try
             {
-                var sid = Guid.Parse(userSid);
-                var user = ctx.User.Where(x => x.UserSid == sid).SingleOrDefault();
-                if (user != null)
+                var json = Request.Content.ReadAsStringAsync().Result;
+                //dynamic expando = JsonConvert.DeserializeObject<ExpandoObject>(json);
+                var data = JsonConvert.DeserializeObject<OrderFormData_Plate>(json);
+
+                using (var ctx = new xFilmEntities())
                 {
-                    /**
-                    var receiptId = ReceiptHelper.SaveReceipt(items, user.UserId, CommonHelper.Enums.PaymentType.OnAccount);
-                    if (receiptId != 0)
+                    var sid = Guid.Parse(userSid);
+                    var user = ctx.User.Where(x => x.UserSid == sid).SingleOrDefault();
+                    if (user != null)
                     {
-                        // 由 xFilm5.Bot 負責打印小票據
-                        if (Helper.ClientHelper.IsReceiptSlip(clientId))
+                        if (data.Items.Count > 0)
                         {
-                            Helper.BotHelper.PostXprinter(receiptId, clientId);
+                            var orderId = OrderHelper.PlaceOrder_Plate(data, user.UserId);
+
+                            if (orderId != 0)
+                            {
+                                var feedback = ctx.vwOrderList.Where(x => x.OrderID == orderId).SingleOrDefault();
+                                return Ok(feedback);
+                            }
                         }
-
-                        // 由 xFilm5.Bot 負責 email 張單
-                        var recipient = ClientHelper.GetEmailRecipient(clientId);
-                        BotHelper.PostEmailReceipt(receiptId, recipient, clientId);
-
-                        return Ok();
                     }
-                    */
                 }
+            }
+            catch (Exception ex)
+            {
+                //
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("api/Order/Place/Blueprint/{id}")]
+        [JwtAuthentication]
+        public async Task<IHttpActionResult> PostPlaceOrder_Blueprint(string id)
+        {
+            var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+            string userSid = identity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault();
+
+            try
+            {
+                var json = Request.Content.ReadAsStringAsync().Result;
+                //dynamic expando = JsonConvert.DeserializeObject<ExpandoObject>(json);
+                var data = JsonConvert.DeserializeObject<OrderFormData_Blueprint>(json);
+
+                using (var ctx = new xFilmEntities())
+                {
+                    var sid = Guid.Parse(userSid);
+                    var user = ctx.User.Where(x => x.UserSid == sid).SingleOrDefault();
+                    if (user != null)
+                    {
+                        if (data.Items.Count > 0)
+                        {
+                            var orderId = OrderHelper.PlaceOrder_Blueprint(data, user.UserId);
+
+                            if (orderId != 0)
+                            {
+                                var feedback = ctx.vwOrderList.Where(x => x.OrderID == orderId).SingleOrDefault();
+                                return Ok(feedback);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("api/Order/Place/Flim/{id}")]
+        [JwtAuthentication]
+        public async Task<IHttpActionResult> PostPlaceOrder_Flim(string id)
+        {
+            var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+            string userSid = identity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault();
+
+            try
+            {
+                var json = Request.Content.ReadAsStringAsync().Result;
+                //dynamic expando = JsonConvert.DeserializeObject<ExpandoObject>(json);
+                var data = JsonConvert.DeserializeObject<OrderFormData_Film>(json);
+
+                using (var ctx = new xFilmEntities())
+                {
+                    var sid = Guid.Parse(userSid);
+                    var user = ctx.User.Where(x => x.UserSid == sid).SingleOrDefault();
+                    if (user != null)
+                    {
+                        if (data.Items.Count > 0)
+                        {
+                            var orderId = OrderHelper.PlaceOrder_Film(data, user.UserId);
+
+                            if (orderId != 0)
+                            {
+                                var feedback = ctx.vwOrderList.Where(x => x.OrderID == orderId).SingleOrDefault();
+                                return Ok(feedback);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //
             }
             return NotFound();
         }

@@ -172,11 +172,14 @@
     <Compile Include="Helper\ClientHelper.cs" />
     <Compile Include="Helper\CommonHelper.cs" />
     <Compile Include="Helper\InvoiceHelper.cs" />
+    <Compile Include="Helper\OrderHelper.cs" />
     <Compile Include="Helper\OwnerHelper.cs" />
+    <Compile Include="Helper\PrintQueueHelper.cs" />
     <Compile Include="Helper\ReceiptHelper.cs" />
     <Compile Include="Helper\UserExHelper.cs" />
     <Compile Include="Helper\UserHelper.cs" />
     <Compile Include="JwtManager.cs" />
+    <Compile Include="Models\OrderFormData.cs" />
     <Compile Include="Models\UserEx.cs" />
     <Compile Include="Models\vwOrderPkPrintQueueVpsListEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
