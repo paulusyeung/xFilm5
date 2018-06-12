@@ -26,7 +26,7 @@ namespace xFilm5.Api.Controllers
             {
                 ctx.Configuration.LazyLoadingEnabled = false;
 
-                var count = ctx.vwPrintQueue_LifeCycleListWithWorkshop.Where(x => x.PrintQSubitemType == (int)EnumHelper.PrintQSubitemType.Plate && x.Workshop.StartsWith(workshop) && DbFunctions.TruncateTime(x.CreatedOn) == DbFunctions.TruncateTime(DateTime.Now)).Count();
+                var count = ctx.vwPrintQueue_LifeCycleListWithWorkshop.Where(x => x.PrintQSubitemType == (int)EnumHelper.Order.PrintQSubitemType.Plate && x.Workshop.StartsWith(workshop) && DbFunctions.TruncateTime(x.CreatedOn) == DbFunctions.TruncateTime(DateTime.Now)).Count();
                 dynamic plates = new ExpandoObject();
                 plates.Count = count;
                 return Json(JsonConvert.SerializeObject(plates));
@@ -41,7 +41,7 @@ namespace xFilm5.Api.Controllers
             {
                 ctx.Configuration.LazyLoadingEnabled = false;
 
-                var count = ctx.vwPrintQueue_LifeCycleListWithWorkshop.Where(x => x.PrintQSubitemType == (int)EnumHelper.PrintQSubitemType.Blueprint && x.Workshop.StartsWith(workshop) && DbFunctions.TruncateTime(x.CreatedOn) == DbFunctions.TruncateTime(DateTime.Now)).Count();
+                var count = ctx.vwPrintQueue_LifeCycleListWithWorkshop.Where(x => x.PrintQSubitemType == (int)EnumHelper.Order.PrintQSubitemType.Blueprint && x.Workshop.StartsWith(workshop) && DbFunctions.TruncateTime(x.CreatedOn) == DbFunctions.TruncateTime(DateTime.Now)).Count();
                 dynamic bp = new ExpandoObject();
                 bp.Count = count;
                 return Json(JsonConvert.SerializeObject(bp));
