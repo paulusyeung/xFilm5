@@ -24,7 +24,7 @@ namespace xFilm5.Bot.Helper
                     hst.MessageBody = fcmHistory.MessageBody;
                     hst.DeliveredOn = fcmHistory.DeliveredOn;
                     hst.Topic = fcmHistory.Topic;
-                    hst.RecipientList = fcmHistory.RecipientList;
+                    hst.RecipientList = fcmHistory.RecipientList.Substring(0, 1024);
                     hst.UserIdList = fcmHistory.UserIdList;
 
                     ctx.FCMHistory.Add(hst);

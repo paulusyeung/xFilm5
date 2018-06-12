@@ -140,6 +140,7 @@ namespace xFilm5.Bot.Helper
             int notifyKF = (int)EnumHelper.User.NotifyType.OnReady_KF;
             int notifyKT = (int)EnumHelper.User.NotifyType.OnReady_KT;
             int notifyTW = (int)EnumHelper.User.NotifyType.OnReady_TW;
+            int notifyClient = (int)EnumHelper.User.NotifyType.OnReady;
 
             using (var ctx = new xFilmEntities())
             {
@@ -155,7 +156,7 @@ namespace xFilm5.Bot.Helper
                     switch (order.Workshop.Substring(0, 2).ToLower())
                     {   // staff 可以分開 branch
                         case "kf":
-                            var kf = ctx.vwUserNotificationList.Where(x => x.NotifyType == notifyKF && (x.SecurityLevel >= 1 || x.ClientId == order.ClientID)).ToList();
+                            var kf = ctx.vwUserNotificationList.Where(x => (x.NotifyType == notifyKF || x.NotifyType == notifyClient) && (x.SecurityLevel > 1 || x.ClientId == order.ClientID)).ToList();
                             #region 每隻登記咗嘅 device 都要發 FCM
                             if (kf.Count > 0)
                             {
@@ -177,7 +178,7 @@ namespace xFilm5.Bot.Helper
                             #endregion
                             break;
                         case "kt":
-                            var kt = ctx.vwUserNotificationList.Where(x => x.NotifyType == notifyKT && (x.SecurityLevel >= 1 || x.ClientId == order.ClientID)).ToList();
+                            var kt = ctx.vwUserNotificationList.Where(x => (x.NotifyType == notifyKT || x.NotifyType == notifyClient) && (x.SecurityLevel > 1 || x.ClientId == order.ClientID)).ToList();
                             #region 每隻登記咗嘅 device 都要發 FCM
                             if (kt.Count > 0)
                             {
@@ -199,7 +200,7 @@ namespace xFilm5.Bot.Helper
                             #endregion
                             break;
                         case "tw":
-                            var tw = ctx.vwUserNotificationList.Where(x => x.NotifyType == notifyKT && (x.SecurityLevel >= 1 || x.ClientId == order.ClientID)).ToList();
+                            var tw = ctx.vwUserNotificationList.Where(x => (x.NotifyType == notifyTW || x.NotifyType == notifyClient) && (x.SecurityLevel > 1 || x.ClientId == order.ClientID)).ToList();
                             #region 每隻登記咗嘅 device 都要發 FCM
                             if (tw.Count > 0)
                             {
@@ -225,7 +226,7 @@ namespace xFilm5.Bot.Helper
 
                     if (recipient.Count > 0)
                     {
-                        var deviceIds = string.Join(",", recipient.ToArray());
+                        var deviceIds = string.Join(",", recipient.Where(x => x != String.Empty).ToArray());
                         var msgTitle = "x5 有貨";
                         var msgBody = String.Format("{0}: {1}", pkVps.OrderHeaderId.ToString(), vps.VpsFileName);
 
@@ -270,6 +271,7 @@ namespace xFilm5.Bot.Helper
             int notifyKF = (int)EnumHelper.User.NotifyType.OnOrder_KF;
             int notifyKT = (int)EnumHelper.User.NotifyType.OnOrder_KT;
             int notifyTW = (int)EnumHelper.User.NotifyType.OnOrder_TW;
+            int notifyClient = (int)EnumHelper.User.NotifyType.OnOrder;
 
             using (var ctx = new xFilmEntities())
             {
@@ -280,7 +282,7 @@ namespace xFilm5.Bot.Helper
                     switch (order.Workshop.Substring(0, 2).ToLower())
                     {   // staff 可以分開 branch
                         case "kf":
-                            var kf = ctx.vwUserNotificationList.Where(x => x.NotifyType == notifyKF && (x.SecurityLevel >= 1 || x.ClientId == order.ClientID)).ToList();
+                            var kf = ctx.vwUserNotificationList.Where(x => (x.NotifyType == notifyKF || x.NotifyType == notifyClient) && (x.SecurityLevel > 1 || x.ClientId == order.ClientID)).ToList();
                             #region 每隻登記咗嘅 device 都要發 FCM
                             if (kf.Count > 0)
                             {
@@ -302,7 +304,7 @@ namespace xFilm5.Bot.Helper
                             #endregion
                             break;
                         case "kt":
-                            var kt = ctx.vwUserNotificationList.Where(x => x.NotifyType == notifyKT && (x.SecurityLevel >= 1 || x.ClientId == order.ClientID)).ToList();
+                            var kt = ctx.vwUserNotificationList.Where(x => (x.NotifyType == notifyKT || x.NotifyType == notifyClient) && (x.SecurityLevel > 1 || x.ClientId == order.ClientID)).ToList();
                             #region 每隻登記咗嘅 device 都要發 FCM
                             if (kt.Count > 0)
                             {
@@ -324,7 +326,7 @@ namespace xFilm5.Bot.Helper
                             #endregion
                             break;
                         case "tw":
-                            var tw = ctx.vwUserNotificationList.Where(x => x.NotifyType == notifyTW && (x.SecurityLevel >= 1 || x.ClientId == order.ClientID)).ToList();
+                            var tw = ctx.vwUserNotificationList.Where(x => (x.NotifyType == notifyTW || x.NotifyType == notifyClient) && (x.SecurityLevel > 1 || x.ClientId == order.ClientID)).ToList();
                             #region 每隻登記咗嘅 device 都要發 FCM
                             if (tw.Count > 0)
                             {
@@ -350,7 +352,7 @@ namespace xFilm5.Bot.Helper
 
                     if (recipient.Count > 0)
                     {
-                        var deviceIds = string.Join(",", recipient.ToArray());
+                        var deviceIds = string.Join(",", recipient.Where(x => x != String.Empty).ToArray());
                         var msgTitle = "x5 有柯打";
                         var msgBody = String.Format("單號：{0}，客名：{1}", orderId.ToString(), order.ClientName);
 
