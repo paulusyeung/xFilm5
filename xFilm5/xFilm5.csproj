@@ -21,6 +21,8 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -95,6 +97,10 @@
       <SpecificVersion>True</SpecificVersion>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Magick.NET-Q8-x86, Version=7.5.0.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=x86">
+      <HintPath>..\packages\Magick.NET-Q8-x86.7.5.0\lib\net40\Magick.NET-Q8-x86.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -102,6 +108,9 @@
     <Reference Include="nxStudio, Version=1.0.2813.23161, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Program Files\Common Files\nxStudio\nxStudio.dll</HintPath>
+    </Reference>
+    <Reference Include="owncloud-sharp">
+      <HintPath>..\..\owncloud-sharp-master\owncloud-sharp\bin\Release\owncloud-sharp.dll</HintPath>
     </Reference>
     <Reference Include="PrinterUtility, Version=1.0.1.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\PrinterUtility.1.1.2\lib\PrinterUtility.dll</HintPath>
@@ -207,6 +216,9 @@
     <Content Include="Resources\Icons\16x16\checkbox-ok-12x12.jpg" />
     <Content Include="Resources\Icons\16x16\checkbox-ok.jpg" />
     <Content Include="Resources\Icons\16x16\client_cash_16x16.png" />
+    <Content Include="Resources\Icons\16x16\cloud-off-outline_16.png" />
+    <Content Include="Resources\Icons\16x16\cloud-outline_16.png" />
+    <Content Include="Resources\Icons\16x16\cloud-upload_16.png" />
     <Content Include="Resources\Icons\16x16\comment.png" />
     <Content Include="Resources\Icons\16x16\document_text-add.png" />
     <Content Include="Resources\Icons\16x16\document_text-edit.png" />
@@ -813,9 +825,11 @@
     </Compile>
     <Compile Include="Helper\BotHelper.cs" />
     <Compile Include="Helper\ClientHelper.cs" />
+    <Compile Include="Helper\CloudDiskHelper.cs" />
     <Compile Include="Helper\CommonHelper.cs" />
     <Compile Include="Helper\EmailHelper.cs" />
     <Compile Include="Helper\FileHelper.cs" />
+    <Compile Include="Helper\ImpersonationHelper.cs" />
     <Compile Include="Helper\InvoiceHelper.cs" />
     <Compile Include="Helper\UserExHelper.cs" />
     <Compile Include="Helper\UserHelper.cs" />
@@ -1380,6 +1394,13 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Import Project="..\packages\Magick.NET-Q8-x86.7.5.0\build\net40\Magick.NET-Q8-x86.targets" Condition="Exists('..\packages\Magick.NET-Q8-x86.7.5.0\build\net40\Magick.NET-Q8-x86.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Magick.NET-Q8-x86.7.5.0\build\net40\Magick.NET-Q8-x86.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Magick.NET-Q8-x86.7.5.0\build\net40\Magick.NET-Q8-x86.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

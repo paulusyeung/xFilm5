@@ -1428,4 +1428,19 @@
     <chs>发出短讯</chs>
     <cht>發出短訊</cht>
   </keyword>
+  <keyword key="cloud_disk">
+    <en>Cloud Disk</en>
+    <chs>云端硬碟</chs>
+    <cht>雲端硬碟</cht>
+  </keyword>
+  <keyword key="activate_cloud_disk">
+    <en>Activate Cloud Disk</en>
+    <chs>啓用云端硬碟</chs>
+    <cht>啓用雲端硬碟</cht>
+  </keyword>
+  <keyword key="sync_cloud_disk">
+    <en>Sync Cloud Disk</en>
+    <chs>同步云端硬碟</chs>
+    <cht>同步雲端硬碟</cht>
+  </keyword>
 </root>

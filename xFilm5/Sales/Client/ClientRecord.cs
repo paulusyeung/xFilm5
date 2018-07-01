@@ -1,4 +1,4 @@
-#region Using
+﻿#region Using
 
 using System;
 using System.Collections.Generic;
@@ -12,6 +12,7 @@ using Gizmox.WebGUI.Common.Resources;
 using Gizmox.WebGUI.Forms;
 
 using xFilm5.DAL;
+using xFilm5.Helper;
 
 #endregion
 
@@ -133,9 +134,21 @@ namespace xFilm5.Sales.Client
             cmdUnsuspend.Image = new IconResourceHandle("16x16.vcr_play_dark_16.png");
 
             // cmdVipPrice
-            ToolBarButton cmdVipPrice = new ToolBarButton("VipPrice", oDict.GetWord("vip_price"));
+            //ToolBarButton cmdVipPrice = new ToolBarButton("VipPrice", oDict.GetWord("vip_price"));    2018.06.30 paulus: 唔夠位，唔出 text
+            ToolBarButton cmdVipPrice = new ToolBarButton("VipPrice", "");
             cmdVipPrice.Tag = "VipPrice";
             cmdVipPrice.Image = new IconResourceHandle("16x16.icons5_Color_VIP_16px.png");
+            cmdVipPrice.ToolTipText = oDict.GetWord("vip_price");
+
+            // cmdCloudDisk
+            ToolBarButton cmdCloudDisk = new ToolBarButton("CloudDisk", "");
+            cmdCloudDisk.Tag = "CloudDisk";
+            cmdCloudDisk.Image = new IconResourceHandle("16x16.cloud-off-outline_16.png");
+
+            ToolBarButton cmdCloudSync = new ToolBarButton("CloudSync", "");
+            cmdCloudSync.Tag = "CloudSync";
+            cmdCloudSync.Image = new IconResourceHandle("16x16.cloud-upload_16.png");
+            cmdCloudSync.ToolTipText = oDict.GetWord("sync_cloud_disk");
 
             if (_EditMode != Common.Enums.EditMode.Read)
             {
@@ -158,6 +171,22 @@ namespace xFilm5.Sales.Client
                         }
                     }
                     this.ansToolbar.Buttons.Add(cmdVipPrice);
+
+                    if (xFilm5.Controls.Utility.User.UserRole() == (int)DAL.Common.Enums.UserRole.Admin)
+                    {
+                        if (CloudDiskHelper.IsClientExist(_ClientId))
+                        {
+                            cmdCloudDisk.Image = new IconResourceHandle("16x16.cloud-outline_16.png");
+                            this.ansToolbar.Buttons.Add(cmdCloudDisk);
+                            this.ansToolbar.Buttons.Add(cmdCloudSync);
+                        }
+                        else
+                        {
+                            cmdCloudDisk.Image = new IconResourceHandle("16x16.cloud-off-outline_16.png");
+                            cmdCloudDisk.ToolTipText = oDict.GetWord("activate_cloud_disk");
+                            this.ansToolbar.Buttons.Add(cmdCloudDisk);
+                        }
+                    }
                 }
             }
 
@@ -290,10 +319,26 @@ namespace xFilm5.Sales.Client
                 client.Save();
 
                 _ClientId = client.ID;
-                if (SaveAddress() && SaveUser())
+                //if (SaveAddress() && SaveUser())
+                //{
+                //    result = true;
+                //}
+                result = SaveAddress() && SaveUser();
+
+                #region 2018.06.30 paulus: 如果係新客，自動建立 CloudDisk account
+                if (result && _EditMode == Common.Enums.EditMode.Add)
                 {
-                    result = true;
+                    switch (_EditMode)
+                    {
+                        case Common.Enums.EditMode.Add:
+                            CloudDiskHelper.CreateClient(_ClientId);
+                            break;
+                        case Common.Enums.EditMode.Edit:
+                            CloudDiskHelper.UpdateClient(_ClientId.ToString(), client.PIN);
+                            break;
+                    }
                 }
+                #endregion
             }
             catch { }
 
@@ -351,6 +396,36 @@ namespace xFilm5.Sales.Client
                     break;
                 case (int)Common.Enums.EditMode.Edit:
                     user = xFilm5.DAL.Client_User.Load(_ClientUserId);
+
+                    #region 2018.06.30 paulus: 如果係新客，自動建立 CloudDisk account
+                    var login = txtEmail.Text.Trim();
+                    var pwd = txtPIN.Text.Trim();
+
+                    var loginChanged = (user.Email != login) ? true : false;
+                    var passwordChanged = (user.Password != pwd) ? true : false;
+
+                    if (loginChanged)
+                    {
+                        if (passwordChanged)
+                        {
+                            CloudDiskHelper.UpdateClient(user.ClientID.ToString(), pwd);        // default account: update password
+                            CloudDiskHelper.CreateSubClient(user.ClientID, login, pwd);         // sub account: create new
+                            CloudDiskHelper.DeleteClient(login);                                // sub acount: remove old
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                    else
+                    {
+                        if (passwordChanged)
+                        {
+                            CloudDiskHelper.UpdateClient(user.ClientID.ToString(), pwd);        // default account: update password
+                            CloudDiskHelper.UpdateClient(login, pwd);                           // sub account: update password
+                        }
+                    }
+                    #endregion
                     break;
             }
             try
@@ -387,6 +462,12 @@ namespace xFilm5.Sales.Client
                 client.Save();
 
                 result = true;
+
+                #region 2018.06.30 paulus: delete CloudDisk account
+                Client_User cuser = DAL.Client_User.LoadWhere(String.Format("ClientID = {0} AND PrimaryUser = 1", _ClientId.ToString()));
+                CloudDiskHelper.DeleteClient(cuser.Email);
+                CloudDiskHelper.DeleteClient(_ClientId);
+                #endregion
             }
 
             return result;
@@ -403,6 +484,12 @@ namespace xFilm5.Sales.Client
                 client.Save();
 
                 result = true;
+
+                #region 2018.06.30 paulus: disable CloudDisk account
+                Client_User cuser = DAL.Client_User.LoadWhere(String.Format("ClientID = {0} AND PrimaryUser = 1", _ClientId.ToString()));
+                CloudDiskHelper.DisableClient(cuser.Email);
+                CloudDiskHelper.DisableClient(_ClientId);
+                #endregion
             }
 
             return result;
@@ -419,6 +506,12 @@ namespace xFilm5.Sales.Client
                 client.Save();
 
                 result = true;
+
+                #region 2018.06.30 paulus: disable CloudDisk account
+                Client_User cuser = Client_User.LoadWhere(String.Format("ClientID = {0} AND PrimaryUser = 1", _ClientId.ToString()));
+                CloudDiskHelper.EnableClient(cuser.Email);
+                CloudDiskHelper.EnableClient(_ClientId);
+                #endregion
             }
 
             return result;
@@ -452,6 +545,20 @@ namespace xFilm5.Sales.Client
                         Sales.VipPrice.Client2ProductList c2p = new VipPrice.Client2ProductList();
                         c2p.ClientId = _ClientId;
                         c2p.ShowDialog();
+                        break;
+                    case "clouddisk":
+                        var icon = e.Button.Image.ToString();
+                        if (e.Button.Image.ToString().Contains("off"))
+                        {
+                            MessageBox.Show(String.Format("{0}?", oDict.GetWord("activate_cloud_disk")), "Cloud Disk Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, new EventHandler(cmdCloudDisk_Click));
+                        }
+                        else
+                        {
+                            //CloudDiskHelper.MigrateFiles(_ClientId);
+                        }
+                        break;
+                    case "cloudsync":
+                        MessageBox.Show(String.Format("{0}?", oDict.GetWord("sync_cloud_disk")), "Cloud Disk Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question, new EventHandler(cmdCloudSync_Click));
                         break;
                 }
             }
@@ -575,6 +682,36 @@ namespace xFilm5.Sales.Client
         private void cmdCloseForm(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void cmdCloudDisk_Click(object sender, EventArgs e)
+        {
+            if (((Form)sender).DialogResult == DialogResult.Yes)
+            {
+                var created = CloudDiskHelper.CreateClient(_ClientId);
+                if (created)
+                {
+                    CloudDiskHelper.MigrateFiles(_ClientId);
+
+                    foreach (ToolBarButton item in ansToolbar.Buttons)
+                    {
+                        if (item.Tag.ToString().ToLower() == "clouddisk")
+                        {
+                            item.Image = new IconResourceHandle("16x16.cloud-outline_16.png");
+                        }
+                    }
+                }
+            }
+
+        }
+
+        private void cmdCloudSync_Click(object sender, EventArgs e)
+        {
+            if (((Form)sender).DialogResult == DialogResult.Yes)
+            {
+                CloudDiskHelper.MigrateFiles(_ClientId);
+            }
+
         }
         #endregion
     }
