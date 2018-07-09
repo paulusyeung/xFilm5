@@ -421,7 +421,7 @@ namespace xFilm5.Bot.Helper
                             #region All done, send notifications
                             var msgTitle = "Sync Cloud Disk";
                             var msgBody = "Your request is done. You can login your Cloud Disk for the changes.";
-                            var mobileIds = UserHelper.GetUserMobileDeviceIds(userId);
+                            var mobileIds = UserHelper.GetUserMobileDeviceTokens(userId);
 
                             if (!String.IsNullOrEmpty(mobileIds))
                             {

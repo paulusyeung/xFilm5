@@ -69,7 +69,7 @@ namespace xFilm5.Bot.Helper
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public static String GetUserMobileDeviceIds(int userId)
+        public static String GetUserMobileDeviceTokens(int userId)
         {
             var result = "";
 
