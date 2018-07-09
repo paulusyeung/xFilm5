@@ -1,9 +1,10 @@
-using System.Web.Http;
+﻿using System.Web.Http;
 using WebActivatorEx;
 using xFilm5.Bot;
 using Swashbuckle.Application;
 
-[assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
+//用 Startup.cs 就要 comment out this line
+//[assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 
 namespace xFilm5.Bot
 {
@@ -240,6 +241,23 @@ namespace xFilm5.Bot
                         // "apiKeyIn" can either be "query" or "header"                                                
                         //
                         //c.EnableApiKeySupport("apiKey", "header");
+                    });
+        }
+
+        /// <summary>
+        /// 2018.07.09 paulus:
+        /// 改用 Startup.cs 就要用喔個 function 嚟 initialize Swagger
+        /// </summary>
+        /// <param name="config"></param>
+        public static void Register(HttpConfiguration config)
+        {
+            config
+                .EnableSwagger(c =>
+                    {
+                        c.SingleApiVersion("v1", "xFilm5.Bot");
+                    })
+                .EnableSwaggerUi(c =>
+                    {
                     });
         }
     }

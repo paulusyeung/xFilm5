@@ -122,6 +122,48 @@ namespace xFilm5.Bot.Helper
             return result;
         }
 
+        /// <summary>
+        /// Sending email via SparkPost
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="subject"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public static bool EmailMessage(String email, String subject, String message)
+        {
+            bool result = false;
+
+            try
+            {
+                var transmission = new SparkPost.Transmission();
+
+                transmission.Content.From.Email = "support@directoutput.com.hk";
+                transmission.Content.ReplyTo = "no-reply<support@directoutput.com.hk>";
+                transmission.Content.Subject = subject;
+                transmission.Content.Text = message;
+
+                var recipient = new SparkPost.Recipient
+                {
+                    Address = new SparkPost.Address { Email = email }
+                };
+                transmission.Recipients.Add(recipient);
+
+                var spclient = new SparkPost.Client(Config.SparkPost_ApiKey);
+
+                spclient.CustomSettings.SendingMode = SparkPost.SendingModes.Sync;
+
+                var response = spclient.Transmissions.Send(transmission);
+
+                result = (response.Result.StatusCode == System.Net.HttpStatusCode.OK) ? true : false;
+            }
+            catch (Exception ex)
+            {
+                //
+            }
+
+            return result;
+        }
+
         public static bool IsValidEmail(String email)
         {
             return Regex.IsMatch(email, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase);

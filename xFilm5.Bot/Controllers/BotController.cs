@@ -173,6 +173,11 @@ namespace xFilm5.Bot.Controllers
                                     {
                                         File.Copy(filePath_Source, filePath_Dest);
                                         log.Info(String.Format("[bot, plate, copied] \r\nFile Name = {0}\r\nFilePath_Source = {1}\r\nFilePath_Dest = {2}", fileName, filePath_Source, filePath_Dest));
+
+                                        #region 2018.06.30 paulus: 抄一份去 CloudDisk
+                                        CloudDiskHelper.UploadPlateFile(filePath_Source);
+                                        #endregion
+
                                         return Ok();
                                     }
                                     catch (Exception e)
