@@ -245,5 +245,25 @@ namespace xFilm5.Helper
             var response = client.Execute(request);
             return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
         }
+
+        public static void PostCloudDisk_MigrateFile(int clientId, int userId)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            //#if (DEBUG)
+            //            botServer = "http://localhost:35543/";
+            //#endif
+            var client = new RestClient(botServer);
+            var request = new RestRequest(String.Format("CloudDisk/MigrateClient/{0}/{1}/", clientId.ToString(), userId.ToString()), Method.POST);
+
+            request.RequestFormat = DataFormat.Json;
+
+            request.AddBody(new
+            {
+                ClientId = clientId.ToString(),
+                UserId = userId.ToString(),
+                AnotherParam = 19.99
+            });
+            var result = client.Execute(request);
+        }
     }
 }

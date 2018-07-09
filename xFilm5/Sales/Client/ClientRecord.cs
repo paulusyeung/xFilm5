@@ -689,9 +689,11 @@ namespace xFilm5.Sales.Client
             if (((Form)sender).DialogResult == DialogResult.Yes)
             {
                 var created = CloudDiskHelper.CreateClient(_ClientId);
+
                 if (created)
                 {
-                    CloudDiskHelper.MigrateFiles(_ClientId);
+                    //2018.07.09 paulus: 唔想立即 migrate files，留俾 cmdCloudSync_Click
+                    //CloudDiskHelper.MigrateFiles(_ClientId, DAL.Common.Config.CurrentUserId);
 
                     foreach (ToolBarButton item in ansToolbar.Buttons)
                     {
@@ -709,7 +711,11 @@ namespace xFilm5.Sales.Client
         {
             if (((Form)sender).DialogResult == DialogResult.Yes)
             {
-                CloudDiskHelper.MigrateFiles(_ClientId);
+                //2018.07.09 paulus: 交俾 Bot Server 倣，唔怕會 Timeout
+                //CloudDiskHelper.MigrateFiles(_ClientId, DAL.Common.Config.CurrentUserId);
+                BotHelper.PostCloudDisk_MigrateFile(_ClientId, DAL.Common.Config.CurrentUserId);
+
+                MessageBox.Show("It takes some time to process your request.\r\nWe will notify you when your request is done.");
             }
 
         }

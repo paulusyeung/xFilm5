@@ -14,6 +14,9 @@ namespace xFilm5.Helper
 {
     public class CloudDiskHelper
     {
+        // not used in this project
+        //private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         static string CLOUDDISK_URL = ConfigurationManager.AppSettings["CloudDisk_ServerUri"];                  // "http://192.168.12.150/nextcloud/";
         static string CLOUDDISK_ADMIN = ConfigurationManager.AppSettings["CloudDisk_Admin"];                    // "nxstudio";
         static string CLOUDDISK_ADMINPASSWORD = ConfigurationManager.AppSettings["CloudDisk_AdminPassword"];    // "nx@82279602";
@@ -79,7 +82,7 @@ namespace xFilm5.Helper
                     string group = clientId.ToString();
                     string parentId = clientId.ToString(), parentPassword = cuser.Password;
                     string childId = cuser.Email, childPassword = cuser.Password;
-                    string cups = "/cups", vps = "/vps", cip3 = "/cip3", plate = "/plate", blueprint = "/blueprint", film = "/film";
+                    string cups = "/cups", vps = "/vps", cip3 = "/cip3", plate = "/plate", blueprint = "/blueprint", film = "/film", thumbnail = "/thumbnail";
 
                     try
                     {
@@ -104,6 +107,8 @@ namespace xFilm5.Helper
                         if (result) c.ShareWithGroup(blueprint, group, Convert.ToInt32(OcsPermission.All));
                         if (result) result = c.Exists(film) ? true : c.CreateDirectory(film);
                         if (result) c.ShareWithGroup(film, group, Convert.ToInt32(OcsPermission.All));
+                        if (result) result = c.Exists(thumbnail) ? true : c.CreateDirectory(thumbnail);
+                        if (result) c.ShareWithGroup(thumbnail, group, Convert.ToInt32(OcsPermission.All));
                     }
                     catch (Exception ex)
                     {
@@ -285,7 +290,8 @@ namespace xFilm5.Helper
             return result;
         }
 
-        public static bool MigrateFiles(int clientId)
+        /** Not used in this project
+        public static bool MigrateFiles(int clientId, int userId)
         {
             bool result = false;
 
@@ -296,9 +302,6 @@ namespace xFilm5.Helper
                 {
                     if (IsClientExist(clientId))
                     {
-                        String serverUri = "", userName = "", userPassword = "", sourcePath = "";
-                        String wildcard = "";
-
                         try
                         {
                             #region Migrate Cups files
@@ -357,7 +360,7 @@ namespace xFilm5.Helper
                                 }
                             }
                             #endregion
-                            
+
                             #region Migrate Tiff (plate) files
                             serverUri = ConfigurationManager.AppSettings["Plate_ServerUri"];
                             userName = ConfigurationManager.AppSettings["Plate_UserName"];
@@ -376,7 +379,7 @@ namespace xFilm5.Helper
                                 }
                             }
                             #endregion
-                            
+
                             #region Migrate Tiff (blueprint) files
                             serverUri = ConfigurationManager.AppSettings["Blueprint_ServerUri"];
                             userName = ConfigurationManager.AppSettings["Blueprint_UserName"];
@@ -395,7 +398,7 @@ namespace xFilm5.Helper
                                 }
                             }
                             #endregion
-                            
+
                             #region Migrate ps (film) files
                             serverUri = ConfigurationManager.AppSettings["Film_ServerUri"];
                             userName = ConfigurationManager.AppSettings["Film_UserName"];
@@ -414,6 +417,29 @@ namespace xFilm5.Helper
                                 }
                             }
                             #endregion
+                            
+                            #region All done, send notifications
+                            var msgTitle = "Sync Cloud Disk";
+                            var msgBody = "Your request is done. You can login your Cloud Disk for the changes.";
+                            var mobileIds = UserHelper.GetUserMobileDeviceTokens(userId);
+
+                            if (!String.IsNullOrEmpty(mobileIds))
+                            {
+                                FCMHelper.SendPushNotification(Config.FCM_ServerKey, mobileIds, Config.FCM_SenderId, msgTitle, msgBody);
+                            }
+                            var email = UserHelper.GetUserEmail(userId);
+#if DEBUG
+                            {
+                                email = "paulusyeung@gmail.com";
+                            }
+#endif
+                            if (!String.IsNullOrEmpty(email))
+                            {
+                                EmailHelper.EmailMessage(email, msgTitle, msgBody);
+                            }
+
+                            log.Info(String.Format("[bot, CloudDisk, MigrateFiles] \r\nHangfire accepted\r\nClient Id = {0}, User Id = {1}", clientId.ToString(), userId.ToString()));
+                            #endregion
                         }
                         catch (Exception ex)
                         {
@@ -425,6 +451,7 @@ namespace xFilm5.Helper
 
             return result;
         }
+        */
 
         public static bool UploadCupsFile(String cupsFileName)
         {
@@ -449,7 +476,7 @@ namespace xFilm5.Helper
                     {
                         string group = cuser.ClientID.ToString();
                         string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
-                        string destPath = "/cups";
+                        string destPath = "/cups", thumbnailPath = "/thumbnail"; ;
 
                         try
                         {
@@ -484,7 +511,7 @@ namespace xFilm5.Helper
                                                 {
                                                     using (var th = new FileStream(thumbnail, FileMode.Open, FileAccess.Read))
                                                     {
-                                                        destFilePath = String.Format("{0}/{1}", destPath, destFileName);
+                                                        destFilePath = String.Format("{0}/{1}", thumbnailPath, destFileName);
                                                         result = c.Upload(destFilePath, th, "image/png");
                                                         if (result) File.Delete(thumbnail);
                                                     }
