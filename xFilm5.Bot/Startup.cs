@@ -6,6 +6,9 @@ using System.Configuration;
 using Hangfire.SqlServer;
 using Hangfire;
 using System.Web.Http;
+using System.Web;
+using Hangfire.Dashboard;
+using System.Net;
 
 [assembly: OwinStartup(typeof(xFilm5.Bot.Startup))]
 
@@ -16,6 +19,9 @@ namespace xFilm5.Bot
         public void Configuration(IAppBuilder app)
         {
             #region Initialize Hangfire
+            // simple
+            //GlobalConfiguration.Configuration.UseSqlServerStorage("SysDb");
+
             // more control options
             var conn = ConfigurationManager.ConnectionStrings["x5db"].ConnectionString;
             var options = new SqlServerStorageOptions
@@ -24,10 +30,17 @@ namespace xFilm5.Bot
             };
             Hangfire.GlobalConfiguration.Configuration.UseSqlServerStorage(conn, options);
 
-            // simple
-            //GlobalConfiguration.Configuration.UseSqlServerStorage("SysDb");
+            // refer: http://docs.hangfire.io/en/latest/configuration/using-dashboard.html?highlight=authorization#configuring-authorization
+            // Hangfire 祇容許 localhost，要用 MyAuthorizationFilter 搞
+            var dashOptions = new DashboardOptions {
+                AppPath = VirtualPathUtility.ToAbsolute("~"),
+                Authorization = new[]
+                {
+                    new MyAuthorizationFilter()
+                }
+            };
+            app.UseHangfireDashboard("/hangfire", dashOptions);
 
-            app.UseHangfireDashboard();
             app.UseHangfireServer();
             #endregion
 
@@ -38,6 +51,22 @@ namespace xFilm5.Bot
             WebApiConfig.Register(config);
 
             app.UseWebApi(config);
+        }
+
+        public class MyAuthorizationFilter : IDashboardAuthorizationFilter
+        {
+            public bool Authorize(DashboardContext context)
+            {
+                // In case you need an OWIN context, use the next line, `OwinContext` class
+                // is the part of the `Microsoft.Owin` package.
+                var owinContext = new OwinContext(context.GetOwinEnvironment());
+                
+                // Allow all authenticated users to see the Dashboard (potentially dangerous).
+                //return owinContext.Authentication.User.Identity.IsAuthenticated;
+                //
+                // allow anonymous
+                return true;
+            }
         }
     }
 }
