@@ -19,6 +19,8 @@ namespace xFilm5.Bot
         public void Configuration(IAppBuilder app)
         {
             #region Initialize Hangfire
+
+            #region database connection string and custom schema
             // simple
             //GlobalConfiguration.Configuration.UseSqlServerStorage("SysDb");
 
@@ -29,9 +31,10 @@ namespace xFilm5.Bot
                 SchemaName = "Hangfire.x5.Bot"
             };
             Hangfire.GlobalConfiguration.Configuration.UseSqlServerStorage(conn, options);
+            #endregion
 
+            #region Hangfire 祇容許 localhost，要用 MyAuthorizationFilter 搞
             // refer: http://docs.hangfire.io/en/latest/configuration/using-dashboard.html?highlight=authorization#configuring-authorization
-            // Hangfire 祇容許 localhost，要用 MyAuthorizationFilter 搞
             var dashOptions = new DashboardOptions {
                 AppPath = VirtualPathUtility.ToAbsolute("~"),
                 Authorization = new[]
@@ -40,6 +43,7 @@ namespace xFilm5.Bot
                 }
             };
             app.UseHangfireDashboard("/hangfire", dashOptions);
+            #endregion
 
             app.UseHangfireServer();
             #endregion
