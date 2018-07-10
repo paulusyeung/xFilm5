@@ -4,6 +4,7 @@ using owncloudsharp;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
@@ -294,6 +295,10 @@ namespace xFilm5.Bot.Helper
         {
             bool result = false;
 
+            // Create new stopwatch.
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             using (var ctx = new xFilmEntities())
             {
                 var cuser = ctx.Client_User.Where(x => x.ClientID == clientId && x.PrimaryUser == true).SingleOrDefault();
@@ -303,7 +308,8 @@ namespace xFilm5.Bot.Helper
                     {
                         try
                         {
-                            /**
+                            String serverUri = "", userName = "", userPassword = "", sourcePath = "", wildcard = "";
+
                             #region Migrate Cups files
                             serverUri = ConfigurationManager.AppSettings["Cups_ServerUri"];
                             userName = ConfigurationManager.AppSettings["Cups_UserName"];
@@ -417,11 +423,12 @@ namespace xFilm5.Bot.Helper
                                 }
                             }
                             #endregion
-                            */
+                            
                             #region All done, send notifications
                             var msgTitle = "Sync Cloud Disk";
-                            var msgBody = "Your request is done. You can login your Cloud Disk for the changes.";
+                            var msgBody = String.Format("Your request is done. Time elapsed: {0:hh\\:mm\\:ss}. Client Id: {1}.", stopwatch.Elapsed, clientId.ToString());
                             var mobileIds = UserHelper.GetUserMobileDeviceTokens(userId);
+                            var deviceIds = UserHelper.GetUserMobileDeviceIds(userId);
 
                             if (!String.IsNullOrEmpty(mobileIds))
                             {
@@ -439,6 +446,22 @@ namespace xFilm5.Bot.Helper
                             }
 
                             log.Info(String.Format("[bot, CloudDisk, MigrateFiles] \r\nHangfire accepted\r\nClient Id = {0}, User Id = {1}", clientId.ToString(), userId.ToString()));
+                            #endregion
+
+                            #region 有 userid，log it
+                            var user = ctx.User.Where(x => x.UserId == userId).SingleOrDefault();
+                            if (user != null)
+                            {
+                                var hst = new FCMHistory();
+                                hst.MessageTitle = msgTitle;
+                                hst.MessageBody = msgBody;
+                                hst.DeliveredOn = DateTime.Now;
+                                hst.Topic = "Device";
+                                hst.RecipientList = mobileIds;
+                                hst.UserIdList = user.UserSid.ToString(); ;
+
+                                var okay = FCMHistoryHelper.WriteHistory(hst);
+                            }
                             #endregion
                         }
                         catch (Exception ex)

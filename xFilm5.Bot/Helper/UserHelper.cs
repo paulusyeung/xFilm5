@@ -65,7 +65,7 @@ namespace xFilm5.Bot.Helper
         }
 
         /// <summary>
-        /// Return the user's device ids delimitted by ','
+        /// Return the user's device tokens delimitted by ','
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
@@ -95,6 +95,38 @@ namespace xFilm5.Bot.Helper
                             if (!(recipient.Any(x => x.Contains(expando.FCM.Token))))
                                 recipient.Add(expando.FCM.Token);
                         }
+                    }
+                    result = String.Join(",", recipient.Where(x => x != String.Empty).ToArray());
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Return the user's device ids delimitted by ','
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public static String GetUserMobileDeviceIds(int userId)
+        {
+            var result = "";
+
+            using (var ctx = new EF6.xFilmEntities())
+            {
+                var items = ctx.vwUserNotificationList
+                    .Where(x => x.UserId == userId)
+                    .OrderBy(x => x.DeviceId).ThenBy(x => x.NotifyType)
+                    //.Select(x => x.DeviceId)
+                    //.Distinct()
+                    .ToList();
+                if (items.Count > 0)
+                {
+                    List<string> recipient = new List<string>();
+
+                    for (int i = 0; i < items.Count; i++)
+                    {
+                        if (!(recipient.Any(x => x.Contains(items[i].DeviceId))))
+                            recipient.Add(items[i].DeviceId);
                     }
                     result = String.Join(",", recipient.Where(x => x != String.Empty).ToArray());
                 }
