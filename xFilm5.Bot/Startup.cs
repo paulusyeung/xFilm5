@@ -34,6 +34,7 @@ namespace xFilm5.Bot
             var config = new HttpConfiguration();
 
             SwaggerConfig.Register(config);
+
             WebApiConfig.Register(config);
 
             app.UseWebApi(config);

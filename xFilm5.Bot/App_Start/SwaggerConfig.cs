@@ -2,6 +2,8 @@
 using WebActivatorEx;
 using xFilm5.Bot;
 using Swashbuckle.Application;
+using System;
+using System.Web;
 
 //用 Startup.cs 就要 comment out this line
 //[assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
@@ -254,6 +256,7 @@ namespace xFilm5.Bot
             config
                 .EnableSwagger(c =>
                     {
+                        c.RootUrl(req => new Uri(req.RequestUri, HttpContext.Current.Request.ApplicationPath ?? string.Empty).ToString());      // used to fix IIS Virtual Directory root path
                         c.SingleApiVersion("v1", "xFilm5.Bot");
                     })
                 .EnableSwaggerUi(c =>
