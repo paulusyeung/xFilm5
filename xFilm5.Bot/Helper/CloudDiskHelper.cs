@@ -71,9 +71,13 @@ namespace xFilm5.Bot.Helper
         /// </summary>
         /// <param name="cuser"></param>
         /// <returns></returns>
-        public static bool CreateClient(int clientId)
+        public static bool CreateClient(int clientId, int userId)
         {
             bool result = false;
+
+            // Create new stopwatch.
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
 
             using (var ctx = new xFilmEntities())
             {
@@ -83,18 +87,22 @@ namespace xFilm5.Bot.Helper
                     string group = clientId.ToString();
                     string parentId = clientId.ToString(), parentPassword = cuser.Password;
                     string childId = cuser.Email, childPassword = cuser.Password;
-                    string cups = "/cups", vps = "/vps", cip3 = "/cip3", plate = "/plate", blueprint = "/blueprint", film = "/film", thumbnail = "/thumbnail";
+                    string cups = "/cups", vps = "/vps", cip3 = "/cip3", plate = "/plate", blueprint = "/blueprint", film = "/film", thumbnail = "/thumbnail", tools = "/tools";
 
                     try
                     {
                         var p = new owncloudsharp.Client(CLOUDDISK_URL, CLOUDDISK_ADMIN, CLOUDDISK_ADMINPASSWORD);
+
+                        #region Create primary user, group, child user
                         result = p.GroupExists(group) ? true : p.CreateGroup(group);
                         if (result) result = p.UserExists(parentId) ? true : p.CreateUser(parentId, parentPassword);
                         if (result) result = p.IsUserInGroup(parentId, group) ? true : p.AddUserToGroup(parentId, group);
                         if (result) result = p.IsUserInSubAdminGroup(parentId, group) ? true : p.AddUserToSubAdminGroup(parentId, group);
                         if (result) result = p.UserExists(childId) ? true : p.CreateUser(childId, childPassword);
                         if (result) result = p.IsUserInGroup(childId, group) ? true : p.AddUserToGroup(childId, group);
+                        #endregion
 
+                        #region Crate folders
                         var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
                         if (result) result = c.Exists(cups) ? true : c.CreateDirectory(cups);
                         if (result) c.ShareWithGroup(cups, group, Convert.ToInt32(OcsPermission.All));
@@ -110,6 +118,118 @@ namespace xFilm5.Bot.Helper
                         if (result) c.ShareWithGroup(film, group, Convert.ToInt32(OcsPermission.All));
                         if (result) result = c.Exists(thumbnail) ? true : c.CreateDirectory(thumbnail);
                         if (result) c.ShareWithGroup(thumbnail, group, Convert.ToInt32(OcsPermission.All));
+                        if (result) result = c.Exists(tools) ? true : c.CreateDirectory(tools);
+                        if (result) c.ShareWithGroup(tools, group, Convert.ToInt32(OcsPermission.All));
+                        #endregion
+
+                        #region Copy default files from Admin and Modify PPD for this client
+                        if (result)
+                        {
+                            #region 將 admin 嘅 /tools/*.* 抄去 client /tools/.
+                            var items = p.List(tools);
+                            if (items.Count > 0)
+                            {
+                                foreach (var item in items)
+                                {
+                                    var filename = item.Name.Replace("%20", " ");
+                                    using (var stream = p.Download(Path.Combine(tools, filename)))
+                                    {
+                                        var localfile = @"C:\Temp\" + filename;
+                                        using (FileStream fs = new FileStream(localfile, FileMode.OpenOrCreate))
+                                        {
+                                            stream.Seek(0, SeekOrigin.Begin);
+                                            stream.CopyTo(fs);
+
+                                            fs.Flush();
+                                        }
+                                        using (var fs = new FileStream(localfile, FileMode.Open, FileAccess.Read))
+                                        {
+                                            var uploaded = c.Upload(Path.Combine(tools, filename), fs, "application/octet-stream");
+                                            if (uploaded)
+                                            {
+                                                File.Delete(localfile);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            #endregion
+
+                            #region 改啲 PPD 入面嘅 CustomerNumber
+                            var ppdCtp = "/tools/CTP.ppd";
+                            var ppdFilm = "/tools/FILM.ppd";
+
+                            if (c.Exists(ppdCtp))
+                            {
+                                using (var streamCtp = c.Download(ppdCtp))
+                                {
+                                    if (streamCtp != null)
+                                    {
+                                        var source = Encoding.ASCII.GetString(((MemoryStream)streamCtp).ToArray());
+                                        var custom = source.Replace("999999", clientId.ToString());
+                                        var memstream = new MemoryStream(ASCIIEncoding.Default.GetBytes(custom));
+                                        c.Upload(ppdCtp, memstream, "text/plain");
+                                    }
+                                }
+                            }
+                            if (c.Exists(ppdFilm))
+                            {
+                                using (var streamFilm = c.Download(ppdFilm))
+                                {
+                                    if (streamFilm != null)
+                                    {
+                                        var source = Encoding.ASCII.GetString(((MemoryStream)streamFilm).ToArray());
+                                        var custom = source.Replace("999999", clientId.ToString());
+                                        var memstream = new MemoryStream(ASCIIEncoding.Default.GetBytes(custom));
+                                        c.Upload(ppdCtp, memstream, "text/plain");
+                                    }
+                                }
+                            }
+                            #endregion
+                        }
+                        #endregion
+
+
+                        #region All done, send notifications
+                        var msgTitle = "Create Cloud Disk Account";
+                        var msgBody = String.Format("Your request is done. Time elapsed: {0:hh\\:mm\\:ss}. Client Id: {1}.", stopwatch.Elapsed, clientId.ToString());
+                        var mobileIds = UserHelper.GetUserMobileDeviceTokens(userId);
+                        var deviceIds = UserHelper.GetUserMobileDeviceIds(userId);
+
+                        if (!String.IsNullOrEmpty(mobileIds))
+                        {
+                            FCMHelper.SendPushNotification(Config.FCM_ServerKey, mobileIds, Config.FCM_SenderId, msgTitle, msgBody);
+                        }
+                        var email = UserHelper.GetUserEmail(userId);
+#if DEBUG
+                        {
+                            email = "paulusyeung@gmail.com";
+                        }
+#endif
+                        if (!String.IsNullOrEmpty(email))
+                        {
+                            EmailHelper.EmailMessage(email, msgTitle, msgBody);
+                        }
+
+                        log.Info(String.Format("[bot, CloudDisk, CreateClient] \r\nHangfire job done.\r\nClient Id = {0}, User Id = {1}", clientId.ToString(), userId.ToString()));
+                        #endregion
+
+                        #region 有 userid，log it
+                        var user = ctx.User.Where(x => x.UserId == userId).SingleOrDefault();
+                        if (user != null)
+                        {
+                            var hst = new FCMHistory();
+                            hst.MessageTitle = msgTitle;
+                            hst.MessageBody = msgBody;
+                            hst.DeliveredOn = DateTime.Now;
+                            hst.Topic = "Device";
+                            hst.RecipientList = mobileIds;
+                            hst.UserIdList = user.UserSid.ToString(); ;
+
+                            var okay = FCMHistoryHelper.WriteHistory(hst);
+                        }
+                        #endregion
+
                     }
                     catch (Exception ex)
                     {
@@ -445,7 +565,7 @@ namespace xFilm5.Bot.Helper
                                 EmailHelper.EmailMessage(email, msgTitle, msgBody);
                             }
 
-                            log.Info(String.Format("[bot, CloudDisk, MigrateFiles] \r\nHangfire accepted\r\nClient Id = {0}, User Id = {1}", clientId.ToString(), userId.ToString()));
+                            log.Info(String.Format("[bot, CloudDisk, MigrateFiles] \r\nHangfire job done.\r\nClient Id = {0}, User Id = {1}", clientId.ToString(), userId.ToString()));
                             #endregion
 
                             #region 有 userid，log it

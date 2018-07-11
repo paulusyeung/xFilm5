@@ -40,5 +40,27 @@ namespace xFilm5.Bot.Controllers
 
             return BadRequest();
         }
+
+        [HttpPost]
+        [Route("CreateClient/{clientId:int}/{userId:int}/")]
+        public IHttpActionResult PostCreateClient(int clientId, int userId)
+        {
+            using (var ctx = new xFilmEntities())
+            {
+                var client = ctx.Client.Where(x => x.ID == clientId && x.Status > 0).SingleOrDefault();
+                if (client != null)
+                {
+                    BackgroundJob.Enqueue(() => CloudDiskHelper.CreateClient(clientId, userId));
+
+                    log.Info(String.Format("[bot, CloudDisk, CreateClient] \r\nHangfire accepted the Job\r\nClient Id = {0}", clientId.ToString()));
+
+                    return StatusCode(HttpStatusCode.Accepted);     // 202 or use: return new StatusCodeResult(202);
+                }
+            }
+
+            log.Info(String.Format("[bot, CloudDisk, CreateClient] \r\nError found before submitting to Hangfire\r\nClient Id = {0}", clientId.ToString()));
+
+            return BadRequest();
+        }
     }
 }
