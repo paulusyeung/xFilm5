@@ -184,6 +184,28 @@ namespace xFilm5.Helper
             return result;
         }
 
+        /// <summary>
+        /// Era Begins on 2017.07.01
+        /// </summary>
+        /// <param name="clientId"></param>
+        /// <returns></returns>
+        public static bool IsCreatedBeforeCloudDiskEra(int clientId)
+        {
+            bool result = false;
+            DateTime eraBeginsOn = new DateTime(2017, 7, 1);
+
+            using (var ctx = new EF6.xFilmEntities())
+            {
+                var pUser = ctx.Client.Where(x => x.ID == clientId).SingleOrDefault();
+                if (pUser != null)
+                {
+                    result = (pUser.CreatedOn >= eraBeginsOn) ? true : false;
+                }
+            }
+
+            return result;
+        }
+
         public static String GetEmailRecipient(int clientId)
         {
             String result = "";

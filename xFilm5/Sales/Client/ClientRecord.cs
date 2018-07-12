@@ -174,18 +174,23 @@ namespace xFilm5.Sales.Client
 
                     if (xFilm5.Controls.Utility.User.UserRole() == (int)DAL.Common.Enums.UserRole.Admin)
                     {
-                        if (CloudDiskHelper.IsClientExist(_ClientId))
+                        #region 如果 Client 喺 2017.07.01 之前 create，顯示 Cloud Disk 按鈕
+                        if (!ClientHelper.IsCreatedBeforeCloudDiskEra(_ClientId))
                         {
-                            cmdCloudDisk.Image = new IconResourceHandle("16x16.cloud-outline_16.png");
-                            this.ansToolbar.Buttons.Add(cmdCloudDisk);
-                            this.ansToolbar.Buttons.Add(cmdCloudSync);
+                            if (CloudDiskHelper.IsClientExist(_ClientId))
+                            {
+                                cmdCloudDisk.Image = new IconResourceHandle("16x16.cloud-outline_16.png");
+                                this.ansToolbar.Buttons.Add(cmdCloudDisk);
+                                this.ansToolbar.Buttons.Add(cmdCloudSync);
+                            }
+                            else
+                            {
+                                cmdCloudDisk.Image = new IconResourceHandle("16x16.cloud-off-outline_16.png");
+                                cmdCloudDisk.ToolTipText = oDict.GetWord("activate_cloud_disk");
+                                this.ansToolbar.Buttons.Add(cmdCloudDisk);
+                            }
                         }
-                        else
-                        {
-                            cmdCloudDisk.Image = new IconResourceHandle("16x16.cloud-off-outline_16.png");
-                            cmdCloudDisk.ToolTipText = oDict.GetWord("activate_cloud_disk");
-                            this.ansToolbar.Buttons.Add(cmdCloudDisk);
-                        }
+                        #endregion
                     }
                 }
             }
@@ -331,7 +336,10 @@ namespace xFilm5.Sales.Client
                     switch (_EditMode)
                     {
                         case Common.Enums.EditMode.Add:
-                            CloudDiskHelper.CreateClient(_ClientId);
+                            //CloudDiskHelper.CreateClient(_ClientId);
+                            //
+                            // 2017.07.13 paulus: 改用 xFilm5.Bot
+                            BotHelper.PostCloudDisk_CreateClient(_ClientId, DAL.Common.Config.CurrentUserId);
                             break;
                         case Common.Enums.EditMode.Edit:
                             CloudDiskHelper.UpdateClient(_ClientId.ToString(), client.PIN);
@@ -688,10 +696,17 @@ namespace xFilm5.Sales.Client
         {
             if (((Form)sender).DialogResult == DialogResult.Yes)
             {
-                var created = CloudDiskHelper.CreateClient(_ClientId);
+                //var created = CloudDiskHelper.CreateClient(_ClientId);
+                //
+                //2018.07.12 paulus: 交俾 Bot Server 用 Hangfire 倣，統一辦理
+                //CloudDiskHelper.MigrateFiles(_ClientId, DAL.Common.Config.CurrentUserId);
+                var created = BotHelper.PostCloudDisk_CreateClient(_ClientId, DAL.Common.Config.CurrentUserId);
 
                 if (created)
                 {
+                    nxStudio.BaseClass.WordDict oDict = new nxStudio.BaseClass.WordDict(Common.Config.CurrentWordDict, Common.Config.CurrentLanguageId);
+                    MessageBox.Show(oDict.GetWord("hangfire_message"));
+
                     //2018.07.09 paulus: 唔想立即 migrate files，留俾 cmdCloudSync_Click
                     //CloudDiskHelper.MigrateFiles(_ClientId, DAL.Common.Config.CurrentUserId);
 
@@ -715,7 +730,8 @@ namespace xFilm5.Sales.Client
                 //CloudDiskHelper.MigrateFiles(_ClientId, DAL.Common.Config.CurrentUserId);
                 BotHelper.PostCloudDisk_MigrateFile(_ClientId, DAL.Common.Config.CurrentUserId);
 
-                MessageBox.Show("It takes some time to process your request.\r\nWe will notify you when your request is done.");
+                nxStudio.BaseClass.WordDict oDict = new nxStudio.BaseClass.WordDict(Common.Config.CurrentWordDict, Common.Config.CurrentLanguageId);
+                MessageBox.Show(oDict.GetWord("hangfire_message"));
             }
 
         }

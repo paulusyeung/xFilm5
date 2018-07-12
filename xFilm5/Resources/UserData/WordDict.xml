@@ -1443,4 +1443,9 @@
     <chs>同步云端硬碟</chs>
     <cht>同步雲端硬碟</cht>
   </keyword>
+  <keyword key="hangfire_message">
+    <en>It takes some time to process your request. We will notify you when your request is done.</en>
+    <chs>执行指令需时，完成之後会另发通知。</chs>
+    <cht>執行指令需時，完成之後會另發通知。</cht>
+  </keyword>
 </root>
