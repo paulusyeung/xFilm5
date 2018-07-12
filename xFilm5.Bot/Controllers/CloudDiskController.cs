@@ -62,5 +62,59 @@ namespace xFilm5.Bot.Controllers
 
             return BadRequest();
         }
+
+        [HttpPost]
+        [Route("ApiCupsUploadFile/{cupsJobTitle}/")]
+        public IHttpActionResult PostApiCupsUploadFile(string cupsJobTitle)
+        {
+            using (var ctx = new xFilmEntities())
+            {
+                BackgroundJob.Enqueue(() => CloudDiskHelper.ApiCupsUploadFile(cupsJobTitle));
+
+                log.Info(String.Format("[bot, CloudDisk, ApiCupsUploadFile] \r\nHangfire accepted the Job\r\nCupJobTitle = {0}", cupsJobTitle));
+
+                return StatusCode(HttpStatusCode.Accepted);     // 202 or use: return new StatusCodeResult(202);
+            }
+
+            log.Info(String.Format("[bot, CloudDisk, ApiCupsUploadFile] \r\nError found before submitting to Hangfire\r\nCupJobTitle = {0}", cupsJobTitle));
+
+            return BadRequest();
+        }
+
+        [HttpPost]
+        [Route("ApiVpsUploadFile/{vpsFileName}/")]
+        public IHttpActionResult PostApiVpsUploadFile(string vpsFileName)
+        {
+            using (var ctx = new xFilmEntities())
+            {
+                BackgroundJob.Enqueue(() => CloudDiskHelper.ApiVpsUploadFile(vpsFileName));
+
+                log.Info(String.Format("[bot, CloudDisk, ApiVpsUploadFile] \r\nHangfire accepted the Job\r\nVpsFileName = {0}", vpsFileName));
+
+                return StatusCode(HttpStatusCode.Accepted);     // 202 or use: return new StatusCodeResult(202);
+            }
+
+            log.Info(String.Format("[bot, CloudDisk, ApiVpsUploadFile] \r\nError found before submitting to Hangfire\r\nVpsFileName = {0}", vpsFileName));
+
+            return BadRequest();
+        }
+
+        [HttpPost]
+        [Route("ApiCip3UploadFile/{cip3FileName}/")]
+        public IHttpActionResult PostApiCip3UploadFile(string cip3FileName)
+        {
+            using (var ctx = new xFilmEntities())
+            {
+                BackgroundJob.Enqueue(() => CloudDiskHelper.ApiCip3UploadFile(cip3FileName));
+
+                log.Info(String.Format("[bot, CloudDisk, ApiCip3UploadFile] \r\nHangfire accepted the Job\r\nCip3FileName = {0}", cip3FileName));
+
+                return StatusCode(HttpStatusCode.Accepted);     // 202 or use: return new StatusCodeResult(202);
+            }
+
+            log.Info(String.Format("[bot, CloudDisk, ApiCip3UploadFile] \r\nError found before submitting to Hangfire\r\nCip3FileName = {0}", cip3FileName));
+
+            return BadRequest();
+        }
     }
 }

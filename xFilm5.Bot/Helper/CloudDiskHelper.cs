@@ -595,6 +595,199 @@ namespace xFilm5.Bot.Helper
             return result;
         }
 
+        public static bool ApiCupsUploadFile(String cupsJobTitle)
+        {
+            bool result = false;
+
+            var source = ParseCupsJobTitle(cupsJobTitle);
+            using (var ctx = new xFilmEntities())
+            {
+                var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
+                if (cuser != null)
+                {
+                    #region 讀入 network impersonation
+                    String serverUri = ConfigurationManager.AppSettings["Cups_ServerUri"];
+                    String userName = ConfigurationManager.AppSettings["Cups_UserName"];
+                    String userPassword = ConfigurationManager.AppSettings["Cups_UserPassword"];
+
+                    String sourcePath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["Cups_SourcePath"]);
+                    String sourceFilePath = Path.Combine(sourcePath, cupsJobTitle);
+                    #endregion
+
+                    using (new Impersonation(serverUri, userName, userPassword))
+                    {
+                        string group = cuser.ClientID.ToString();
+                        string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
+                        string destPath = "/cups", thumbnailPath = "/thumbnail";
+
+                        try
+                        {
+                            var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+                            if (c.Exists(destPath))
+                            {
+                                if (File.Exists(sourceFilePath))
+                                {
+                                    #region upload file
+                                    var contentType = source.PFileExtension.ToLower() == "ps" ? "application/postscript" : (source.PFileExtension.ToLower() == "pdf" ? "application/pdf" : "application/octet-stream");
+                                    var destFilePath = String.Format("{0}/{1}-{2}", destPath, source.JobId, source.PFileName);
+
+                                    using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+                                    {
+                                        result = c.Upload(destFilePath, fs, contentType);
+                                        if (result)
+                                        {
+                                            #region Generate thumbnail
+                                            MagickReadSettings settings = new MagickReadSettings();
+                                            settings.Density = new Density(300, 300);                               // Settings the density to 300 dpi will create an image with a better quality
+                                            var temp = @"C:\Temp";                                                  // The default folder for %TEMP% but we want to change it to C:\Temp
+                                            MagickNET.SetTempDirectory(temp);
+                                            using (MagickImageCollection images = new MagickImageCollection())
+                                            {
+                                                images.Read(sourceFilePath, settings);
+                                                var destFileName = String.Format("{0}-{1}.png", source.JobId, source.PFileName);                       // append .png to priginal file name
+                                                var thumbnail = String.Format(@"{0}\{1}", temp, destFileName);
+                                                var img = images[0];
+                                                img.Format = MagickFormat.Png;
+                                                img.Write(thumbnail);
+                                                if (File.Exists(thumbnail))
+                                                {
+                                                    using (var th = new FileStream(thumbnail, FileMode.Open, FileAccess.Read))
+                                                    {
+                                                        destFilePath = String.Format("{0}/{1}", thumbnailPath, destFileName);
+                                                        result = c.Upload(destFilePath, th, "image/png");
+                                                        if (result) File.Delete(thumbnail);
+                                                    }
+                                                }
+                                            }
+                                            #endregion
+                                        }
+                                    }
+                                    #endregion
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            //
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public static bool ApiVpsUploadFile(String vpsFileName)
+        {
+            bool result = false;
+
+            var source = ParseVpsFileName(vpsFileName);
+            using (var ctx = new xFilmEntities())
+            {
+                var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
+                if (cuser != null)
+                {
+                    #region 讀入 network impersonation
+                    String serverUri = ConfigurationManager.AppSettings["Vps_ServerUri"];
+                    String userName = ConfigurationManager.AppSettings["Vps_UserName"];
+                    String userPassword = ConfigurationManager.AppSettings["Vps_UserPassword"];
+
+                    String sourcePath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["Vps_SourcePath"]);
+                    String sourceFilePath = Path.Combine(sourcePath, vpsFileName);
+                    #endregion
+
+                    using (new Impersonation(serverUri, userName, userPassword))
+                    {
+                        string group = cuser.ClientID.ToString();
+                        string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
+                        string destPath = "/vps";
+
+                        try
+                        {
+                            var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+                            if (c.Exists(destPath))
+                            {
+                                if (File.Exists(sourceFilePath))
+                                {
+                                    #region upload file
+                                    var contentType = "application/octet-stream";
+                                    var destFilePath = String.Format("{0}/{1}-{2}", destPath, source.JobId, source.PFileName);
+
+                                    using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+                                    {
+                                        result = c.Upload(destFilePath, fs, contentType);
+                                    }
+                                    #endregion
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            //
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public static bool ApiCip3UploadFile(String cip3FileName)
+        {
+            bool result = false;
+
+            var source = ParseCip3FileName(cip3FileName);
+            using (var ctx = new xFilmEntities())
+            {
+                var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
+                if (cuser != null)
+                {
+                    #region 用 NetworkConnection: 來自於 NetworkConnection.cs 用嚟做 impersonation
+                    String serverUri = ConfigurationManager.AppSettings["Cip3_ServerUri"];
+                    String userName = ConfigurationManager.AppSettings["Cip3_UserName"];
+                    String userPassword = ConfigurationManager.AppSettings["Cip3_UserPassword"];
+                    String sourecPath = ConfigurationManager.AppSettings["Cip3_SourcePath"];
+
+                    String sourcePath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["Cip3_SourcePath"]);
+                    String sourceFilePath = Path.Combine(sourcePath, cip3FileName);
+                    #endregion
+
+                    using (new Impersonation(serverUri, userName, userPassword))
+                    {
+                        string group = cuser.ClientID.ToString();
+                        string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
+                        string destPath = "/cip3";
+
+                        try
+                        {
+                            var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+                            if (c.Exists(destPath))
+                            {
+                                if (File.Exists(sourceFilePath))
+                                {
+                                    #region upload file
+                                    var contentType = "application/octet-stream";
+                                    var destFilePath = String.Format("{0}/{1}-{2}", destPath, source.JobId, source.PFileName);
+
+                                    using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+                                    {
+                                        result = c.Upload(destFilePath, fs, contentType);
+                                    }
+                                    #endregion
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            //
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
         public static bool UploadCupsFile(String cupsFileName)
         {
             bool result = false;
@@ -618,7 +811,7 @@ namespace xFilm5.Bot.Helper
                     {
                         string group = cuser.ClientID.ToString();
                         string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
-                        string destPath = "/cups", thumbnailPath = "/thumbnail"; ;
+                        string destPath = "/cups", thumbnailPath = "/thumbnail";
 
                         try
                         {
@@ -993,6 +1186,34 @@ namespace xFilm5.Bot.Helper
         }
 
         #region handy private objects
+
+        /// <summary>
+        /// example: 202856.N10549-SM-CHQ-form.ps
+        ///          202706.MA6102-510x400.op180612-A03-Chiyu-Namecard-129571-1.ps
+        ///          203080.A11963-Nongs_coupon_90x55mnm_op.pdf
+        ///          
+        ///          ClientId.JobId-PFileName
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        private static FileNaming ParseCupsJobTitle(string source)
+        {
+            var result = new FileNaming();
+
+            var parts = source.Split('.');
+
+            result.Raw = source;
+            result.ClientId = int.Parse(parts[0]);
+            var part2 = parts[1].Split('-');
+            result.JobId = part2[0];
+            result.PQueue = "";
+            result.PSize = "";
+            result.PFileName = source.Substring(parts[0].Length + part2[0].Length + 2);
+            result.PFileExtension = parts[parts.Length - 1];
+
+            return result;
+        }
+
         /// <summary>
         /// example: N10549.202856.CTP50.525x459.SM-CHQ-form.ps
         ///          MA6102.202706.CTP50_15459075.510x400.op180612-A03-Chiyu-Namecard-129571-1.ps
@@ -1032,17 +1253,23 @@ namespace xFilm5.Bot.Helper
         {
             var result = new FileNaming();
 
-            var parts = source.Split('.');
+            try
+            {
+                var parts = source.Split('.');
 
-            result.Raw = source;
-            result.ClientId = int.Parse(parts[0]);
-            var part2 = parts[1].Split('-');
-            result.JobId = part2[0];
-            result.PQueue = "";
-            result.PSize = "";
-            result.PFileName = source.Substring(parts[0].Length + part2[0].Length + 2);
-            result.PFileExtension = "VPS";
+                result.Raw = source;
+                result.ClientId = int.Parse(parts[0]);
+                var part2 = parts[1].Split('-');
+                result.JobId = part2[0];
+                result.PQueue = "";
+                result.PSize = "";
+                result.PFileName = source.Substring(parts[0].Length + part2[0].Length + 2);
+                result.PFileExtension = "VPS";
+            }
+            catch (Exception ex)
+            {
 
+            }
             return result;
         }
 
