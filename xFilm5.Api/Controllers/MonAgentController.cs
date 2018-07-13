@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using xFilm5.Api.Helper;
 //using xFilm5.Api.Models;
 using xFilm5.DAL;
 
@@ -92,6 +93,10 @@ namespace xFilm5.Api.Controllers
                             }
 
                             UpdateListCycle(pq.ID, (int)DAL.Common.Enums.PrintQSubitemType.Ps);
+
+                            #region 2018.07.13 paulus: 通知 xFilm5.Bot upload file 去 Cloud Disk
+                            BotHelper.PostCloudDisk_ApiCupsUploadFile(jobTitle);
+                            #endregion
 
                             log.Info("[cups] " + jsonData.ToString());
                             return Ok();
@@ -233,6 +238,10 @@ namespace xFilm5.Api.Controllers
                             //UpdateListCycle(pQueue.ID, (int)DAL.Common.Enums.PrintQSubitemType.Vps);
                             UpdateListCycle_Vps(pq.ID, pq.ID, (int)DAL.Common.Enums.PrintQSubitemType.Vps);
 
+                            #region 2018.07.13 paulus: 通知 xFilm5.Bot upload file 去 Cloud Disk
+                            BotHelper.PostCloudDisk_ApiVpsUploadFile(String.Format("{0}.{1}", clientId.ToString(), vpsFileName));
+                            #endregion
+
                             log.Info("[vps] " + jsonData.ToString());
                             return Ok();
                         }
@@ -309,6 +318,10 @@ namespace xFilm5.Api.Controllers
                         if (pq != null)
                         {
                             UpdateListCycle(pq.ID, (int)DAL.Common.Enums.PrintQSubitemType.Cip3);
+
+                            #region 2018.07.13 paulus: 通知 xFilm5.Bot upload file 去 Cloud Disk
+                            BotHelper.PostCloudDisk_ApiCip3UploadFile(cip3FileName);
+                            #endregion
 
                             log.Info("[cip3] " + jsonData.ToString());
                             return Ok();
