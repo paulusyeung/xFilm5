@@ -595,11 +595,12 @@ namespace xFilm5.Bot.Helper
             return result;
         }
 
+        #region used by xFilm5.Api calling xFilm5.Bot functions
         public static bool ApiCupsUploadFile(String cupsJobTitle)
         {
             bool result = false;
 
-            var source = ParseCupsJobTitle(cupsJobTitle);
+            var source = ParseCupsFileName(cupsJobTitle);
             using (var ctx = new xFilmEntities())
             {
                 var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
@@ -787,6 +788,7 @@ namespace xFilm5.Bot.Helper
 
             return result;
         }
+        #endregion
 
         public static bool UploadCupsFile(String cupsFileName)
         {
@@ -1186,33 +1188,6 @@ namespace xFilm5.Bot.Helper
         }
 
         #region handy private objects
-
-        /// <summary>
-        /// example: 202856.N10549-SM-CHQ-form.ps
-        ///          202706.MA6102-510x400.op180612-A03-Chiyu-Namecard-129571-1.ps
-        ///          203080.A11963-Nongs_coupon_90x55mnm_op.pdf
-        ///          
-        ///          ClientId.JobId-PFileName
-        /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        private static FileNaming ParseCupsJobTitle(string source)
-        {
-            var result = new FileNaming();
-
-            var parts = source.Split('.');
-
-            result.Raw = source;
-            result.ClientId = int.Parse(parts[0]);
-            var part2 = parts[1].Split('-');
-            result.JobId = part2[0];
-            result.PQueue = "";
-            result.PSize = "";
-            result.PFileName = source.Substring(parts[0].Length + part2[0].Length + 2);
-            result.PFileExtension = parts[parts.Length - 1];
-
-            return result;
-        }
 
         /// <summary>
         /// example: N10549.202856.CTP50.525x459.SM-CHQ-form.ps

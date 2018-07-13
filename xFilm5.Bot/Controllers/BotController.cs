@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using Hangfire;
+using log4net;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -84,8 +85,13 @@ namespace xFilm5.Bot.Controllers
                                             String filePath_Source = item.FullName;
                                             String filePath_Dest = Path.Combine(serverUri + destPath, item.Name);
                                             File.Copy(filePath_Source, filePath_Dest, true);
+
+                                            // 2018.07.14 paulus: 叫 Hangfire 抄去 Cloud Disk
+                                            //BackgroundJob.Enqueue(() => CloudDiskHelper.UploadBlueprintFile(filePath_Source));
+                                            CloudDiskHelper.UploadBlueprintFile(filePath_Source);
                                         }
-                                        log.Info(String.Format("[bot, blueprint, copied] \r\nFile Name = {0}\r\nFilePath_Source = {1}\\{2}", fileName, serverUri, sourecPath));
+                                        log.Info(String.Format("[bot, blueprint, copied] \r\nFile Name = {0}\r\nFilePath_Source = {1}{2}", fileName, serverUri, sourecPath));
+
                                         return Ok();
                                     }
                                     catch (Exception e)
@@ -348,6 +354,11 @@ namespace xFilm5.Bot.Controllers
                                     {
                                         File.Copy(filePath_Source, filePath_Dest);
                                         log.Info(String.Format("[bot, film, copied] \r\nFile Name = {0}\r\nFilePath_Source = {1}\r\nFilePath_Dest = {2}", filename, filePath_Source, filePath_Dest));
+
+
+                                        // 2018.07.14 paulus: 叫 Hangfire 抄去 Cloud Disk
+                                        CloudDiskHelper.UploadFilmFile(filePath_Source);
+
                                         return Ok();
                                     }
                                     catch (Exception e)
