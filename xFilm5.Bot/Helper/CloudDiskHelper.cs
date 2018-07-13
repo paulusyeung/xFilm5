@@ -81,12 +81,12 @@ namespace xFilm5.Bot.Helper
 
             using (var ctx = new xFilmEntities())
             {
-                var cuser = ctx.Client_User.Where(x => x.ClientID == clientId && x.PrimaryUser == true).SingleOrDefault();
+                var cuser = ctx.vwClientUserList.Where(x => x.ClientId == clientId && x.PrimaryUser == true).SingleOrDefault();
                 if (cuser != null)
                 {
                     string group = clientId.ToString();
-                    string parentId = clientId.ToString(), parentPassword = cuser.Password;
-                    string childId = cuser.Email, childPassword = cuser.Password;
+                    string parentId = clientId.ToString(), parentPassword = cuser.UserPassword;
+                    string childId = cuser.Email, childPassword = cuser.UserPassword;
                     string cups = "/cups", vps = "/vps", cip3 = "/cip3", plate = "/plate", blueprint = "/blueprint", film = "/film", thumbnail = "/thumbnail", tools = "/tools";
 
                     try
@@ -96,10 +96,12 @@ namespace xFilm5.Bot.Helper
                         #region Create primary user, group, child user
                         result = p.GroupExists(group) ? true : p.CreateGroup(group);
                         if (result) result = p.UserExists(parentId) ? true : p.CreateUser(parentId, parentPassword);
+                        if (result) p.SetUserAttribute(parentId, OCSUserAttributeKey.DisplayName, cuser.ClientName);
                         if (result) result = p.IsUserInGroup(parentId, group) ? true : p.AddUserToGroup(parentId, group);
                         if (result) result = p.IsUserInSubAdminGroup(parentId, group) ? true : p.AddUserToSubAdminGroup(parentId, group);
                         if (result) result = p.UserExists(childId) ? true : p.CreateUser(childId, childPassword);
                         if (result) result = p.IsUserInGroup(childId, group) ? true : p.AddUserToGroup(childId, group);
+                        if (result) p.SetUserAttribute(childId, OCSUserAttributeKey.DisplayName, cuser.UserFullName);
                         #endregion
 
                         #region Crate folders
