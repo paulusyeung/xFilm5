@@ -87,8 +87,8 @@ namespace xFilm5.Bot.Controllers
                                             File.Copy(filePath_Source, filePath_Dest, true);
 
                                             // 2018.07.14 paulus: 叫 Hangfire 抄去 Cloud Disk
-                                            //BackgroundJob.Enqueue(() => CloudDiskHelper.UploadBlueprintFile(filePath_Source));
-                                            CloudDiskHelper.UploadBlueprintFile(filePath_Source);
+                                            BackgroundJob.Enqueue(() => CloudDiskHelper.UploadBlueprintFile(filePath_Source));
+                                            //CloudDiskHelper.UploadBlueprintFile(filePath_Source);
                                         }
                                         log.Info(String.Format("[bot, blueprint, copied] \r\nFile Name = {0}\r\nFilePath_Source = {1}{2}", fileName, serverUri, sourecPath));
 
@@ -181,7 +181,8 @@ namespace xFilm5.Bot.Controllers
                                         log.Info(String.Format("[bot, plate, copied] \r\nFile Name = {0}\r\nFilePath_Source = {1}\r\nFilePath_Dest = {2}", fileName, filePath_Source, filePath_Dest));
 
                                         #region 2018.06.30 paulus: 抄一份去 CloudDisk
-                                        CloudDiskHelper.UploadPlateFile(filePath_Source);
+                                        BackgroundJob.Enqueue(() => CloudDiskHelper.UploadPlateFile(filePath_Source));
+                                        //CloudDiskHelper.UploadPlateFile(filePath_Source);
                                         #endregion
 
                                         return Ok();
@@ -357,7 +358,8 @@ namespace xFilm5.Bot.Controllers
 
 
                                         // 2018.07.14 paulus: 叫 Hangfire 抄去 Cloud Disk
-                                        CloudDiskHelper.UploadFilmFile(filePath_Source);
+                                        BackgroundJob.Enqueue(() => CloudDiskHelper.UploadFilmFile(filePath_Source));
+                                        //CloudDiskHelper.UploadFilmFile(filePath_Source);
 
                                         return Ok();
                                     }

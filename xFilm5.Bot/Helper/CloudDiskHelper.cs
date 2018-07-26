@@ -797,75 +797,79 @@ namespace xFilm5.Bot.Helper
             bool result = false;
 
             var source = ParseCupsFileName(cupsFileName);
-            using (var ctx = new xFilmEntities())
+
+            if (IsClientEnabled(source.ClientId))
             {
-                var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
-                if (cuser != null)
+                using (var ctx = new xFilmEntities())
                 {
-                    #region 讀入 network impersonation
-                    String serverUri = ConfigurationManager.AppSettings["Cups_ServerUri"];
-                    String userName = ConfigurationManager.AppSettings["Cups_UserName"];
-                    String userPassword = ConfigurationManager.AppSettings["Cups_UserPassword"];
-
-                    String sourcePath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["Cups_SourcePath"]);
-                    String sourceFilePath = Path.Combine(sourcePath, cupsFileName);
-                    #endregion
-
-                    using (new Impersonation(serverUri, userName, userPassword))
+                    var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
+                    if (cuser != null)
                     {
-                        string group = cuser.ClientID.ToString();
-                        string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
-                        string destPath = "/cups", thumbnailPath = "/thumbnail";
+                        #region 讀入 network impersonation
+                        String serverUri = ConfigurationManager.AppSettings["Cups_ServerUri"];
+                        String userName = ConfigurationManager.AppSettings["Cups_UserName"];
+                        String userPassword = ConfigurationManager.AppSettings["Cups_UserPassword"];
 
-                        try
+                        String sourcePath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["Cups_SourcePath"]);
+                        String sourceFilePath = Path.Combine(sourcePath, cupsFileName);
+                        #endregion
+
+                        using (new Impersonation(serverUri, userName, userPassword))
                         {
-                            var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
-                            if (c.Exists(destPath))
-                            {
-                                if (File.Exists(sourceFilePath))
-                                {
-                                    #region upload file
-                                    var contentType = source.PFileExtension.ToLower() == "ps" ? "application/postscript" : (source.PFileExtension.ToLower() == "pdf" ? "application/pdf" : "application/octet-stream");
-                                    var destFilePath = String.Format("{0}/{1}-{2}", destPath, source.JobId, source.PFileName);
+                            string group = cuser.ClientID.ToString();
+                            string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
+                            string destPath = "/cups", thumbnailPath = "/thumbnail";
 
-                                    using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+                            try
+                            {
+                                var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+                                if (c.Exists(destPath))
+                                {
+                                    if (File.Exists(sourceFilePath))
                                     {
-                                        result = c.Upload(destFilePath, fs, contentType);
-                                        if (result)
+                                        #region upload file
+                                        var contentType = source.PFileExtension.ToLower() == "ps" ? "application/postscript" : (source.PFileExtension.ToLower() == "pdf" ? "application/pdf" : "application/octet-stream");
+                                        var destFilePath = String.Format("{0}/{1}-{2}", destPath, source.JobId, source.PFileName);
+
+                                        using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
                                         {
-                                            #region Generate thumbnail
-                                            MagickReadSettings settings = new MagickReadSettings();
-                                            settings.Density = new Density(300, 300);                               // Settings the density to 300 dpi will create an image with a better quality
-                                            var temp = @"C:\Temp";                                                  // The default folder for %TEMP% but we want to change it to C:\Temp
-                                            MagickNET.SetTempDirectory(temp);
-                                            using (MagickImageCollection images = new MagickImageCollection())
+                                            result = c.Upload(destFilePath, fs, contentType);
+                                            if (result)
                                             {
-                                                images.Read(sourceFilePath, settings);
-                                                var destFileName = String.Format("{0}-{1}.png", source.JobId, source.PFileName);                       // append .png to priginal file name
-                                                var thumbnail = String.Format(@"{0}\{1}", temp, destFileName);
-                                                var img = images[0];
-                                                img.Format = MagickFormat.Png;
-                                                img.Write(thumbnail);
-                                                if (File.Exists(thumbnail))
+                                                #region Generate thumbnail
+                                                MagickReadSettings settings = new MagickReadSettings();
+                                                settings.Density = new Density(300, 300);                               // Settings the density to 300 dpi will create an image with a better quality
+                                                var temp = @"C:\Temp";                                                  // The default folder for %TEMP% but we want to change it to C:\Temp
+                                                MagickNET.SetTempDirectory(temp);
+                                                using (MagickImageCollection images = new MagickImageCollection())
                                                 {
-                                                    using (var th = new FileStream(thumbnail, FileMode.Open, FileAccess.Read))
+                                                    images.Read(sourceFilePath, settings);
+                                                    var destFileName = String.Format("{0}-{1}.png", source.JobId, source.PFileName);                       // append .png to priginal file name
+                                                    var thumbnail = String.Format(@"{0}\{1}", temp, destFileName);
+                                                    var img = images[0];
+                                                    img.Format = MagickFormat.Png;
+                                                    img.Write(thumbnail);
+                                                    if (File.Exists(thumbnail))
                                                     {
-                                                        destFilePath = String.Format("{0}/{1}", thumbnailPath, destFileName);
-                                                        result = c.Upload(destFilePath, th, "image/png");
-                                                        if (result) File.Delete(thumbnail);
+                                                        using (var th = new FileStream(thumbnail, FileMode.Open, FileAccess.Read))
+                                                        {
+                                                            destFilePath = String.Format("{0}/{1}", thumbnailPath, destFileName);
+                                                            result = c.Upload(destFilePath, th, "image/png");
+                                                            if (result) File.Delete(thumbnail);
+                                                        }
                                                     }
                                                 }
+                                                #endregion
                                             }
-                                            #endregion
                                         }
+                                        #endregion
                                     }
-                                    #endregion
                                 }
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            //
+                            catch (Exception ex)
+                            {
+                                //
+                            }
                         }
                     }
                 }
@@ -879,48 +883,52 @@ namespace xFilm5.Bot.Helper
             bool result = false;
 
             var source = ParseVpsFileName(vpsFileName);
-            using (var ctx = new xFilmEntities())
+
+            if (IsClientEnabled(source.ClientId))
             {
-                var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
-                if (cuser != null)
+                using (var ctx = new xFilmEntities())
                 {
-                    #region 讀入 network impersonation
-                    String serverUri = ConfigurationManager.AppSettings["Vps_ServerUri"];
-                    String userName = ConfigurationManager.AppSettings["Vps_UserName"];
-                    String userPassword = ConfigurationManager.AppSettings["Vps_UserPassword"];
-
-                    String sourcePath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["Vps_SourcePath"]);
-                    String sourceFilePath = Path.Combine(sourcePath, vpsFileName);
-                    #endregion
-
-                    using (new Impersonation(serverUri, userName, userPassword))
+                    var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
+                    if (cuser != null)
                     {
-                        string group = cuser.ClientID.ToString();
-                        string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
-                        string destPath = "/vps";
+                        #region 讀入 network impersonation
+                        String serverUri = ConfigurationManager.AppSettings["Vps_ServerUri"];
+                        String userName = ConfigurationManager.AppSettings["Vps_UserName"];
+                        String userPassword = ConfigurationManager.AppSettings["Vps_UserPassword"];
 
-                        try
+                        String sourcePath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["Vps_SourcePath"]);
+                        String sourceFilePath = Path.Combine(sourcePath, vpsFileName);
+                        #endregion
+
+                        using (new Impersonation(serverUri, userName, userPassword))
                         {
-                            var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
-                            if (c.Exists(destPath))
-                            {
-                                if (File.Exists(sourceFilePath))
-                                {
-                                    #region upload file
-                                    var contentType = "application/octet-stream";
-                                    var destFilePath = String.Format("{0}/{1}-{2}", destPath, source.JobId, source.PFileName);
+                            string group = cuser.ClientID.ToString();
+                            string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
+                            string destPath = "/vps";
 
-                                    using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+                            try
+                            {
+                                var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+                                if (c.Exists(destPath))
+                                {
+                                    if (File.Exists(sourceFilePath))
                                     {
-                                        result = c.Upload(destFilePath, fs, contentType);
+                                        #region upload file
+                                        var contentType = "application/octet-stream";
+                                        var destFilePath = String.Format("{0}/{1}-{2}", destPath, source.JobId, source.PFileName);
+
+                                        using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+                                        {
+                                            result = c.Upload(destFilePath, fs, contentType);
+                                        }
+                                        #endregion
                                     }
-                                    #endregion
                                 }
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            //
+                            catch (Exception ex)
+                            {
+                                //
+                            }
                         }
                     }
                 }
@@ -934,49 +942,53 @@ namespace xFilm5.Bot.Helper
             bool result = false;
 
             var source = ParseCip3FileName(cip3FileName);
-            using (var ctx = new xFilmEntities())
+
+            if (IsClientEnabled(source.ClientId))
             {
-                var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
-                if (cuser != null)
+                using (var ctx = new xFilmEntities())
                 {
-                    #region 用 NetworkConnection: 來自於 NetworkConnection.cs 用嚟做 impersonation
-                    String serverUri = ConfigurationManager.AppSettings["Cip3_ServerUri"];
-                    String userName = ConfigurationManager.AppSettings["Cip3_UserName"];
-                    String userPassword = ConfigurationManager.AppSettings["Cip3_UserPassword"];
-                    String sourecPath = ConfigurationManager.AppSettings["Cip3_SourcePath"];
-
-                    String sourcePath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["Cip3_SourcePath"]);
-                    String sourceFilePath = Path.Combine(sourcePath, cip3FileName);
-                    #endregion
-
-                    using (new Impersonation(serverUri, userName, userPassword))
+                    var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
+                    if (cuser != null)
                     {
-                        string group = cuser.ClientID.ToString();
-                        string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
-                        string destPath = "/cip3";
+                        #region 用 NetworkConnection: 來自於 NetworkConnection.cs 用嚟做 impersonation
+                        String serverUri = ConfigurationManager.AppSettings["Cip3_ServerUri"];
+                        String userName = ConfigurationManager.AppSettings["Cip3_UserName"];
+                        String userPassword = ConfigurationManager.AppSettings["Cip3_UserPassword"];
+                        String sourecPath = ConfigurationManager.AppSettings["Cip3_SourcePath"];
 
-                        try
+                        String sourcePath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["Cip3_SourcePath"]);
+                        String sourceFilePath = Path.Combine(sourcePath, cip3FileName);
+                        #endregion
+
+                        using (new Impersonation(serverUri, userName, userPassword))
                         {
-                            var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
-                            if (c.Exists(destPath))
-                            {
-                                if (File.Exists(sourceFilePath))
-                                {
-                                    #region upload file
-                                    var contentType = "application/octet-stream";
-                                    var destFilePath = String.Format("{0}/{1}-{2}", destPath, source.JobId, source.PFileName);
+                            string group = cuser.ClientID.ToString();
+                            string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
+                            string destPath = "/cip3";
 
-                                    using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+                            try
+                            {
+                                var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+                                if (c.Exists(destPath))
+                                {
+                                    if (File.Exists(sourceFilePath))
                                     {
-                                        result = c.Upload(destFilePath, fs, contentType);
+                                        #region upload file
+                                        var contentType = "application/octet-stream";
+                                        var destFilePath = String.Format("{0}/{1}-{2}", destPath, source.JobId, source.PFileName);
+
+                                        using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+                                        {
+                                            result = c.Upload(destFilePath, fs, contentType);
+                                        }
+                                        #endregion
                                     }
-                                    #endregion
                                 }
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            //
+                            catch (Exception ex)
+                            {
+                                //
+                            }
                         }
                     }
                 }
@@ -1000,49 +1012,52 @@ namespace xFilm5.Bot.Helper
             var fileName = sourceFileName.Substring(5);                                             // remove prefix    (TG-A.)
             var source = ParseVpsFileName(fileName);
 
-            using (var ctx = new xFilmEntities())
+            if (IsClientEnabled(source.ClientId))
             {
-                var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
-                if (cuser != null)
+                using (var ctx = new xFilmEntities())
                 {
-                    #region 讀入 network impersonation
-                    String serverUri = ConfigurationManager.AppSettings["Plate_ServerUri"];
-                    String userName = ConfigurationManager.AppSettings["Plate_UserName"];
-                    String userPassword = ConfigurationManager.AppSettings["Plate_UserPassword"];
-
-                    String sourcePath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["Plate_SourcePath"]);
-                    //String sourceFilePath = Path.Combine(sourcePath, vpsFileName);
-                    #endregion
-
-                    using (new Impersonation(serverUri, userName, userPassword))
+                    var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
+                    if (cuser != null)
                     {
-                        if (File.Exists(sourceFilePath))
+                        #region 讀入 network impersonation
+                        String serverUri = ConfigurationManager.AppSettings["Plate_ServerUri"];
+                        String userName = ConfigurationManager.AppSettings["Plate_UserName"];
+                        String userPassword = ConfigurationManager.AppSettings["Plate_UserPassword"];
+
+                        String sourcePath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["Plate_SourcePath"]);
+                        //String sourceFilePath = Path.Combine(sourcePath, vpsFileName);
+                        #endregion
+
+                        using (new Impersonation(serverUri, userName, userPassword))
                         {
-                            if (CloudDiskHelper.IsClientEnabled(cuser.ClientID))
+                            if (File.Exists(sourceFilePath))
                             {
-                                string group = cuser.ClientID.ToString();
-                                string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
-                                string cdiskPath = "/plate";
-
-                                try
+                                if (CloudDiskHelper.IsClientEnabled(cuser.ClientID))
                                 {
-                                    var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
-                                    if (c.Exists(cdiskPath))
+                                    string group = cuser.ClientID.ToString();
+                                    string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
+                                    string cdiskPath = "/plate";
+
+                                    try
                                     {
-                                        #region upload file
-                                        var contentType = "image/tiff";
-                                        var cdiskFilePath = String.Format("{0}/{1}-{2}", cdiskPath, source.JobId, source.PFileName);
-
-                                        using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+                                        var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+                                        if (c.Exists(cdiskPath))
                                         {
-                                            result = c.Upload(cdiskFilePath, fs, contentType);
+                                            #region upload file
+                                            var contentType = "image/tiff";
+                                            var cdiskFilePath = String.Format("{0}/{1}-{2}", cdiskPath, source.JobId, source.PFileName);
+
+                                            using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+                                            {
+                                                result = c.Upload(cdiskFilePath, fs, contentType);
+                                            }
+                                            #endregion
                                         }
-                                        #endregion
                                     }
-                                }
-                                catch (Exception ex)
-                                {
-                                    //
+                                    catch (Exception ex)
+                                    {
+                                        //
+                                    }
                                 }
                             }
                         }
@@ -1068,49 +1083,52 @@ namespace xFilm5.Bot.Helper
             var fileName = sourceFileName.Substring(4);                                             // remove prefix    (efi.)
             var source = ParseVpsFileName(fileName);
 
-            using (var ctx = new xFilmEntities())
+            if (IsClientEnabled(source.ClientId))
             {
-                var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
-                if (cuser != null)
+                using (var ctx = new xFilmEntities())
                 {
-                    #region 讀入 network impersonation
-                    String serverUri = ConfigurationManager.AppSettings["Blueprint_ServerUri"];
-                    String userName = ConfigurationManager.AppSettings["Blueprint_UserName"];
-                    String userPassword = ConfigurationManager.AppSettings["Blueprint_UserPassword"];
-
-                    String sourcePath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["Blueprint_SourcePath"]);
-                    //String sourceFilePath = Path.Combine(sourcePath, vpsFileName);
-                    #endregion
-
-                    using (new Impersonation(serverUri, userName, userPassword))
+                    var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
+                    if (cuser != null)
                     {
-                        if (File.Exists(sourceFilePath))
+                        #region 讀入 network impersonation
+                        String serverUri = ConfigurationManager.AppSettings["Blueprint_ServerUri"];
+                        String userName = ConfigurationManager.AppSettings["Blueprint_UserName"];
+                        String userPassword = ConfigurationManager.AppSettings["Blueprint_UserPassword"];
+
+                        String sourcePath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["Blueprint_SourcePath"]);
+                        //String sourceFilePath = Path.Combine(sourcePath, vpsFileName);
+                        #endregion
+
+                        using (new Impersonation(serverUri, userName, userPassword))
                         {
-                            if (CloudDiskHelper.IsClientEnabled(cuser.ClientID))
+                            if (File.Exists(sourceFilePath))
                             {
-                                string group = cuser.ClientID.ToString();
-                                string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
-                                string cdiskPath = "/blueprint";
-
-                                try
+                                if (CloudDiskHelper.IsClientEnabled(cuser.ClientID))
                                 {
-                                    var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
-                                    if (c.Exists(cdiskPath))
+                                    string group = cuser.ClientID.ToString();
+                                    string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
+                                    string cdiskPath = "/blueprint";
+
+                                    try
                                     {
-                                        #region upload file
-                                        var contentType = "image/tiff";
-                                        var cdiskFilePath = String.Format("{0}/{1}-{2}", cdiskPath, source.JobId, source.PFileName);
-
-                                        using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+                                        var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+                                        if (c.Exists(cdiskPath))
                                         {
-                                            result = c.Upload(cdiskFilePath, fs, contentType);
+                                            #region upload file
+                                            var contentType = "image/tiff";
+                                            var cdiskFilePath = String.Format("{0}/{1}-{2}", cdiskPath, source.JobId, source.PFileName);
+
+                                            using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+                                            {
+                                                result = c.Upload(cdiskFilePath, fs, contentType);
+                                            }
+                                            #endregion
                                         }
-                                        #endregion
                                     }
-                                }
-                                catch (Exception ex)
-                                {
-                                    //
+                                    catch (Exception ex)
+                                    {
+                                        //
+                                    }
                                 }
                             }
                         }
@@ -1136,49 +1154,52 @@ namespace xFilm5.Bot.Helper
             var fileName = sourceFileName;
             var source = ParseVpsFileName(fileName);
 
-            using (var ctx = new xFilmEntities())
+            if (IsClientEnabled(source.ClientId))
             {
-                var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
-                if (cuser != null)
+                using (var ctx = new xFilmEntities())
                 {
-                    #region 讀入 network impersonation
-                    String serverUri = ConfigurationManager.AppSettings["Film_ServerUri"];
-                    String userName = ConfigurationManager.AppSettings["Film_UserName"];
-                    String userPassword = ConfigurationManager.AppSettings["Film_UserPassword"];
-
-                    String sourcePath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["Film_SourcePath"]);
-                    //String sourceFilePath = Path.Combine(sourcePath, vpsFileName);
-                    #endregion
-
-                    using (new Impersonation(serverUri, userName, userPassword))
+                    var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
+                    if (cuser != null)
                     {
-                        if (File.Exists(sourceFilePath))
+                        #region 讀入 network impersonation
+                        String serverUri = ConfigurationManager.AppSettings["Film_ServerUri"];
+                        String userName = ConfigurationManager.AppSettings["Film_UserName"];
+                        String userPassword = ConfigurationManager.AppSettings["Film_UserPassword"];
+
+                        String sourcePath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["Film_SourcePath"]);
+                        //String sourceFilePath = Path.Combine(sourcePath, vpsFileName);
+                        #endregion
+
+                        using (new Impersonation(serverUri, userName, userPassword))
                         {
-                            if (CloudDiskHelper.IsClientEnabled(cuser.ClientID))
+                            if (File.Exists(sourceFilePath))
                             {
-                                string group = cuser.ClientID.ToString();
-                                string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
-                                string cdiskPath = "/film";
-
-                                try
+                                if (CloudDiskHelper.IsClientEnabled(cuser.ClientID))
                                 {
-                                    var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
-                                    if (c.Exists(cdiskPath))
+                                    string group = cuser.ClientID.ToString();
+                                    string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
+                                    string cdiskPath = "/film";
+
+                                    try
                                     {
-                                        #region upload file
-                                        var contentType = "application/octet-stream";
-                                        var cdiskFilePath = String.Format("{0}/{1}-{2}", cdiskPath, source.JobId, source.PFileName);
-
-                                        using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+                                        var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+                                        if (c.Exists(cdiskPath))
                                         {
-                                            result = c.Upload(cdiskFilePath, fs, contentType);
+                                            #region upload file
+                                            var contentType = "application/octet-stream";
+                                            var cdiskFilePath = String.Format("{0}/{1}-{2}", cdiskPath, source.JobId, source.PFileName);
+
+                                            using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+                                            {
+                                                result = c.Upload(cdiskFilePath, fs, contentType);
+                                            }
+                                            #endregion
                                         }
-                                        #endregion
                                     }
-                                }
-                                catch (Exception ex)
-                                {
-                                    //
+                                    catch (Exception ex)
+                                    {
+                                        //
+                                    }
                                 }
                             }
                         }
