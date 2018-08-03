@@ -108,6 +108,10 @@ namespace xFilm5.Controls.Email
             #endregion
 
             var spclient = new SparkPost.Client(xFilm5.Controls.Utility.Config.SparkPost_ApiKey);
+
+            //2018.08.03 paulus: send 唔倒，除非加埋 TLS 1.2
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls12;
+
             var response = spclient.Transmissions.Send(transmission).Result;
             // or client.Transmissions.Send(transmission).Wait();
 
