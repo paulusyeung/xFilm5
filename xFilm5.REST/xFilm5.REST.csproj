@@ -151,6 +151,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\CashierController.cs" />
     <Compile Include="Controllers\ClientController.cs" />
+    <Compile Include="Controllers\CloudDiskController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\FCMController.cs" />
     <Compile Include="Controllers\FCMHistoryController.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="Helper\UserExHelper.cs" />
     <Compile Include="Helper\UserHelper.cs" />
     <Compile Include="JwtManager.cs" />
+    <Compile Include="Models\CloudDisk.cs" />
     <Compile Include="Models\OrderFormData.cs" />
     <Compile Include="Models\UserEx.cs" />
     <Compile Include="Models\vwOrderPkPrintQueueVpsListEx.cs" />

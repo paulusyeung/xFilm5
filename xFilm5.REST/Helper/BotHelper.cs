@@ -1,11 +1,15 @@
-﻿using RestSharp;
+﻿using Newtonsoft.Json;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Printing;
 using System.Text;
 using System.Threading.Tasks;
+using xFilm5.REST.Models;
 
 namespace xFilm5.REST.Helper
 {
@@ -191,6 +195,396 @@ namespace xFilm5.REST.Helper
                 OrderId = orderId.ToString(),
                 AnotherParam = 19.99
             });
+            var response = client.Execute(request);
+            return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
+        }
+
+        #region Get Cups, Cip3, Vps, Blueprint, Plate, Film, Thumbnail
+        public static List<CloudDisk.ResourceInfo> GetCups(int clientId, int page)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            String uri = String.Format("clouddisk/cups/{0}/{1}/", clientId.ToString(), page.ToString());
+
+            var client = new RestClient(botServer);
+            var request = new RestRequest(uri, Method.GET);
+            request.RequestFormat = DataFormat.Json;
+
+            //serialize an object to JSON and set it as content for a request
+            //request.JsonSerializer = NewtonsoftJsonSerializer.Default;
+            //request.AddJsonBody(obj);
+
+            request.AddBody(new
+            {
+                ClientId = clientId.ToString(),
+                Page = page.ToString(),
+                AnotherParam = 19.99
+            });
+            var cups = client.Execute<List<CloudDisk.ResourceInfo>>(request);
+            return cups.StatusCode == System.Net.HttpStatusCode.OK ? cups.Data : null;
+        }
+
+        public static List<CloudDisk.ResourceInfo> GetCups(int clientId, String keyword)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            String uri = String.Format("clouddisk/cups/keyword/{0}/{1}/", clientId.ToString(), keyword);
+
+            var client = new RestClient(botServer);
+            var request = new RestRequest(uri, Method.GET);
+            request.RequestFormat = DataFormat.Json;
+
+            //serialize an object to JSON and set it as content for a request
+            //request.JsonSerializer = NewtonsoftJsonSerializer.Default;
+            //request.AddJsonBody(obj);
+
+            request.AddBody(new
+            {
+                ClientId = clientId.ToString(),
+                Keyword = keyword,
+                AnotherParam = 19.99
+            });
+            var cups = client.Execute<List<CloudDisk.ResourceInfo>>(request);
+            return cups.StatusCode == System.Net.HttpStatusCode.OK ? cups.Data : null;
+        }
+
+        public static List<CloudDisk.ResourceInfo> GetCip3(int clientId, int page)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            String uri = String.Format("clouddisk/cip3/{0}/{1}/", clientId.ToString(), page.ToString());
+
+            var client = new RestClient(botServer);
+            var request = new RestRequest(uri, Method.GET);
+            request.RequestFormat = DataFormat.Json;
+
+            //serialize an object to JSON and set it as content for a request
+            //request.JsonSerializer = NewtonsoftJsonSerializer.Default;
+            //request.AddJsonBody(obj);
+
+            request.AddBody(new
+            {
+                ClientId = clientId.ToString(),
+                Page = page.ToString(),
+                AnotherParam = 19.99
+            });
+            var cups = client.Execute<List<CloudDisk.ResourceInfo>>(request);
+            return cups.StatusCode == System.Net.HttpStatusCode.OK ? cups.Data : null;
+        }
+
+        public static List<CloudDisk.ResourceInfo> GetCip3(int clientId, String keyword)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            String uri = String.Format("clouddisk/cip3/keyword/{0}/{1}/", clientId.ToString(), keyword);
+
+            var client = new RestClient(botServer);
+            var request = new RestRequest(uri, Method.GET);
+            request.RequestFormat = DataFormat.Json;
+
+            //serialize an object to JSON and set it as content for a request
+            //request.JsonSerializer = NewtonsoftJsonSerializer.Default;
+            //request.AddJsonBody(obj);
+
+            request.AddBody(new
+            {
+                ClientId = clientId.ToString(),
+                Keyword = keyword,
+                AnotherParam = 19.99
+            });
+            var cups = client.Execute<List<CloudDisk.ResourceInfo>>(request);
+            return cups.StatusCode == System.Net.HttpStatusCode.OK ? cups.Data : null;
+        }
+
+        public static List<CloudDisk.ResourceInfo> GetVps(int clientId, int page)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            String uri = String.Format("clouddisk/vps/{0}/{1}/", clientId.ToString(), page.ToString());
+
+            var client = new RestClient(botServer);
+            var request = new RestRequest(uri, Method.GET);
+            request.RequestFormat = DataFormat.Json;
+
+            //serialize an object to JSON and set it as content for a request
+            //request.JsonSerializer = NewtonsoftJsonSerializer.Default;
+            //request.AddJsonBody(obj);
+
+            request.AddBody(new
+            {
+                ClientId = clientId.ToString(),
+                Page = page.ToString(),
+                AnotherParam = 19.99
+            });
+            var cups = client.Execute<List<CloudDisk.ResourceInfo>>(request);
+            return cups.StatusCode == System.Net.HttpStatusCode.OK ? cups.Data : null;
+        }
+
+        public static List<CloudDisk.ResourceInfo> GetVps(int clientId, String keyword)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            String uri = String.Format("clouddisk/vps/keyword/{0}/{1}/", clientId.ToString(), keyword);
+
+            var client = new RestClient(botServer);
+            var request = new RestRequest(uri, Method.GET);
+            request.RequestFormat = DataFormat.Json;
+
+            //serialize an object to JSON and set it as content for a request
+            //request.JsonSerializer = NewtonsoftJsonSerializer.Default;
+            //request.AddJsonBody(obj);
+
+            request.AddBody(new
+            {
+                ClientId = clientId.ToString(),
+                Keyword = keyword,
+                AnotherParam = 19.99
+            });
+            var cups = client.Execute<List<CloudDisk.ResourceInfo>>(request);
+            return cups.StatusCode == System.Net.HttpStatusCode.OK ? cups.Data : null;
+        }
+
+        public static List<CloudDisk.ResourceInfo> GetBlueprint(int clientId, int page)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            String uri = String.Format("clouddisk/Blueprint/{0}/{1}/", clientId.ToString(), page.ToString());
+
+            var client = new RestClient(botServer);
+            var request = new RestRequest(uri, Method.GET);
+            request.RequestFormat = DataFormat.Json;
+
+            //serialize an object to JSON and set it as content for a request
+            //request.JsonSerializer = NewtonsoftJsonSerializer.Default;
+            //request.AddJsonBody(obj);
+
+            request.AddBody(new
+            {
+                ClientId = clientId.ToString(),
+                Page = page.ToString(),
+                AnotherParam = 19.99
+            });
+            var cups = client.Execute<List<CloudDisk.ResourceInfo>>(request);
+            return cups.StatusCode == System.Net.HttpStatusCode.OK ? cups.Data : null;
+        }
+
+        public static List<CloudDisk.ResourceInfo> GetBlueprint(int clientId, String keyword)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            String uri = String.Format("clouddisk/Blueprint/keyword/{0}/{1}/", clientId.ToString(), keyword);
+
+            var client = new RestClient(botServer);
+            var request = new RestRequest(uri, Method.GET);
+            request.RequestFormat = DataFormat.Json;
+
+            //serialize an object to JSON and set it as content for a request
+            //request.JsonSerializer = NewtonsoftJsonSerializer.Default;
+            //request.AddJsonBody(obj);
+
+            request.AddBody(new
+            {
+                ClientId = clientId.ToString(),
+                Keyword = keyword,
+                AnotherParam = 19.99
+            });
+            var cups = client.Execute<List<CloudDisk.ResourceInfo>>(request);
+            return cups.StatusCode == System.Net.HttpStatusCode.OK ? cups.Data : null;
+        }
+
+        public static List<CloudDisk.ResourceInfo> GetPlate(int clientId, int page)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            String uri = String.Format("clouddisk/plate/{0}/{1}/", clientId.ToString(), page.ToString());
+
+            var client = new RestClient(botServer);
+            var request = new RestRequest(uri, Method.GET);
+            request.RequestFormat = DataFormat.Json;
+
+            //serialize an object to JSON and set it as content for a request
+            //request.JsonSerializer = NewtonsoftJsonSerializer.Default;
+            //request.AddJsonBody(obj);
+
+            request.AddBody(new
+            {
+                ClientId = clientId.ToString(),
+                Page = page.ToString(),
+                AnotherParam = 19.99
+            });
+            var cups = client.Execute<List<CloudDisk.ResourceInfo>>(request);
+            return cups.StatusCode == System.Net.HttpStatusCode.OK ? cups.Data : null;
+        }
+
+        public static List<CloudDisk.ResourceInfo> GetPlate(int clientId, String keyword)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            String uri = String.Format("clouddisk/plate/keyword/{0}/{1}/", clientId.ToString(), keyword);
+
+            var client = new RestClient(botServer);
+            var request = new RestRequest(uri, Method.GET);
+            request.RequestFormat = DataFormat.Json;
+
+            //serialize an object to JSON and set it as content for a request
+            //request.JsonSerializer = NewtonsoftJsonSerializer.Default;
+            //request.AddJsonBody(obj);
+
+            request.AddBody(new
+            {
+                ClientId = clientId.ToString(),
+                Keyword = keyword,
+                AnotherParam = 19.99
+            });
+            var cups = client.Execute<List<CloudDisk.ResourceInfo>>(request);
+            return cups.StatusCode == System.Net.HttpStatusCode.OK ? cups.Data : null;
+        }
+
+        public static List<CloudDisk.ResourceInfo> GetFilm(int clientId, int page)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            String uri = String.Format("clouddisk/film/{0}/{1}/", clientId.ToString(), page.ToString());
+
+            var client = new RestClient(botServer);
+            var request = new RestRequest(uri, Method.GET);
+            request.RequestFormat = DataFormat.Json;
+
+            //serialize an object to JSON and set it as content for a request
+            //request.JsonSerializer = NewtonsoftJsonSerializer.Default;
+            //request.AddJsonBody(obj);
+
+            request.AddBody(new
+            {
+                ClientId = clientId.ToString(),
+                Page = page.ToString(),
+                AnotherParam = 19.99
+            });
+            var cups = client.Execute<List<CloudDisk.ResourceInfo>>(request);
+            return cups.StatusCode == System.Net.HttpStatusCode.OK ? cups.Data : null;
+        }
+
+        public static List<CloudDisk.ResourceInfo> GetFilm(int clientId, String keyword)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            String uri = String.Format("clouddisk/film/keyword/{0}/{1}/", clientId.ToString(), keyword);
+
+            var client = new RestClient(botServer);
+            var request = new RestRequest(uri, Method.GET);
+            request.RequestFormat = DataFormat.Json;
+
+            //serialize an object to JSON and set it as content for a request
+            //request.JsonSerializer = NewtonsoftJsonSerializer.Default;
+            //request.AddJsonBody(obj);
+
+            request.AddBody(new
+            {
+                ClientId = clientId.ToString(),
+                Keyword = keyword,
+                AnotherParam = 19.99
+            });
+            var cups = client.Execute<List<CloudDisk.ResourceInfo>>(request);
+            return cups.StatusCode == System.Net.HttpStatusCode.OK ? cups.Data : null;
+        }
+
+        public static List<CloudDisk.ResourceInfo> GetThumbnail(int clientId, int page)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            String uri = String.Format("clouddisk/thumbnail/{0}/{1}/", clientId.ToString(), page.ToString());
+
+            var client = new RestClient(botServer);
+            var request = new RestRequest(uri, Method.GET);
+            request.RequestFormat = DataFormat.Json;
+
+            //serialize an object to JSON and set it as content for a request
+            //request.JsonSerializer = NewtonsoftJsonSerializer.Default;
+            //request.AddJsonBody(obj);
+
+            request.AddBody(new
+            {
+                ClientId = clientId.ToString(),
+                Page = page.ToString(),
+                AnotherParam = 19.99
+            });
+            var cups = client.Execute<List<CloudDisk.ResourceInfo>>(request);
+            return cups.StatusCode == System.Net.HttpStatusCode.OK ? cups.Data : null;
+        }
+
+        public static List<CloudDisk.ResourceInfo> GetThumbnail(int clientId, String keyword)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            String uri = String.Format("clouddisk/thumbnail/keyword/{0}/{1}/", clientId.ToString(), keyword);
+
+            var client = new RestClient(botServer);
+            var request = new RestRequest(uri, Method.GET);
+            request.RequestFormat = DataFormat.Json;
+
+            //serialize an object to JSON and set it as content for a request
+            //request.JsonSerializer = NewtonsoftJsonSerializer.Default;
+            //request.AddJsonBody(obj);
+
+            request.AddBody(new
+            {
+                ClientId = clientId.ToString(),
+                Keyword = keyword,
+                AnotherParam = 19.99
+            });
+            var cups = client.Execute<List<CloudDisk.ResourceInfo>>(request);
+            return cups.StatusCode == System.Net.HttpStatusCode.OK ? cups.Data : null;
+        }
+        #endregion
+
+        public static List<EF6.vwClientList> GetSubAdminUsers(String workshop)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            String uri = String.Format("clouddisk/users/subadmin/{0}/", workshop);
+
+            var client = new RestClient(botServer);
+            var request = new RestRequest(uri, Method.GET);
+            request.RequestFormat = DataFormat.Json;
+
+            //serialize an object to JSON and set it as content for a request
+            //request.JsonSerializer = NewtonsoftJsonSerializer.Default;
+            //request.AddJsonBody(obj);
+
+            request.AddBody(new
+            {
+                WorkshopName = workshop,
+                AnotherParam = 19.99
+            });
+            var list = client.Execute<List<EF6.vwClientList>>(request);
+            return list.StatusCode == System.Net.HttpStatusCode.OK ? list.Data : null;
+        }
+
+        public static byte[] GetThumbnail(int clientId, String filename, int width, int height)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            String uri = String.Format("clouddisk/thumbnail/{0}/{1}/{2}/{3}/", clientId.ToString(), filename, width.ToString(), height.ToString());
+
+            var client = new RestClient(botServer);
+            var request = new RestRequest(uri, Method.GET);
+            request.RequestFormat = DataFormat.Json;
+
+            //serialize an object to JSON and set it as content for a request
+            //request.JsonSerializer = NewtonsoftJsonSerializer.Default;
+            //request.AddJsonBody(obj);
+
+            request.AddBody(new
+            {
+                ClientId = clientId,
+                FileName = filename,
+                Width = width,
+                Height = height,
+                AnotherParam = 19.99
+            });
+            var image = client.DownloadData(request);
+
+            //var response = client.Execute(request);
+            //var raw = (response.StatusCode == System.Net.HttpStatusCode.OK) ? response.RawBytes : null;
+
+            return image;
+        }
+
+        public static bool PostCloudDiskActionEmail(Models.CloudDisk.ActionEmail data, int clientId)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            //#if (DEBUG)
+            //            botServer = "http://localhost:35543/";
+            //#endif
+            var client = new RestClient(botServer);
+            var request = new RestRequest(string.Format("CloudDisk/Action/Email/{0}/", clientId.ToString()), Method.POST);
+            //request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+            request.RequestFormat = DataFormat.Json;
+            request.AddBody(data);
             var response = client.Execute(request);
             return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
         }
