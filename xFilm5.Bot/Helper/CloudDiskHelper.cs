@@ -10,6 +10,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using xFilm5.EF6;
 
 namespace xFilm5.Bot.Helper
@@ -18,6 +19,7 @@ namespace xFilm5.Bot.Helper
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+        static string CLOUDDISK_EXTERNALURL = ConfigurationManager.AppSettings["CloudDisk_ServerExternalUri"];  // "http://cd.directoutput.com.hk/";
         static string CLOUDDISK_URL = ConfigurationManager.AppSettings["CloudDisk_ServerUri"];                  // "http://192.168.12.150/nextcloud/";
         static string CLOUDDISK_ADMIN = ConfigurationManager.AppSettings["CloudDisk_Admin"];                    // "nxstudio";
         static string CLOUDDISK_ADMINPASSWORD = ConfigurationManager.AppSettings["CloudDisk_AdminPassword"];    // "nx@82279602";
@@ -597,6 +599,146 @@ namespace xFilm5.Bot.Helper
             return result;
         }
 
+        public static List<String> GetSubAdminUsers()
+        {
+            var list = new List<String>();
+            var p = new owncloudsharp.Client(CLOUDDISK_URL, CLOUDDISK_ADMIN, CLOUDDISK_ADMINPASSWORD);
+            var items = p.GetUsers();
+            foreach (var item in items)
+            {
+                if (p.IsUserInSubAdminGroup(item, item))
+                {
+                    list.Add(item);
+                }
+            }
+
+            return list;
+        }
+
+        public static bool ActionEmail(Models.CloudDisk.ActionEmail data, int clientId)
+        {
+            var result = false;
+
+            using (var ctx = new xFilmEntities())
+            {
+                var cuser = ctx.vwClientList.Where(x => x.ID == clientId && x.PrimaryUser == true).SingleOrDefault();
+                if (cuser != null)
+                {
+                    if (IsClientEnabled(clientId))
+                    {
+                        string parentId = cuser.ID.ToString(), parentPassword = cuser.Password;
+                        var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+
+                        #region 準備 files download links
+                        StringBuilder msg = new StringBuilder();
+                        foreach (var item in data.Items)
+                        {
+                            var path = item.Path.Substring(item.Path.LastIndexOf('/'));
+                            var filepath = Path.Combine(path, item.Name);
+                            if (c.Exists(filepath))
+                            {
+                                // create share
+                                var share = c.ShareWithLink(filepath, (int)OcsPermission.All, data.Password);
+                                if (share != null)
+                                {
+                                    // update share with expireDate if applicable
+                                    if (data.ExpiryChecked)
+                                        c.UpdateShare(share.ShareId, (int)OcsPermission.All, data.Password, OcsBoolParam.None, data.ExpiredOn.ToString("yyyy-MM-dd"));
+                                    // add the file url to message body
+                                    msg.Append(string.Format("{0}. {1}{2}", item.idx.ToString(), share.Url.Replace(CLOUDDISK_URL, CLOUDDISK_EXTERNALURL), Environment.NewLine));
+                                }
+                            }
+                        }
+                        if (data.ExpiryChecked)
+                        {
+                            msg.Append(Environment.NewLine);
+                            var expiryText = cuser.SMS_Lang == 0 ? "Expired On: {0}" : cuser.SMS_Lang == 1 ? "有效期限：{0}" : "有效期限：{0}";
+                            msg.Append(string.Format(expiryText, data.ExpiredOn.ToString("yyyy-MM-dd")));
+                        }
+                        #endregion
+
+                        #region 發出電郵，如果遇到 error 立即停止
+                        var subject = cuser.SMS_Lang == 0 ? "Cloud Disk File Link" : cuser.SMS_Lang == 1 ? "云端硬碟下载链接" : "雲端硬碟下載鏈接";
+                        subject = subject + String.Format(" ({0})", DateTime.Today.ToString("yyyy-MM-dd hh:mm"));
+
+                        var recipientList = EmailHelper.SplitRecipient(data.Recipient);
+                        foreach (var recipient in recipientList)
+                        {
+                            result = EmailHelper.EmailMessageSMTP(recipient, subject, msg.ToString());
+                            if (!result)
+                                break;      // 遇到 error 立即停止
+                        }
+                        #endregion
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        #region file functions
+        public static List<owncloudsharp.Types.ResourceInfo> FileLst(int clientId, int max = 5, string path = "")
+        {
+            using (var ctx = new xFilmEntities())
+            {
+                var cuser = ctx.Client_User.Where(x => x.ClientID == clientId && x.PrimaryUser == true).SingleOrDefault();
+                if (cuser != null)
+                {
+                    if (IsClientExist(clientId))
+                    {
+                        string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
+                        try
+                        {
+                            var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+                            if (c.Exists(path))
+                            {
+                                var result = (max == 0) ?
+                                    (c.List(path)).OrderByDescending(x => x.LastModified).ToList() :
+                                    (c.List(path)).OrderByDescending(x => x.LastModified).Take(max).ToList();
+                                return result;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            //
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static Stream Thumbnail(int clientId, string filename)
+        {
+            using (var ctx = new xFilmEntities())
+            {
+                var cuser = ctx.Client_User.Where(x => x.ClientID == clientId && x.PrimaryUser == true).SingleOrDefault();
+                if (cuser != null)
+                {
+                    if (IsClientExist(clientId))
+                    {
+                        string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
+                        string filepath = String.Format("/thumbnail/{0}", filename);
+                        try
+                        {
+                            var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+                            var thumbnail = c.Download(filepath);
+                            if (thumbnail != null)
+                            {
+                                return thumbnail;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            //
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+        #endregion
+
         #region used by xFilm5.Api calling xFilm5.Bot functions
         public static bool ApiCupsUploadFile(String cupsJobTitle)
         {
@@ -792,6 +934,7 @@ namespace xFilm5.Bot.Helper
         }
         #endregion
 
+        #region upload functions
         public static bool UploadCupsFile(String cupsFileName)
         {
             bool result = false;
@@ -1209,6 +1352,7 @@ namespace xFilm5.Bot.Helper
 
             return result;
         }
+        #endregion
 
         #region handy private objects
 

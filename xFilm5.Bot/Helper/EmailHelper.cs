@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -10,6 +12,59 @@ namespace xFilm5.Bot.Helper
 {
     public static class EmailHelper
     {
+        static Regex ValidEmailRegex = CreateValidEmailRegex();
+
+        /// <summary>
+        /// Taken from http://haacked.com/archive/2007/08/21/i-knew-how-to-validate-an-email-address-until-i.aspx
+        /// </summary>
+        /// <returns></returns>
+        private static Regex CreateValidEmailRegex()
+        {
+            string validEmailPattern = @"^(?!\.)(""([^""\r\\]|\\[""\r\\])*""|"
+                + @"([-a-z0-9!#$%&'*+/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)"
+                + @"@[a-z0-9][\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$";
+
+            return new Regex(validEmailPattern, RegexOptions.IgnoreCase);
+        }
+
+        internal static bool EmailIsValid(string emailAddress)
+        {
+            bool isValid = ValidEmailRegex.IsMatch(emailAddress);
+
+            return isValid;
+        }
+
+        internal static bool VerifyRecipient(String source)
+        {
+            var result = false;
+
+            var sep = new char[] { '\n', ',', ' ', ';' };
+            var items = source.Split(sep, StringSplitOptions.RemoveEmptyEntries);
+            if (items.Length > 0)
+            {
+                foreach (var item in items)
+                {
+                    result = EmailHelper.EmailIsValid(item);
+                    if (!result)
+                        break;
+                }
+            }
+
+            return result;
+        }
+
+        internal static string[] SplitRecipient(string source)
+        {
+            var sep = new char[] { '\n', ',', ' ', ';' };
+            var items = source.Split(sep, StringSplitOptions.RemoveEmptyEntries);
+            if (items.Length > 0)
+            {
+                return items;
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// 可以用 [,] / [ ] / [;] 嚟分隔 email 收件人
         /// </summary>
@@ -113,6 +168,9 @@ namespace xFilm5.Bot.Helper
 
                 spclient.CustomSettings.SendingMode = SparkPost.SendingModes.Sync;
 
+                //2018.08.03 paulus: send 唔倒，除非加埋 TLS 1.2
+                System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls12;
+
                 var response = spclient.Transmissions.Send(transmission);
 
                 result = (response.Result.StatusCode == System.Net.HttpStatusCode.OK) ? true : false;
@@ -152,9 +210,59 @@ namespace xFilm5.Bot.Helper
 
                 spclient.CustomSettings.SendingMode = SparkPost.SendingModes.Sync;
 
+                //2018.08.03 paulus: send 唔倒，除非加埋 TLS 1.2
+                System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls12;
+
                 var response = spclient.Transmissions.Send(transmission);
 
                 result = (response.Result.StatusCode == System.Net.HttpStatusCode.OK) ? true : false;
+            }
+            catch (Exception ex)
+            {
+                //
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// SparkPost 如果用 http api 會加咗 tracking redirect links，怪怪咃
+        /// 改用 SMTP 就冇哩個問題
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="subject"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public static bool EmailMessageSMTP(String email, String subject, String message)
+        {
+            bool result = false;
+
+            try
+            {
+                //2018.08.03 paulus: send 唔倒，除非加埋 TLS 1.2
+                System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls12;
+
+                var fromAddress = "support@directoutput.com.hk";
+
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.sparkpostmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    //DeliveryMethod = SmtpDeliveryMethod.Network,
+                    //UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential("SMTP_Injection", Config.SparkPost_ApiKey)
+                };
+
+                using (var mailMessage = new MailMessage(fromAddress, email)
+                {
+                    Subject = subject,
+                    Body = message
+                })
+                {
+                    smtp.Send(mailMessage);
+                    result = true;
+                }
             }
             catch (Exception ex)
             {
