@@ -659,7 +659,7 @@ namespace xFilm5.Bot.Helper
 
                         #region 發出電郵，如果遇到 error 立即停止
                         var subject = cuser.SMS_Lang == 0 ? "Cloud Disk File Link" : cuser.SMS_Lang == 1 ? "云端硬碟下载链接" : "雲端硬碟下載鏈接";
-                        subject = subject + String.Format(" ({0})", DateTime.Today.ToString("yyyy-MM-dd hh:mm"));
+                        subject = subject + String.Format(" ({0})", DateTime.Now.ToString("yyyy-MM-dd hh:mm"));
 
                         var recipientList = EmailHelper.SplitRecipient(data.Recipient);
                         foreach (var recipient in recipientList)
