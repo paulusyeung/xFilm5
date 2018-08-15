@@ -493,5 +493,28 @@ namespace xFilm5.REST.Controllers
             }
             return NotFound();
         }
+
+        [HttpPost]
+        [Route("Action/Reprint/{clientId:int}")]
+        [JwtAuthentication]
+        public IHttpActionResult PostActionReprint(int clientId)
+        {
+            var json = Request.Content.ReadAsStringAsync().Result;
+            var data = JsonConvert.DeserializeObject<Models.CloudDisk.ActionReprint>(json);
+
+            if (data != null)
+            {
+                using (var ctx = new xFilmEntities())
+                {
+                    var client = ctx.Client.Where(x => x.ID == clientId).SingleOrDefault();
+                    if (client != null)
+                    {
+                        var result = BotHelper.PostCloudDiskActionReprint(data, clientId);
+                        if (result) return Ok();
+                    }
+                }
+            }
+            return NotFound();
+        }
     }
 }

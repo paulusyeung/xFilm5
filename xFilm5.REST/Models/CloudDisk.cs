@@ -31,5 +31,11 @@ namespace xFilm5.REST.Models
             public string Password { get; set; }
             public List<ResourceInfo> Items { get; set; }
         }
+
+        public class ActionReprint
+        {
+            public string Remarks { get; set; }
+            public List<ResourceInfo> Items { get; set; }
+        }
     }
 }

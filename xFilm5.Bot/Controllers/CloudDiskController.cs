@@ -473,7 +473,6 @@ namespace xFilm5.Bot.Controllers
             return response;
         }
 
-
         [HttpPost]
         [Route("Action/Email/{clientId:int}")]
         public IHttpActionResult PostActionEmail(int clientId)
@@ -499,23 +498,64 @@ namespace xFilm5.Bot.Controllers
 
                             if (result)
                             {
-                                log.Info(String.Format("[bot, CloudDisk, PostSenActionEmail] \r\njsondata = {0}", json));
+                                log.Info(String.Format("[bot, CloudDisk, PostActionEmail] \r\njsondata = {0}", json));
                                 return Ok();
                             }
                             else
                             {
-                                log.Error(String.Format("[bot, CloudDisk, PostSenActionEmail] \r\nEmailer return false\r\njsondat = {0}", json));
+                                log.Error(String.Format("[bot, CloudDisk, PostActionEmail] \r\nEmailer returns false\r\njsondat = {0}", json));
                             }
                         }
                         else
                         {
-                            log.Error("[bot, CloudDisk, PostSenActionEmail] \r\nInvaoid Recipient IsNullOrEmpty");
+                            log.Error("[bot, CloudDisk, PostActionEmail] \r\nInvaoid Recipient IsNullOrEmpty");
                             //return NotFound();
                         }
                     }
                     else
                     {
-                        log.Error("[bot, CloudDisk, PostSenActionEmail] \r\nInvaoid Client Id: " + clientId.ToString());
+                        log.Error("[bot, CloudDisk, PostActionEmail] \r\nInvaoid Client Id: " + clientId.ToString());
+                        //return NotFound();
+                    }
+                }
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("Action/Reprint/{clientId:int}")]
+        public IHttpActionResult PostActionReprint(int clientId)
+        {
+            var json = Request.Content.ReadAsStringAsync().Result;
+            var data = JsonConvert.DeserializeObject<Models.CloudDisk.ActionReprint>(json);
+
+            if (data == null)
+            {
+                log.Error("[bot, CloudDisk, PostSActionReprint] jsonData == null");
+                //return NotFound();
+            }
+            else
+            {
+                using (var ctx = new xFilmEntities())
+                {
+                    var client = ctx.Client.Where(x => x.ID == clientId).SingleOrDefault();
+                    if (client != null)
+                    {
+                        var result = CloudDiskHelper.ActionReprint(data, clientId);
+
+                        if (result)
+                        {
+                            log.Info(String.Format("[bot, CloudDisk, PostActionReprint] \r\njsondata = {0}", json));
+                            return Ok();
+                        }
+                        else
+                        {
+                            log.Error(String.Format("[bot, CloudDisk, PostActionReprint] \r\nReprint returns false\r\njsondat = {0}", json));
+                        }
+                    }
+                    else
+                    {
+                        log.Error("[bot, CloudDisk, PostActionReprint] \r\nInvaoid Client Id: " + clientId.ToString());
                         //return NotFound();
                     }
                 }

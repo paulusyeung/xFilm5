@@ -588,5 +588,20 @@ namespace xFilm5.REST.Helper
             var response = client.Execute(request);
             return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
         }
+
+        public static bool PostCloudDiskActionReprint(Models.CloudDisk.ActionReprint data, int clientId)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            //#if (DEBUG)
+            //            botServer = "http://localhost:35543/";
+            //#endif
+            var client = new RestClient(botServer);
+            var request = new RestRequest(string.Format("CloudDisk/Action/Reprint/{0}/", clientId.ToString()), Method.POST);
+            //request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+            request.RequestFormat = DataFormat.Json;
+            request.AddBody(data);
+            var response = client.Execute(request);
+            return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
+        }
     }
 }

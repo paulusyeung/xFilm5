@@ -685,6 +685,83 @@ namespace xFilm5.Bot.Helper
             return result;
         }
 
+        public static bool ActionReprint(Models.CloudDisk.ActionReprint data, int clientId)
+        {
+            var result = false;
+
+            using (var ctx = new xFilmEntities())
+            {
+                var cuser = ctx.vwClientList.Where(x => x.ID == clientId && x.PrimaryUser == true).SingleOrDefault();
+                if (cuser != null)
+                {
+                    if (IsClientEnabled(clientId))
+                    {
+                        try
+                        {
+                            string parentId = cuser.ID.ToString(), parentPassword = cuser.Password;
+                            var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+
+                            #region download files to stream and copy it to hot folder
+                            foreach (var item in data.Items)
+                            {
+                                var path = item.Path.Substring(item.Path.LastIndexOf('/'));
+                                var filepath = Path.Combine(path, item.Name);
+                                if (c.Exists(filepath))
+                                {
+                                    var stream = c.Download(filepath);
+                                    if (stream != null)
+                                    {
+                                        #region copy files
+                                        var serverUri = ConfigurationManager.AppSettings["CloudDiskReprint_ServerUri"];
+                                        var userName = ConfigurationManager.AppSettings["CloudDiskReprint_UserName"];
+                                        var userPassword = ConfigurationManager.AppSettings["CloudDiskReprint_UserPassword"];
+                                        var hotFolder = ConfigurationManager.AppSettings["CloudDiskReprint_HotFolder"];
+
+                                        var destPath = String.Format("{0}{1}{2}", serverUri, hotFolder, path.Replace('/', '\\'));
+                                        var part1 = item.Name.Substring(0, item.Name.IndexOf('-'));
+                                        var part2 = item.Name.Substring(item.Name.IndexOf('-') + 1);
+                                        var filename = String.Format("{0}.{1}.{2}", part1, clientId.ToString(), part2);     // 加番個 client id 入個檔案名度
+                                        var destFilePath = Path.Combine(destPath, filename);
+
+                                        using (new Impersonation(serverUri, userName, userPassword))
+                                        {
+                                            #region 如果未有 folder 就 create，有同名榴案，先刪除
+                                            if (!Directory.Exists(destPath))
+                                                Directory.CreateDirectory(destPath);
+                                            if (File.Exists(destFilePath))
+                                                File.Delete(destFilePath);
+                                            #endregion
+
+                                            #region 將個 stream 寫入去隻檔案
+                                            using (FileStream fileStream = File.Create(destFilePath, (int)stream.Length))
+                                            {
+                                                byte[] bytesInStream = new byte[stream.Length];                             // Initialize the bytes array with the stream length and then fill it with data
+                                                stream.Read(bytesInStream, 0, bytesInStream.Length);
+                                                // Use write method to write to the file specified above
+                                                fileStream.Write(bytesInStream, 0, bytesInStream.Length);                   // Use write method to write to the file specified above
+                                            }
+                                            #endregion
+
+                                            result = true;
+                                        }
+                                        #endregion
+                                    }
+                                }
+                                if (!result) break;
+                            }
+                            #endregion
+                        }
+                        catch (Exception ex)
+                        {
+                            //
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
         #region file functions
         public static List<owncloudsharp.Types.ResourceInfo> FileLst(int clientId, int max = 5, string path = "")
         {
