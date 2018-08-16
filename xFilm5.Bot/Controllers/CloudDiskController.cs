@@ -389,6 +389,44 @@ namespace xFilm5.Bot.Controllers
             }
             return null;
         }
+
+        [HttpGet]
+        [Route("tools/{clientId:int}/{page:int}/")]
+        public IHttpActionResult GetTools(int clientId, int page)
+        {
+            using (var ctx = new xFilmEntities())
+            {
+                var path = "/tools";
+                var client = ctx.Client.Where(x => x.ID == clientId && x.Status > 0).SingleOrDefault();
+                if (client != null)
+                {
+                    var list = page == 0 ?
+                        CloudDiskHelper.FileLst(clientId, 0, path) :                   // all
+                        CloudDiskHelper.FileLst(clientId, page * _PageSize, path);    // pages
+                    if (list != null)
+                        return Json(list);
+                }
+            }
+            return null;
+        }
+
+        [HttpGet]
+        [Route("tools/keyword/{clientId:int}/{keyword}/")]
+        public IHttpActionResult GetTools(int clientId, String keyword)
+        {
+            using (var ctx = new xFilmEntities())
+            {
+                var path = "/tools";
+                var client = ctx.Client.Where(x => x.ID == clientId && x.Status > 0).SingleOrDefault();
+                if (client != null)
+                {
+                    var list = (CloudDiskHelper.FileLst(clientId, 0, path)).Where(x => x.Name.Contains(keyword)).ToList();
+                    if (list != null)
+                        return Json(list);
+                }
+            }
+            return null;
+        }
         #endregion
 
         [HttpGet]

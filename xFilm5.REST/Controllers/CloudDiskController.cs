@@ -401,6 +401,60 @@ namespace xFilm5.REST.Controllers
 
             return null;
         }
+
+        [HttpGet]
+        [Route("tools/{clientId:int}/{page:int}")]
+        [JwtAuthentication]
+        public IHttpActionResult GetTools(int clientId, int page)
+        {
+            var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+
+            Guid userSid = Guid.Empty;
+            userSid = Guid.TryParse(identity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault(), out userSid) ? userSid : Guid.Empty;
+
+            using (var ctx = new xFilmEntities())
+            {
+                var user = ctx.User.Where(x => x.UserSid == userSid).SingleOrDefault();
+                if (user != null)
+                {
+                    var items = BotHelper.GetTools(clientId, page);
+
+                    if (items.Count() > 0)
+                    {
+                        return Json(items.ToList());
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        [HttpGet]
+        [Route("tools/keyword/{clientId:int}/{keyword}")]
+        [JwtAuthentication]
+        public IHttpActionResult GetTools(int clientId, String keyword)
+        {
+            var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+
+            Guid userSid = Guid.Empty;
+            userSid = Guid.TryParse(identity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault(), out userSid) ? userSid : Guid.Empty;
+
+            using (var ctx = new xFilmEntities())
+            {
+                var user = ctx.User.Where(x => x.UserSid == userSid).SingleOrDefault();
+                if (user != null)
+                {
+                    var items = BotHelper.GetTools(clientId, keyword);
+
+                    if (items.Count() > 0)
+                    {
+                        return Json(items.ToList());
+                    }
+                }
+            }
+
+            return null;
+        }
         #endregion
 
         [HttpGet]
