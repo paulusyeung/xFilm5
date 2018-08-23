@@ -16,7 +16,7 @@ namespace xFilm5.Api.Controllers
     public class PrintQueue_LifeCycleController : ApiController
     {
         private static log4net.ILog Log { get; set; }
-        ILog log = log4net.LogManager.GetLogger(typeof(MonAgentController));
+        ILog log = log4net.LogManager.GetLogger(typeof(PrintQueue_LifeCycleController));
 
         [HttpGet]
         [Route("api/PrintQueue_LifeCycle/Counter/Plate/{workshop}/")]

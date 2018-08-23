@@ -15,7 +15,7 @@ namespace xFilm5.Api.Controllers
     public class OrderPkPrintQueneVpsController : ApiController
     {
         private static log4net.ILog Log { get; set; }
-        ILog log = log4net.LogManager.GetLogger(typeof(MonAgentController));
+        ILog log = log4net.LogManager.GetLogger(typeof(OrderPkPrintQueneVpsController));
 
         [HttpGet]
         [Route("api/OrderPq/Plate/{id:int}")]
