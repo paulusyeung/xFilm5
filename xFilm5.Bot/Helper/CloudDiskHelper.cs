@@ -615,6 +615,7 @@ namespace xFilm5.Bot.Helper
             return list;
         }
 
+        #region Action : Email, Reprint, Re-Output 
         public static bool ActionEmail(Models.CloudDisk.ActionEmail data, int clientId)
         {
             var result = false;
@@ -761,6 +762,242 @@ namespace xFilm5.Bot.Helper
 
             return result;
         }
+
+        public static bool ActionOutputBlueprint(Models.CloudDisk.ActionOutputEx data, int clientId)
+        {
+            var result = false;
+
+            using (var ctx = new xFilmEntities())
+            {
+                var cuser = ctx.vwClientList.Where(x => x.ID == clientId && x.PrimaryUser == true).SingleOrDefault();
+                if (cuser != null)
+                {
+                    if (IsClientEnabled(clientId))
+                    {
+                        try
+                        {
+                            string parentId = cuser.ID.ToString(), parentPassword = cuser.Password;
+                            var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+
+                            #region 用 NetworkConnection: 來自於 NetworkConnection.cs 用嚟做 impersonation
+                            var destServerUri = ConfigurationManager.AppSettings["CloudDiskReprint_ServerUri"];
+                            var destUserName = ConfigurationManager.AppSettings["CloudDiskReprint_UserName"];
+                            var destUserPassword = ConfigurationManager.AppSettings["CloudDiskReprint_UserPassword"];
+                            var destHotFolder = ConfigurationManager.AppSettings["CloudDiskReprint_HotFolder"];
+
+                            var destFilePrefix = ConfigurationManager.AppSettings["Blueprint_FileNamePrefix"];
+                            #endregion
+
+                            using (new Impersonation(destServerUri, destUserName, destUserPassword))
+                            {
+                                #region download files to stream and copy it to hot folder
+                                foreach (var item in data.Items)
+                                {
+                                    #region prepare destination sub-folder: .\Plate\PlateSize
+                                    destHotFolder += item.Path.Replace('/', '\\');
+                                    if (!Directory.Exists(destHotFolder))
+                                        Directory.CreateDirectory(destHotFolder);
+
+                                    destHotFolder = destHotFolder + "\\" + item.PlateSize;
+                                    if (!Directory.Exists(destHotFolder))
+                                        Directory.CreateDirectory(destHotFolder);
+                                    #endregion
+
+                                    var destFileName = String.Format("{0}.{1}.{2}.tif", destFilePrefix, data.ClientId.ToString(), item.VpsFileName.Substring(0, item.VpsFileName.Length - 4));
+                                    var destFilePath = Path.Combine(destHotFolder, destFileName);
+                                    var sourcePath = item.Path.Substring(item.Path.LastIndexOf('/'));
+                                    var sourceFilePath = Path.Combine(sourcePath, item.Name);
+
+                                    if (c.Exists(sourceFilePath))
+                                    {
+                                        var stream = c.Download(sourceFilePath);
+                                        if (stream != null)
+                                        {
+                                            #region copy files 將個 stream 寫入去隻檔案
+                                            using (FileStream fileStream = File.Create(destFilePath, (int)stream.Length))
+                                            {
+                                                byte[] bytesInStream = new byte[stream.Length];                             // Initialize the bytes array with the stream length and then fill it with data
+                                                stream.Read(bytesInStream, 0, bytesInStream.Length);
+                                                // Use write method to write to the file specified above
+                                                fileStream.Write(bytesInStream, 0, bytesInStream.Length);                   // Use write method to write to the file specified above
+                                            }
+                                            #endregion
+
+                                            result = true;
+                                        }
+                                    }
+                                    if (!result) break;
+                                }
+                                #endregion
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            //
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public static bool ActionOutputPlate(Models.CloudDisk.ActionOutputEx data, int clientId)
+        {
+            var result = false;
+
+            using (var ctx = new xFilmEntities())
+            {
+                var cuser = ctx.vwClientList.Where(x => x.ID == clientId && x.PrimaryUser == true).SingleOrDefault();
+                if (cuser != null)
+                {
+                    if (IsClientEnabled(clientId))
+                    {
+                        try
+                        {
+                            string parentId = cuser.ID.ToString(), parentPassword = cuser.Password;
+                            var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+
+                            #region 用 NetworkConnection: 來自於 NetworkConnection.cs 用嚟做 impersonation
+                            var destServerUri       = ConfigurationManager.AppSettings["CloudDiskReprint_ServerUri"];
+                            var destUserName        = ConfigurationManager.AppSettings["CloudDiskReprint_UserName"];
+                            var destUserPassword    = ConfigurationManager.AppSettings["CloudDiskReprint_UserPassword"];
+                            var destHotFolder       = ConfigurationManager.AppSettings["CloudDiskReprint_HotFolder"];
+
+                            var destFilePrefix      = ConfigurationManager.AppSettings["Plate_FileNamePrefix"];
+                            #endregion
+
+                            using (new Impersonation(destServerUri, destUserName, destUserPassword))
+                            {
+                                #region download files to stream and copy it to hot folder
+                                foreach (var item in data.Items)
+                                {
+                                    #region prepare destination sub-folder: .\Plate\PlateSize
+                                    destHotFolder += item.Path.Replace('/', '\\');
+                                    if (!Directory.Exists(destHotFolder))
+                                        Directory.CreateDirectory(destHotFolder);
+
+                                    destHotFolder = destHotFolder + "\\" + item.PlateSize;
+                                    if (!Directory.Exists(destHotFolder))
+                                        Directory.CreateDirectory(destHotFolder);
+                                    #endregion
+
+                                    var destFileName    = String.Format("{0}.{1}.{2}.tif", destFilePrefix, data.ClientId.ToString(), item.VpsFileName.Substring(0, item.VpsFileName.Length - 4));
+                                    var destFilePath    = Path.Combine(destHotFolder, destFileName);
+                                    var sourcePath      = item.Path.Substring(item.Path.LastIndexOf('/'));
+                                    var sourceFilePath  = Path.Combine(sourcePath, item.Name);
+
+                                    if (c.Exists(sourceFilePath))
+                                    {
+                                        var stream = c.Download(sourceFilePath);
+                                        if (stream != null)
+                                        {
+                                            #region copy files 將個 stream 寫入去隻檔案
+                                            using (FileStream fileStream = File.Create(destFilePath, (int)stream.Length))
+                                            {
+                                                byte[] bytesInStream = new byte[stream.Length];                             // Initialize the bytes array with the stream length and then fill it with data
+                                                stream.Read(bytesInStream, 0, bytesInStream.Length);
+                                                // Use write method to write to the file specified above
+                                                fileStream.Write(bytesInStream, 0, bytesInStream.Length);                   // Use write method to write to the file specified above
+                                            }
+                                            #endregion
+
+                                            result = true;
+                                        }
+                                    }
+                                    if (!result) break;
+                                }
+                                #endregion
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            //
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public static bool ActionOutputFilm(Models.CloudDisk.ActionOutputEx data, int clientId)
+        {
+            var result = false;
+
+            using (var ctx = new xFilmEntities())
+            {
+                var cuser = ctx.vwClientList.Where(x => x.ID == clientId && x.PrimaryUser == true).SingleOrDefault();
+                if (cuser != null)
+                {
+                    if (IsClientEnabled(clientId))
+                    {
+                        try
+                        {
+                            string parentId = cuser.ID.ToString(), parentPassword = cuser.Password;
+                            var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+
+                            #region 用 NetworkConnection: 來自於 NetworkConnection.cs 用嚟做 impersonation
+                            var destServerUri = ConfigurationManager.AppSettings["CloudDiskReprint_ServerUri"];
+                            var destUserName = ConfigurationManager.AppSettings["CloudDiskReprint_UserName"];
+                            var destUserPassword = ConfigurationManager.AppSettings["CloudDiskReprint_UserPassword"];
+                            var destHotFolder = ConfigurationManager.AppSettings["CloudDiskReprint_HotFolder"];
+                            #endregion
+
+                            using (new Impersonation(destServerUri, destUserName, destUserPassword))
+                            {
+                                #region download files to stream and copy it to hot folder
+                                foreach (var item in data.Items)
+                                {
+                                    #region prepare destination sub-folder: .\Plate\PlateSize
+                                    destHotFolder += item.Path.Replace('/', '\\');
+                                    if (!Directory.Exists(destHotFolder))
+                                        Directory.CreateDirectory(destHotFolder);
+
+                                    destHotFolder = destHotFolder + "\\" + item.PlateSize;
+                                    if (!Directory.Exists(destHotFolder))
+                                        Directory.CreateDirectory(destHotFolder);
+                                    #endregion
+
+                                    var destFileName = String.Format("{0}.{1}.ps", data.ClientId.ToString(), item.VpsFileName.Substring(0, item.VpsFileName.Length - 4));
+                                    var destFilePath = Path.Combine(destHotFolder, destFileName);
+                                    var sourcePath = item.Path.Substring(item.Path.LastIndexOf('/'));
+                                    var sourceFilePath = Path.Combine(sourcePath, item.Name);
+
+                                    if (c.Exists(sourceFilePath))
+                                    {
+                                        var stream = c.Download(sourceFilePath);
+                                        if (stream != null)
+                                        {
+                                            #region copy files 將個 stream 寫入去隻檔案
+                                            using (FileStream fileStream = File.Create(destFilePath, (int)stream.Length))
+                                            {
+                                                byte[] bytesInStream = new byte[stream.Length];                             // Initialize the bytes array with the stream length and then fill it with data
+                                                stream.Read(bytesInStream, 0, bytesInStream.Length);
+                                                // Use write method to write to the file specified above
+                                                fileStream.Write(bytesInStream, 0, bytesInStream.Length);                   // Use write method to write to the file specified above
+                                            }
+                                            #endregion
+
+                                            result = true;
+                                        }
+                                    }
+                                    if (!result) break;
+                                }
+                                #endregion
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            //
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+        #endregion
 
         #region file functions
         public static List<owncloudsharp.Types.ResourceInfo> FileLst(int clientId, int max = 5, string path = "")
@@ -1227,6 +1464,86 @@ namespace xFilm5.Bot.Helper
         }
 
         /// <summary>
+        /// 2018.08.24 paulus: 發現 QRCode generator 會 overwrite 舊嘅，所以唔使用 original TIFF
+        /// 
+        /// Original TIFF means No QRCode TIFF
+        /// Source File Path: \\192.168.12.230\DirectPrint\TIFF\TG0390\AGFA\TIFF\TG-A.202725.N10819-GTO52_拓裕_送貨單.p1(K).tif
+        ///                   \\192.168.12.230\DirectPrint\TIFF\TG0390\AGFA\TIFF\TG-A.202856.N10814-SM-0629-2.p1(K).tif
+        ///                   \\192.168.12.230\DirectPrint\TIFF\TG0390\AGFA\TIFF\TG-A.202706.MA6304-op180628-F02--SUNCITY_NAME_CARD_V3.p1(M).tif
+        /// </summary>
+        /// <param name="sourceFilePath"></param>
+        /// <param name="cdiskPath">Cloud Disk folder, e.g. /plate or /blueprint </param>
+        /// <returns></returns>
+        public static bool UploadOriginalTFFFile(String sourceFilePath, string cdiskPath)
+        {
+            var result = false;
+
+
+            var plateFilePrefix     = ConfigurationManager.AppSettings["Plate_FileNamePrefix"];
+            var blueprintFilePrefix = ConfigurationManager.AppSettings["Blueprint_FileNamePrefix"];
+            var sourceFileName = cdiskPath == "/plate" ?
+                sourceFilePath.Substring(sourceFilePath.LastIndexOf('\\') + 1) :                                                    // remove path (\\192.168.12.230\JobsOrder\QRTIFF\)
+                (sourceFilePath.Substring(sourceFilePath.LastIndexOf('\\') + 1)).Replace(blueprintFilePrefix, plateFilePrefix);     // remove path (\\192.168.12.230\JobsOrder\QRTIFF\) 同埋改返 efi 為 TG-A
+
+            var fileName = sourceFileName.Substring(5);     // remove prefix (TG-A.)
+            var source = ParseVpsFileName(fileName);
+
+            if (IsClientEnabled(source.ClientId))
+            {
+                using (var ctx = new xFilmEntities())
+                {
+                    var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
+                    if (cuser != null)
+                    {
+                        #region 讀入 network impersonation
+                        String serverUri = ConfigurationManager.AppSettings["OriginalTIFF_ServerUri"];
+                        String userName = ConfigurationManager.AppSettings["OriginalTIFF_UserName"];
+                        String userPassword = ConfigurationManager.AppSettings["OriginalTIFF_UserPassword"];
+
+                        String sourcePath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["Plate_SourcePath"]);
+
+                        #endregion
+
+                        using (new Impersonation(serverUri, userName, userPassword))
+                        {
+                            if (File.Exists(sourceFilePath))
+                            {
+                                if (CloudDiskHelper.IsClientEnabled(cuser.ClientID))
+                                {
+                                    string group = cuser.ClientID.ToString();
+                                    string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
+
+                                    try
+                                    {
+                                        var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+                                        if (c.Exists(cdiskPath))
+                                        {
+                                            #region upload file
+                                            var contentType = "image/tiff";
+                                            var cdiskFilePath = String.Format("{0}/{1}-{2}", cdiskPath, source.JobId, source.PFileName);
+
+                                            using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+                                            {
+                                                result = c.Upload(cdiskFilePath, fs, contentType);
+                                            }
+                                            #endregion
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        //
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Source File Path: \\192.168.12.230\JobsOrder\QRTIFF\TG-A.202725.N10819-GTO52_拓裕_送貨單.p1(K).tif
         ///                   \\192.168.12.230\JobsOrder\QRTIFF\TG-A.202856.N10814-SM-0629-2.p1(K).tif
         ///                   \\192.168.12.230\JobsOrder\QRTIFF\TG-A.202706.MA6304-op180628-F02--SUNCITY_NAME_CARD_V3.p1(M).tif
@@ -1235,6 +1552,9 @@ namespace xFilm5.Bot.Helper
         /// <returns></returns>
         public static bool UploadPlateFile(String sourceFilePath)
         {
+            // 2018.08.24 paulus: 發現 QRCode generator 會 overwrite 舊嘅，所以唔使用 original TIFF
+            //return UploadOriginalTFFFile(sourceFilePath, "/plate");
+
             var result = false;
 
             var sourceFileName = sourceFilePath.Substring(sourceFilePath.LastIndexOf('\\') + 1);    // remove path      (\\192.168.12.230\JobsOrder\QRTIFF\)
@@ -1306,6 +1626,9 @@ namespace xFilm5.Bot.Helper
         /// <returns></returns>
         public static bool UploadBlueprintFile(String sourceFilePath)
         {
+            // 2018.08.24 paulus: 發現 QRCode generator 會 overwrite 舊嘅，所以唔使用 original TIFF
+            //return UploadOriginalTFFFile(sourceFilePath, "/blueprint");
+
             var result = false;
 
             var sourceFileName = sourceFilePath.Substring(sourceFilePath.LastIndexOf('\\') + 1);    // remove path      (\\192.168.12.230\DirectPrint\EfiProof\)

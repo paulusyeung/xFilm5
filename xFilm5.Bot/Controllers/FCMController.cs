@@ -16,7 +16,7 @@ namespace xFilm5.Bot.Controllers
     public class FCMController : ApiController
     {
         private static log4net.ILog Log { get; set; }
-        ILog log = log4net.LogManager.GetLogger(typeof(BotController));
+        ILog log = log4net.LogManager.GetLogger(typeof(FCMController));
 
         [HttpPost]
         [Route("FCM/SendMessage")]
