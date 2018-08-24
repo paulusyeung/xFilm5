@@ -87,14 +87,14 @@ namespace xFilm5.Api.Controllers
                         }
                         else
                         {
-                            log.Error("[api, PrintQueue_LifeCycle duplicated] \r\n" + item.ToString());
+                            log.Error("[api, PostPrintQueue_LifeCycle duplicated] \r\n" + jsonData.ToString());
                             return NotFound();
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    log.Error("[api, PrintQueue_LifeCycle exception error] \r\n" + ex);
+                    log.Error("[api, PostPrintQueue_LifeCycle exception error] \r\n" + ex);
                     return NotFound();
                 }
             }
