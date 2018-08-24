@@ -570,5 +570,104 @@ namespace xFilm5.REST.Controllers
             }
             return NotFound();
         }
+
+        [HttpPost]
+        [Route("Action/Output/Blueprint/{clientId:int}")]
+        [JwtAuthentication]
+        public IHttpActionResult PostActionOutputBlueprint(int clientId)
+        {
+            var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+
+            Guid userSid = Guid.Empty;
+            userSid = Guid.TryParse(identity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault(), out userSid) ? userSid : Guid.Empty;
+
+            var json = Request.Content.ReadAsStringAsync().Result;
+            var data = JsonConvert.DeserializeObject<Models.CloudDisk.ActionOutputEx>(json);
+
+            if (data != null)
+            {
+                using (var ctx = new xFilmEntities())
+                {
+                    var client = ctx.Client.Where(x => x.ID == clientId).SingleOrDefault();
+                    if (client != null)
+                    {
+                        var user = ctx.User.Where(x => x.UserSid == userSid).SingleOrDefault();
+                        if (user != null)
+                        {
+                            //var result = BotHelper.PostCloudDiskActionOutput_Blueprint(data, clientId, user.UserId);
+                            var result = OrderHelper.CloudDiskReOutput_Blueprint(data, user.UserId);
+                            if (result != 0) return Ok();
+                        }
+                    }
+                }
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("Action/Output/Plate/{clientId:int}")]
+        [JwtAuthentication]
+        public IHttpActionResult PostActionOutputPlate(int clientId)
+        {
+            var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+
+            Guid userSid = Guid.Empty;
+            userSid = Guid.TryParse(identity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault(), out userSid) ? userSid : Guid.Empty;
+
+            var json = Request.Content.ReadAsStringAsync().Result;
+            Models.CloudDisk.ActionOutputEx data = JsonConvert.DeserializeObject<Models.CloudDisk.ActionOutputEx>(json);
+
+            if (data != null)
+            {
+                using (var ctx = new xFilmEntities())
+                {
+                    var client = ctx.Client.Where(x => x.ID == clientId).SingleOrDefault();
+                    if (client != null)
+                    {
+                        var user = ctx.User.Where(x => x.UserSid == userSid).SingleOrDefault();
+                        if (user != null)
+                        {
+                            //var result = BotHelper.PostCloudDiskActionOutput_Plate(data, clientId, user.UserId);
+                            var result = OrderHelper.CloudDiskReOutput_Plate(data, user.UserId);
+                            if (result != 0) return Ok();
+                        }
+                    }
+                }
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        [Route("Action/Output/Film/{clientId:int}")]
+        [JwtAuthentication]
+        public IHttpActionResult PostActionOutputFilm(int clientId)
+        {
+            var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+
+            Guid userSid = Guid.Empty;
+            userSid = Guid.TryParse(identity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault(), out userSid) ? userSid : Guid.Empty;
+
+            var json = Request.Content.ReadAsStringAsync().Result;
+            var data = JsonConvert.DeserializeObject<Models.CloudDisk.ActionOutputEx>(json);
+
+            if (data != null)
+            {
+                using (var ctx = new xFilmEntities())
+                {
+                    var client = ctx.Client.Where(x => x.ID == clientId).SingleOrDefault();
+                    if (client != null)
+                    {
+                        var user = ctx.User.Where(x => x.UserSid == userSid).SingleOrDefault();
+                        if (user != null)
+                        {
+                            //var result = BotHelper.PostCloudDiskActionOutput_Film(data, clientId, user.UserId);
+                            var result = OrderHelper.CloudDiskReOutput_Film(data, user.UserId);
+                            if (result != 0) return Ok();
+                        }
+                    }
+                }
+            }
+            return NotFound();
+        }
     }
 }

@@ -649,5 +649,50 @@ namespace xFilm5.REST.Helper
             var response = client.Execute(request);
             return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
         }
+
+        public static bool PostCloudDiskActionOutput_Blueprint(Models.CloudDisk.ActionOutputEx data, int userId)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            //#if (DEBUG)
+            //            botServer = "http://localhost:35543/";
+            //#endif
+            var client = new RestClient(botServer);
+            var request = new RestRequest(string.Format("CloudDisk/Action/Output/Blueprint/{0}/", userId.ToString()), Method.POST);
+            //request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+            request.RequestFormat = DataFormat.Json;
+            request.AddBody(data);
+            var response = client.Execute(request);
+            return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
+        }
+
+        public static bool PostCloudDiskActionOutput_Plate(Models.CloudDisk.ActionOutputEx data, int userId)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            //#if (DEBUG)
+            //            botServer = "http://localhost:35543/";
+            //#endif
+            var client = new RestClient(botServer);
+            var request = new RestRequest(string.Format("CloudDisk/Action/Output/Plate/{0}/", userId.ToString()), Method.POST);
+            //request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+            request.RequestFormat = DataFormat.Json;
+            request.AddBody(data);
+            var response = client.Execute(request);
+            return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
+        }
+
+        public static bool PostCloudDiskActionOutput_Film(Models.CloudDisk.ActionOutputEx data, int userId)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            //#if (DEBUG)
+            //            botServer = "http://localhost:35543/";
+            //#endif
+            var client = new RestClient(botServer);
+            var request = new RestRequest(string.Format("CloudDisk/Action/Output/Film/{0}/", userId.ToString()), Method.POST);
+            //request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+            request.RequestFormat = DataFormat.Json;
+            request.AddBody(data);
+            var response = client.Execute(request);
+            return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
+        }
     }
 }

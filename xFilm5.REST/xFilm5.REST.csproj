@@ -171,6 +171,7 @@
     </Compile>
     <Compile Include="Helper\BotHelper.cs" />
     <Compile Include="Helper\ClientHelper.cs" />
+    <Compile Include="Helper\CloudDiskHelper.cs" />
     <Compile Include="Helper\CommonHelper.cs" />
     <Compile Include="Helper\InvoiceHelper.cs" />
     <Compile Include="Helper\OrderHelper.cs" />

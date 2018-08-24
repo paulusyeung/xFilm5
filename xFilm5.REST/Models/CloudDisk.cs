@@ -22,6 +22,15 @@ namespace xFilm5.REST.Models
             public bool Checked { get; set; }
         }
 
+        public class ResourceInfoEx : ResourceInfo
+        {
+            public string CupsJobId { get; set; }
+            public string CupsJobTitle { get; set; }
+            public string PlateSize { get; set; }
+            public string VpsFileName { get; set; }
+            public int VpsPrintQueueId { get; set; }
+        }
+
         public class ActionEmail
         {
             public string Recipient { get; set; }
@@ -36,6 +45,18 @@ namespace xFilm5.REST.Models
         {
             public string Remarks { get; set; }
             public List<ResourceInfo> Items { get; set; }
+        }
+
+        public class ActionOutputEx
+        {
+            public int ClientId { get; set; }
+            public int Priority { get; set; }
+            public string Workshop { get; set; }
+            public bool Pickup { get; set; }
+            public bool Deliver { get; set; }
+            public int DeliverTo { get; set; }
+            public string Remarks { get; set; }
+            public List<ResourceInfoEx> Items { get; set; }
         }
     }
 }
