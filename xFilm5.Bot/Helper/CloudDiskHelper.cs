@@ -737,9 +737,11 @@ namespace xFilm5.Bot.Helper
                                             using (FileStream fileStream = File.Create(destFilePath, (int)stream.Length))
                                             {
                                                 byte[] bytesInStream = new byte[stream.Length];                             // Initialize the bytes array with the stream length and then fill it with data
-                                                stream.Read(bytesInStream, 0, bytesInStream.Length);
-                                                // Use write method to write to the file specified above
-                                                fileStream.Write(bytesInStream, 0, bytesInStream.Length);                   // Use write method to write to the file specified above
+                                                stream.Position = 0;
+                                                var byteRead = stream.Read(bytesInStream, 0, bytesInStream.Length);
+                                                if (byteRead > 0)
+                                                    fileStream.Write(bytesInStream, 0, byteRead);                           // Use write method to write to the file specified above
+                                                fileStream.Flush();
                                             }
                                             #endregion
 
@@ -817,9 +819,11 @@ namespace xFilm5.Bot.Helper
                                             using (FileStream fileStream = File.Create(destFilePath, (int)stream.Length))
                                             {
                                                 byte[] bytesInStream = new byte[stream.Length];                             // Initialize the bytes array with the stream length and then fill it with data
-                                                stream.Read(bytesInStream, 0, bytesInStream.Length);
-                                                // Use write method to write to the file specified above
-                                                fileStream.Write(bytesInStream, 0, bytesInStream.Length);                   // Use write method to write to the file specified above
+                                                stream.Position = 0;
+                                                var byteRead = stream.Read(bytesInStream, 0, bytesInStream.Length);
+                                                if (byteRead > 0)
+                                                    fileStream.Write(bytesInStream, 0, byteRead);                           // Use write method to write to the file specified above
+                                                fileStream.Flush();
                                             }
                                             #endregion
 
@@ -873,17 +877,21 @@ namespace xFilm5.Bot.Helper
                                 foreach (var item in data.Items)
                                 {
                                     #region prepare destination sub-folder: .\Plate\PlateSize
-                                    destHotFolder += item.Path.Replace('/', '\\');
-                                    if (!Directory.Exists(destHotFolder))
-                                        Directory.CreateDirectory(destHotFolder);
+                                    var destFolder = destServerUri + destHotFolder;
+                                    if (!Directory.Exists(destFolder))
+                                        Directory.CreateDirectory(destFolder);
 
-                                    destHotFolder = destHotFolder + "\\" + item.PlateSize;
-                                    if (!Directory.Exists(destHotFolder))
-                                        Directory.CreateDirectory(destHotFolder);
+                                    destFolder += item.Path.Substring(item.Path.LastIndexOf('/')).Replace('/', '\\');
+                                    if (!Directory.Exists(destFolder))
+                                        Directory.CreateDirectory(destFolder);
+
+                                    destFolder += "\\" + item.PlateSize;
+                                    if (!Directory.Exists(destFolder))
+                                        Directory.CreateDirectory(destFolder);
                                     #endregion
 
                                     var destFileName    = String.Format("{0}.{1}.{2}.tif", destFilePrefix, data.ClientId.ToString(), item.VpsFileName.Substring(0, item.VpsFileName.Length - 4));
-                                    var destFilePath    = Path.Combine(destHotFolder, destFileName);
+                                    var destFilePath    = Path.Combine(destFolder, destFileName);
                                     var sourcePath      = item.Path.Substring(item.Path.LastIndexOf('/'));
                                     var sourceFilePath  = Path.Combine(sourcePath, item.Name);
 
@@ -896,9 +904,11 @@ namespace xFilm5.Bot.Helper
                                             using (FileStream fileStream = File.Create(destFilePath, (int)stream.Length))
                                             {
                                                 byte[] bytesInStream = new byte[stream.Length];                             // Initialize the bytes array with the stream length and then fill it with data
-                                                stream.Read(bytesInStream, 0, bytesInStream.Length);
-                                                // Use write method to write to the file specified above
-                                                fileStream.Write(bytesInStream, 0, bytesInStream.Length);                   // Use write method to write to the file specified above
+                                                stream.Position = 0;
+                                                var byteRead = stream.Read(bytesInStream, 0, bytesInStream.Length);
+                                                if (byteRead > 0)
+                                                    fileStream.Write(bytesInStream, 0, byteRead);                           // Use write method to write to the file specified above
+                                                fileStream.Flush();
                                             }
                                             #endregion
 
@@ -950,17 +960,18 @@ namespace xFilm5.Bot.Helper
                                 foreach (var item in data.Items)
                                 {
                                     #region prepare destination sub-folder: .\Plate\PlateSize
-                                    destHotFolder += item.Path.Replace('/', '\\');
-                                    if (!Directory.Exists(destHotFolder))
-                                        Directory.CreateDirectory(destHotFolder);
+                                    var destFolder = destServerUri + destHotFolder;
+                                    if (!Directory.Exists(destFolder))
+                                        Directory.CreateDirectory(destFolder);
 
-                                    destHotFolder = destHotFolder + "\\" + item.PlateSize;
-                                    if (!Directory.Exists(destHotFolder))
-                                        Directory.CreateDirectory(destHotFolder);
+                                    destFolder += item.Path.Substring(item.Path.LastIndexOf('/')).Replace('/', '\\');
+                                    if (!Directory.Exists(destFolder))
+                                        Directory.CreateDirectory(destFolder);
                                     #endregion
 
-                                    var destFileName = String.Format("{0}.{1}.ps", data.ClientId.ToString(), item.VpsFileName.Substring(0, item.VpsFileName.Length - 4));
-                                    var destFilePath = Path.Combine(destHotFolder, destFileName);
+                                    var destFileName = String.Format("{0}.{1}", data.ClientId.ToString(), item.VpsFileName.Substring(0, item.VpsFileName.LastIndexOf('.')));
+                                    destFileName = String.Format("{0}.ps", destFileName.Substring(0, item.VpsFileName.LastIndexOf('.') + 1));
+                                    var destFilePath = Path.Combine(destFolder, destFileName);
                                     var sourcePath = item.Path.Substring(item.Path.LastIndexOf('/'));
                                     var sourceFilePath = Path.Combine(sourcePath, item.Name);
 
@@ -973,9 +984,11 @@ namespace xFilm5.Bot.Helper
                                             using (FileStream fileStream = File.Create(destFilePath, (int)stream.Length))
                                             {
                                                 byte[] bytesInStream = new byte[stream.Length];                             // Initialize the bytes array with the stream length and then fill it with data
-                                                stream.Read(bytesInStream, 0, bytesInStream.Length);
-                                                // Use write method to write to the file specified above
-                                                fileStream.Write(bytesInStream, 0, bytesInStream.Length);                   // Use write method to write to the file specified above
+                                                stream.Position = 0;
+                                                var byteRead = stream.Read(bytesInStream, 0, bytesInStream.Length);
+                                                if (byteRead > 0)
+                                                    fileStream.Write(bytesInStream, 0, byteRead);                           // Use write method to write to the file specified above
+                                                fileStream.Flush();
                                             }
                                             #endregion
 

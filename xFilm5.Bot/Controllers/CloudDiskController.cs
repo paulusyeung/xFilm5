@@ -22,8 +22,16 @@ namespace xFilm5.Bot.Controllers
         private DateTime _DateZero = new DateTime(2017, 1, 1);
         private int _PageSize = 50;
 
-        private static log4net.ILog Log { get; set; }
-        ILog log = log4net.LogManager.GetLogger(typeof(CloudDiskController));
+        #region Instead of naming my invoking class, I started using the following:
+        //private static log4net.ILog Log { get; set; }
+        //ILog log = log4net.LogManager.GetLogger(typeof(CloudDiskController));
+
+        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        // In this way, I can use the same line of code in every class that uses log4net without having to remember to change code when I copy and paste.
+        // Alternatively, i could create a logging class, and have every other class inherit from my logging class.
+        // Refer: https://stackoverflow.com/questions/7089286/correct-way-of-using-log4net-logger-naming
+        #endregion
 
         [HttpPost]
         [Route("MigrateFile/{clientId:int}/{userId:int}/")]
