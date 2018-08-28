@@ -9,6 +9,10 @@ using System.Web.Http;
 using System.Web;
 using Hangfire.Dashboard;
 using System.Net;
+using log4net;
+using log4net.Config;
+using System.IO;
+using System.Reflection;
 
 [assembly: OwinStartup(typeof(xFilm5.Bot.Startup))]
 
@@ -18,6 +22,15 @@ namespace xFilm5.Bot
     {
         public void Configuration(IAppBuilder app)
         {
+            #region Initialize log4net with local configuration file when other methods not working
+            // Refer: https://stackify.com/making-log4net-net-core-work/?utm_referrer=https%3A%2F%2Fwww.google.ca%2F
+            //var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
+            //XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
+
+            // Refer: https://stackoverflow.com/questions/21166126/log4net-separate-config-file-not-working
+            XmlConfigurator.ConfigureAndWatch(new System.IO.FileInfo(AppDomain.CurrentDomain.BaseDirectory + "logging.config"));
+            #endregion
+
             #region Initialize Hangfire
 
             #region database connection string and custom schema

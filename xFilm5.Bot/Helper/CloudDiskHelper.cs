@@ -1557,80 +1557,6 @@ namespace xFilm5.Bot.Helper
         }
 
         /// <summary>
-        /// Source File Path: \\192.168.12.230\JobsOrder\QRTIFF\TG-A.202725.N10819-GTO52_拓裕_送貨單.p1(K).tif
-        ///                   \\192.168.12.230\JobsOrder\QRTIFF\TG-A.202856.N10814-SM-0629-2.p1(K).tif
-        ///                   \\192.168.12.230\JobsOrder\QRTIFF\TG-A.202706.MA6304-op180628-F02--SUNCITY_NAME_CARD_V3.p1(M).tif
-        /// </summary>
-        /// <param name="sourceFilePath"></param>
-        /// <returns></returns>
-        public static bool UploadPlateFile(String sourceFilePath)
-        {
-            // 2018.08.24 paulus: 發現 QRCode generator 會 overwrite 舊嘅，所以唔使用 original TIFF
-            //return UploadOriginalTFFFile(sourceFilePath, "/plate");
-
-            var result = false;
-
-            var sourceFileName = sourceFilePath.Substring(sourceFilePath.LastIndexOf('\\') + 1);    // remove path      (\\192.168.12.230\JobsOrder\QRTIFF\)
-            var fileName = sourceFileName.Substring(5);                                             // remove prefix    (TG-A.)
-            var source = ParseVpsFileName(fileName);
-
-            if (IsClientEnabled(source.ClientId))
-            {
-                using (var ctx = new xFilmEntities())
-                {
-                    var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
-                    if (cuser != null)
-                    {
-                        #region 讀入 network impersonation
-                        String serverUri = ConfigurationManager.AppSettings["Plate_ServerUri"];
-                        String userName = ConfigurationManager.AppSettings["Plate_UserName"];
-                        String userPassword = ConfigurationManager.AppSettings["Plate_UserPassword"];
-
-                        String sourcePath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["Plate_SourcePath"]);
-                        //String sourceFilePath = Path.Combine(sourcePath, vpsFileName);
-                        #endregion
-
-                        using (new Impersonation(serverUri, userName, userPassword))
-                        {
-                            if (File.Exists(sourceFilePath))
-                            {
-                                if (CloudDiskHelper.IsClientEnabled(cuser.ClientID))
-                                {
-                                    string group = cuser.ClientID.ToString();
-                                    string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
-                                    string cdiskPath = "/plate";
-
-                                    try
-                                    {
-                                        var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
-                                        if (c.Exists(cdiskPath))
-                                        {
-                                            #region upload file
-                                            var contentType = "image/tiff";
-                                            var cdiskFilePath = String.Format("{0}/{1}-{2}", cdiskPath, source.JobId, source.PFileName);
-
-                                            using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
-                                            {
-                                                result = c.Upload(cdiskFilePath, fs, contentType);
-                                            }
-                                            #endregion
-                                        }
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        //
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
         /// Source File Path: \\192.168.12.230\DirectPrint\EfiProof\efi.202725.N10819-GTO52_拓裕_送貨單.p1(K).tif
         ///                   \\192.168.12.230\DirectPrint\EfiProof\efi.202856.N10814-SM-0629-2.p1(K).tif
         ///                   \\192.168.12.230\DirectPrint\EfiProof\efi.202706.MA6304-op180628-F02--SUNCITY_NAME_CARD_V3.p1(M).tif
@@ -1705,8 +1631,82 @@ namespace xFilm5.Bot.Helper
         }
 
         /// <summary>
+        /// Source File Path: \\192.168.12.230\JobsOrder\QRTIFF\TG-A.202725.N10819-GTO52_拓裕_送貨單.p1(K).tif
+        ///                   \\192.168.12.230\JobsOrder\QRTIFF\TG-A.202856.N10814-SM-0629-2.p1(K).tif
+        ///                   \\192.168.12.230\JobsOrder\QRTIFF\TG-A.202706.MA6304-op180628-F02--SUNCITY_NAME_CARD_V3.p1(M).tif
+        /// </summary>
+        /// <param name="sourceFilePath"></param>
+        /// <returns></returns>
+        public static bool UploadPlateFile(String sourceFilePath)
+        {
+            // 2018.08.24 paulus: 發現 QRCode generator 會 overwrite 舊嘅，所以唔使用 original TIFF
+            //return UploadOriginalTFFFile(sourceFilePath, "/plate");
+
+            var result = false;
+
+            var sourceFileName = sourceFilePath.Substring(sourceFilePath.LastIndexOf('\\') + 1);    // remove path      (\\192.168.12.230\JobsOrder\QRTIFF\)
+            var fileName = sourceFileName.Substring(5);                                             // remove prefix    (TG-A.)
+            var source = ParseVpsFileName(fileName);
+
+            if (IsClientEnabled(source.ClientId))
+            {
+                using (var ctx = new xFilmEntities())
+                {
+                    var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
+                    if (cuser != null)
+                    {
+                        #region 讀入 network impersonation
+                        String serverUri = ConfigurationManager.AppSettings["Plate_ServerUri"];
+                        String userName = ConfigurationManager.AppSettings["Plate_UserName"];
+                        String userPassword = ConfigurationManager.AppSettings["Plate_UserPassword"];
+
+                        String sourcePath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["Plate_SourcePath"]);
+                        //String sourceFilePath = Path.Combine(sourcePath, vpsFileName);
+                        #endregion
+
+                        using (new Impersonation(serverUri, userName, userPassword))
+                        {
+                            if (File.Exists(sourceFilePath))
+                            {
+                                if (CloudDiskHelper.IsClientEnabled(cuser.ClientID))
+                                {
+                                    string group = cuser.ClientID.ToString();
+                                    string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
+                                    string cdiskPath = "/plate";
+
+                                    try
+                                    {
+                                        var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+                                        if (c.Exists(cdiskPath))
+                                        {
+                                            #region upload file
+                                            var contentType = "image/tiff";
+                                            var cdiskFilePath = String.Format("{0}/{1}-{2}", cdiskPath, source.JobId, source.PFileName);
+
+                                            using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+                                            {
+                                                result = c.Upload(cdiskFilePath, fs, contentType);
+                                            }
+                                            #endregion
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        //
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Source File Path: \\192.168.12.230\DirectPrint\FILM\202725.N10819-GTO52_拓裕_送貨單.ps
-        ///                   \\192.168.12.230\DirectPrint\FILM\202856.N10814-SM-0629-2.ps
+        ///                   \\192.168.12.230\DirectPrint\FILM\202856.N11533-DJ-Neg-20180823.pdf
         ///                   \\192.168.12.230\DirectPrint\FILM\202706.MA6304-op180628-F02--SUNCITY_NAME_CARD_V3.ps
         /// </summary>
         /// <param name="sourceFilePath"></param>
@@ -1733,6 +1733,78 @@ namespace xFilm5.Bot.Helper
 
                         String sourcePath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["Film_SourcePath"]);
                         //String sourceFilePath = Path.Combine(sourcePath, vpsFileName);
+                        #endregion
+
+                        using (new Impersonation(serverUri, userName, userPassword))
+                        {
+                            if (File.Exists(sourceFilePath))
+                            {
+                                if (CloudDiskHelper.IsClientEnabled(cuser.ClientID))
+                                {
+                                    string group = cuser.ClientID.ToString();
+                                    string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
+                                    string cdiskPath = "/film";
+
+                                    try
+                                    {
+                                        var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+                                        if (c.Exists(cdiskPath))
+                                        {
+                                            #region upload file
+                                            var contentType = "application/octet-stream";
+                                            var cdiskFilePath = String.Format("{0}/{1}-{2}", cdiskPath, source.JobId, source.PFileName);
+
+                                            using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+                                            {
+                                                result = c.Upload(cdiskFilePath, fs, contentType);
+                                            }
+                                            #endregion
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        //
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Source File Path: N10819-GTO52_拓裕_送貨單.p1(K).VPS
+        ///                   N11533-DJ-Neg-20180823.p1(K).VPS
+        ///                   MA6304-op180628-F02--SUNCITY_NAME_CARD_V3.p1(K).VPS
+        /// </summary>
+        /// <param name="sourceFilePath"></param>
+        /// <returns></returns>
+        public static bool UploadFilmFile_VPS(String sourceFileName, int clientId)
+        {
+            var result = false;
+
+            //var sourceFileName = sourceFilePath;    //.Substring(sourceFilePath.LastIndexOf('\\') + 1);    // remove path      (\\192.168.12.230\DirectPrint\FILM\)
+            var fileName = String.Format("{0}.{1}", clientId.ToString(), sourceFileName);       //變成 VPS file name 格式
+            var source = ParseVpsFileName(fileName);
+            source.ClientId = clientId;
+
+            if (IsClientEnabled(source.ClientId))
+            {
+                using (var ctx = new xFilmEntities())
+                {
+                    var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
+                    if (cuser != null)
+                    {
+                        #region 讀入 network impersonation
+                        String serverUri = ConfigurationManager.AppSettings["Vps_ServerUri"];
+                        String userName = ConfigurationManager.AppSettings["Vps_UserName"];
+                        String userPassword = ConfigurationManager.AppSettings["Vps_UserPassword"];
+
+                        String sourcePath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["Vps_SourcePath"]);
+                        String sourceFilePath = Path.Combine(sourcePath, fileName);
                         #endregion
 
                         using (new Impersonation(serverUri, userName, userPassword))

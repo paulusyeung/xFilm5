@@ -1087,11 +1087,12 @@ namespace xFilm5.REST.Helper
                         for (int i = 0; i < pqItems.Count; i++)
                         {
                             var item = pqItems[i];
-                            var vpsFileName = item.Name.Substring(0, item.Name.Length - 3) + "VPS";             // 將 TIF 改為 VPS
+                            var vpsFileName = item.Name.Substring(0, item.Name.LastIndexOf('.')); 
                             var original_pqVpsList = ctx.vwPrintQueueVpsList_Ordered
                                 .Where(x => x.VpsFileName.Contains(vpsFileName) && x.CheckedPlate == true)      // CheckedPlate == true
-                                .OrderBy(x => x.OrderPkPrintQueueVpsId)
-                                .First();
+                                //.OrderBy(x => x.OrderPkPrintQueueVpsId)
+                                .OrderBy(x => x.VpsFileName)
+                                .FirstOrDefault();
                             if (original_pqVpsList != null)
                             {
                                 if (lastCupsJobId != original_pqVpsList.CupsJobID)
@@ -1102,7 +1103,7 @@ namespace xFilm5.REST.Helper
                                 pqItems[i].CupsJobId    = newCupsJobId;
                                 pqItems[i].CupsJobTitle = original_pqVpsList.CupsJobTitle.Replace(original_pqVpsList.CupsJobID, newCupsJobId);
                                 pqItems[i].PlateSize    = original_pqVpsList.PlateSize;
-                                pqItems[i].VpsFileName  = vpsFileName.Replace(original_pqVpsList.CupsJobID, newCupsJobId);
+                                pqItems[i].VpsFileName  = original_pqVpsList.VpsFileName.Replace(original_pqVpsList.CupsJobID, newCupsJobId);
 
                                 lastCupsJobId = original_pqVpsList.CupsJobID;
                             }
@@ -1211,7 +1212,7 @@ namespace xFilm5.REST.Helper
                         BotHelper.PostCloudDiskActionOutput_Film(data, userId);
                         #endregion
                     }
-                    catch
+                    catch (Exception ex)
                     {
                         scope.Rollback();
                     }

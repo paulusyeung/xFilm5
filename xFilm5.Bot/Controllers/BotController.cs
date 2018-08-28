@@ -364,10 +364,12 @@ namespace xFilm5.Bot.Controllers
                                         File.Copy(filePath_Source, filePath_Dest);
                                         log.Info(String.Format("[bot, film, copied] \r\nFile Name = {0}\r\nFilePath_Source = {1}\r\nFilePath_Dest = {2}", filename, filePath_Source, filePath_Dest));
 
-
                                         // 2018.07.14 paulus: 叫 Hangfire 抄去 Cloud Disk
                                         BackgroundJob.Enqueue(() => CloudDiskHelper.UploadFilmFile(filePath_Source));
-                                        //CloudDiskHelper.UploadFilmFile(filePath_Source);
+
+                                        // 抄隻 VPS
+                                        log.Info(String.Format("[bot, film, copied] \r\nVPS File Name = {0}\r\nClient Id = {1}", vps.VpsFileName, vps.PrintQueue.ClientID.ToString()));
+                                        BackgroundJob.Enqueue(() => CloudDiskHelper.UploadFilmFile_VPS(vps.VpsFileName, vps.PrintQueue.ClientID));
 
                                         return Ok();
                                     }
