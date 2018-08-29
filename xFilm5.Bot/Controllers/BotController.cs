@@ -354,9 +354,10 @@ namespace xFilm5.Bot.Controllers
 
                             if (File.Exists(filePath_Source))
                             {
-                                //IEnumerable<string> files = Directory.EnumerateFiles(bpFilePath_Source, "*.dll", SearchOption.AllDirectories);
                                 if (!(Directory.Exists(destUri))) Directory.CreateDirectory(destUri);
 
+                                /** 2018.08.29 paulus: 改為抄 VPS
+                                #region 抄 PS 去 CloudDisk /film，衹抄１次
                                 if (!File.Exists(filePath_Dest))
                                 {
                                     try
@@ -366,10 +367,6 @@ namespace xFilm5.Bot.Controllers
 
                                         // 2018.07.14 paulus: 叫 Hangfire 抄去 Cloud Disk
                                         BackgroundJob.Enqueue(() => CloudDiskHelper.UploadFilmFile(filePath_Source));
-
-                                        // 抄隻 VPS
-                                        log.Info(String.Format("[bot, film, copied] \r\nVPS File Name = {0}\r\nClient Id = {1}", vps.VpsFileName, vps.PrintQueue.ClientID.ToString()));
-                                        BackgroundJob.Enqueue(() => CloudDiskHelper.UploadFilmFile_VPS(vps.VpsFileName, vps.PrintQueue.ClientID));
 
                                         return Ok();
                                     }
@@ -384,6 +381,13 @@ namespace xFilm5.Bot.Controllers
                                     log.Error(String.Format("[bot, film, dest file exist] \r\nFile Name = {0}\r\nFilePath_Source = {1}\r\nFilePath_Dest = {2}", filename, filePath_Source, filePath_Dest));
                                     return NotFound();
                                 }
+                                #endregion
+                                */
+
+                                // 2018.08.29 paulus: 抄 VPS 去 CloudDisk /film，用 VPS 方便 re-output，PS 可以喺 /cups 度搵
+                                log.Info(String.Format("[bot, film, copied] \r\nVPS File Name = {0}\r\nClient Id = {1}", vps.VpsFileName, vps.PrintQueue.ClientID.ToString()));
+                                BackgroundJob.Enqueue(() => CloudDiskHelper.UploadFilmFile_VPS(vps.VpsFileName, vps.PrintQueue.ClientID));
+                                return Ok();
                             }
                             else
                             {
