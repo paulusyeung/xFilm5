@@ -1087,12 +1087,10 @@ namespace xFilm5.REST.Helper
                         for (int i = 0; i < pqItems.Count; i++)
                         {
                             var item = pqItems[i];
-                            var vpsFileName = item.Name.Substring(0, item.Name.LastIndexOf('.')); 
+                            //var vpsFileName = item.Name.Substring(0, item.Name.LastIndexOf('.')); 
                             var original_pqVpsList = ctx.vwPrintQueueVpsList_Ordered
-                                .Where(x => x.VpsFileName.Contains(vpsFileName) && x.CheckedPlate == true)      // CheckedPlate == true
-                                //.OrderBy(x => x.OrderPkPrintQueueVpsId)
-                                .OrderBy(x => x.VpsFileName)
-                                .FirstOrDefault();
+                                .Where(x => x.VpsFileName == item.Name && x.CheckedPlate == true)      // VpsFileName = PQNumber-FileName.page(color).VPS, CheckedPlate == true
+                                .SingleOrDefault();
                             if (original_pqVpsList != null)
                             {
                                 if (lastCupsJobId != original_pqVpsList.CupsJobID)

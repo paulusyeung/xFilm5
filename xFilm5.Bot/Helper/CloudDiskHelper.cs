@@ -972,8 +972,13 @@ namespace xFilm5.Bot.Helper
                                     var destFileName = String.Format("{0}.{1}", data.ClientId.ToString(), item.VpsFileName.Substring(0, item.VpsFileName.LastIndexOf('.')));
                                     destFileName = String.Format("{0}.ps", destFileName.Substring(0, item.VpsFileName.LastIndexOf('.') + 1));
                                     var destFilePath = Path.Combine(destFolder, destFileName);
-                                    var sourcePath = item.Path.Substring(item.Path.LastIndexOf('/'));
-                                    var sourceFilePath = Path.Combine(sourcePath, item.Name);
+
+                                    #region 2018.08.29 paulus: 抄 /cups 隻 PS 檔案
+                                    var sourcePath = "/cups";       // item.Path.Substring(item.Path.LastIndexOf('/'));
+                                    var cupsFileName = item.Name.Substring(0, item.Name.LastIndexOf('.'));
+                                    cupsFileName = cupsFileName.Substring(0, cupsFileName.LastIndexOf('.')) + ".ps";
+                                    var sourceFilePath = Path.Combine(sourcePath, cupsFileName);
+                                    #endregion
 
                                     if (c.Exists(sourceFilePath))
                                     {
