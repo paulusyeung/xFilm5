@@ -594,6 +594,33 @@ namespace xFilm5.REST.Controllers
                         var user = ctx.User.Where(x => x.UserSid == userSid).SingleOrDefault();
                         if (user != null)
                         {
+                            List<Models.CloudDisk.ResourceInfoEx> newItems = new List<Models.CloudDisk.ResourceInfoEx>();
+                            foreach (var item in data.Items)
+                            {
+                                var original_pqVpsList = ctx.vwPrintQueueVpsList_Ordered
+                                    .Where(x => x.VpsFileName.Contains(item.Name) && x.CheckedBlueprint == true)
+                                    .OrderBy(x => x.OrderPkPrintQueueVpsId)
+                                    .ToList();
+                                if (original_pqVpsList.Count > 0)
+                                {
+                                    foreach (var original_pqVpItem in original_pqVpsList)
+                                    {
+                                        var newItem = new Models.CloudDisk.ResourceInfoEx();
+                                        newItem.Name = original_pqVpItem.VpsFileName;
+                                        newItem.Path = item.Path;
+                                        newItem.ETag = item.ETag;
+                                        newItem.ContentType = item.ContentType;
+                                        newItem.LastModified = item.LastModified;
+                                        newItem.Created = item.Created;
+                                        newItem.QuotaUsed = item.QuotaUsed;
+                                        newItem.QuotaAvailable = item.QuotaAvailable;
+                                        newItem.Size = item.Size;
+                                        newItems.Add(newItem);
+                                    }
+                                }
+                            }
+                            data.Items = newItems;
+
                             //var result = BotHelper.PostCloudDiskActionOutput_Blueprint(data, clientId, user.UserId);
                             var result = OrderHelper.CloudDiskReOutput_Blueprint(data, user.UserId);
                             if (result != 0) return Ok();

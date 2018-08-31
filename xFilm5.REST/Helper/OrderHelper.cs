@@ -714,7 +714,7 @@ namespace xFilm5.REST.Helper
                             var pq_vps = new PrintQueue_VPS();
                             pq_vps.PrintQueueID = pqId;
                             pq_vps.VpsFileName  = item.VpsFileName;
-                            pq_vps.PlateOrdered = true;
+                            pq_vps.PlateOrdered = false;
                             pq_vps.CreatedOn    = DateTime.Now;
                             pq_vps.CreatedBy    = userId;
                             pq_vps.ModifiedOn   = DateTime.Now;
@@ -757,10 +757,6 @@ namespace xFilm5.REST.Helper
                             pkVps.Retired           = false;
                             pkVps.RetiredOn         = DateTime.Parse("1900-01-01 00:00:00");
                             pkVps.RetiredBy         = 0;
-
-                            pkVps.CheckedPlate = true;
-                            //pkVps.CheckedCip3 = false;           // 手機 apps 冇得選
-                            //pkVps.CheckedBlueprint = false;
 
                             ctx.OrderPkPrintQueueVps.Add(pkVps);
                             ctx.SaveChanges();

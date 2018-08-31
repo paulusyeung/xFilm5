@@ -22,6 +22,12 @@ namespace xFilm5.Bot
     {
         public void Configuration(IAppBuilder app)
         {
+            #region When making calls to Rest services, deactivating the NagleAlgorithm can reduce latency when the data transferred over the network is small.
+            // refer: https://alexandrebrisebois.wordpress.com/2013/03/24/why-are-webrequests-throttled-i-want-more-throughput/
+            ServicePointManager.UseNagleAlgorithm = false;
+            ServicePointManager.DefaultConnectionLimit = 1000;
+            #endregion
+
             #region Initialize log4net with local configuration file when other methods not working
             // Refer: https://stackify.com/making-log4net-net-core-work/?utm_referrer=https%3A%2F%2Fwww.google.ca%2F
             //var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());

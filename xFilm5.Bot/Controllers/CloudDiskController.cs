@@ -285,6 +285,64 @@ namespace xFilm5.Bot.Controllers
         }
 
         [HttpGet]
+        [Route("blueprint/group/{clientId:int}/{page:int}/")]
+        public IHttpActionResult GetBlueprintGroup(int clientId, int page)
+        {
+            using (var ctx = new xFilmEntities())
+            {
+                var path = "/blueprint";
+                var client = ctx.Client.Where(x => x.ID == clientId && x.Status > 0).SingleOrDefault();
+                if (client != null)
+                {
+                    var all = CloudDiskHelper.FileLst(clientId, 0, path);
+
+                    // 切咗 page(color).VPS 去
+                    for (int i = 0; i < all.Count; ++i)
+                    {
+                        all[i].Name = all[i].Name.Substring(0, all[i].Name.LastIndexOf('('));
+                    }
+
+                    // 將同名嘅抽一個 record 出嚟
+                    var result = page == 0 ?
+                        all.GroupBy(x => x.Name, (key, g) => g.OrderBy(e => e.Name).First()).OrderByDescending(x => x.LastModified).ToList() :
+                        all.GroupBy(x => x.Name, (key, g) => g.OrderBy(e => e.Name).First()).OrderByDescending(x => x.LastModified).Take(_PageSize * page).ToList();
+
+                    if (result != null)
+                        return Json(result);
+                }
+            }
+            return null;
+        }
+
+        [HttpGet]
+        [Route("blueprint/group/keyword/{clientId:int}/{keyword}/")]
+        public IHttpActionResult GetBlueprintGroup(int clientId, String keyword)
+        {
+            using (var ctx = new xFilmEntities())
+            {
+                var path = "/blueprint";
+                var client = ctx.Client.Where(x => x.ID == clientId && x.Status > 0).SingleOrDefault();
+                if (client != null)
+                {
+                    var all = (CloudDiskHelper.FileLst(clientId, 0, path)).Where(x => x.Name.Contains(keyword)).ToList();
+
+                    // 切咗 page(color).VPS 去
+                    for (int i = 0; i < all.Count; ++i)
+                    {
+                        all[i].Name = all[i].Name.Substring(0, all[i].Name.LastIndexOf('('));
+                    }
+
+                    // 將同名嘅抽一個 record 出嚟
+                    var result = all.GroupBy(x => x.Name, (key, g) => g.OrderBy(e => e.Name).First()).OrderByDescending(x => x.LastModified).ToList();
+
+                    if (result != null)
+                        return Json(result);
+                }
+            }
+            return null;
+        }
+
+        [HttpGet]
         [Route("plate/{clientId:int}/{page:int}/")]
         public IHttpActionResult GetPlate(int clientId, int page)
         {

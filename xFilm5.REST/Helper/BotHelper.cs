@@ -341,7 +341,7 @@ namespace xFilm5.REST.Helper
         public static List<CloudDisk.ResourceInfo> GetBlueprint(int clientId, int page)
         {
             String botServer = ConfigurationManager.AppSettings["BotServer"];
-            String uri = String.Format("clouddisk/Blueprint/{0}/{1}/", clientId.ToString(), page.ToString());
+            String uri = String.Format("clouddisk/Blueprint/group/{0}/{1}/", clientId.ToString(), page.ToString());
 
             var client = new RestClient(botServer);
             var request = new RestRequest(uri, Method.GET);
@@ -364,7 +364,7 @@ namespace xFilm5.REST.Helper
         public static List<CloudDisk.ResourceInfo> GetBlueprint(int clientId, String keyword)
         {
             String botServer = ConfigurationManager.AppSettings["BotServer"];
-            String uri = String.Format("clouddisk/Blueprint/keyword/{0}/{1}/", clientId.ToString(), keyword);
+            String uri = String.Format("clouddisk/Blueprint/group/keyword/{0}/{1}/", clientId.ToString(), keyword);
 
             var client = new RestClient(botServer);
             var request = new RestRequest(uri, Method.GET);

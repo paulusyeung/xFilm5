@@ -782,10 +782,10 @@ namespace xFilm5.Bot.Helper
                             var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
 
                             #region 用 NetworkConnection: 來自於 NetworkConnection.cs 用嚟做 impersonation
-                            var destServerUri = ConfigurationManager.AppSettings["CloudDiskReprint_ServerUri"];
-                            var destUserName = ConfigurationManager.AppSettings["CloudDiskReprint_UserName"];
-                            var destUserPassword = ConfigurationManager.AppSettings["CloudDiskReprint_UserPassword"];
-                            var destHotFolder = ConfigurationManager.AppSettings["CloudDiskReprint_HotFolder"];
+                            var destServerUri = ConfigurationManager.AppSettings["CloudDiskReOutput_ServerUri"];
+                            var destUserName = ConfigurationManager.AppSettings["CloudDiskReOutput_UserName"];
+                            var destUserPassword = ConfigurationManager.AppSettings["CloudDiskReOutput_UserPassword"];
+                            var destHotFolder = ConfigurationManager.AppSettings["CloudDiskReOutput_HotFolder"];
 
                             var destFilePrefix = ConfigurationManager.AppSettings["Blueprint_FileNamePrefix"];
                             #endregion
@@ -795,20 +795,20 @@ namespace xFilm5.Bot.Helper
                                 #region download files to stream and copy it to hot folder
                                 foreach (var item in data.Items)
                                 {
-                                    #region prepare destination sub-folder: .\Plate\PlateSize
-                                    destHotFolder += item.Path.Replace('/', '\\');
-                                    if (!Directory.Exists(destHotFolder))
-                                        Directory.CreateDirectory(destHotFolder);
+                                    #region prepare destination sub-folder: .\Blueprint
+                                    var destFolder = destServerUri + destHotFolder;
+                                    if (!Directory.Exists(destFolder))
+                                        Directory.CreateDirectory(destFolder);
 
-                                    destHotFolder = destHotFolder + "\\" + item.PlateSize;
-                                    if (!Directory.Exists(destHotFolder))
-                                        Directory.CreateDirectory(destHotFolder);
+                                    destFolder += item.Path.Substring(item.Path.LastIndexOf('/')).Replace('/', '\\');
+                                    if (!Directory.Exists(destFolder))
+                                        Directory.CreateDirectory(destFolder);
                                     #endregion
 
-                                    var destFileName = String.Format("{0}.{1}.{2}.tif", destFilePrefix, data.ClientId.ToString(), item.VpsFileName.Substring(0, item.VpsFileName.Length - 4));
-                                    var destFilePath = Path.Combine(destHotFolder, destFileName);
+                                    var destFileName = String.Format("{0}.{1}.{2}.TIF", destFilePrefix, data.ClientId.ToString(), item.VpsFileName.Substring(0, item.VpsFileName.Length - 4));
+                                    var destFilePath = Path.Combine(destFolder, destFileName);
                                     var sourcePath = item.Path.Substring(item.Path.LastIndexOf('/'));
-                                    var sourceFilePath = Path.Combine(sourcePath, item.Name);
+                                    var sourceFilePath = Path.Combine(sourcePath, item.Name.Substring(0, item.Name.LastIndexOf('.')) + ".TIF");
 
                                     if (c.Exists(sourceFilePath))
                                     {
@@ -863,10 +863,10 @@ namespace xFilm5.Bot.Helper
                             var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
 
                             #region 用 NetworkConnection: 來自於 NetworkConnection.cs 用嚟做 impersonation
-                            var destServerUri       = ConfigurationManager.AppSettings["CloudDiskReprint_ServerUri"];
-                            var destUserName        = ConfigurationManager.AppSettings["CloudDiskReprint_UserName"];
-                            var destUserPassword    = ConfigurationManager.AppSettings["CloudDiskReprint_UserPassword"];
-                            var destHotFolder       = ConfigurationManager.AppSettings["CloudDiskReprint_HotFolder"];
+                            var destServerUri       = ConfigurationManager.AppSettings["CloudDiskReOutput_ServerUri"];
+                            var destUserName        = ConfigurationManager.AppSettings["CloudDiskReOutput_UserName"];
+                            var destUserPassword    = ConfigurationManager.AppSettings["CloudDiskReOutput_UserPassword"];
+                            var destHotFolder       = ConfigurationManager.AppSettings["CloudDiskReOutput_HotFolder"];
 
                             var destFilePrefix      = ConfigurationManager.AppSettings["Plate_FileNamePrefix"];
                             #endregion
@@ -948,10 +948,10 @@ namespace xFilm5.Bot.Helper
                             var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
 
                             #region 用 NetworkConnection: 來自於 NetworkConnection.cs 用嚟做 impersonation
-                            var destServerUri = ConfigurationManager.AppSettings["CloudDiskReprint_ServerUri"];
-                            var destUserName = ConfigurationManager.AppSettings["CloudDiskReprint_UserName"];
-                            var destUserPassword = ConfigurationManager.AppSettings["CloudDiskReprint_UserPassword"];
-                            var destHotFolder = ConfigurationManager.AppSettings["CloudDiskReprint_HotFolder"];
+                            var destServerUri = ConfigurationManager.AppSettings["CloudDiskReOutput_ServerUri"];
+                            var destUserName = ConfigurationManager.AppSettings["CloudDiskReOutput_UserName"];
+                            var destUserPassword = ConfigurationManager.AppSettings["CloudDiskReOutput_UserPassword"];
+                            var destHotFolder = ConfigurationManager.AppSettings["CloudDiskReOutput_HotFolder"];
                             #endregion
 
                             using (new Impersonation(destServerUri, destUserName, destUserPassword))
