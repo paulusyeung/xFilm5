@@ -686,7 +686,7 @@ namespace xFilm5.Bot.Helper
             return result;
         }
 
-        public static bool ActionReprint(Models.CloudDisk.ActionReprint data, int clientId)
+        public static bool ActionReprintCups(Models.CloudDisk.ActionReprintEx data, int clientId)
         {
             var result = false;
 
@@ -721,27 +721,35 @@ namespace xFilm5.Bot.Helper
                                         var destPath = String.Format("{0}{1}{2}", serverUri, hotFolder, path.Replace('/', '\\'));
                                         var part1 = item.Name.Substring(0, item.Name.IndexOf('-'));
                                         var part2 = item.Name.Substring(item.Name.IndexOf('-') + 1);
-                                        var filename = String.Format("{0}.{1}.{2}", part1, clientId.ToString(), part2);     // 加番個 client id 入個檔案名度
+                                        var filename = item.CupsJobTitle;    // String.Format("{0}.{1}.{2}", part1, clientId.ToString(), part2);     // 加番個 client id 入個檔案名度
                                         var destFilePath = Path.Combine(destPath, filename);
 
                                         using (new Impersonation(serverUri, userName, userPassword))
                                         {
-                                            #region 如果未有 folder 就 create，有同名榴案，先刪除
+                                            #region 如果未有 folder 就 create，如有同名榴案，先刪除
                                             if (!Directory.Exists(destPath))
                                                 Directory.CreateDirectory(destPath);
                                             if (File.Exists(destFilePath))
                                                 File.Delete(destFilePath);
                                             #endregion
 
-                                            #region 將個 stream 寫入去隻檔案
+                                            #region copy from CloudDisk to HotFolder and upload a copy to CloudDisk, using new name
                                             using (FileStream fileStream = File.Create(destFilePath, (int)stream.Length))
                                             {
                                                 byte[] bytesInStream = new byte[stream.Length];                             // Initialize the bytes array with the stream length and then fill it with data
                                                 stream.Position = 0;
                                                 var byteRead = stream.Read(bytesInStream, 0, bytesInStream.Length);
                                                 if (byteRead > 0)
+                                                {
                                                     fileStream.Write(bytesInStream, 0, byteRead);                           // Use write method to write to the file specified above
+                                                }
                                                 fileStream.Flush();
+                                                fileStream.Close();
+
+                                                if (File.Exists(destFilePath))
+                                                {
+                                                    UploadHotFolderReprintCupsFile(filename);
+                                                }
                                             }
                                             #endregion
 
@@ -815,15 +823,23 @@ namespace xFilm5.Bot.Helper
                                         var stream = c.Download(sourceFilePath);
                                         if (stream != null)
                                         {
-                                            #region copy files 將個 stream 寫入去隻檔案
+                                            #region copy from CloudDisk to HotFolder and upload a copy to CloudDisk, using new name
                                             using (FileStream fileStream = File.Create(destFilePath, (int)stream.Length))
                                             {
                                                 byte[] bytesInStream = new byte[stream.Length];                             // Initialize the bytes array with the stream length and then fill it with data
                                                 stream.Position = 0;
                                                 var byteRead = stream.Read(bytesInStream, 0, bytesInStream.Length);
                                                 if (byteRead > 0)
+                                                {
                                                     fileStream.Write(bytesInStream, 0, byteRead);                           // Use write method to write to the file specified above
+                                                }
                                                 fileStream.Flush();
+                                                fileStream.Close();
+
+                                                if (File.Exists(destFilePath))
+                                                {
+                                                    UploadHotFolderReOutputBlueprintFile(destFileName);
+                                                }
                                             }
                                             #endregion
 
@@ -900,15 +916,23 @@ namespace xFilm5.Bot.Helper
                                         var stream = c.Download(sourceFilePath);
                                         if (stream != null)
                                         {
-                                            #region copy files 將個 stream 寫入去隻檔案
+                                            #region copy from CloudDisk to HotFolder and upload a copy to CloudDisk, using new name
                                             using (FileStream fileStream = File.Create(destFilePath, (int)stream.Length))
                                             {
                                                 byte[] bytesInStream = new byte[stream.Length];                             // Initialize the bytes array with the stream length and then fill it with data
                                                 stream.Position = 0;
                                                 var byteRead = stream.Read(bytesInStream, 0, bytesInStream.Length);
                                                 if (byteRead > 0)
+                                                {
                                                     fileStream.Write(bytesInStream, 0, byteRead);                           // Use write method to write to the file specified above
+                                                }
                                                 fileStream.Flush();
+                                                fileStream.Close();
+
+                                                if (File.Exists(destFilePath))
+                                                {
+                                                    UploadHotFolderReOutputPlateFile(destFileName, item.PlateSize);
+                                                }
                                             }
                                             #endregion
 
@@ -985,15 +1009,27 @@ namespace xFilm5.Bot.Helper
                                         var stream = c.Download(sourceFilePath);
                                         if (stream != null)
                                         {
-                                            #region copy files 將個 stream 寫入去隻檔案
+                                            #region copy from CloudDisk to HotFolder and upload a copy to CloudDisk, using new name
                                             using (FileStream fileStream = File.Create(destFilePath, (int)stream.Length))
                                             {
                                                 byte[] bytesInStream = new byte[stream.Length];                             // Initialize the bytes array with the stream length and then fill it with data
                                                 stream.Position = 0;
                                                 var byteRead = stream.Read(bytesInStream, 0, bytesInStream.Length);
                                                 if (byteRead > 0)
+                                                {
                                                     fileStream.Write(bytesInStream, 0, byteRead);                           // Use write method to write to the file specified above
+                                                }
                                                 fileStream.Flush();
+                                                fileStream.Close();
+
+                                                var cdPath = item.Path.Substring(item.Path.LastIndexOf('/'));
+                                                cdPath += "/";
+                                                result = c.Copy(cdPath + item.Name, cdPath + item.VpsFileName);
+
+                                                //if (File.Exists(destFilePath))
+                                                //{
+                                                //    UploadHotFolderReOutputFilmFile(destFileName);
+                                                //}
                                             }
                                             #endregion
 
@@ -1851,6 +1887,323 @@ namespace xFilm5.Bot.Helper
 
             return result;
         }
+
+        #region Upload Files from Hot Folders
+
+        public static bool UploadHotFolderReprintCupsFile(String cupsFileName)
+        {
+            bool result = false;
+
+            var source = ParseCupsFileName(cupsFileName);
+
+            if (IsClientEnabled(source.ClientId))
+            {
+                using (var ctx = new xFilmEntities())
+                {
+                    var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
+                    if (cuser != null)
+                    {
+                        #region 讀入 network impersonation
+                        String sourceServerUri = ConfigurationManager.AppSettings["CloudDiskReprint_ServerUri"];
+                        String sourceUserName = ConfigurationManager.AppSettings["CloudDiskReprint_UserName"];
+                        String sourceUserPassword = ConfigurationManager.AppSettings["CloudDiskReprint_UserPassword"];
+                        String sourceFolder = ConfigurationManager.AppSettings["CloudDiskReprint_HotFolder"] + @"\cups";
+
+                        String sourcePath = String.Format("{0}{1}", sourceServerUri, sourceFolder);
+                        String sourceFilePath = Path.Combine(sourcePath, cupsFileName);
+                        #endregion
+
+                        using (new Impersonation(sourceServerUri, sourceUserName, sourceUserPassword))
+                        {
+                            string group = cuser.ClientID.ToString();
+                            string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
+                            string destPath = "/cups", thumbnailPath = "/thumbnail";
+
+                            try
+                            {
+                                var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+                                if (c.Exists(destPath))
+                                {
+                                    if (File.Exists(sourceFilePath))
+                                    {
+                                        #region upload file
+                                        var contentType = source.PFileExtension.ToLower() == "ps" ? "application/postscript" : (source.PFileExtension.ToLower() == "pdf" ? "application/pdf" : "application/octet-stream");
+                                        var destFilePath = String.Format("{0}/{1}-{2}", destPath, source.JobId, source.PFileName);
+
+                                        using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+                                        {
+                                            result = c.Upload(destFilePath, fs, contentType);
+                                            if (result)
+                                            {
+                                                #region Generate thumbnail
+                                                MagickReadSettings settings = new MagickReadSettings();
+                                                settings.Density = new Density(300, 300);                               // Settings the density to 300 dpi will create an image with a better quality
+                                                var temp = @"C:\Temp";                                                  // The default folder for %TEMP% but we want to change it to C:\Temp
+                                                MagickNET.SetTempDirectory(temp);
+                                                using (MagickImageCollection images = new MagickImageCollection())
+                                                {
+                                                    images.Read(sourceFilePath, settings);
+                                                    var destFileName = String.Format("{0}-{1}.png", source.JobId, source.PFileName);                       // append .png to priginal file name
+                                                    var thumbnail = String.Format(@"{0}\{1}", temp, destFileName);
+                                                    var img = images[0];
+                                                    img.Format = MagickFormat.Png;
+                                                    img.Write(thumbnail);
+                                                    if (File.Exists(thumbnail))
+                                                    {
+                                                        using (var th = new FileStream(thumbnail, FileMode.Open, FileAccess.Read))
+                                                        {
+                                                            destFilePath = String.Format("{0}/{1}", thumbnailPath, destFileName);
+                                                            result = c.Upload(destFilePath, th, "image/png");
+                                                            if (result)
+                                                            {
+                                                                File.Delete(thumbnail);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                #endregion
+                                            }
+                                        }
+                                        #endregion
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                //
+                            }
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Source File Path: EfiProof\efi.202725.N10819-GTO52_拓裕_送貨單.p1(K).tif
+        ///                   EfiProof\efi.202856.N10814-SM-0629-2.p1(K).tif
+        ///                   EfiProof\efi.202706.MA6304-op180628-F02--SUNCITY_NAME_CARD_V3.p1(M).tif
+        /// </summary>
+        /// <param name="sourceFilePath"></param>
+        /// <returns></returns>
+        public static bool UploadHotFolderReOutputBlueprintFile(String sourceFileName)
+        {
+            // 2018.08.24 paulus: 發現 QRCode generator 會 overwrite 舊嘅，所以唔使用 original TIFF
+            //return UploadOriginalTFFFile(sourceFilePath, "/blueprint");
+
+            var result = false;
+
+            //var sourceFileName = sourceFilePath.Substring(sourceFilePath.LastIndexOf('\\') + 1);    // remove path      (\\192.168.12.230\DirectPrint\EfiProof\)
+            var fileName = sourceFileName.Substring(4);                                             // remove prefix    (efi.)
+            var source = ParseVpsFileName(fileName);
+
+            if (IsClientEnabled(source.ClientId))
+            {
+                using (var ctx = new xFilmEntities())
+                {
+                    var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
+                    if (cuser != null)
+                    {
+                        #region 讀入 network impersonation
+                        String sourceServerUri = ConfigurationManager.AppSettings["CloudDiskReOutput_ServerUri"];
+                        String sourceUserName = ConfigurationManager.AppSettings["CloudDiskReOutput_UserName"];
+                        String sourceUserPassword = ConfigurationManager.AppSettings["CloudDiskReOutput_UserPassword"];
+                        String sourceFolder = ConfigurationManager.AppSettings["CloudDiskReOutput_HotFolder"] + @"\blueprint";
+
+                        String sourcePath = String.Format("{0}{1}", sourceServerUri, sourceFolder);
+                        String sourceFilePath = Path.Combine(sourcePath, sourceFileName);
+                        #endregion
+
+                        using (new Impersonation(sourceServerUri, sourceUserName, sourceUserPassword))
+                        {
+                            if (File.Exists(sourceFilePath))
+                            {
+                                if (CloudDiskHelper.IsClientEnabled(cuser.ClientID))
+                                {
+                                    string group = cuser.ClientID.ToString();
+                                    string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
+                                    string cdiskPath = "/blueprint";
+
+                                    try
+                                    {
+                                        var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+                                        if (c.Exists(cdiskPath))
+                                        {
+                                            #region upload file
+                                            var contentType = "image/tiff";
+                                            var cdiskFilePath = String.Format("{0}/{1}-{2}", cdiskPath, source.JobId, source.PFileName);
+
+                                            using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+                                            {
+                                                result = c.Upload(cdiskFilePath, fs, contentType);
+                                            }
+                                            #endregion
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        //
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Source File Path: TG-A.202725.N10819-GTO52_拓裕_送貨單.p1(K).tif
+        ///                   TG-A.202856.N10814-SM-0629-2.p1(K).tif
+        ///                   TG-A.202706.MA6304-op180628-F02--SUNCITY_NAME_CARD_V3.p1(M).tif
+        /// </summary>
+        /// <param name="sourceFilePath"></param>
+        /// <returns></returns>
+        public static bool UploadHotFolderReOutputPlateFile(String sourceFileName, String plateSize)
+        {
+            // 2018.08.24 paulus: 發現 QRCode generator 會 overwrite 舊嘅，所以唔使用 original TIFF
+            //return UploadOriginalTFFFile(sourceFilePath, "/plate");
+
+            var result = false;
+
+            //var sourceFileName = sourceFilePath.Substring(sourceFilePath.LastIndexOf('\\') + 1);    // remove path      (\\192.168.12.230\JobsOrder\QRTIFF\)
+            var fileName = sourceFileName.Substring(5);                                             // remove prefix    (TG-A.)
+            var source = ParseVpsFileName(fileName);
+
+            if (IsClientEnabled(source.ClientId))
+            {
+                using (var ctx = new xFilmEntities())
+                {
+                    var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
+                    if (cuser != null)
+                    {
+                        #region 讀入 network impersonation
+                        String sourceServerUri      = ConfigurationManager.AppSettings["CloudDiskReOutput_ServerUri"];
+                        String serverUserName       = ConfigurationManager.AppSettings["CloudDiskReOutput_UserName"];
+                        String serverUserPassword   = ConfigurationManager.AppSettings["CloudDiskReOutput_UserPassword"];
+                        String sourceFolder         = ConfigurationManager.AppSettings["CloudDiskReOutput_HotFolder"] + @"\plate\" + plateSize;
+
+                        String sourcePath = String.Format("{0}{1}", sourceServerUri, sourceFolder);
+                        String sourceFilePath = Path.Combine(sourcePath, sourceFileName);
+                        #endregion
+
+                        using (new Impersonation(sourceServerUri, serverUserName, serverUserPassword))
+                        {
+                            if (File.Exists(sourceFilePath))
+                            {
+                                if (CloudDiskHelper.IsClientEnabled(cuser.ClientID))
+                                {
+                                    string group = cuser.ClientID.ToString();
+                                    string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
+                                    string cdiskPath = "/plate";
+
+                                    try
+                                    {
+                                        var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+                                        if (c.Exists(cdiskPath))
+                                        {
+                                            #region upload file
+                                            var contentType = "image/tiff";
+                                            var cdiskFilePath = String.Format("{0}/{1}-{2}", cdiskPath, source.JobId, source.PFileName);
+
+                                            using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+                                            {
+                                                result = c.Upload(cdiskFilePath, fs, contentType);
+                                            }
+                                            #endregion
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        //
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Source File Path: 202725.N10819-GTO52_拓裕_送貨單.ps
+        ///                   202856.N11533-DJ-Neg-20180823.pdf
+        ///                   202706.MA6304-op180628-F02--SUNCITY_NAME_CARD_V3.ps
+        /// </summary>
+        /// <param name="sourceFilePath"></param>
+        /// <returns></returns>
+        public static bool UploadHotFolderReOutputFilmFile(String sourceFileName)
+        {
+            var result = false;
+
+            //var sourceFileName = sourceFilePath.Substring(sourceFilePath.LastIndexOf('\\') + 1);    // remove path      (\\192.168.12.230\DirectPrint\FILM\)
+            var fileName = sourceFileName;
+            var source = ParseVpsFileName(fileName);
+
+            if (IsClientEnabled(source.ClientId))
+            {
+                using (var ctx = new xFilmEntities())
+                {
+                    var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
+                    if (cuser != null)
+                    {
+                        #region 讀入 network impersonation
+                        String sourceServerUri = ConfigurationManager.AppSettings["CloudDiskReOutput_ServerUri"];
+                        String sourceUserName = ConfigurationManager.AppSettings["CloudDiskReOutput_UserName"];
+                        String sourceUserPassword = ConfigurationManager.AppSettings["CloudDiskReOutput_UserPassword"];
+                        String sourceFolder = ConfigurationManager.AppSettings["CloudDiskReOutput_HotFolder"] + @"\film";
+
+                        String sourcePath = String.Format("{0}{1}", sourceServerUri, sourceFolder);
+                        String sourceFilePath = Path.Combine(sourcePath, sourceFileName);
+                        #endregion
+
+                        using (new Impersonation(sourceServerUri, sourceUserName, sourceUserPassword))
+                        {
+                            if (File.Exists(sourceFilePath))
+                            {
+                                if (CloudDiskHelper.IsClientEnabled(cuser.ClientID))
+                                {
+                                    string group = cuser.ClientID.ToString();
+                                    string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
+                                    string cdiskPath = "/film";
+
+                                    try
+                                    {
+                                        var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+                                        if (c.Exists(cdiskPath))
+                                        {
+                                            #region upload file
+                                            var contentType = "application/octet-stream";
+                                            var cdiskFilePath = String.Format("{0}/{1}-{2}", cdiskPath, source.JobId, source.PFileName);
+
+                                            using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+                                            {
+                                                result = c.Upload(cdiskFilePath, fs, contentType);
+                                            }
+                                            #endregion
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        //
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        #endregion
+
         #endregion
 
         #region handy private objects

@@ -632,7 +632,7 @@ namespace xFilm5.Bot.Controllers
         public IHttpActionResult PostActionReprint(int clientId)
         {
             var json = Request.Content.ReadAsStringAsync().Result;
-            var data = JsonConvert.DeserializeObject<Models.CloudDisk.ActionReprint>(json);
+            var data = JsonConvert.DeserializeObject<Models.CloudDisk.ActionReprintEx>(json);
 
             if (data == null)
             {
@@ -646,7 +646,10 @@ namespace xFilm5.Bot.Controllers
                     var client = ctx.Client.Where(x => x.ID == clientId).SingleOrDefault();
                     if (client != null)
                     {
-                        var result = CloudDiskHelper.ActionReprint(data, clientId);
+                        //var result = CloudDiskHelper.ActionReprintCups(data, clientId);
+                        // let Hangfire takes over the job
+                        BackgroundJob.Enqueue(() => CloudDiskHelper.ActionReprintCups(data, clientId));
+                        var result = true;
 
                         if (result)
                         {
@@ -687,7 +690,10 @@ namespace xFilm5.Bot.Controllers
                     var client = ctx.Client.Where(x => x.ID == data.ClientId).SingleOrDefault();
                     if (client != null)
                     {
-                        var result = CloudDiskHelper.ActionOutputBlueprint(data, data.ClientId);
+                        //var result = CloudDiskHelper.ActionOutputBlueprint(data, data.ClientId);
+                        // let Hangfire takes over the job
+                        BackgroundJob.Enqueue(() => CloudDiskHelper.ActionOutputBlueprint(data, data.ClientId));
+                        var result = true;
 
                         if (result)
                         {
@@ -728,7 +734,10 @@ namespace xFilm5.Bot.Controllers
                     var client = ctx.Client.Where(x => x.ID == data.ClientId).SingleOrDefault();
                     if (client != null)
                     {
-                        var result = CloudDiskHelper.ActionOutputPlate(data, data.ClientId);
+                        //var result = CloudDiskHelper.ActionOutputPlate(data, data.ClientId);
+                        // let Hangfire takes over the job
+                        BackgroundJob.Enqueue(() => CloudDiskHelper.ActionOutputPlate(data, data.ClientId));
+                        var result = true;
 
                         if (result)
                         {
@@ -769,7 +778,10 @@ namespace xFilm5.Bot.Controllers
                     var client = ctx.Client.Where(x => x.ID == data.ClientId).SingleOrDefault();
                     if (client != null)
                     {
-                        var result = CloudDiskHelper.ActionOutputFilm(data, data.ClientId);
+                        //var result = CloudDiskHelper.ActionOutputFilm(data, data.ClientId);
+                        // let Hangfire takes over the job
+                        BackgroundJob.Enqueue(() => CloudDiskHelper.ActionOutputFilm(data, data.ClientId));
+                        var result = true;
 
                         if (result)
                         {

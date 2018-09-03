@@ -41,10 +41,11 @@ namespace xFilm5.Bot.Models
             public List<ResourceInfo> Items { get; set; }
         }
 
-        public class ActionReprint
+        public class ActionReprintEx
         {
+            public int ClientId { get; set; }
             public string Remarks { get; set; }
-            public List<ResourceInfo> Items { get; set; }
+            public List<ResourceInfoEx> Items { get; set; }
         }
 
         public class ActionOutputEx

@@ -553,8 +553,13 @@ namespace xFilm5.REST.Controllers
         [JwtAuthentication]
         public IHttpActionResult PostActionReprint(int clientId)
         {
+            var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+
+            Guid userSid = Guid.Empty;
+            userSid = Guid.TryParse(identity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault(), out userSid) ? userSid : Guid.Empty;
+
             var json = Request.Content.ReadAsStringAsync().Result;
-            var data = JsonConvert.DeserializeObject<Models.CloudDisk.ActionReprint>(json);
+            var data = JsonConvert.DeserializeObject<Models.CloudDisk.ActionReprintEx>(json);
 
             if (data != null)
             {
@@ -563,8 +568,12 @@ namespace xFilm5.REST.Controllers
                     var client = ctx.Client.Where(x => x.ID == clientId).SingleOrDefault();
                     if (client != null)
                     {
-                        var result = BotHelper.PostCloudDiskActionReprint(data, clientId);
-                        if (result) return Ok();
+                        var user = ctx.User.Where(x => x.UserSid == userSid).SingleOrDefault();
+                        if (user != null)
+                        {
+                            var result = OrderHelper.CloudDiskRePrint(data, user.UserId);
+                            if (result != 0) return Ok();
+                        }
                     }
                 }
             }
@@ -597,6 +606,7 @@ namespace xFilm5.REST.Controllers
                             List<Models.CloudDisk.ResourceInfoEx> newItems = new List<Models.CloudDisk.ResourceInfoEx>();
                             foreach (var item in data.Items)
                             {
+                                #region replace the selected item with VPS files
                                 var original_pqVpsList = ctx.vwPrintQueueVpsList_Ordered
                                     .Where(x => x.VpsFileName.Contains(item.Name) && x.CheckedBlueprint == true)
                                     .OrderBy(x => x.OrderPkPrintQueueVpsId)
@@ -618,6 +628,7 @@ namespace xFilm5.REST.Controllers
                                         newItems.Add(newItem);
                                     }
                                 }
+                                #endregion
                             }
                             data.Items = newItems;
 

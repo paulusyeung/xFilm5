@@ -635,7 +635,7 @@ namespace xFilm5.REST.Helper
             return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
         }
 
-        public static bool PostCloudDiskActionReprint(Models.CloudDisk.ActionReprint data, int clientId)
+        public static bool PostCloudDiskActionReprint(Models.CloudDisk.ActionReprintEx data, int clientId)
         {
             String botServer = ConfigurationManager.AppSettings["BotServer"];
             //#if (DEBUG)

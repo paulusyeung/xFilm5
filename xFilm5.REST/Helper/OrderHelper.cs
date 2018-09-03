@@ -573,6 +573,95 @@ namespace xFilm5.REST.Helper
             return result;
         }
 
+        /// <summary>
+        /// 嚴格嚟講，未係 order，淨係要 create dbo.PrintQueue
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public static int CloudDiskRePrint(CloudDisk.ActionReprintEx data, int userId)
+        {
+            int result = 0;
+
+            using (var ctx = new xFilmEntities())
+            {
+                using (var scope = ctx.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        #region 2018.08.20 paulus: 由於 db 嘅設計，CloudDisk re-output 唔可以套用原本嘅 dbo.PrintQueue，要重新 create 過，但係就要更新個 CupsJobId
+                        String lastCupsJobId = "", newCupsJobId = "";
+                        var pqId = 0;
+                        var pqItems = data.Items.OrderBy(x => x.Name).ToList();
+                        for (int i = 0; i < pqItems.Count; i++)
+                        {
+                            var item = pqItems[i];
+                            var cupsJobId = item.Name.Substring(0, item.Name.IndexOf('-'));
+                            var vpsFileName = item.Name;    //.Substring(0, item.Name.Length - 3) + "VPS";             // 將 TIF 改為 VPS
+                            var original_pq = ctx.vwPrintQueueVpsList_Ordered
+                                .Where(x => x.CupsJobID == cupsJobId)
+                                .OrderBy(x => x.OrderPkPrintQueueVpsId)
+                                .SingleOrDefault();
+                            if (original_pq != null)
+                            {
+                                if (lastCupsJobId != original_pq.CupsJobID)
+                                {
+                                    newCupsJobId = newCupsJobId == "" ? CloudDiskHelper.GetNextReOutputCupsJobId() : CloudDiskHelper.GetNextReOutputCupsJobId(newCupsJobId);
+                                }
+
+                                pqItems[i].CupsJobId = newCupsJobId;
+                                pqItems[i].CupsJobTitle = original_pq.CupsJobTitle.Replace(original_pq.CupsJobID, newCupsJobId);
+                                pqItems[i].PlateSize = original_pq.PlateSize;
+                                pqItems[i].VpsFileName = vpsFileName.Replace(original_pq.CupsJobID, newCupsJobId);
+
+                                #region create dbo.PrintQueue
+                                var pq = new PrintQueue();
+
+                                pq.ClientID = data.ClientId;
+                                pq.CupsJobID = item.CupsJobId;
+                                pq.CupsJobTitle = item.CupsJobTitle;
+                                pq.PlateSize = item.PlateSize;
+                                pq.BlueprintOrdered = false;
+                                pq.Status = (int)EF6.EnumHelper.Common.Status.Active;
+                                pq.CreatedOn = DateTime.Now;
+                                pq.CreatedBy = userId;
+                                pq.ModifiedOn = DateTime.Now;
+                                pq.ModifiedBy = userId;
+                                pq.Retired = false;
+                                pq.RetiredOn = DateTime.Parse("1900-01-01 00:00:00");
+                                pq.RetiredBy = 0;
+
+                                ctx.PrintQueue.Add(pq);
+                                ctx.SaveChanges();
+                                #endregion
+
+                                pqId = pq.ID;
+                                lastCupsJobId = original_pq.CupsJobID;
+                            }
+                        }
+                        #endregion
+
+                        scope.Commit();
+                        result = pqId;     // oHeader.ID;
+
+                        #region 叫 Bot send Fcm Notifications
+                        //BotHelper.PostSendFcmOnOrder(oHeader.ID);
+                        #endregion
+
+                        #region 叫 Bot 抄 tiff
+                        BotHelper.PostCloudDiskActionReprint(data, userId);
+                        #endregion
+                    }
+                    catch
+                    {
+                        scope.Rollback();
+                    }
+                }
+            }
+
+            return result;
+        }
+
         public static int CloudDiskReOutput_Blueprint(CloudDisk.ActionOutputEx data, int userId)
         {
             int result = 0;
