@@ -192,7 +192,7 @@ namespace xFilm5.Helper
         public static bool IsCreatedBeforeCloudDiskEra(int clientId)
         {
             bool result = false;
-            DateTime eraBeginsOn = new DateTime(2017, 7, 1);
+            DateTime eraBeginsOn = new DateTime(2018, 10, 1);
 
             using (var ctx = new EF6.xFilmEntities())
             {
