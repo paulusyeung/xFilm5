@@ -615,8 +615,10 @@ namespace xFilm5.Bot.Helper
 
             return list;
             */
-
+            //
             List<string> result = CacheHelper.GetObjectFromCache<List<string>>("getSubAdminUsers", 60, () => {
+
+                #region if cache not exist or is expired, create here
                 var list = new List<String>();
                 var p = new owncloudsharp.Client(CLOUDDISK_URL, CLOUDDISK_ADMIN, CLOUDDISK_ADMINPASSWORD);
                 var items = p.GetUsers();
@@ -629,6 +631,7 @@ namespace xFilm5.Bot.Helper
                 }
 
                 return list;
+                #endregion
             });
             return result;
         }
