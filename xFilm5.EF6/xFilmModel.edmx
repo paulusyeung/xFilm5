@@ -960,7 +960,18 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwPrintQueue_LifeCycleListWithWo
 warning 6002: The table/view 'xFilm3_NuStar.dbo.vwPrintQueueVpsList_AvailableFilm' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vwPrintQueueVpsList_AvailableFilm">
           <Key>
+            
+            
+            
+            
+            
+            
+            
+            
+            
             <PropertyRef Name="VpsFileName" />
+            
+            
             <PropertyRef Name="DefaultWorkshopId" />
           </Key>
           <Property Name="ClientID" Type="int" Nullable="false" />
@@ -987,8 +998,19 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwPrintQueueVpsList_AvailableFil
 warning 6002: The table/view 'xFilm3_NuStar.dbo.vwPrintQueueVpsList_AvailablePlate' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vwPrintQueueVpsList_AvailablePlate">
           <Key>
-            <PropertyRef Name="DefaultWorkshopId" />
+            
+            
+            
+            
+            
+            
+            
+            
+            
             <PropertyRef Name="VpsFileName" />
+            
+            
+            <PropertyRef Name="DefaultWorkshopId" />
           </Key>
           <Property Name="ClientID" Type="int" Nullable="false" />
           <Property Name="OrderID" Type="int" Nullable="false" />
@@ -1216,6 +1238,43 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserNotificationList' does not
           <Property Name="PrimaryUser" Type="bit" Nullable="false" />
           <Property Name="ClientId" Type="int" Nullable="false" />
           <Property Name="ClientName" Type="nvarchar" MaxLength="128" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'xFilm3_NuStar.dbo.vwUserPreferenceList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vwUserPreferenceList">
+          <Key>
+            <PropertyRef Name="UserSid" />
+            <PropertyRef Name="PreferenceId" />
+            <PropertyRef Name="ClientId" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="ClientId" Type="int" Nullable="false" />
+          <Property Name="ClientName" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ClientStatus" Type="smallint" />
+          <Property Name="Branch" Type="int" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="PrimaryUser" Type="bit" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="64" />
+          <Property Name="Password" Type="nvarchar" MaxLength="32" />
+          <Property Name="Email" Type="nvarchar" MaxLength="64" />
+          <Property Name="PIN" Type="nvarchar" MaxLength="16" />
+          <Property Name="UserType" Type="int" Nullable="false" />
+          <Property Name="UserSid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="LoginName" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="LoginPassword" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="Alias" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="64" />
+          <Property Name="ModifiedOn" Type="datetime" Nullable="false" />
+          <Property Name="ModifiedBy" Type="nvarchar" MaxLength="64" />
+          <Property Name="Retired" Type="bit" Nullable="false" />
+          <Property Name="RetiredOn" Type="datetime" />
+          <Property Name="RetiredBy" Type="nvarchar" MaxLength="64" />
+          <Property Name="PreferenceId" Type="int" Nullable="false" />
+          <Property Name="ObjectId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ObjectType" Type="int" Nullable="false" />
+          <Property Name="MetadataXml" Type="xml" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'xFilm3_NuStar.dbo.vwWorkshopList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -2243,6 +2302,37 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwWorkshopList' does not have a 
     [vwUserNotificationList].[ClientId] AS [ClientId], 
     [vwUserNotificationList].[ClientName] AS [ClientName]
     FROM [dbo].[vwUserNotificationList] AS [vwUserNotificationList]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vwUserPreferenceList" EntityType="Self.vwUserPreferenceList" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vwUserPreferenceList].[ClientId] AS [ClientId], 
+    [vwUserPreferenceList].[ClientName] AS [ClientName], 
+    [vwUserPreferenceList].[ClientStatus] AS [ClientStatus], 
+    [vwUserPreferenceList].[Branch] AS [Branch], 
+    [vwUserPreferenceList].[UserId] AS [UserId], 
+    [vwUserPreferenceList].[PrimaryUser] AS [PrimaryUser], 
+    [vwUserPreferenceList].[FullName] AS [FullName], 
+    [vwUserPreferenceList].[Password] AS [Password], 
+    [vwUserPreferenceList].[Email] AS [Email], 
+    [vwUserPreferenceList].[PIN] AS [PIN], 
+    [vwUserPreferenceList].[UserType] AS [UserType], 
+    [vwUserPreferenceList].[UserSid] AS [UserSid], 
+    [vwUserPreferenceList].[LoginName] AS [LoginName], 
+    [vwUserPreferenceList].[LoginPassword] AS [LoginPassword], 
+    [vwUserPreferenceList].[Alias] AS [Alias], 
+    [vwUserPreferenceList].[Status] AS [Status], 
+    [vwUserPreferenceList].[CreatedOn] AS [CreatedOn], 
+    [vwUserPreferenceList].[CreatedBy] AS [CreatedBy], 
+    [vwUserPreferenceList].[ModifiedOn] AS [ModifiedOn], 
+    [vwUserPreferenceList].[ModifiedBy] AS [ModifiedBy], 
+    [vwUserPreferenceList].[Retired] AS [Retired], 
+    [vwUserPreferenceList].[RetiredOn] AS [RetiredOn], 
+    [vwUserPreferenceList].[RetiredBy] AS [RetiredBy], 
+    [vwUserPreferenceList].[PreferenceId] AS [PreferenceId], 
+    [vwUserPreferenceList].[ObjectId] AS [ObjectId], 
+    [vwUserPreferenceList].[ObjectType] AS [ObjectType], 
+    [vwUserPreferenceList].[MetadataXml] AS [MetadataXml]
+    FROM [dbo].[vwUserPreferenceList] AS [vwUserPreferenceList]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="vwWorkshopList" EntityType="Self.vwWorkshopList" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -3751,6 +3841,7 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwWorkshopList' does not have a 
           <EntitySet Name="vwReceiptDetailsList_Invoice" EntityType="xFilmModel.vwReceiptDetailsList_Invoice" />
           <EntitySet Name="vwPrintQueueVpsList_AvailableFilm" EntityType="xFilmModel.vwPrintQueueVpsList_AvailableFilm" />
           <EntitySet Name="vwPrintQueueVpsList_AvailablePlate" EntityType="xFilmModel.vwPrintQueueVpsList_AvailablePlate" />
+          <EntitySet Name="vwUserPreferenceList" EntityType="xFilmModel.vwUserPreferenceList" />
         </EntityContainer>
         <EntityType Name="vwReceiptDetailsList_Ex">
           <Key>
@@ -4320,6 +4411,41 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwWorkshopList' does not have a 
           <Property Name="ClientName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="DefaultWorkshopId" Type="Int32" Nullable="false" />
           <Property Name="DefaultWorkshopName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="vwUserPreferenceList">
+          <Key>
+            <PropertyRef Name="UserSid" />
+            <PropertyRef Name="PreferenceId" />
+            <PropertyRef Name="ClientId" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="ClientName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ClientStatus" Type="Int16" />
+          <Property Name="Branch" Type="Int32" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="PrimaryUser" Type="Boolean" />
+          <Property Name="FullName" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="PIN" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="UserType" Type="Int32" Nullable="false" />
+          <Property Name="UserSid" Type="Guid" Nullable="false" />
+          <Property Name="LoginName" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="LoginPassword" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Alias" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="ModifiedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModifiedBy" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="Retired" Type="Boolean" Nullable="false" />
+          <Property Name="RetiredOn" Type="DateTime" Precision="3" />
+          <Property Name="RetiredBy" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="PreferenceId" Type="Int32" Nullable="false" />
+          <Property Name="ObjectId" Type="Guid" Nullable="false" />
+          <Property Name="ObjectType" Type="Int32" Nullable="false" />
+          <Property Name="MetadataXml" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -5448,6 +5574,39 @@ warning 6002: The table/view 'xFilm3_NuStar.dbo.vwWorkshopList' does not have a 
                 <ScalarProperty Name="CupsJobID" ColumnName="CupsJobID" />
                 <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vwUserPreferenceList">
+            <EntityTypeMapping TypeName="xFilmModel.vwUserPreferenceList">
+              <MappingFragment StoreEntitySet="vwUserPreferenceList">
+                <ScalarProperty Name="MetadataXml" ColumnName="MetadataXml" />
+                <ScalarProperty Name="ObjectType" ColumnName="ObjectType" />
+                <ScalarProperty Name="ObjectId" ColumnName="ObjectId" />
+                <ScalarProperty Name="PreferenceId" ColumnName="PreferenceId" />
+                <ScalarProperty Name="RetiredBy" ColumnName="RetiredBy" />
+                <ScalarProperty Name="RetiredOn" ColumnName="RetiredOn" />
+                <ScalarProperty Name="Retired" ColumnName="Retired" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="ModifiedOn" ColumnName="ModifiedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Alias" ColumnName="Alias" />
+                <ScalarProperty Name="LoginPassword" ColumnName="LoginPassword" />
+                <ScalarProperty Name="LoginName" ColumnName="LoginName" />
+                <ScalarProperty Name="UserSid" ColumnName="UserSid" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="PIN" ColumnName="PIN" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="PrimaryUser" ColumnName="PrimaryUser" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Branch" ColumnName="Branch" />
+                <ScalarProperty Name="ClientStatus" ColumnName="ClientStatus" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
