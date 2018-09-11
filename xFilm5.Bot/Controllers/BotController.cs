@@ -95,7 +95,7 @@ namespace xFilm5.Bot.Controllers
                                             File.Copy(filePath_Source, filePath_Dest, true);
 
                                             // 2018.07.14 paulus: 叫 Hangfire 抄去 Cloud Disk
-                                            BackgroundJob.Enqueue(() => CloudDiskHelper.UploadBlueprintFile(filePath_Source));
+                                            BackgroundJob.Enqueue(() => CloudDiskHelper.UploadBlueprintFile(filePath_Source));      // filePath_Source format "\\192.168.12.230\DirectPrint\EfiProof\efi.202706.MA7222-op180910-F01-Chiyu-BOOK.p1(K).TIF"
                                             //CloudDiskHelper.UploadBlueprintFile(filePath_Source);
                                         }
                                         log.Info(String.Format("[bot, blueprint, copied] \r\nFile Name = {0}\r\nFilePath_Source = {1}{2}", fileName, serverUri, sourecPath));

@@ -601,6 +601,7 @@ namespace xFilm5.Bot.Helper
 
         public static List<String> GetSubAdminUsers()
         {
+            /** 2018.09.12 paulus: 試下用 MemoryCache 改善個 response 速度
             var list = new List<String>();
             var p = new owncloudsharp.Client(CLOUDDISK_URL, CLOUDDISK_ADMIN, CLOUDDISK_ADMINPASSWORD);
             var items = p.GetUsers();
@@ -613,6 +614,23 @@ namespace xFilm5.Bot.Helper
             }
 
             return list;
+            */
+
+            List<string> result = CacheHelper.GetObjectFromCache<List<string>>("getSubAdminUsers", 60, () => {
+                var list = new List<String>();
+                var p = new owncloudsharp.Client(CLOUDDISK_URL, CLOUDDISK_ADMIN, CLOUDDISK_ADMINPASSWORD);
+                var items = p.GetUsers();
+                foreach (var item in items)
+                {
+                    if (p.IsUserInSubAdminGroup(item, item))
+                    {
+                        list.Add(item);
+                    }
+                }
+
+                return list;
+            });
+            return result;
         }
 
         #region Action : Email, Reprint, Re-Output 
@@ -1601,6 +1619,7 @@ namespace xFilm5.Bot.Helper
         /// Source File Path: \\192.168.12.230\DirectPrint\EfiProof\efi.202725.N10819-GTO52_拓裕_送貨單.p1(K).tif
         ///                   \\192.168.12.230\DirectPrint\EfiProof\efi.202856.N10814-SM-0629-2.p1(K).tif
         ///                   \\192.168.12.230\DirectPrint\EfiProof\efi.202706.MA6304-op180628-F02--SUNCITY_NAME_CARD_V3.p1(M).tif
+        ///                   \\192.168.12.230\DirectPrint\EfiProof\efi.202706.MA7222-op180910-F01-Chiyu-BOOK.p1(K).TIF
         /// </summary>
         /// <param name="sourceFilePath"></param>
         /// <returns></returns>
@@ -1611,8 +1630,8 @@ namespace xFilm5.Bot.Helper
 
             var result = false;
 
-            var sourceFileName = sourceFilePath.Substring(sourceFilePath.LastIndexOf('\\') + 1);    // remove path      (\\192.168.12.230\DirectPrint\EfiProof\)
-            var fileName = sourceFileName.Substring(4);                                             // remove prefix    (efi.)
+            var sourceFileName = sourceFilePath.LastIndexOf('\\') != -1 ? sourceFilePath.Substring(sourceFilePath.LastIndexOf('\\') + 1) : sourceFilePath;    // remove path (\\192.168.12.230\DirectPrint\EfiProof\) if any
+            var fileName = sourceFileName.Substring(sourceFileName.IndexOf('.') + 1);       // remove prefix (efi.)
             var source = ParseVpsFileName(fileName);
 
             if (IsClientEnabled(source.ClientId))
@@ -1623,8 +1642,8 @@ namespace xFilm5.Bot.Helper
                     if (cuser != null)
                     {
                         #region 讀入 network impersonation
-                        String serverUri = ConfigurationManager.AppSettings["Blueprint_ServerUri"];
-                        String userName = ConfigurationManager.AppSettings["Blueprint_UserName"];
+                        String serverUri    = ConfigurationManager.AppSettings["Blueprint_ServerUri"];
+                        String userName     = ConfigurationManager.AppSettings["Blueprint_UserName"];
                         String userPassword = ConfigurationManager.AppSettings["Blueprint_UserPassword"];
 
                         String sourcePath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["Blueprint_SourcePath"]);

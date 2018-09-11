@@ -673,14 +673,14 @@ namespace xFilm5.Bot.Controllers
 
         [HttpPost]
         [Route("Action/Output/Blueprint/{userId:int}")]
-        public IHttpActionResult PostActionROutputBlueprint(int userId)
+        public IHttpActionResult PostActionReOutputBlueprint(int userId)
         {
             var json = Request.Content.ReadAsStringAsync().Result;
             var data = JsonConvert.DeserializeObject<Models.CloudDisk.ActionOutputEx>(json);
 
             if (data == null)
             {
-                log.Error("[bot, CloudDisk, PostActionROutputBlueprint] jsonData == null");
+                log.Error("[bot, CloudDisk, PostActionReOutputBlueprint] jsonData == null");
                 //return NotFound();
             }
             else
@@ -697,17 +697,17 @@ namespace xFilm5.Bot.Controllers
 
                         if (result)
                         {
-                            log.Info(String.Format("[bot, CloudDisk, PostActionROutputBlueprint] \r\njsondata = {0}", json));
+                            log.Info(String.Format("[bot, CloudDisk, PostActionReOutputBlueprint, done] \r\njsondata = {0}", json));
                             return Ok();
                         }
                         else
                         {
-                            log.Error(String.Format("[bot, CloudDisk, PostActionROutputBlueprint] \r\nRe-Output returns false\r\njsondat = {0}", json));
+                            log.Error(String.Format("[bot, CloudDisk, PostActionReOutputBlueprint] \r\nRe-Output returns false\r\njsondat = {0}", json));
                         }
                     }
                     else
                     {
-                        log.Error("[bot, CloudDisk, PostActionROutputBlueprint] \r\nInvaoid Client Id: " + data.ClientId.ToString());
+                        log.Error("[bot, CloudDisk, PostActionReOutputBlueprint] \r\nInvaoid Client Id: " + data.ClientId.ToString());
                         //return NotFound();
                     }
                 }
@@ -717,14 +717,14 @@ namespace xFilm5.Bot.Controllers
 
         [HttpPost]
         [Route("Action/Output/Plate/{userId:int}")]
-        public IHttpActionResult PostActionROutputPlate(int userId)
+        public IHttpActionResult PostActionReOutputPlate(int userId)
         {
             var json = Request.Content.ReadAsStringAsync().Result;
             var data = JsonConvert.DeserializeObject<Models.CloudDisk.ActionOutputEx>(json);
 
             if (data == null)
             {
-                log.Error("[bot, CloudDisk, PostActionROutputPlate] jsonData == null");
+                log.Error("[bot, CloudDisk, PostActionReOutputPlate] jsonData == null");
                 //return NotFound();
             }
             else
@@ -741,17 +741,17 @@ namespace xFilm5.Bot.Controllers
 
                         if (result)
                         {
-                            log.Info(String.Format("[bot, CloudDisk, PostActionROutputPlate] \r\njsondata = {0}", json));
+                            log.Info(String.Format("[bot, CloudDisk, PostActionReOutputPlate, done] \r\njsondata = {0}", json));
                             return Ok();
                         }
                         else
                         {
-                            log.Error(String.Format("[bot, CloudDisk, PostActionROutputPlate] \r\nRe-Output returns false\r\njsondat = {0}", json));
+                            log.Error(String.Format("[bot, CloudDisk, PostActionReOutputPlate] \r\nRe-Output returns false\r\njsondat = {0}", json));
                         }
                     }
                     else
                     {
-                        log.Error("[bot, CloudDisk, PostActionROutputPlate] \r\nInvaoid Client Id: " + data.ClientId.ToString());
+                        log.Error("[bot, CloudDisk, PostActionReOutputPlate] \r\nInvaoid Client Id: " + data.ClientId.ToString());
                         //return NotFound();
                     }
                 }
@@ -761,14 +761,14 @@ namespace xFilm5.Bot.Controllers
 
         [HttpPost]
         [Route("Action/Output/Film/{userId:int}")]
-        public IHttpActionResult PostActionROutputFilm(int userId)
+        public IHttpActionResult PostActionReOutputFilm(int userId)
         {
             var json = Request.Content.ReadAsStringAsync().Result;
             var data = JsonConvert.DeserializeObject<Models.CloudDisk.ActionOutputEx>(json);
 
             if (data == null)
             {
-                log.Error("[bot, CloudDisk, PostActionROutputFilm] jsonData == null");
+                log.Error("[bot, CloudDisk, PostActionReOutputFilm] jsonData == null");
                 //return NotFound();
             }
             else
@@ -785,17 +785,17 @@ namespace xFilm5.Bot.Controllers
 
                         if (result)
                         {
-                            log.Info(String.Format("[bot, CloudDisk, PostActionROutputFilm] \r\njsondata = {0}", json));
+                            log.Info(String.Format("[bot, CloudDisk, PostActionReOutputFilm, done] \r\njsondata = {0}", json));
                             return Ok();
                         }
                         else
                         {
-                            log.Error(String.Format("[bot, CloudDisk, PostActionROutputFilm] \r\nRe-Output returns false\r\njsondat = {0}", json));
+                            log.Error(String.Format("[bot, CloudDisk, PostActionReOutputFilm] \r\nRe-Output returns false\r\njsondat = {0}", json));
                         }
                     }
                     else
                     {
-                        log.Error("[bot, CloudDisk, PostActionROutputFilm] \r\nInvaoid Client Id: " + data.ClientId.ToString());
+                        log.Error("[bot, CloudDisk, PostActionReOutputFilm] \r\nInvaoid Client Id: " + data.ClientId.ToString());
                         //return NotFound();
                     }
                 }
