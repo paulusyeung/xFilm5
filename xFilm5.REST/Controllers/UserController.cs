@@ -238,7 +238,7 @@ namespace xFilm5.REST.Controllers
         }
 
         [HttpGet]
-        [Route("api/User/Preference/{clientid}")]
+        [Route("api/User/Preference/{clientid:int}")]
         [JwtAuthentication]
         public IHttpActionResult GetPreference(int clientId)
         {
@@ -252,12 +252,12 @@ namespace xFilm5.REST.Controllers
                 var user = ctx.User.Where(x => x.UserSid == userSid).SingleOrDefault();
                 if (user != null)
                 {
-                    var firstitem = ctx.UserNotification.Where(x => x.UserId == user.UserId && x.DeviceId == deviceId).FirstOrDefault();
-                    if (firstitem != null)
+                    var pref = ctx.vwUserPreferenceList.Where(x => x.ClientId == clientId && x.Status >= 1 && x.PrimaryUser == true).SingleOrDefault();
+                    if (pref != null)
                     {
                         // 直接用 MetadataXMl 會多咗啲 escape code，搞到個 MetadataXml 變成唔係 valid json，要先轉換一下
                         // refer: https://stackoverflow.com/questions/36241098/ihttpactionresult-with-json-string
-                        var unserializedContent = JsonConvert.DeserializeObject(firstitem.MetadataXml);
+                        var unserializedContent = JsonConvert.DeserializeObject(pref.MetadataXml);
                         return Json(unserializedContent);
                     }
                 }
@@ -267,9 +267,9 @@ namespace xFilm5.REST.Controllers
         }
 
         [HttpPost]
-        [Route("api/User/Preference/{id}")]
+        [Route("api/User/Preference/{clientid:int}")]
         [JwtAuthentication]
-        public async Task<IHttpActionResult> PostPreference(string id)
+        public async Task<IHttpActionResult> PostPreference(int clientId)
         {
             var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
 
@@ -283,14 +283,16 @@ namespace xFilm5.REST.Controllers
             //var converter = new ExpandoObjectConverter();     用唔用真係冇分別嘅
             dynamic expando = JsonConvert.DeserializeObject<ExpandoObject>(json);
 
-            //string fcmToken = expando.FCM.Token;
+            /** not in use
+            string fcmToken = expando.FCM.Token;
             string deviceId = expando.DeviceInfo.Id;
-            //string deviceModel = expando.DeviceInfo.Model;
+            string deviceModel = expando.DeviceInfo.Model;
             int platform = (int)expando.DeviceInfo.Platform;
-            //string version = expando.DeviceInfo.Version;
-            //DateTime registeredOn = ((DateTime)expando.RegisteredOn).ToLocalTime();
+            string version = expando.DeviceInfo.Version;
+            DateTime registeredOn = ((DateTime)expando.RegisteredOn).ToLocalTime();
+            */
 
-            dynamic options = expando.Options;
+            dynamic receipt = expando.Receipt;
             #endregion
 
             if (expando != null)
@@ -300,66 +302,16 @@ namespace xFilm5.REST.Controllers
                     var user = ctx.User.Where(x => x.UserSid == userSid).SingleOrDefault();
                     if (user != null)
                     {
-                        using (var scope = ctx.Database.BeginTransaction())
+                        var userPref = ctx.vwUserPreferenceList.Where(x => x.ClientId == clientId && x.Status >= 1 && x.PrimaryUser == true).SingleOrDefault();
+                        if (userPref != null)
                         {
-                            try
+                            var item = ctx.UserPreference.Where(x => x.PreferenceId == userPref.PreferenceId).SingleOrDefault();
+                            if (item != null)
                             {
-                                #region loop throught 所有 options
-                                foreach (KeyValuePair<string, object> item in options)
-                                {
-                                    var notifyType = EnumHelper.User.NotifyType.None;
-                                    notifyType = Enum.TryParse(item.Key, out notifyType) ? notifyType : EnumHelper.User.NotifyType.None;
-                                    var ntype = (int)notifyType;
+                                item.MetadataXml = json;
+                                ctx.SaveChanges();
 
-                                    if (notifyType != EnumHelper.User.NotifyType.None)
-                                    {
-                                        if ((bool)item.Value)
-                                        {
-                                            #region 選擇哩個短訊，創建 dbo.UserNotification record
-                                            var updRec = ctx.UserNotification.Where(x => x.UserId == user.UserId && x.DeviceId == deviceId && x.NotifyType == ntype).SingleOrDefault();
-                                            if (updRec != null)
-                                            {
-                                                //updRec.UserId = user.UserId;
-                                                //updRec.DeviceId = deviceId;
-                                                //updRec.NotifyType = ntype;
-                                                updRec.Platform = platform;
-                                                updRec.MetadataXml = json;
-                                                ctx.SaveChanges();
-                                            }
-                                            else
-                                            {
-                                                updRec = new UserNotification();
-                                                updRec.UserId = user.UserId;
-                                                updRec.DeviceId = deviceId;
-                                                updRec.NotifyType = ntype;
-                                                updRec.Platform = platform;
-                                                updRec.MetadataXml = json;
-                                                ctx.UserNotification.Add(updRec);
-                                                ctx.SaveChanges();
-                                            }
-                                            #endregion
-                                        }
-                                        else
-                                        {
-                                            #region 唔要哩個短訊，刪除 dbo.UserNotification record
-                                            var delRec = ctx.UserNotification.Where(x => x.UserId == user.UserId && x.DeviceId == deviceId && x.NotifyType == ntype).SingleOrDefault();
-                                            if (delRec != null)
-                                            {
-                                                ctx.UserNotification.Remove(delRec);
-                                                ctx.SaveChanges();
-                                            }
-                                            #endregion
-                                        }
-                                    }
-                                }
-                                #endregion
-
-                                scope.Commit();
                                 return Ok();
-                            }
-                            catch
-                            {
-                                scope.Rollback();
                             }
                         }
                     }
