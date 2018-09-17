@@ -269,6 +269,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ReadMe.txt" />
     <Content Include="xFilmModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>xFilmModel.edmx</DependentUpon>
