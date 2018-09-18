@@ -158,6 +158,7 @@
     <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ReceiptController.cs" />
+    <Compile Include="Controllers\RegistrationController.cs" />
     <Compile Include="Controllers\ScoreController.cs" />
     <Compile Include="Controllers\TokenController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -183,6 +184,7 @@
     <Compile Include="JwtManager.cs" />
     <Compile Include="Models\CloudDisk.cs" />
     <Compile Include="Models\OrderFormData.cs" />
+    <Compile Include="Models\Registration.cs" />
     <Compile Include="Models\UserEx.cs" />
     <Compile Include="Models\vwOrderPkPrintQueueVpsListEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

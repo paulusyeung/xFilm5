@@ -176,6 +176,31 @@ namespace xFilm5.REST.Helper
             return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
         }
 
+        public static bool PostEmailSmtp(string recipient, string subject, string message)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            var client = new RestClient(botServer);
+            var request = new RestRequest("email/smtp/", Method.POST);
+
+            //request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+            request.RequestFormat = DataFormat.Json;
+
+            //request.AddParameter("ReceiptId", receiptId.ToString());
+            //request.AddParameter("LanguageId", DAL.Common.Config.CurrentLanguageId.ToString());
+            //request.AddParameter("PrinterName", printerName);
+
+            //request.AddHeader("Content-type", "application/json");
+            request.AddBody(new
+            {
+                Recipient = recipient,
+                Subject = subject,
+                Message = message,
+                AnotherParam = 19.99
+            });
+            var response = client.Execute(request);
+            return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
+        }
+
         public static bool PostSendFcmOnOrder(int orderId)
         {
             String botServer = ConfigurationManager.AppSettings["BotServer"];
@@ -693,6 +718,27 @@ namespace xFilm5.REST.Helper
             request.AddBody(data);
             var response = client.Execute(request);
             return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
+        }
+
+        public static bool PostCloudDisk_CreateClient(int clientId, int userId)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            //#if (DEBUG)
+            //            botServer = "http://localhost:35543/";
+            //#endif
+            var client = new RestClient(botServer);
+            var request = new RestRequest(String.Format("CloudDisk/CreateClient/{0}/{1}/", clientId.ToString(), userId.ToString()), Method.POST);
+
+            request.RequestFormat = DataFormat.Json;
+
+            request.AddBody(new
+            {
+                ClientId = clientId.ToString(),
+                UserId = userId.ToString(),
+                AnotherParam = 19.99
+            });
+            var result = client.Execute(request);
+            return (result.StatusCode == System.Net.HttpStatusCode.Accepted ? true : false);
         }
     }
 }

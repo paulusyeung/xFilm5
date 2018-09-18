@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using xFilm5.EF6;
 
 namespace xFilm5.REST.Helper
 {
@@ -39,6 +40,23 @@ namespace xFilm5.REST.Helper
                 if (cUser != null)
                 {
                     result = cUser.UserSid;
+                }
+            }
+
+            return result;
+        }
+
+        public static int GetPrimaryAdminUser()
+        {
+            var result = 0;
+
+            using (var ctx = new EF6.xFilmEntities())
+            {
+                var admin = (int)EnumHelper.User.UserRole.Admin;
+                var user = ctx.Client_User.Where(x => x.PrimaryUser == true && x.SecurityLevel == admin).SingleOrDefault();
+                if (user != null)
+                {
+                    result = user.ID;
                 }
             }
 

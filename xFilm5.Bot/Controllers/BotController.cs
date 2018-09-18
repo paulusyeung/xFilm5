@@ -504,5 +504,69 @@ namespace xFilm5.Bot.Controllers
                 }
             }
         }
+
+        /// <summary>
+        /// 2018.09.17 paulus:
+        /// 將 email send via smtp 集中由 xFilm5.Bot 處理，
+        /// </summary>
+        /// <param name="jsonData"></param>
+        /// <returns></returns>
+        [Route("email/smtp")]
+        public IHttpActionResult PostEmailSmtp([FromBody] JObject jsonData)
+        {
+            if (jsonData == null)
+            {
+                log.Fatal("[bot, email smtp] jsonData == null");
+                return BadRequest();    // 400
+            }
+            else
+            {
+                #region extra parameters from json data
+                var recipientStr = jsonData["Recipient"].Value<string>();
+                var recipients = EmailHelper.SplitRecipient(recipientStr);
+                var subject = jsonData["Subject"].Value<string>();
+                var message = jsonData["Message"].Value<string>();
+                #endregion
+
+                if (recipients != null)
+                {
+                    using (var ctx = new xFilmEntities())
+                    {
+                        if (recipients.Length > 0)
+                        {
+                            var result = false;
+                            foreach (var recipient in recipients)
+                            {
+                                result = EmailHelper.EmailMessageSMTP(recipient, subject, message);
+                                if (!result) break;
+                            }
+                            if (result)
+                            {
+                                log.Info(String.Format("[bot, email smtp, success] \r\nRecipients = {0}\r\nSubject = {1}\r\nMessage = {2}", recipientStr, subject, message));
+                                return Ok();
+                            }
+                            else
+                            {
+                                log.Error(String.Format("[bot, email smtp, error found] \r\n{0}", jsonData.ToString()));
+                                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "error found...aborted"));
+                                //return NotFound();
+                            }
+                        }
+                        else
+                        {
+                            log.Error("[bot, email smtp, no smtp recipient] \r\n" + jsonData.ToString());
+                            return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "empty recipient"));
+                            //return NotFound();  // 404
+                        }
+                    }
+                }
+                else
+                {
+                    log.Error("[bot, email smtp, no smtp recipient] \r\n" + jsonData.ToString());
+                    return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "null recipient"));
+                    //return NotFound();      // 404
+                }
+            }
+        }
     }
 }

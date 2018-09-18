@@ -15,12 +15,13 @@ namespace xFilm5.REST.Controllers
     {
         [HttpGet]
         [Route("api/Workshop")]
-        [JwtAuthentication]
+        //[JwtAuthentication]
+        [AllowAnonymous]
         public IHttpActionResult Get()
         {
-            var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
-            Guid userSid = Guid.Empty;
-            userSid = Guid.TryParse(identity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault(), out userSid) ? userSid : Guid.Empty;
+            //var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+            //Guid userSid = Guid.Empty;
+            //userSid = Guid.TryParse(identity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault(), out userSid) ? userSid : Guid.Empty;
 
             using (var ctx = new xFilmEntities())
             {
