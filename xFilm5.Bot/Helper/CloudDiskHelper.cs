@@ -241,6 +241,7 @@ namespace xFilm5.Bot.Helper
                     }
                 }
             }
+            stopwatch.Stop();
             return result;
         }
 
