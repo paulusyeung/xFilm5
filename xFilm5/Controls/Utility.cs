@@ -729,19 +729,23 @@ SELECT @listStr";
             {
                 bool result = false;
 
-                DAL.PrintQueue pq = DAL.PrintQueue.Load(pqId);
-                if (pq != null)
+                try
                 {
-                    DAL.PrintQueue_LifeCycle log = new DAL.PrintQueue_LifeCycle();
-                    log.PrintQueueId = pq.ID;
-                    log.PrintQSubitemType = (int)type;
-                    log.Status = (int)DAL.Common.Enums.Status.Active;
-                    log.CreatedOn = DateTime.Now;
-                    log.CreatedBy = DAL.Common.Config.CurrentUserId;
-                    log.Save();
+                    DAL.PrintQueue pq = DAL.PrintQueue.Load(pqId);
+                    if (pq != null)
+                    {
+                        DAL.PrintQueue_LifeCycle log = new DAL.PrintQueue_LifeCycle();
+                        log.PrintQueueId = pq.ID;
+                        log.PrintQSubitemType = (int)type;
+                        log.Status = (int)DAL.Common.Enums.Status.Active;
+                        log.CreatedOn = DateTime.Now;
+                        log.CreatedBy = DAL.Common.Config.CurrentUserId;
+                        log.Save();
 
-                    result = true;
+                        result = true;
+                    }
                 }
+                catch { }
 
                 return result;
             }
@@ -749,21 +753,24 @@ SELECT @listStr";
             public static bool WriteLogWithVpsId(int vpsId, DAL.Common.Enums.PrintQSubitemType type)
             {
                 bool result = false;
-
-                DAL.PrintQueue_VPS vps = DAL.PrintQueue_VPS.Load(vpsId);
-                if (vps != null)
+                try
                 {
-                    DAL.PrintQueue_LifeCycle log = new DAL.PrintQueue_LifeCycle();
-                    log.PrintQueueId = vps.PrintQueueID;
-                    log.PrintQueueVpsId = vps.ID;
-                    log.PrintQSubitemType = (int)type;
-                    log.Status = (int)DAL.Common.Enums.Status.Active;
-                    log.CreatedOn = DateTime.Now;
-                    log.CreatedBy = DAL.Common.Config.CurrentUserId;
-                    log.Save();
+                    DAL.PrintQueue_VPS vps = DAL.PrintQueue_VPS.Load(vpsId);
+                    if (vps != null)
+                    {
+                        DAL.PrintQueue_LifeCycle log = new DAL.PrintQueue_LifeCycle();
+                        log.PrintQueueId = vps.PrintQueueID;
+                        log.PrintQueueVpsId = vps.ID;
+                        log.PrintQSubitemType = (int)type;
+                        log.Status = (int)DAL.Common.Enums.Status.Active;
+                        log.CreatedOn = DateTime.Now;
+                        log.CreatedBy = DAL.Common.Config.CurrentUserId;
+                        log.Save();
 
-                    result = true;
+                        result = true;
+                    }
                 }
+                catch { }
 
                 return result;
             }
