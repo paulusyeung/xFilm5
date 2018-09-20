@@ -236,7 +236,7 @@ namespace xFilm5.Api.Controllers
                             #endregion
 
                             //UpdateListCycle(pQueue.ID, (int)DAL.Common.Enums.PrintQSubitemType.Vps);
-                            UpdateListCycle_Vps(pq.ID, pq.ID, (int)DAL.Common.Enums.PrintQSubitemType.Vps);
+                            UpdateListCycle_Vps(pq.ID, vps.ID, (int)DAL.Common.Enums.PrintQSubitemType.Vps);
 
                             #region 2018.07.13 paulus: 通知 xFilm5.Bot upload file 去 Cloud Disk
                             BotHelper.PostCloudDisk_ApiVpsUploadFile(String.Format("{0}.{1}", clientId.ToString(), vpsFileName));
