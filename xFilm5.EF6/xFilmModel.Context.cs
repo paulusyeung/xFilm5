@@ -87,5 +87,7 @@ namespace xFilm5.EF6
         public virtual DbSet<vwPrintQueueVpsList_AvailableFilm> vwPrintQueueVpsList_AvailableFilm { get; set; }
         public virtual DbSet<vwPrintQueueVpsList_AvailablePlate> vwPrintQueueVpsList_AvailablePlate { get; set; }
         public virtual DbSet<vwUserPreferenceList> vwUserPreferenceList { get; set; }
+        public virtual DbSet<vwPrintQueue_LifeCycleList> vwPrintQueue_LifeCycleList { get; set; }
+        public virtual DbSet<vwPrintQueueVpsList> vwPrintQueueVpsList { get; set; }
     }
 }

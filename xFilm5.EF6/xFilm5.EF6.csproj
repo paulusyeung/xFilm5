@@ -207,6 +207,9 @@
     <Compile Include="vwOrderPkPrintQueueVpsList_Plate.cs">
       <DependentUpon>xFilmModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="vwPrintQueueVpsList.cs">
+      <DependentUpon>xFilmModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="vwPrintQueueVpsList_AvailableFilm.cs">
       <DependentUpon>xFilmModel.tt</DependentUpon>
     </Compile>
@@ -214,6 +217,9 @@
       <DependentUpon>xFilmModel.tt</DependentUpon>
     </Compile>
     <Compile Include="vwPrintQueueVpsList_Ordered.cs">
+      <DependentUpon>xFilmModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vwPrintQueue_LifeCycleList.cs">
       <DependentUpon>xFilmModel.tt</DependentUpon>
     </Compile>
     <Compile Include="vwPrintQueue_LifeCycleListWithWorkshop.cs">
