@@ -24,125 +24,142 @@ namespace xFilm5.REST.Controllers
 
             if (data != null)
             {
+                var padmin = UserHelper.GetPrimaryAdminUser();
                 using (var ctx = new xFilmEntities())
                 {
-                    var deviceIdInUse = ctx.UserAuth.Where(x => x.DeviceId == deviceId).Any();
-                    if (!deviceIdInUse)
+                    using (var scope = ctx.Database.BeginTransaction())
                     {
-
-                        var padmin = UserHelper.GetPrimaryAdminUser();
-
-                        using (var scope = ctx.Database.BeginTransaction())
+                        ctx.Database.Log = s => System.Diagnostics.Debug.WriteLine(s);
+                        try
                         {
-                            try
+                            var workshop = ctx.vwWorkshopList.Where(x => x.WorkshopName == data.Workshop).SingleOrDefault();
+                            if (workshop != null)
                             {
-                                var workshop = ctx.vwWorkshopList.Where(x => x.WorkshopName == data.Workshop).SingleOrDefault();
-                                if (workshop != null)
-                                {
-                                    #region create dbo.Client
-                                    var client = new Client();
-                                    client.Name = data.BusinessName;
-                                    client.Status = (int)EnumHelper.Common.Status.Draft;
-                                    client.CreatedOn = DateTime.Now;
-                                    client.CreditLimit = 0;
-                                    client.PaymentTerms = 0;
-                                    client.PaymentType = 0;     // 0 = On Account, 1 = C.O.D.
-                                    client.PIN = "";
-                                    client.Branch = workshop.WorkshopId;
+                                #region create dbo.Client
+                                var client = new Client();
+                                client.Name = data.BusinessName;
+                                client.Status = (int)EnumHelper.Common.Status.Draft;
+                                client.CreatedOn = DateTime.Now;
+                                client.CreditLimit = 0;
+                                client.PaymentTerms = 0;
+                                client.PaymentType = 0;     // 0 = On Account, 1 = C.O.D.
+                                client.PIN = "";
+                                client.Branch = workshop.WorkshopId;
 
-                                    ctx.Client.Add(client);
-                                    ctx.SaveChanges();
-                                    #endregion
+                                ctx.Client.Add(client);
+                                ctx.SaveChanges();
+                                #endregion
 
-                                    #region create dbo.ClientAddress
-                                    var address = new Client_AddressBook();
-                                    address.ClientID = client.ID;
-                                    address.PrimaryAddr = true;
-                                    address.CreatedOn = DateTime.Now;
-                                    address.Name = data.BusinessName;
-                                    address.Address = data.BusinessAddress;
-                                    address.Tel = data.BusinessTel;
-                                    address.Fax = "";
-                                    address.Pager = "";
-                                    address.ContactPerson = data.ContactPerson;
-                                    address.Mobile = data.Mobile;
-                                    address.SMS = "";
-                                    address.SMS_Lang = data.Locale.Contains("en") ? 0 : data.Locale.ToLower() == "zh-chs" ? 1 : 2;
+                                #region create dbo.ClientAddress
+                                var address = new Client_AddressBook();
+                                address.ClientID = client.ID;
+                                address.PrimaryAddr = true;
+                                address.CreatedOn = DateTime.Now;
+                                address.Name = data.BusinessName;
+                                address.Address = data.BusinessAddress;
+                                address.Tel = data.BusinessTel;
+                                address.Fax = "";
+                                address.Pager = "";
+                                address.ContactPerson = data.ContactPerson;
+                                address.Mobile = data.Mobile;
+                                address.SMS = "";
+                                address.SMS_Lang = data.Locale.Contains("en") ? 0 : data.Locale.ToLower() == "zh-chs" ? 1 : 2;
 
-                                    ctx.Client_AddressBook.Add(address);
-                                    ctx.SaveChanges();
-                                    #endregion
+                                ctx.Client_AddressBook.Add(address);
+                                ctx.SaveChanges();
+                                #endregion
 
-                                    #region create dbo.ClientUser
-                                    var cuser = new Client_User();
-                                    cuser.ClientID = client.ID;
-                                    cuser.PrimaryUser = true;
-                                    cuser.FullName = data.ContactPerson;
-                                    cuser.Email = data.Email;
-                                    cuser.Password = data.Password;
-                                    cuser.SecurityLevel = (int)EnumHelper.User.UserRole.Customer;
-                                    cuser.LastIP = "";
-                                    cuser.LastVisit = DateTime.Parse("1900-01-01 00:00:00");
-                                    cuser.Branch = workshop.WorkshopId;
+                                #region create dbo.ClientUser
+                                var cuser = new Client_User();
+                                cuser.ClientID = client.ID;
+                                cuser.PrimaryUser = true;
+                                cuser.FullName = data.ContactPerson;
+                                cuser.Email = data.Email;
+                                cuser.Password = data.Password;
+                                cuser.SecurityLevel = (int)EnumHelper.User.UserRole.Customer;
+                                cuser.LastIP = "";
+                                cuser.LastVisit = DateTime.Parse("1900-01-01 00:00:00");
+                                cuser.Branch = workshop.WorkshopId;
 
-                                    ctx.Client_User.Add(cuser);
-                                    ctx.SaveChanges();
-                                    #endregion
+                                ctx.Client_User.Add(cuser);
+                                ctx.SaveChanges();
+                                #endregion
 
-                                    #region create dbo.User
-                                    // refer: https://stackoverflow.com/questions/13086006/how-can-i-force-entity-framework-to-insert-identity-columns
-                                    ctx.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[User] ON");
+                                #region create dbo.User
 
-                                    var user = new EF6.User();
-                                    user.UserId = cuser.ID;
-                                    user.UserType = (int)EnumHelper.User.UserType.Customer;
-                                    user.UserSid = Guid.NewGuid();
-                                    user.LoginName = data.Email;
-                                    user.LoginPassword = data.Password;
-                                    user.Alias = data.ContactPerson;
-                                    user.Status = (int)EnumHelper.Common.Status.Draft;
-                                    user.CreatedOn = DateTime.Now;
-                                    user.CreatedBy = padmin;
-                                    user.ModifiedOn = DateTime.Now;
-                                    user.ModifiedBy = padmin;
-                                    user.Retired = false;
-                                    user.RetiredBy = 0;
-                                    user.RetiredOn = DateTime.Parse("1900-01-01 00:00:00");
+                                /** EF6 won't send the UserId if using User.Add && SaveChanges, needs to do it using ExecuteSqlCommand
+                                var user = new EF6.User();
+                                user.UserId = cuser.ID;
+                                user.UserType = (int)EnumHelper.User.UserType.Customer;
+                                user.UserSid = Guid.NewGuid();
+                                user.LoginName = data.Email;
+                                user.LoginPassword = data.Password;
+                                user.Alias = data.ContactPerson;
+                                user.Status = (int)EnumHelper.Common.Status.Draft;
+                                user.CreatedOn = DateTime.Now;
+                                user.CreatedBy = padmin;
+                                user.ModifiedOn = DateTime.Now;
+                                user.ModifiedBy = padmin;
+                                user.Retired = false;
+                                user.RetiredBy = 0;
+                                user.RetiredOn = DateTime.Parse("1900-01-01 00:00:00");
 
-                                    ctx.User.Add(user);
-                                    ctx.SaveChanges();
+                                ctx.User.Add(user);
 
-                                    ctx.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[User] OFF");
-                                    #endregion
+                                // refer: https://stackoverflow.com/questions/13086006/how-can-i-force-entity-framework-to-insert-identity-columns
+                                ctx.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[User] ON");
+                                ctx.SaveChanges();
+                                */
+                                var sql = String.Format(@"
+INSERT [dbo].[User]([UserId], [UserType], [UserSid], [LoginName], [LoginPassword], [Alias], [Status], [CreatedOn], [CreatedBy], [ModifiedOn], [ModifiedBy], [Retired], [RetiredOn], [RetiredBy])
+VALUES ({0}, {1}, '{2}', '{3}', '{4}', '{5}', {6}, '{7}', {8}, '{9}', {10}, {11}, '{12}', {13})"
+, cuser.ID.ToString()                                       // UserId
+, ((int)EnumHelper.User.UserType.Customer).ToString()       // UserType
+, Guid.NewGuid()                                            // UserSid
+, data.Email                                                // LoginName
+, data.Password                                             // LoginPassword
+, data.ContactPerson                                        // Alias
+, ((int)EnumHelper.Common.Status.Draft).ToString()          // Status
+, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")              // CreatedOn
+, padmin.ToString()                                         // CreatedBy
+, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")              // ModifiedOn
+, padmin.ToString()                                         // ModifiedBy
+, 0                                                         // Retired = false
+, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")              // RetiredOn
+, "0"                                                       // RetiredBy
+);
+                                // refer: https://stackoverflow.com/questions/13086006/how-can-i-force-entity-framework-to-insert-identity-columns
+                                ctx.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[User] ON");
+                                ctx.Database.ExecuteSqlCommand(sql);
+                                ctx.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[User] OFF");
+                                #endregion
 
-                                    scope.Commit();
+                                scope.Commit();
 
-                                    #region send activation code via email
-                                    var recipient = data.Email;
-                                    var subject = data.Locale.Contains("en") ?
-                                        "x5 Activation Code" :
-                                         data.Locale.ToLower() == "zh-chs" ?
-                                         "x5 激活密码" :
-                                         "x5 激活密碼";
-                                    var message = data.Locale.Contains("en") ?
-                                        String.Format(@"Dear Customer ({0}): This is your activation code {1}", data.BusinessName, client.ID.ToString()) :
-                                        data.Locale.ToLower() == "zh-chs" ?
-                                         String.Format(@"尊敬的客户（{0}）：阁下的激活密码　{1}", data.BusinessName, client.ID.ToString()) :
-                                         String.Format(@"尊敬的客戶（{0}）：閣下的激活密碼　{1}", data.BusinessName, client.ID.ToString());
+                                #region send activation code via email
+                                var recipient = data.Email;
+                                var subject = data.Locale.Contains("en") ?
+                                    "x5 Activation Code" :
+                                     data.Locale.ToLower() == "zh-chs" ?
+                                     "x5 激活密码" :
+                                     "x5 激活密碼";
+                                var message = data.Locale.Contains("en") ?
+                                    String.Format(@"Dear Customer ({0}): This is your activation code {1}", data.BusinessName, client.ID.ToString()) :
+                                    data.Locale.ToLower() == "zh-chs" ?
+                                     String.Format(@"尊敬的客户（{0}）：阁下的激活密码　{1}", data.BusinessName, client.ID.ToString()) :
+                                     String.Format(@"尊敬的客戶（{0}）：閣下的激活密碼　{1}", data.BusinessName, client.ID.ToString());
 
-                                    BotHelper.PostEmailSmtp(recipient, subject, message);
-                                    #endregion
+                                BotHelper.PostEmailSmtp(recipient, subject, message);
+                                #endregion
 
-                                    return Ok();
-                                }
-                            }
-                            catch (Exception)
-                            {
-                                scope.Rollback();
+                                return Ok();
                             }
                         }
-                    }
-                }
+                        catch (Exception ex)
+                        {
+                            scope.Rollback();
+                        }
+                    }                }
             }
 
             return NotFound();
