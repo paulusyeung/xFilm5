@@ -108,6 +108,7 @@ namespace xFilm5.Bot.Helper
 
                         #region Crate folders
                         var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+                        
                         if (result) result = c.Exists(cups) ? true : c.CreateDirectory(cups);
                         if (result) c.ShareWithGroup(cups, group, Convert.ToInt32(OcsPermission.All));
                         if (result) result = c.Exists(vps) ? true : c.CreateDirectory(vps);
@@ -192,7 +193,6 @@ namespace xFilm5.Bot.Helper
                             #endregion
                         }
                         #endregion
-
 
                         #region All done, send notifications
                         var msgTitle = "Create Cloud Disk Account";
