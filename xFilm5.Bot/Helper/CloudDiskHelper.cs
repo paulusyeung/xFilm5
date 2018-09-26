@@ -185,7 +185,7 @@ namespace xFilm5.Bot.Helper
                                         var source = Encoding.ASCII.GetString(((MemoryStream)streamFilm).ToArray());
                                         var custom = source.Replace("999999", clientId.ToString());
                                         var memstream = new MemoryStream(ASCIIEncoding.Default.GetBytes(custom));
-                                        c.Upload(ppdCtp, memstream, "text/plain");
+                                        c.Upload(ppdFilm, memstream, "text/plain");
                                     }
                                 }
                             }
