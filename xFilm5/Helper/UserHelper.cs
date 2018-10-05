@@ -40,6 +40,7 @@ namespace xFilm5.Helper
                             if (cUser != null)
                             {
                                 #region 先 save dbo.User
+                                /** EF6 won't send the UserId if using User.Add && SaveChanges, needs to do it using ExecuteSqlCommand
                                 var u = new EF6.User();
                                 u.UserId = clientUserId;
                                 u.UserType = CommonHelper.Config.IamStaff ? (int)UserType.Staff : (int)UserType.Customer;
@@ -54,20 +55,32 @@ namespace xFilm5.Helper
                                 u.ModifiedOn = DateTime.Now;
                                 u.ModifiedBy = CommonHelper.Config.CurrentUserId;
                                 u.Retired = false;
-
+                                */
                                 // force entity framework to insert identity columns
                                 // 參考: http://stackoverflow.com/questions/13086006/how-can-i-force-entity-framework-to-insert-identity-columns
                                 // 留意要改埋 EF6.User.UserId.StoreGeneratedPattern
-                                /**
-                                using (var scope = ctx.Database.BeginTransaction())
-                                {
-                                    ctx.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[User] ON ");
-                                    ctx.User.Add(u);
-                                    ctx.SaveChanges();
-                                    ctx.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[User] OFF ");
-                                    scope.Commit();
-                                }
-                                */
+                                var userType = CommonHelper.Config.IamStaff ? (int)UserType.Staff : (int)UserType.Customer;
+                                var sql = String.Format(@"
+INSERT [dbo].[User]([UserId], [UserType], [UserSid], [LoginName], [LoginPassword], [Alias], [Status], [CreatedOn], [CreatedBy], [ModifiedOn], [ModifiedBy], [Retired], [RetiredOn], [RetiredBy])
+VALUES ({0}, {1}, '{2}', '{3}', '{4}', '{5}', {6}, '{7}', {8}, '{9}', {10}, {11}, '{12}', {13})"
+, clientUserId.ToString()                                   // UserId
+, userType.ToString()                                       // UserType
+, Guid.NewGuid()                                            // UserSid
+, cUser.Email                                               // LoginName
+, cUser.Password                                            // LoginPassword
+, cUser.FullName                                            // Alias
+, ((int)CommonHelper.Enums.Status.Active).ToString()        // Status
+, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")              // CreatedOn
+, CommonHelper.Config.CurrentUserId.ToString()              // CreatedBy
+, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")              // ModifiedOn
+, CommonHelper.Config.CurrentUserId.ToString()              // ModifiedBy
+, 0                                                         // Retired = false
+, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")              // RetiredOn
+, "0"                                                       // RetiredBy
+);
+                                ctx.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[User] ON ");
+                                ctx.Database.ExecuteSqlCommand(sql);
+                                ctx.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[User] OFF ");
                                 #endregion
 
                                 #region 再 save dbo.UserPreferences
@@ -78,13 +91,20 @@ namespace xFilm5.Helper
                                 up.ObjectId = UserExHelper.USEREX_OBJECTID;
                                 up.ObjectType = (int)CommonHelper.Enums.ObjectType.UserExInfo;
                                 up.MetadataXml = JsonConvert.SerializeObject(defaults, Formatting.Indented);
+                                ctx.UserPreference.Add(up);
+                                ctx.SaveChanges();
                                 #endregion
 
+                                /**
                                 ctx.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[User] ON ");
+                                ctx.Database.ExecuteSqlCommand(sql);
+                                ctx.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[User] OFF ");
                                 ctx.User.Add(u);
                                 ctx.UserPreference.Add(up);
                                 ctx.SaveChanges();
                                 ctx.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[User] OFF ");
+                                */
+
                                 scope.Commit();
 
                                 result = true;

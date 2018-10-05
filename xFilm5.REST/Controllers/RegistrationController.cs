@@ -134,6 +134,18 @@ VALUES ({0}, {1}, '{2}', '{3}', '{4}', '{5}', {6}, '{7}', {8}, '{9}', {10}, {11}
                                 ctx.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[User] OFF");
                                 #endregion
 
+                                #region 再 save dbo.UserPreferences
+                                var up = new EF6.UserPreference();
+                                var defaults = UserExHelper.Preferences.GetDefaults();
+
+                                up.UserId = cuser.ID;
+                                up.ObjectId = UserExHelper.USEREX_OBJECTID;
+                                up.ObjectType = (int)CommonHelper.Enums.ObjectType.UserExInfo;
+                                up.MetadataXml = JsonConvert.SerializeObject(defaults, Formatting.Indented);
+                                ctx.UserPreference.Add(up);
+                                ctx.SaveChanges();
+                                #endregion
+
                                 scope.Commit();
 
                                 #region send activation code via email
