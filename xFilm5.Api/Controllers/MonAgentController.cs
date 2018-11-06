@@ -435,15 +435,37 @@ namespace xFilm5.Api.Controllers
                     int clientId = Convert.ToInt32(jsonData["clientId"].Value<int>());
                     String jobId = jsonData["jobId"].Value<String>();
                     String bpFileName = jsonData["bpFileName"].Value<String>();
+                    String bpFileNameWithoutSuffix = bpFileName.Substring(0, bpFileName.LastIndexOf('.'));
 
                     using (var ctx = new EF6.xFilmEntities())
                     {
                         var pq = ctx.PrintQueue.Where(x => x.ClientID == clientId && x.CupsJobID == jobId).SingleOrDefault();
                         if (pq != null)
                         {
+                            #region 2018.11.06 paulus: update dbo.OrderPkPrintQueue.IsReady
+                            var pqVps = ctx.PrintQueue_VPS.Where(x => x.PrintQueueID == pq.ID && x.VpsFileName.Contains(bpFileNameWithoutSuffix)).FirstOrDefault();
+                            if (pqVps != null)
+                            {
+                                var pkPq = ctx.OrderPkPrintQueueVps.Where(x => x.PrintQueueVpsId == pqVps.ID && x.CheckedBlueprint == true).FirstOrDefault();
+                                if (pkPq != null)
+                                {
+                                    pkPq.IsReady = true;
+                                    ctx.SaveChanges();
+                                }
+                            }
+                            #endregion
+
                             UpdateListCycle(pq.ID, (int)DAL.Common.Enums.PrintQSubitemType.Blueprint);
 
                             log.Info("[blueprint] " + jsonData.ToString());
+
+                            #region 2018.11.06 paulus: send Fcm notification
+                            if (pqVps != null)
+                            {
+                                Helper.BotHelper.PostSendFcmOnOrder(pqVps.ID);       // 叫 xFIlm5.Bot server 發短訊
+                            }
+                            #endregion
+
                             return Ok();
                         }
                         else
