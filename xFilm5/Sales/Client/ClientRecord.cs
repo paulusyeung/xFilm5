@@ -407,7 +407,7 @@ namespace xFilm5.Sales.Client
 
                     #region 2018.06.30 paulus: 如果係新客，自動建立 CloudDisk account
                     var login = txtEmail.Text.Trim();
-                    var pwd = txtPIN.Text.Trim();
+                    var pwd = txtPassword.Text.Trim();  // txtPIN.Text.Trim();
 
                     var loginChanged = (user.Email != login) ? true : false;
                     var passwordChanged = (user.Password != pwd) ? true : false;
