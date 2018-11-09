@@ -62,7 +62,9 @@ namespace xFilm5.Bot.Controllers
                         System.Net.NetworkCredential readCredentials = new System.Net.NetworkCredential(userName, userPassword);
                         #endregion
 
-                        using (new NetworkConnection(String.Format(@"\\{0}", uri.Host), readCredentials))
+                        // 2018.11.09 pulus: 無端端 NetworkConnection 又唔得，改用 Impersonation
+                        //using (new NetworkConnection(String.Format(@"\\{0}", uri.Host), readCredentials))
+                        using (new Impersonation(serverUri, userName, userPassword))
                         {
                             // 參考：https://bitbucket.org/nxstudio/xfilm5/wiki/xFilm5%20Plate5%20Order%20Form
 
@@ -72,7 +74,10 @@ namespace xFilm5.Bot.Controllers
 
                             String aliasname = vps.VpsFileName.Substring(0, vps.VpsFileName.Length - 4);    // ignor suffix (file type)
                             aliasname = aliasname.Substring(0, aliasname.LastIndexOf('('));                 // ignor "(color)"
-                            String fileName = String.Format("{0}.{1}.{2}*", filePrefix, vps.PrintQueue.ClientID.ToString(), aliasname);     // wildcard
+                            //String fileName = String.Format("{0}.{1}.{2}*", filePrefix, vps.PrintQueue.ClientID.ToString(), aliasname);     // wildcard
+
+                            // 2018.11.09 paulus: 改用 CMYK 合成檔案，即係得 1 個 TIFF
+                            String fileName = String.Format("{0}.{1}*", vps.PrintQueue.ClientID.ToString(), aliasname);     // wildcard
 
                             //String source = Path.Combine(@"\\192.168.12.230\DirectPrint\EfiProof", "*" + aliasname + "*");
                             //FileInfo[] files = Helper.FileHelper.FileUtils.GetFilesMatchWildCard(source, "MonAgent", "nx-9602");
@@ -164,11 +169,9 @@ namespace xFilm5.Bot.Controllers
                         System.Net.NetworkCredential readCredentials = new System.Net.NetworkCredential(userName, userPassword);
                         #endregion
 
-                        //using (new WindowsIdentity(userName, userPassword))
-                        //{
-
-                        //}
-                        using (new NetworkConnection(String.Format(@"\\{0}", uri.Host), readCredentials))
+                        // 2018.11.09 pulus: 無端端 NetworkConnection 又唔得，改用 Impersonation
+                        //using (new NetworkConnection(String.Format(@"\\{0}", uri.Host), readCredentials))
+                        using (new Impersonation(serverUri, userName, userPassword))
                         {
                             // 參考：https://bitbucket.org/nxstudio/xfilm5/wiki/xFilm5%20Plate5%20Order%20Form
                             String destUri = serverUri + destPath;
