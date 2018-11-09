@@ -423,7 +423,7 @@ namespace xFilm5.Api.Controllers
         {
             if (jsonData == null)
             {
-                log.Error("[blueprint] jsonData == null");
+                log.Error("[api, blueprint] jsonData == null");
                 return NotFound();
             }
             else
@@ -457,7 +457,7 @@ namespace xFilm5.Api.Controllers
 
                             UpdateListCycle(pq.ID, (int)DAL.Common.Enums.PrintQSubitemType.Blueprint);
 
-                            log.Info("[blueprint] " + jsonData.ToString());
+                            log.Info("[api, blueprint] " + jsonData.ToString());
 
                             #region 2018.11.06 paulus: send Fcm notification
                             if (pqVps != null)
@@ -470,7 +470,7 @@ namespace xFilm5.Api.Controllers
                         }
                         else
                         {
-                            log.Error("[blueprint] PrintQueue == null " + jsonData.ToString());
+                            log.Error("[api, blueprint] PrintQueue == null " + jsonData.ToString());
                             return NotFound();
                         }
                     }
@@ -493,7 +493,7 @@ namespace xFilm5.Api.Controllers
                 }
                 catch (Exception e)
                 {
-                    log.Fatal("[blueprint] " + jsonData.ToString(), e);
+                    log.Fatal("[api, blueprint] " + jsonData.ToString(), e);
                     return NotFound();
                 }
                 #endregion
