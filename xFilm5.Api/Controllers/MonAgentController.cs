@@ -435,7 +435,7 @@ namespace xFilm5.Api.Controllers
                     int clientId = Convert.ToInt32(jsonData["clientId"].Value<int>());
                     String jobId = jsonData["jobId"].Value<String>();
                     String bpFileName = jsonData["vpsFileName"].Value<String>();
-                    String bpFileNameWithoutSuffix = bpFileName.Substring(0, bpFileName.LastIndexOf('.'));
+                    String bpFileNameWithoutSuffix = bpFileName.Substring(0, bpFileName.LastIndexOf('('));
 
                     using (var ctx = new EF6.xFilmEntities())
                     {
@@ -462,7 +462,7 @@ namespace xFilm5.Api.Controllers
                             #region 2018.11.06 paulus: send Fcm notification
                             if (pqVps != null)
                             {
-                                Helper.BotHelper.PostSendFcmOnOrder(pqVps.ID);       // 叫 xFIlm5.Bot server 發短訊
+                                Helper.BotHelper.PostSendFcmOnReady(pqVps.ID);       // 叫 xFIlm5.Bot server 發短訊
                             }
                             #endregion
 

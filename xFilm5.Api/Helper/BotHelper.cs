@@ -225,6 +225,29 @@ namespace xFilm5.Api.Helper
             return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
         }
 
+        public static bool PostSendFcmOnReady(int vpsId)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            //#if (DEBUG)
+            //            botServer = "http://localhost:35543/";
+            //#endif
+            var client = new RestClient(botServer);
+            var request = new RestRequest(string.Format("FCM/SendMessage/OnReady/{0}/", vpsId.ToString()), Method.POST);
+            //request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+            request.RequestFormat = DataFormat.Json;
+
+            //request.AddParameter("ReceiptId", receiptId.ToString());
+            //request.AddParameter("LanguageId", DAL.Common.Config.CurrentLanguageId.ToString());
+            //request.AddParameter("PrinterName", printerName);
+            request.AddBody(new
+            {
+                PrintQueueVpsId = vpsId.ToString(),
+                AnotherParam = 19.99
+            });
+            var response = client.Execute(request);
+            return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
+        }
+
         public static bool PostBroadcastFcm(String topic, String msg)
         {
             String botServer = ConfigurationManager.AppSettings["BotServer"];
