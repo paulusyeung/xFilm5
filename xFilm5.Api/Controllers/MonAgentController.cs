@@ -434,7 +434,7 @@ namespace xFilm5.Api.Controllers
                     // 每個 call 祇得一隻 record
                     int clientId = Convert.ToInt32(jsonData["clientId"].Value<int>());
                     String jobId = jsonData["jobId"].Value<String>();
-                    String bpFileName = jsonData["bpFileName"].Value<String>();
+                    String bpFileName = jsonData["vpsFileName"].Value<String>();
                     String bpFileNameWithoutSuffix = bpFileName.Substring(0, bpFileName.LastIndexOf('.'));
 
                     using (var ctx = new EF6.xFilmEntities())
