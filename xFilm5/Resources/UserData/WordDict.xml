@@ -1138,6 +1138,16 @@
     <chs>选出档案或是拖拉档案至此</chs>
     <cht>選出檔案或是拖拉檔案至此</cht>
   </keyword>
+  <keyword key="msg_speedbox_error">
+    <en>Only PS or PDF files</en>
+    <chs>只接授 PS 或 PDF 档案</chs>
+    <cht>衹接授 PS 或 PDF 檔案</cht>
+  </keyword>
+  <keyword key="msg_speedbox_ok">
+    <en>All done...You will receive the VPS files soon</en>
+    <chs>上载完成...你将很快收到 VPS 档案</chs>
+    <cht>上載完成...你將很快收到 VPS 檔案</cht>
+  </keyword>
   <keyword key="popup">
     <en>Popup</en>
     <chs>弹窗</chs>
@@ -1447,5 +1457,10 @@
     <en>It takes some time to process your request. We will notify you when your request is done.</en>
     <chs>执行指令需时，完成之後会另发通知。</chs>
     <cht>執行指令需時，完成之後會另發通知。</cht>
+  </keyword>
+  <keyword key="speedbox">
+    <en>Speed Box</en>
+    <chs>特快专递</chs>
+    <cht>特快專遞</cht>
   </keyword>
 </root>

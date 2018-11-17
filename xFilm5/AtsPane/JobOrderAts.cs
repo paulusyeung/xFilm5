@@ -1,4 +1,4 @@
-#region Using
+﻿#region Using
 
 using System;
 using System.Collections.Generic;
@@ -12,6 +12,7 @@ using Gizmox.WebGUI.Common.Resources;
 using Gizmox.WebGUI.Forms;
 
 using xFilm5.DAL;
+using System.IO;
 
 #endregion
 
@@ -57,6 +58,15 @@ namespace xFilm5.AtsPane
 
             this.atsJobOrder.Buttons.Add(cmdSearch);
 
+            #region 2018.11.16 paulus: SpeedBox
+            this.atsJobOrder.Buttons.Add(sep);
+            ToolBarButton cmdSpeedBox = new ToolBarButton("SpeedBox", oDict.GetWord("speedbox"));
+            cmdSpeedBox.Tag = "SpeedBox";
+            cmdSpeedBox.Image = new IconResourceHandle("16x16.fe_cloud_upload_16_white.png");
+
+            this.atsJobOrder.Buttons.Add(cmdSpeedBox);
+            #endregion
+
             this.atsJobOrder.ButtonClick += new ToolBarButtonClickEventHandler(atsJobOrder_ButtonClick);           
         }
 
@@ -100,8 +110,74 @@ namespace xFilm5.AtsPane
             }
         }
 
+        #region Speed Box uploader
+        private void UseUploaderVWG()
+        {
+            nxStudio.BaseClass.WordDict oDict = new nxStudio.BaseClass.WordDict(Common.Config.CurrentWordDict, Common.Config.CurrentLanguageId);
+            xFilm5.Controls.Upload.SpeedBox speedBox = new xFilm5.Controls.Upload.SpeedBox();
+
+            speedBox.Text = oDict.GetWord("speedbox");
+            speedBox.UploadedFileType = @"^.*\.(ps|pdf)$";   // accept ps, pdf
+            speedBox.FormClosed += new Form.FormClosedEventHandler(uploader_FormClosed);
+            speedBox.ShowDialog();
+        }
+
+        private void uploader_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            string FileName = string.Empty;
+            string FullName = string.Empty;
+            //string dropbox = Common.Client.DropBox(202020);
+
+            xFilm5.Controls.Upload.SpeedBox speedBox = (xFilm5.Controls.Upload.SpeedBox)sender;
+            var clientId = speedBox.ClientId;
+            if (clientId != 0)
+            {
+                //string dropbox = Common.Client.DropBox(clientId);
+                if (speedBox.UploadedFiles.Count > 0)
+                {
+                    foreach (String filepath in speedBox.UploadedFiles)
+                    {
+                        #region process uploaded file: 把已經上載到 temporary folder 的檔案抄至指定的檔案夾
+                        if (File.Exists(filepath))
+                        {
+                            String filename = Path.GetFileName(filepath);       // VWG Uploader 會加個 Guid 在檔案名之前，要將佢去掉先至係真正嘅檔案名
+                            int idx = filename.IndexOf('_');
+                            filename = filename.Substring(idx + 1);
+
+                            //String filename = Path.GetFileName(filepath).Substring(37);     // 32 + 4 + 1
+                            //String dest = Path.Combine(dropbox, filename);
+                            //File.Copy(filepath, dest, true);
+
+                            Helper.BotHelper.PostSpeedBox(clientId, filepath, filename);      //交俾 BotServer 處理
+                        }
+                        #endregion
+                    }
+                    nxStudio.BaseClass.WordDict oDict = new nxStudio.BaseClass.WordDict(Common.Config.CurrentWordDict, Common.Config.CurrentLanguageId);
+                    MessageBox.Show(oDict.GetWord("msg_speedbox_ok"), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information, new EventHandler(cmdPrompt_Click));
+                }
+            }
+        }
+
+        private void cmdPrompt_Click(object sender, EventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
+        #endregion
+
         private void atsJobOrder_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
         {
+            #region 2018.11.17 paulus: 避免 speedbox 清除咗原來嘅畫面，唔跳去 ShowWorkspace()
+            var tag = (string)e.Button.Tag;
+            if (!string.IsNullOrEmpty(tag))
+            {
+                if (tag.ToLower() == "speedbox")
+                {
+                    UseUploaderVWG();
+                    return;
+                }
+            }
+            #endregion
+
             Control[] controls = this.Form.Controls.Find("wspPane", true);
             if (controls.Length > 0)
             {
@@ -144,6 +220,9 @@ namespace xFilm5.AtsPane
                             }
                         }
                     break;
+                    case "speedbox":
+                        UseUploaderVWG();
+                        break;
                 }
             }
         }

@@ -287,5 +287,31 @@ namespace xFilm5.Helper
             var result = client.Execute(request);
             return (result.StatusCode == System.Net.HttpStatusCode.Accepted ? true : false);
         }
+
+        /// <summary>
+        /// 2018.11.17 paulus: 將 SpeedBox 收到嘅檔案上載去 CloudDisk，同時抄１份去　hotfolder
+        /// </summary>
+        /// <param name="clientId"></param>
+        /// <param name="filepath"></param>
+        public static void PostSpeedBox(int clientId, String filepath, String filename)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            var client = new RestClient(botServer);
+            var request = new RestRequest("speedbox/", Method.POST);
+            request.RequestFormat = DataFormat.Json;
+
+            //serialize an object to JSON and set it as content for a request
+            //request.JsonSerializer = NewtonsoftJsonSerializer.Default;
+            //request.AddJsonBody(obj);
+
+            request.AddBody(new
+            {
+                ClientId = clientId.ToString(),
+                FilePath = filepath,
+                FileName = filename,
+                AnotherParam = 19.99
+            });
+            client.Execute(request);
+        }
     }
 }

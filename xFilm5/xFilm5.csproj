@@ -234,6 +234,7 @@
     <Content Include="Resources\Icons\16x16\dropbox_out_16x16.png" />
     <Content Include="Resources\Icons\16x16\English16.gif" />
     <Content Include="Resources\Icons\16x16\export.png" />
+    <Content Include="Resources\Icons\16x16\fe_cloud_upload_16_white.png" />
     <Content Include="Resources\Icons\16x16\filter_16.png" />
     <Content Include="Resources\Icons\16x16\find.png" />
     <Content Include="Resources\Icons\16x16\flag_green.png" />
@@ -732,6 +733,12 @@
     <Compile Include="Controls\Reporting\Viewer.Designer.cs">
       <DependentUpon>Viewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Upload\SpeedBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\Upload\SpeedBox.Designer.cs">
+      <DependentUpon>SpeedBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Utility.cs" />
     <Compile Include="Controls\WriteFileHelper.cs" />
     <Compile Include="Customer\Address\AddressList.cs">
@@ -1196,6 +1203,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Reporting\Viewer.resx">
       <DependentUpon>Viewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Upload\SpeedBox.resx">
+      <DependentUpon>SpeedBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Customer\Address\AddressList.resx">
       <DependentUpon>AddressList.cs</DependentUpon>
