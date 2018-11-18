@@ -592,6 +592,52 @@ namespace xFilm5.REST.Helper
             var cups = client.Execute<List<CloudDisk.ResourceInfo>>(request);
             return cups.StatusCode == System.Net.HttpStatusCode.OK ? cups.Data : null;
         }
+
+        public static List<CloudDisk.ResourceInfo> GetSpeedBox(int clientId, int page)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            String uri = String.Format("clouddisk/speedbox/{0}/{1}/", clientId.ToString(), page.ToString());
+
+            var client = new RestClient(botServer);
+            var request = new RestRequest(uri, Method.GET);
+            request.RequestFormat = DataFormat.Json;
+
+            //serialize an object to JSON and set it as content for a request
+            //request.JsonSerializer = NewtonsoftJsonSerializer.Default;
+            //request.AddJsonBody(obj);
+
+            request.AddBody(new
+            {
+                ClientId = clientId.ToString(),
+                Page = page.ToString(),
+                AnotherParam = 19.99
+            });
+            var cups = client.Execute<List<CloudDisk.ResourceInfo>>(request);
+            return cups.StatusCode == System.Net.HttpStatusCode.OK ? cups.Data : null;
+        }
+
+        public static List<CloudDisk.ResourceInfo> GetSpeedBox(int clientId, String keyword)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            String uri = String.Format("clouddisk/speedbox/keyword/{0}/{1}/", clientId.ToString(), keyword);
+
+            var client = new RestClient(botServer);
+            var request = new RestRequest(uri, Method.GET);
+            request.RequestFormat = DataFormat.Json;
+
+            //serialize an object to JSON and set it as content for a request
+            //request.JsonSerializer = NewtonsoftJsonSerializer.Default;
+            //request.AddJsonBody(obj);
+
+            request.AddBody(new
+            {
+                ClientId = clientId.ToString(),
+                Keyword = keyword,
+                AnotherParam = 19.99
+            });
+            var cups = client.Execute<List<CloudDisk.ResourceInfo>>(request);
+            return cups.StatusCode == System.Net.HttpStatusCode.OK ? cups.Data : null;
+        }
         #endregion
 
         public static List<EF6.vwClientList> GetSubAdminUsers(String workshop)

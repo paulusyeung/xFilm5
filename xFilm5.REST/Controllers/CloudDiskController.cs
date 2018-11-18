@@ -455,6 +455,60 @@ namespace xFilm5.REST.Controllers
 
             return null;
         }
+
+        [HttpGet]
+        [Route("speedbox/{clientId:int}/{page:int}")]
+        [JwtAuthentication]
+        public IHttpActionResult GetSpeedBox(int clientId, int page)
+        {
+            var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+
+            Guid userSid = Guid.Empty;
+            userSid = Guid.TryParse(identity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault(), out userSid) ? userSid : Guid.Empty;
+
+            using (var ctx = new xFilmEntities())
+            {
+                var user = ctx.User.Where(x => x.UserSid == userSid).SingleOrDefault();
+                if (user != null)
+                {
+                    var items = BotHelper.GetSpeedBox(clientId, page);
+
+                    if (items.Count() > 0)
+                    {
+                        return Json(items.ToList());
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        [HttpGet]
+        [Route("speedbox/keyword/{clientId:int}/{keyword}")]
+        [JwtAuthentication]
+        public IHttpActionResult GetSpeedBox(int clientId, String keyword)
+        {
+            var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+
+            Guid userSid = Guid.Empty;
+            userSid = Guid.TryParse(identity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault(), out userSid) ? userSid : Guid.Empty;
+
+            using (var ctx = new xFilmEntities())
+            {
+                var user = ctx.User.Where(x => x.UserSid == userSid).SingleOrDefault();
+                if (user != null)
+                {
+                    var items = BotHelper.GetSpeedBox(clientId, keyword);
+
+                    if (items.Count() > 0)
+                    {
+                        return Json(items.ToList());
+                    }
+                }
+            }
+
+            return null;
+        }
         #endregion
 
         [HttpGet]
