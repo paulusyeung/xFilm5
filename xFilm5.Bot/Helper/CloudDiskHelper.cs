@@ -1965,8 +1965,14 @@ namespace xFilm5.Bot.Helper
                                 try
                                 {
                                     var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
-                                    if (result) result = c.Exists(speedbox) ? true : c.CreateDirectory(speedbox);
-                                    if (result) c.ShareWithGroup(speedbox, group, Convert.ToInt32(OcsPermission.All));
+
+                                    #region 如果未有 speedbox folder, 先建立一下
+                                    if (!c.Exists(speedbox))
+                                    {
+                                        result = c.CreateDirectory(speedbox);
+                                        if (result) c.ShareWithGroup(speedbox, group, Convert.ToInt32(OcsPermission.All));
+                                    }
+                                    #endregion
 
                                     if (result)
                                     {
