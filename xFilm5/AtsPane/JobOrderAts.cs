@@ -13,6 +13,8 @@ using Gizmox.WebGUI.Forms;
 
 using xFilm5.DAL;
 using System.IO;
+using System.Configuration;
+using xFilm5.Helper;
 
 #endregion
 
@@ -140,15 +142,27 @@ namespace xFilm5.AtsPane
                         #region process uploaded file: 把已經上載到 temporary folder 的檔案抄至指定的檔案夾
                         if (File.Exists(filepath))
                         {
-                            String filename = Path.GetFileName(filepath);       // VWG Uploader 會加個 Guid 在檔案名之前，要將佢去掉先至係真正嘅檔案名
-                            int idx = filename.IndexOf('_');
-                            filename = filename.Substring(idx + 1);
+                            String tempfilename = Path.GetFileName(filepath);                           // VWG Uploader 會加個 Guid 在檔案名之前，要將佢去掉先至係真正嘅檔案名
+                            String filename = tempfilename.Substring(tempfilename.IndexOf('_') + 1);
 
-                            //String filename = Path.GetFileName(filepath).Substring(37);     // 32 + 4 + 1
-                            //String dest = Path.Combine(dropbox, filename);
-                            //File.Copy(filepath, dest, true);
+                            #region 先從 local 抄去 shared netwrok drive
+                            #region 讀入 SpeedBox network impersonation
+                            String serverUri = ConfigurationManager.AppSettings["SpeedBox_ServerUri"];
+                            String userName = ConfigurationManager.AppSettings["SpeedBox_UserName"];
+                            String userPassword = ConfigurationManager.AppSettings["SpeedBox_UserPassword"];
 
-                            Helper.BotHelper.PostSpeedBox(clientId, filepath, filename);      //交俾 BotServer 處理
+                            String tempPath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["SpeedBox_TempFolder"]);
+                            String tempFilePath = Path.Combine(tempPath, tempfilename);
+                            #endregion
+
+                            using (new Impersonation(serverUri, userName, userPassword))
+                            {
+                                File.Copy(filepath, tempFilePath, true);
+                                File.Delete(filepath);                      // Copy is synchronous operation, delete 應該唔會有 error
+
+                                Helper.BotHelper.PostSpeedBox(clientId, tempfilename, filename);      // 再交俾 BotServer 處理
+                            }
+                            #endregion
                         }
                         #endregion
                     }

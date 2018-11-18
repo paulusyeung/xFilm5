@@ -1927,6 +1927,7 @@ namespace xFilm5.Bot.Helper
                         String userName = ConfigurationManager.AppSettings["SpeedBox_UserName"];
                         String userPassword = ConfigurationManager.AppSettings["SpeedBox_UserPassword"];
                         String speedBox_HotFolder = ConfigurationManager.AppSettings["SpeedBox_HotFolder"];
+                        String speedBox_TempFolder = ConfigurationManager.AppSettings["SpeedBox_TempFolder"];
                         #endregion
 
                         using (new Impersonation(serverUri, userName, userPassword))
@@ -1935,17 +1936,20 @@ namespace xFilm5.Bot.Helper
                             string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
                             string speedbox = "/speedbox", thumbnailPath = "/thumbnail";
 
+                            var sourceUri = serverUri + speedBox_TempFolder;
+                            var filepath_Source = Path.Combine(sourceUri, filepath);
+
                             #region 抄一份去 hotfolder SpeedBox
                             try
                             {
-                                String destUri = serverUri + speedBox_HotFolder;
+                                var destUri = serverUri + speedBox_HotFolder;
                                 var filepath_Dest = Path.Combine(destUri, filename);
 
                                 if (!(Directory.Exists(destUri))) Directory.CreateDirectory(destUri);
 
-                                File.Copy(filepath, filepath_Dest);
+                                File.Copy(filepath_Source, filepath_Dest);
 
-                                log.Info(String.Format("[bot, speedbox, local copied] \r\nFile Name = {0}\r\nFilePath_Source = {1}\r\nFilePath_Dest = {2}", filename, filepath, filepath_Dest));
+                                log.Info(String.Format("[bot, speedbox, local copied] \r\nFile Name = {0}\r\nFilePath_Source = {1}\r\nFilePath_Dest = {2}", filename, filepath_Source, filepath_Dest));
                                 result = true;
                             }
                             catch (Exception e)
@@ -1966,14 +1970,14 @@ namespace xFilm5.Bot.Helper
 
                                     if (result)
                                     {
-                                        if (File.Exists(filepath))
+                                        if (File.Exists(filepath_Source))
                                         {
                                             #region upload file
                                             var suffix = filename.Substring(filename.LastIndexOf('.'));
                                             var contentType = suffix.ToLower() == "ps" ? "application/postscript" : (suffix.ToLower() == "pdf" ? "application/pdf" : "application/octet-stream");
                                             var destFilePath = String.Format("{0}/{1}.{2}", speedbox, clientId, filename);
 
-                                            using (var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read))
+                                            using (var fs = new FileStream(filepath_Source, FileMode.Open, FileAccess.Read))
                                             {
                                                 result = c.Upload(destFilePath, fs, contentType);
                                                 if (result)
@@ -2005,11 +2009,12 @@ namespace xFilm5.Bot.Helper
                                                     #endregion
                                                     */
 
-                                                    log.Info(String.Format("[bot, speedbox, cloud copied] \r\nFile Name = {0}\r\nFilePath_Source = {1}\r\nFilePath_Dest = {2}", filename, filepath, destFilePath));
+                                                    File.Delete(filepath_Source);       // 搞掂，可以 delete
+                                                    log.Info(String.Format("[bot, speedbox, cloud copied] \r\nFile Name = {0}\r\nFilePath_Source = {1}\r\nFilePath_Dest = {2}", filename, filepath_Source, destFilePath));
                                                 }
                                                 else
                                                 {
-                                                    log.Error(String.Format("[bot, speedbox, cloud copy failed] \r\nFile Name = {0}\r\nFilePath_Source = {1}\r\nFilePath_Dest = {2}", filename, filepath, destFilePath));
+                                                    log.Error(String.Format("[bot, speedbox, cloud copy failed] \r\nFile Name = {0}\r\nFilePath_Source = {1}\r\nFilePath_Dest = {2}", filename, filepath_Source, destFilePath));
                                                 }
                                             }
                                             #endregion
