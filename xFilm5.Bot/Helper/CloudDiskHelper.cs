@@ -1981,7 +1981,7 @@ namespace xFilm5.Bot.Helper
                                             #region upload file
                                             var suffix = filename.Substring(filename.LastIndexOf('.'));
                                             var contentType = suffix.ToLower() == "ps" ? "application/postscript" : (suffix.ToLower() == "pdf" ? "application/pdf" : "application/octet-stream");
-                                            var destFilePath = String.Format("{0}/{1}.{2}", speedbox, clientId, filename);
+                                            var destFilePath = String.Format("{0}/{1}", speedbox, filename);
 
                                             using (var fs = new FileStream(filepath_Source, FileMode.Open, FileAccess.Read))
                                             {
