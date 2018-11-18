@@ -1943,7 +1943,7 @@ namespace xFilm5.Bot.Helper
                             try
                             {
                                 var destUri = serverUri + speedBox_HotFolder;
-                                var filepath_Dest = Path.Combine(destUri, filename);
+                                var filepath_Dest = Path.Combine(destUri, String.Format("{0}.{1}", clientId.ToString(), filename));
 
                                 if (!(Directory.Exists(destUri))) Directory.CreateDirectory(destUri);
 
