@@ -569,5 +569,37 @@ namespace xFilm5.Bot.Controllers
                 }
             }
         }
+
+        [Route("speedbox")]
+        public IHttpActionResult PostSpeedBox([FromBody] JObject jsonData)
+        {
+            if (jsonData == null)
+            {
+                log.Error("[bot, speedbox] jsonData == null");
+                return NotFound();
+            }
+            else
+            {
+                int clientId = jsonData["ClientId"].Value<int>();
+                String filepath = jsonData["FilePath"].Value<String>();
+                String filename = jsonData["FileName"].Value<String>();
+
+                using (var ctx = new xFilmEntities())
+                {
+                    var client = ctx.Client.FirstOrDefault(v => v.ID == clientId);
+                    if (client != null)
+                    {
+                        //Helper.CloudDiskHelper.UploadSpeedBoxFile(clientId, filepath, filename);                            // used in debug
+                        BackgroundJob.Enqueue(() => CloudDiskHelper.UploadSpeedBoxFile(clientId, filepath, filename));      // used in Live
+                        return Ok();
+                    }
+                    else
+                    {
+                        log.Error("[bot, speedbox, Client not found] \r\n" + client.ToString());
+                        return NotFound();
+                    }
+                }
+            }
+        }
     }
 }

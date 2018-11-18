@@ -1911,6 +1911,126 @@ namespace xFilm5.Bot.Helper
             return result;
         }
 
+        public static bool UploadSpeedBoxFile(int clientId, String filepath, String filename)
+        {
+            bool result = false;
+
+            if (IsClientEnabled(clientId))
+            {
+                using (var ctx = new xFilmEntities())
+                {
+                    var cuser = ctx.Client_User.Where(x => x.ClientID == clientId && x.PrimaryUser == true).SingleOrDefault();
+                    if (cuser != null)
+                    {
+                        #region 讀入 network impersonation
+                        String serverUri = ConfigurationManager.AppSettings["SpeedBox_ServerUri"];
+                        String userName = ConfigurationManager.AppSettings["SpeedBox_UserName"];
+                        String userPassword = ConfigurationManager.AppSettings["SpeedBox_UserPassword"];
+                        String speedBox_HotFolder = ConfigurationManager.AppSettings["SpeedBox_HotFolder"];
+                        #endregion
+
+                        using (new Impersonation(serverUri, userName, userPassword))
+                        {
+                            string group = cuser.ClientID.ToString();
+                            string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
+                            string speedbox = "/speedbox", thumbnailPath = "/thumbnail";
+
+                            #region 抄一份去 hotfolder SpeedBox
+                            try
+                            {
+                                String destUri = serverUri + speedBox_HotFolder;
+                                var filepath_Dest = Path.Combine(destUri, filename);
+
+                                if (!(Directory.Exists(destUri))) Directory.CreateDirectory(destUri);
+
+                                File.Copy(filepath, filepath_Dest);
+
+                                log.Info(String.Format("[bot, speedbox, local copied] \r\nFile Name = {0}\r\nFilePath_Source = {1}\r\nFilePath_Dest = {2}", filename, filepath, filepath_Dest));
+                                result = true;
+                            }
+                            catch (Exception e)
+                            {
+                                log.Error("[bot, speedbox, local copy failed] \r\n", e);
+                                result = false;
+                            }
+                            #endregion
+
+                            #region 抄一份去 Cloud Disk
+                            if (result)
+                            {
+                                try
+                                {
+                                    var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+                                    if (result) result = c.Exists(speedbox) ? true : c.CreateDirectory(speedbox);
+                                    if (result) c.ShareWithGroup(speedbox, group, Convert.ToInt32(OcsPermission.All));
+
+                                    if (result)
+                                    {
+                                        if (File.Exists(filepath))
+                                        {
+                                            #region upload file
+                                            var suffix = filename.Substring(filename.LastIndexOf('.'));
+                                            var contentType = suffix.ToLower() == "ps" ? "application/postscript" : (suffix.ToLower() == "pdf" ? "application/pdf" : "application/octet-stream");
+                                            var destFilePath = String.Format("{0}/{1}.{2}", speedbox, clientId, filename);
+
+                                            using (var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read))
+                                            {
+                                                result = c.Upload(destFilePath, fs, contentType);
+                                                if (result)
+                                                {
+                                                    /** 暫時唔整 thumbnail
+                                                    #region Generate thumbnail
+                                                    MagickReadSettings settings = new MagickReadSettings();
+                                                    settings.Density = new Density(300, 300);                               // Settings the density to 300 dpi will create an image with a better quality
+                                                    var temp = @"C:\Temp";                                                  // The default folder for %TEMP% but we want to change it to C:\Temp
+                                                    MagickNET.SetTempDirectory(temp);
+                                                    using (MagickImageCollection images = new MagickImageCollection())
+                                                    {
+                                                        images.Read(sourceFilePath, settings);
+                                                        var destFileName = String.Format("{0}-{1}.png", source.JobId, source.PFileName);                       // append .png to priginal file name
+                                                        var thumbnail = String.Format(@"{0}\{1}", temp, destFileName);
+                                                        var img = images[0];
+                                                        img.Format = MagickFormat.Png;
+                                                        img.Write(thumbnail);
+                                                        if (File.Exists(thumbnail))
+                                                        {
+                                                            using (var th = new FileStream(thumbnail, FileMode.Open, FileAccess.Read))
+                                                            {
+                                                                destFilePath = String.Format("{0}/{1}", thumbnailPath, destFileName);
+                                                                result = c.Upload(destFilePath, th, "image/png");
+                                                                if (result) File.Delete(thumbnail);
+                                                            }
+                                                        }
+                                                    }
+                                                    #endregion
+                                                    */
+
+                                                    log.Info(String.Format("[bot, speedbox, cloud copied] \r\nFile Name = {0}\r\nFilePath_Source = {1}\r\nFilePath_Dest = {2}", filename, filepath, destFilePath));
+                                                }
+                                                else
+                                                {
+                                                    log.Error(String.Format("[bot, speedbox, cloud copy failed] \r\nFile Name = {0}\r\nFilePath_Source = {1}\r\nFilePath_Dest = {2}", filename, filepath, destFilePath));
+                                                }
+                                            }
+                                            #endregion
+                                        }
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    log.Error("[bot, speedbox, cloud copy failed] \r\n", ex);
+                                    result = false;
+                                }
+                            }
+                            #endregion
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
         #region Upload Files from Hot Folders
 
         public static bool UploadHotFolderReprintCupsFile(String cupsFileName)
