@@ -187,5 +187,73 @@ namespace xFilm5.REST.Helper
 
             return result;
         }
+
+        public static bool SetInvoiceToPaid(int invoiceId, DateTime paidOn, String paidRef)
+        {
+            bool result = false;
+
+            using (var ctx = new EF6.xFilmEntities())
+            {
+                // 用 Transactions 可以快啲同埋有 error 可以 roolback
+                using (var scope = ctx.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var invHdr = ctx.Acct_INMaster.Where(x => x.ID == invoiceId).SingleOrDefault();
+                        if (invHdr != null)
+                        {
+                            #region UpdRec: dbo.Acct_INMaster
+                            invHdr.Paid = true;
+                            invHdr.PaidAmount = invHdr.InvoiceAmount.Value;
+                            invHdr.PaidOn = paidOn;
+                            invHdr.PaidRef = paidRef;
+                            invHdr.LastModifiedOn = DateTime.Now;
+                            invHdr.LastModifiedBy = CommonHelper.Config.CurrentUserId;
+                            #endregion
+
+                            #region UpdRec: related dbo.ReceiptHeader
+                            var invDtls = ctx.Acct_INDetails.Where(x => x.INMasterID == invoiceId).ToList();
+                            if (invDtls.Count > 0)
+                            {
+                                for (int i = 0; i < invDtls.Count; i++)
+                                {
+                                    var invDtl = invDtls[i];
+                                    var rDetails = ctx.ReceiptDetail.Where(x => x.OrderPkPrintQueueVpsId == invDtl.OrderPkPrintQueueVpsId).ToList();
+                                    if (rDetails.Count > 0)
+                                    {
+                                        for (int j = 0; j < rDetails.Count; j++)
+                                        {
+                                            var rDetail = rDetails[j];
+                                            var rHeader = ctx.ReceiptHeader.Where(x => x.ReceiptHeaderId == rDetail.ReceiptHeaderId).SingleOrDefault();
+                                            if (rHeader != null)
+                                            {
+                                                rHeader.Paid = true;
+                                                rHeader.PaidAmount = invHdr.InvoiceAmount.Value;
+                                                rHeader.PaidOn = paidOn;
+                                                rHeader.PaidRef = paidRef;
+                                                rHeader.ModifiedOn = DateTime.Now;
+                                                rHeader.ModifiedBy = CommonHelper.Config.CurrentUserId;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            #endregion
+
+                            ctx.SaveChanges();
+
+                            scope.Commit();
+                            result = true;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        scope.Rollback();
+                    }
+                }
+            }
+
+            return result;
+        }
     }
 }

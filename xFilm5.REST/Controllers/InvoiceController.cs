@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web.Http;
 using xFilm5.EF6;
 using xFilm5.REST.Filters;
@@ -425,6 +426,37 @@ order by [InvoiceNumber]", _DateZero.ToString("yyyy-MM-dd"), id.ToString(), keyw
             }
 
             return response;
+        }
+
+        [HttpPost]
+        [Route("api/Registration/Register/{deviceId}")]
+        [AllowAnonymous]
+        public async Task<IHttpActionResult> PostRecordPayment(string deviceId)
+        {
+            var json = Request.Content.ReadAsStringAsync().Result;
+            var data = JsonConvert.DeserializeObject<Models.RecordPayment>(json);
+
+            if (data != null)
+            {
+                using (var ctx = new xFilmEntities())
+                {
+                    var invoice = ctx.Acct_INMaster.Where(x => x.ID == data.InvoiceId).SingleOrDefault();
+                    if (invoice != null)
+                    {
+                        var notes = String.Format("{0}: {1}", data.PaidBy, data.Remarks.Trim());
+                        var max = 128;  // dbo.Acct_INMaster.PaidRef length
+
+                        var result = InvoiceHelper.SetInvoiceToPaid(data.InvoiceId, data.PaidOn.Value, notes.Length <= max ? notes : notes.Substring(0, max));
+
+                        if (result)
+                        {
+                            return Ok();
+                        }
+                    }
+                }
+            }
+
+            return NotFound();
         }
     }
 }

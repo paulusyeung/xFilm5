@@ -186,6 +186,7 @@
     <Compile Include="JwtManager.cs" />
     <Compile Include="Models\CloudDisk.cs" />
     <Compile Include="Models\OrderFormData.cs" />
+    <Compile Include="Models\RecordPayment.cs" />
     <Compile Include="Models\Registration.cs" />
     <Compile Include="Models\UserEx.cs" />
     <Compile Include="Models\vwOrderPkPrintQueueVpsListEx.cs" />
