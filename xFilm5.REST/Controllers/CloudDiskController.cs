@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.Drawing;
 using System.IO;
@@ -10,6 +11,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Http;
 using xFilm5.EF6;
 using xFilm5.REST.Filters;
@@ -760,6 +762,95 @@ namespace xFilm5.REST.Controllers
                 }
             }
             return NotFound();
+        }
+
+        [HttpPost]
+        [Route("speedbox/upload/{clientId:int}")]
+        [JwtAuthentication]
+        public async Task<HttpResponseMessage> PostSpeedBoxUpload(int clientId)
+        {
+            var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+
+            Guid userSid = Guid.Empty;
+            userSid = Guid.TryParse(identity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault(), out userSid) ? userSid : Guid.Empty;
+
+            using (var ctx = new xFilmEntities())
+            {
+                ctx.Configuration.LazyLoadingEnabled = false;
+                var client = ctx.Client.Where(x => x.ID == clientId).SingleOrDefault();
+                if (client != null)
+                {
+                    try
+                    {
+                        HttpRequestMessage request = this.Request;
+                        if (!request.Content.IsMimeMultipartContent())
+                        {
+                            throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+                        }
+                        var provider = new MultipartFormDataStreamProvider(Path.GetTempPath());     // upload file 暫存 temporaray folder，唔使理 permission
+
+                        var task = await request.Content.ReadAsMultipartAsync(provider).
+                            ContinueWith<HttpResponseMessage>(o =>
+                            {
+                                /** 唔使 loop，暫時得一個 file
+                                foreach (MultipartFileData file in provider.FileData)
+                                {
+                                    var filename = file.Headers.ContentDisposition.FileName;
+                                    var localFilePath = "Server file path: " + file.LocalFileName;
+                                }
+                                */
+
+                                if (provider.Contents.Count > 0)
+                                {
+                                    var tmpFileName = provider.FileData.First().LocalFileName;
+                                    var orgFileName = provider.FileData.First().Headers.ContentDisposition.FileName.Replace("\"", string.Empty);
+
+                                    #region 用 NetworkConnection: 來自於 NetworkConnection.cs 用嚟做 impersonation
+                                    String serverUri = ConfigurationManager.AppSettings["SpeedBox_ServerUri"];
+                                    String userName = ConfigurationManager.AppSettings["SpeedBox_UserName"];
+                                    String userPassword = ConfigurationManager.AppSettings["SpeedBox_UserPassword"];
+                                    String speedBox_HotFolder = ConfigurationManager.AppSettings["SpeedBox_HotFolder"];
+                                    String speedBox_TempFolder = ConfigurationManager.AppSettings["SpeedBox_TempFolder"];
+
+                                    String tempPath = serverUri + speedBox_TempFolder;
+                                    String tempFileName = String.Format("{0}.{1}", clientId.ToString(), orgFileName);
+                                    String filePath = Path.Combine(tempPath, tempFileName);
+
+                                    //var uri = new Uri(serverUri);
+                                    //System.Net.NetworkCredential readCredentials = new System.Net.NetworkCredential(userName, userPassword);
+                                    #endregion
+
+                                    #region 抄去 shared folder on server 然後叫 Bot Server 做嘢
+                                    using (new Impersonation(serverUri, userName, userPassword))
+                                    {
+                                        if (!(Directory.Exists(tempPath)))
+                                            Directory.CreateDirectory(tempPath);
+                                        if (File.Exists(filePath))
+                                            File.Delete(filePath);
+                                        File.Move(tmpFileName, filePath);
+
+                                        BotHelper.PostSpeedBox(clientId, filePath, orgFileName);    // 通知 Bot Server 跟進
+                                    }
+                                    #endregion
+
+                                    return Request.CreateResponse(HttpStatusCode.OK, string.Format("File {0} uploaded...{1}", orgFileName, tmpFileName));
+                                }
+                                else
+                                {
+                                    return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Upload failed...No file found");
+                                }
+                            }
+                        );
+                        return task;
+                    }
+                    catch (Exception ex)
+                    {
+                        return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
+                    }
+                }
+
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Upload failed...Client not found");
+            }
         }
     }
 }
