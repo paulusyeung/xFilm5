@@ -1459,8 +1459,13 @@
     <cht>執行指令需時，完成之後會另發通知。</cht>
   </keyword>
   <keyword key="speedbox">
-    <en>Speed Box</en>
-    <chs>特快专递</chs>
-    <cht>特快專遞</cht>
+    <en>Speed Box (Plate)</en>
+    <chs>特快专递（锌）</chs>
+    <cht>特快專遞（鋅）</cht>
+  </keyword>
+  <keyword key="speedbox_film">
+    <en>Speed Box (Film)</en>彤
+    <chs>特快专递（胶片）</chs>
+    <cht>特快專遞（菲林）</cht>
   </keyword>
 </root>

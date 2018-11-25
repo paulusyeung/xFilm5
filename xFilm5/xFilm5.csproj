@@ -733,6 +733,12 @@
     <Compile Include="Controls\Reporting\Viewer.Designer.cs">
       <DependentUpon>Viewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Upload\SpeedBox_Flim.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\Upload\SpeedBox_Flim.Designer.cs">
+      <DependentUpon>SpeedBox_Flim.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Upload\SpeedBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1203,6 +1209,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Reporting\Viewer.resx">
       <DependentUpon>Viewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Upload\SpeedBox_Flim.resx">
+      <DependentUpon>SpeedBox_Flim.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Upload\SpeedBox.resx">
       <DependentUpon>SpeedBox.cs</DependentUpon>

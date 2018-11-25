@@ -66,7 +66,12 @@ namespace xFilm5.AtsPane
             cmdSpeedBox.Tag = "SpeedBox";
             cmdSpeedBox.Image = new IconResourceHandle("16x16.fe_cloud_upload_16_white.png");
 
+            ToolBarButton cmdSpeedBox_Film = new ToolBarButton("SpeedBoxFilm", oDict.GetWord("speedbox_film"));
+            cmdSpeedBox_Film.Tag = "SpeedBoxFilm";
+            cmdSpeedBox_Film.Image = new IconResourceHandle("16x16.fe_cloud_upload_16_white.png");
+
             this.atsJobOrder.Buttons.Add(cmdSpeedBox);
+            this.atsJobOrder.Buttons.Add(cmdSpeedBox_Film);
             #endregion
 
             this.atsJobOrder.ButtonClick += new ToolBarButtonClickEventHandler(atsJobOrder_ButtonClick);           
@@ -176,6 +181,69 @@ namespace xFilm5.AtsPane
         {
             //throw new NotImplementedException();
         }
+
+        private void UseUploaderVWG_Film()
+        {
+            nxStudio.BaseClass.WordDict oDict = new nxStudio.BaseClass.WordDict(Common.Config.CurrentWordDict, Common.Config.CurrentLanguageId);
+            xFilm5.Controls.Upload.SpeedBox_Film speedBox = new xFilm5.Controls.Upload.SpeedBox_Film();
+
+            speedBox.Text = oDict.GetWord("speedbox");
+            speedBox.UploadedFileType = @"^.*\.(ps|pdf)$";   // accept ps, pdf
+            speedBox.FormClosed += new Form.FormClosedEventHandler(film_uploader_FormClosed);
+            speedBox.ShowDialog();
+        }
+
+        private void film_uploader_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            string FileName = string.Empty;
+            string FullName = string.Empty;
+            //string dropbox = Common.Client.DropBox(202020);
+
+            xFilm5.Controls.Upload.SpeedBox_Film speedBox = (xFilm5.Controls.Upload.SpeedBox_Film)sender;
+            var clientId = speedBox.ClientId;
+            if (clientId != 0)
+            {
+                //string dropbox = Common.Client.DropBox(clientId);
+                if (speedBox.UploadedFiles.Count > 0)
+                {
+                    foreach (String filepath in speedBox.UploadedFiles)
+                    {
+                        #region process uploaded file: 把已經上載到 temporary folder 的檔案抄至指定的檔案夾
+                        if (File.Exists(filepath))
+                        {
+                            String tempfilename = Path.GetFileName(filepath);                           // VWG Uploader 會加個 Guid 在檔案名之前，要將佢去掉先至係真正嘅檔案名
+                            String filename = tempfilename.Substring(tempfilename.IndexOf('_') + 1);
+
+                            #region 先從 local 抄去 shared netwrok drive
+                            #region 讀入 SpeedBox network impersonation
+                            String serverUri = ConfigurationManager.AppSettings["SpeedBox_ServerUri"];
+                            String userName = ConfigurationManager.AppSettings["SpeedBox_UserName"];
+                            String userPassword = ConfigurationManager.AppSettings["SpeedBox_UserPassword"];
+
+                            String tempPath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["SpeedBox_TempFolder"]);
+                            String tempFilePath = Path.Combine(tempPath, tempfilename);
+                            #endregion
+
+                            using (new Impersonation(serverUri, userName, userPassword))
+                            {
+                                File.Copy(filepath, tempFilePath, true);
+                                File.Delete(filepath);                      // Copy is synchronous operation, delete 應該唔會有 error
+
+                                filename = String.Format("Film.{0}.{1}.{2}",
+                                    speedBox.Positive ? "P" : "N",
+                                    speedBox.EmulsionUp ? "U" : "D",
+                                    filename);
+                                Helper.BotHelper.PostSpeedBox(clientId, tempfilename, filename);      // 再交俾 BotServer 處理
+                            }
+                            #endregion
+                        }
+                        #endregion
+                    }
+                    nxStudio.BaseClass.WordDict oDict = new nxStudio.BaseClass.WordDict(Common.Config.CurrentWordDict, Common.Config.CurrentLanguageId);
+                    MessageBox.Show(oDict.GetWord("msg_speedbox_ok"), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information, new EventHandler(cmdPrompt_Click));
+                }
+            }
+        }
         #endregion
 
         private void atsJobOrder_ButtonClick(object sender, ToolBarButtonClickEventArgs e)
@@ -187,6 +255,11 @@ namespace xFilm5.AtsPane
                 if (tag.ToLower() == "speedbox")
                 {
                     UseUploaderVWG();
+                    return;
+                }
+                else if (tag.ToLower() == "speedboxfilm")
+                {
+                    UseUploaderVWG_Film();
                     return;
                 }
             }
