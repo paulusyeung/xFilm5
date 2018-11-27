@@ -165,6 +165,7 @@ namespace xFilm5.AtsPane
                                 File.Copy(filepath, tempFilePath, true);
                                 File.Delete(filepath);                      // Copy is synchronous operation, delete 應該唔會有 error
 
+                                filename = "Plate." + filename;
                                 Helper.BotHelper.PostSpeedBox(clientId, tempfilename, filename);      // 再交俾 BotServer 處理
                             }
                             #endregion
