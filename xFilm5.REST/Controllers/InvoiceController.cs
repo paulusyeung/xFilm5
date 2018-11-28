@@ -6,6 +6,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 using xFilm5.EF6;
@@ -429,10 +431,15 @@ order by [InvoiceNumber]", _DateZero.ToString("yyyy-MM-dd"), id.ToString(), keyw
         }
 
         [HttpPost]
-        [Route("api/Registration/Register/{deviceId}")]
-        [AllowAnonymous]
-        public async Task<IHttpActionResult> PostRecordPayment(string deviceId)
+        [Route("api/Invoice/Payment")]
+        [JwtAuthentication]
+        public async Task<IHttpActionResult> PostRecordPayment()
         {
+            var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+
+            Guid userSid = Guid.Empty;
+            userSid = Guid.TryParse(identity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault(), out userSid) ? userSid : Guid.Empty;
+
             var json = Request.Content.ReadAsStringAsync().Result;
             var data = JsonConvert.DeserializeObject<Models.RecordPayment>(json);
 
@@ -440,17 +447,21 @@ order by [InvoiceNumber]", _DateZero.ToString("yyyy-MM-dd"), id.ToString(), keyw
             {
                 using (var ctx = new xFilmEntities())
                 {
-                    var invoice = ctx.Acct_INMaster.Where(x => x.ID == data.InvoiceId).SingleOrDefault();
-                    if (invoice != null)
+                    var user = ctx.User.Where(x => x.UserSid == userSid).SingleOrDefault();
+                    if (user != null)
                     {
-                        var notes = String.Format("{0}: {1}", data.PaidBy, data.Remarks.Trim());
-                        var max = 128;  // dbo.Acct_INMaster.PaidRef length
-
-                        var result = InvoiceHelper.SetInvoiceToPaid(data.InvoiceId, data.PaidOn.Value, notes.Length <= max ? notes : notes.Substring(0, max));
-
-                        if (result)
+                        var invoice = ctx.Acct_INMaster.Where(x => x.ID == data.InvoiceId).SingleOrDefault();
+                        if (invoice != null)
                         {
-                            return Ok();
+                            var notes = String.Format("{0}: {1}", data.PaidBy, data.Remarks.Trim());
+                            var max = 128;  // dbo.Acct_INMaster.PaidRef length
+
+                            var result = InvoiceHelper.SetInvoiceToPaid(data.InvoiceId, data.PaidOn.Value, notes.Length <= max ? notes : notes.Substring(0, max), user.UserId);
+
+                            if (result)
+                            {
+                                return Ok();
+                            }
                         }
                     }
                 }

@@ -188,7 +188,7 @@ namespace xFilm5.REST.Helper
             return result;
         }
 
-        public static bool SetInvoiceToPaid(int invoiceId, DateTime paidOn, String paidRef)
+        public static bool SetInvoiceToPaid(int invoiceId, DateTime paidOn, String paidRef, int userId)
         {
             bool result = false;
 
@@ -208,7 +208,7 @@ namespace xFilm5.REST.Helper
                             invHdr.PaidOn = paidOn;
                             invHdr.PaidRef = paidRef;
                             invHdr.LastModifiedOn = DateTime.Now;
-                            invHdr.LastModifiedBy = CommonHelper.Config.CurrentUserId;
+                            invHdr.LastModifiedBy = userId;
                             #endregion
 
                             #region UpdRec: related dbo.ReceiptHeader
@@ -232,7 +232,7 @@ namespace xFilm5.REST.Helper
                                                 rHeader.PaidOn = paidOn;
                                                 rHeader.PaidRef = paidRef;
                                                 rHeader.ModifiedOn = DateTime.Now;
-                                                rHeader.ModifiedBy = CommonHelper.Config.CurrentUserId;
+                                                rHeader.ModifiedBy = userId;
                                             }
                                         }
                                     }
