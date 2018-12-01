@@ -188,7 +188,7 @@ namespace xFilm5.AtsPane
             nxStudio.BaseClass.WordDict oDict = new nxStudio.BaseClass.WordDict(Common.Config.CurrentWordDict, Common.Config.CurrentLanguageId);
             xFilm5.Controls.Upload.SpeedBox_Film speedBox = new xFilm5.Controls.Upload.SpeedBox_Film();
 
-            speedBox.Text = oDict.GetWord("speedbox");
+            speedBox.Text = oDict.GetWord("speedbox_film");
             speedBox.UploadedFileType = @"^.*\.(ps|pdf)$";   // accept ps, pdf
             speedBox.FormClosed += new Form.FormClosedEventHandler(film_uploader_FormClosed);
             speedBox.ShowDialog();
