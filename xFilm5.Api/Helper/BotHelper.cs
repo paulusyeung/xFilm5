@@ -390,6 +390,26 @@ namespace xFilm5.Api.Helper
             return ((result.StatusCode == System.Net.HttpStatusCode.Accepted || result.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
         }
 
+        public static bool PostCloudDisk_ApiLowResTiffUploadFile(String tiffFileName)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            //#if (DEBUG)
+            //            botServer = "http://localhost:35543/";
+            //#endif
+            var client = new RestClient(botServer);
+            var request = new RestRequest(String.Format("CloudDisk/ApiLowResTiffUploadFile/{0}/", tiffFileName), Method.POST);
+
+            request.RequestFormat = DataFormat.Json;
+
+            request.AddBody(new
+            {
+                VpsFileName = tiffFileName,
+                AnotherParam = 19.99
+            });
+            var result = client.Execute(request);
+            return ((result.StatusCode == System.Net.HttpStatusCode.Accepted || result.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
+        }
+
         #endregion
     }
 }

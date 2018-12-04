@@ -131,6 +131,24 @@ namespace xFilm5.Bot.Controllers
             return BadRequest();
         }
 
+        [HttpPost]
+        [Route("ApiLowResTiffUploadFile/{tiffFileName}/")]
+        public IHttpActionResult PostApiLowResTiffUploadFile(string tiffFileName)
+        {
+            using (var ctx = new xFilmEntities())
+            {
+                BackgroundJob.Enqueue(() => CloudDiskHelper.ApiLowResTiffUploadFile(tiffFileName));
+
+                log.Info(String.Format("[bot, CloudDisk, ApiTiffUploadFile] \r\nHangfire accepted the Job\r\nVpsFileName = {0}", tiffFileName));
+
+                return StatusCode(HttpStatusCode.Accepted);     // 202 or use: return new StatusCodeResult(202);
+            }
+
+            log.Info(String.Format("[bot, CloudDisk, ApiTiffUploadFile] \r\nError found before submitting to Hangfire\r\nVpsFileName = {0}", tiffFileName));
+
+            return BadRequest();
+        }
+
         #region Get Cups, Cip3, Vps, Blueprint, Plate, Film, thumbnail
         [HttpGet]
         [Route("cups/{clientId:int}/{page:int}/")]
@@ -581,27 +599,78 @@ namespace xFilm5.Bot.Controllers
                     var img = CloudDiskHelper.Thumbnail(clientId, filename);
                     if (img != null)
                     {
-                        var suffix = "png";
-                        var image = Image.FromStream(img);
-
-                        //var thumb = image.GetThumbnailImage(120, 120, () => false, IntPtr.Zero);
-                        var thumb = width == 0 || height == 0 ? image : ImageHelper.FixedSize(image, width, height);
-                        var buffer = ImageHelper.ImageToByteArray(thumb, suffix);
-
-                        var contentLength = buffer.Length;
-
-                        //200
-                        //successful
-                        var statuscode = HttpStatusCode.OK;
-                        response = Request.CreateResponse(statuscode);
-                        response.Content = new StreamContent(new MemoryStream(buffer));
-                        response.Content.Headers.ContentType = new MediaTypeHeaderValue("image/png");
-                        response.Content.Headers.ContentLength = contentLength;
-
-                        ContentDispositionHeaderValue contentDisposition = null;
-                        if (ContentDispositionHeaderValue.TryParse("inline; filename=" + filename, out contentDisposition))
+                        try
                         {
-                            response.Content.Headers.ContentDisposition = contentDisposition;
+                            // 2018.12.05 paulus: 新 thumbnail 改用 LowRes Tiff
+                            var isTiff = (filename.Substring(filename.LastIndexOf('.')).Contains("tif")) ? true : false;
+
+                            if (isTiff)
+                            {
+                                #region 新 code，先將 Tiff 轉成 PNG，再改 size，送出
+                                Byte[] pngBytes;
+
+                                using (MemoryStream outStream = new MemoryStream())
+                                {
+                                    //System.Drawing.Bitmap.FromStream(img).Save(outStream, System.Drawing.Imaging.ImageFormat.Png);
+                                    Image.FromStream(img).Save(outStream, System.Drawing.Imaging.ImageFormat.Png);
+                                    //pngBytes = outStream.ToArray();
+
+                                    var suffix = "png";
+                                    var pngImage = Image.FromStream(outStream);
+                                    var thumb = width == 0 || height == 0 ? pngImage : ImageHelper.FixedSize(pngImage, width, height);
+                                    var buffer = ImageHelper.ImageToByteArray(thumb, suffix);
+
+                                    var contentLength = buffer.Length;
+
+                                    //200
+                                    //successful
+                                    var statuscode = HttpStatusCode.OK;
+                                    response = Request.CreateResponse(statuscode);
+                                    response.Content = new StreamContent(new MemoryStream(buffer));
+                                    response.Content.Headers.ContentType = new MediaTypeHeaderValue("image/png");
+                                    response.Content.Headers.ContentLength = contentLength;
+
+                                    ContentDispositionHeaderValue contentDisposition = null;
+                                    if (ContentDispositionHeaderValue.TryParse("inline; filename=" + filename, out contentDisposition))
+                                    {
+                                        response.Content.Headers.ContentDisposition = contentDisposition;
+                                    }
+                                }
+                                #endregion
+                            }
+                            else
+                            {
+                                #region 蕭 code，已經係 PNG，改 size，送出
+                                var suffix = "png";
+                                var image = Image.FromStream(img);
+
+                                //var thumb = image.GetThumbnailImage(120, 120, () => false, IntPtr.Zero);
+                                var thumb = width == 0 || height == 0 ? image : ImageHelper.FixedSize(image, width, height);
+                                var buffer = ImageHelper.ImageToByteArray(thumb, suffix);
+
+                                var contentLength = buffer.Length;
+
+                                //200
+                                //successful
+                                var statuscode = HttpStatusCode.OK;
+                                response = Request.CreateResponse(statuscode);
+                                response.Content = new StreamContent(new MemoryStream(buffer));
+                                response.Content.Headers.ContentType = new MediaTypeHeaderValue("image/png");
+                                response.Content.Headers.ContentLength = contentLength;
+
+                                ContentDispositionHeaderValue contentDisposition = null;
+                                if (ContentDispositionHeaderValue.TryParse("inline; filename=" + filename, out contentDisposition))
+                                {
+                                    response.Content.Headers.ContentDisposition = contentDisposition;
+                                }
+                                #endregion
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            var message = String.Format("Exception throw. Resource \"{0}\" contains error.", filename);
+                            HttpError err = new HttpError(message);
+                            response = Request.CreateErrorResponse(HttpStatusCode.NotFound, ex);
                         }
                     }
                     else

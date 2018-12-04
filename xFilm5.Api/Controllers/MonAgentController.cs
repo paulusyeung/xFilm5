@@ -383,6 +383,10 @@ namespace xFilm5.Api.Controllers
                         {
                             UpdateListCycle(pq.ID, (int)DAL.Common.Enums.PrintQSubitemType.Tiff);
 
+                            #region 2018.12.05 paulus: 通知 xFilm5.Bot upload file 去 Cloud Disk thumbnail
+                            BotHelper.PostCloudDisk_ApiLowResTiffUploadFile(String.Format("{0}.{1}", clientId.ToString(), tiffFileName));
+                            #endregion
+
                             log.Info("[tiff] " + jsonData.ToString());
                             return Ok();
                         }

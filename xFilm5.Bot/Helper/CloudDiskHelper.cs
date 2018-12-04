@@ -1180,6 +1180,7 @@ namespace xFilm5.Bot.Helper
                                         result = c.Upload(destFilePath, fs, contentType);
                                         if (result)
                                         {
+                                            /** 2018.12.05 paulus: 暫停，用 LowRes Tiff 取代
                                             #region Generate thumbnail
                                             MagickReadSettings settings = new MagickReadSettings();
                                             settings.Density = new Density(300, 300);                               // Settings the density to 300 dpi will create an image with a better quality
@@ -1204,6 +1205,7 @@ namespace xFilm5.Bot.Helper
                                                 }
                                             }
                                             #endregion
+                                            */
                                         }
                                     }
                                     #endregion
@@ -1301,6 +1303,66 @@ namespace xFilm5.Bot.Helper
                         string group = cuser.ClientID.ToString();
                         string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
                         string destPath = "/cip3";
+
+                        try
+                        {
+                            var c = new owncloudsharp.Client(CLOUDDISK_URL, parentId, parentPassword);
+                            if (c.Exists(destPath))
+                            {
+                                if (File.Exists(sourceFilePath))
+                                {
+                                    #region upload file
+                                    var contentType = "application/octet-stream";
+                                    var destFilePath = String.Format("{0}/{1}-{2}", destPath, source.JobId, source.PFileName);
+
+                                    using (var fs = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read))
+                                    {
+                                        result = c.Upload(destFilePath, fs, contentType);
+                                    }
+                                    #endregion
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            //
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 2018.12.05 paulus: 用 LowRes Tiff 倣 thumbnail
+        /// </summary>
+        /// <param name="tiffFileName"></param>
+        /// <returns></returns>
+        public static bool ApiLowResTiffUploadFile(String tiffFileName)
+        {
+            bool result = false;
+
+            var source = ParseLowResTiffFileName(tiffFileName);
+            using (var ctx = new xFilmEntities())
+            {
+                var cuser = ctx.Client_User.Where(x => x.ClientID == source.ClientId && x.PrimaryUser == true).SingleOrDefault();
+                if (cuser != null)
+                {
+                    #region 讀入 network impersonation
+                    String serverUri = ConfigurationManager.AppSettings["LowResTiff_ServerUri"];
+                    String userName = ConfigurationManager.AppSettings["LowResTiff_UserName"];
+                    String userPassword = ConfigurationManager.AppSettings["LowResTiff_UserPassword"];
+
+                    String sourcePath = String.Format("{0}{1}", serverUri, ConfigurationManager.AppSettings["LowResTiff_SourcePath"]);
+                    String sourceFilePath = Path.Combine(sourcePath, tiffFileName);
+                    #endregion
+
+                    using (new Impersonation(serverUri, userName, userPassword))
+                    {
+                        string group = cuser.ClientID.ToString();
+                        string parentId = cuser.ClientID.ToString(), parentPassword = cuser.Password;
+                        string destPath = "/thumbnail";
 
                         try
                         {
@@ -2413,6 +2475,39 @@ namespace xFilm5.Bot.Helper
                 result.PSize = "";
                 result.PFileName = source.Substring(parts[0].Length + part2[0].Length + 2);
                 result.PFileExtension = "VPS";
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// example: 202926.N10657-LemonCR.p1(CMYK).tif
+        ///          202204.A12203-封面新會商會、陳呂重德2018出菲林_f.p1(CMYK).tif
+        ///          202706.MA6176-op180620-W05-UOB-CA-79_13.p1(CMYK).tif
+        ///          
+        ///          ClientId.JobId-PFileName
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        private static FileNaming ParseLowResTiffFileName(string source)
+        {
+            var result = new FileNaming();
+
+            try
+            {
+                var parts = source.Split('.');
+
+                result.Raw = source;
+                result.ClientId = int.Parse(parts[0]);
+                var part2 = parts[1].Split('-');
+                result.JobId = part2[0];
+                result.PQueue = "";
+                result.PSize = "";
+                result.PFileName = source.Substring(parts[0].Length + part2[0].Length + 2);
+                result.PFileExtension = "tif";
             }
             catch (Exception ex)
             {
