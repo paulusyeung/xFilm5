@@ -140,6 +140,68 @@ order by [ClientName]", month);
             }
         }
 
+        /// <summary>
+        /// All orders of a single client within the same month
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="date"></param>
+        /// <param name="workshop"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("api/Order/ByMonth/excel/{id:int}/{date:DateTime}")]
+        [JwtAuthentication]
+        public HttpResponseMessage GetOrderByMonthAsExcel(int id, DateTime date)
+        {
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.BadRequest);
+
+            try
+            {
+                using (var ctx = new xFilmEntities())
+                {
+                    var month = date.ToString("yyyy-MM");
+
+                    var list = ctx.vwOrderList.Where(x => x.DateReceived.StartsWith(month) && x.ClientID == id && x.OrderTypeID >= 6).OrderBy(x => x.OrderID).ToList();
+                    if (list.Count > 0)
+                    {
+                        var docName = String.Format("Order_{0}.xlsx", id.ToString());
+
+                        var wb = ClosedXmlHelper.GetOrderListAsExcel(list);
+                        MemoryStream memStream = new System.IO.MemoryStream();
+                        wb.SaveAs(memStream);
+                        memStream.Seek(0, SeekOrigin.Begin);
+
+                        //200
+                        //successful
+                        var statuscode = HttpStatusCode.OK;
+                        response = Request.CreateResponse(statuscode);
+                        response.Content = new StreamContent(memStream);
+                        response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.ms-excel");
+                        response.Content.Headers.ContentLength = memStream.Length;
+
+                        ContentDispositionHeaderValue contentDisposition = null;
+                        if (ContentDispositionHeaderValue.TryParse("attachment; filename=" + docName, out contentDisposition))
+                        {
+                            response.Content.Headers.ContentDisposition = contentDisposition;
+                        }
+                    }
+                    else
+                    {
+                        var message = String.Format("GetOrderByMonthAsExcel: Unable to find resource. Resource \"{0}\" may not exist.", id.ToString());
+                        HttpError err = new HttpError(message);
+                        response = Request.CreateErrorResponse(HttpStatusCode.NotFound, err);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var message = String.Format("GetOrderByMonthAsExcel: Exceptional error.\r\n{0}", ex.ToString());
+                HttpError err = new HttpError(message);
+                response = Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, err);
+            }
+
+            return response;
+        }
+
         [HttpGet]
         [Route("api/Order/ByKeyword/{id:int}/{keyword}/{workshop?}")]
         [JwtAuthentication]
@@ -195,6 +257,61 @@ order by [ClientName]", month);
             {
                 return null;
             }
+        }
+
+        [HttpGet]
+        [Route("api/Order/ByKeyword/excel/{id:int}/{keyword}")]
+        [JwtAuthentication]
+        public HttpResponseMessage GetOrderByKeywordAsExcel(int id, String keyword)
+        {
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.BadRequest);
+
+            try
+            {
+                using (var ctx = new xFilmEntities())
+                {
+                    var list = ctx.vwOrderList.Where(x => x.OrderTypeID >= 6 && x.ClientID == id
+                        && (x.OrderID.ToString().Contains(keyword) || x.DateReceived.Contains(keyword) || x.Remarks.Contains(keyword)))
+                        .OrderBy(x => x.OrderID).ToList();
+                    if (list.Count > 0)
+                    {
+                        var docName = String.Format("Order_{0}.xlsx", id.ToString());
+
+                        var wb = ClosedXmlHelper.GetOrderListAsExcel(list);
+                        MemoryStream memStream = new System.IO.MemoryStream();
+                        wb.SaveAs(memStream);
+                        memStream.Seek(0, SeekOrigin.Begin);
+
+                        //200
+                        //successful
+                        var statuscode = HttpStatusCode.OK;
+                        response = Request.CreateResponse(statuscode);
+                        response.Content = new StreamContent(memStream);
+                        response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.ms-excel");
+                        response.Content.Headers.ContentLength = memStream.Length;
+
+                        ContentDispositionHeaderValue contentDisposition = null;
+                        if (ContentDispositionHeaderValue.TryParse("attachment; filename=" + docName, out contentDisposition))
+                        {
+                            response.Content.Headers.ContentDisposition = contentDisposition;
+                        }
+                    }
+                    else
+                    {
+                        var message = String.Format("GetOrderByKeywordAsExcel: Unable to find resource. Resource \"{0}\" may not exist.", id.ToString());
+                        HttpError err = new HttpError(message);
+                        response = Request.CreateErrorResponse(HttpStatusCode.NotFound, err);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var message = String.Format("GetOrderByKeywordAsExcel: Exceptional error.\r\n{0}", ex.ToString());
+                HttpError err = new HttpError(message);
+                response = Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, err);
+            }
+
+            return response;
         }
 
         [HttpGet]
