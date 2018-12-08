@@ -143,6 +143,89 @@ order by [InvoiceNumber]", _DateZero.ToString("yyyy-MM-dd"), id.ToString(), mont
         }
 
         [HttpGet]
+        [Route("api/Invoice/ByMonth/excel/{id:int}/{date:DateTime}")]
+        [JwtAuthentication]
+        public HttpResponseMessage GetInvoiceByMonthAsExcel(int id, DateTime date)
+        {
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.BadRequest);
+
+            try
+            {
+                using (var ctx = new xFilmEntities())
+                {
+                    var month = date.ToString("yyyy-MM");
+
+                    #region construct query string: qry
+                    string qry = String.Format(@"
+SELECT TOP (1000) [ClientId]
+      ,[ClientName]
+      ,[ClientStatus]
+      ,[InvoiceID]
+      ,[InvoiceNumber]
+      ,[InvoiceDate]
+      ,[OsAmount]
+      ,[InvoiceAmount]
+      ,[Status]
+      ,[Paid]
+      ,[PaidOn]
+      ,[PaidAmount]
+      ,[PaidRef]
+      ,[Remarks]
+      ,[OrderID]
+      ,[CreatedOn]
+      ,[CreatedBy]
+      ,[LastModifiedOn]
+      ,[LastModifiedBy]
+      ,[WorkshopId]
+      ,[WorkshopName]
+FROM [dbo].[vwInvoiceList_All]
+where ([ClientStatus] = 1) and ([InvoiceDate] >= '{0}') and (ClientId = {1}) and (convert(nvarchar(7), InvoiceDate, 120) = '{2}')
+order by [InvoiceNumber]", _DateZero.ToString("yyyy-MM-dd"), id.ToString(), month);
+                    #endregion
+
+                    var list = ctx.Database.SqlQuery<vwInvoiceList_All>(qry).ToList();
+                    if (list.Count > 0)
+                    {
+                        var docName = String.Format("Invoice_{0}.xlsx", id.ToString());
+
+                        var wb = ClosedXmlHelper.GetInvoiceListAsExcel(list);
+                        MemoryStream memStream = new System.IO.MemoryStream();
+                        wb.SaveAs(memStream);
+                        memStream.Seek(0, SeekOrigin.Begin);
+
+                        //200
+                        //successful
+                        var statuscode = HttpStatusCode.OK;
+                        response = Request.CreateResponse(statuscode);
+                        response.Content = new StreamContent(memStream);
+                        response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.ms-excel");
+                        response.Content.Headers.ContentLength = memStream.Length;
+
+                        ContentDispositionHeaderValue contentDisposition = null;
+                        if (ContentDispositionHeaderValue.TryParse("attachment; filename=" + docName, out contentDisposition))
+                        {
+                            response.Content.Headers.ContentDisposition = contentDisposition;
+                        }
+                    }
+                    else
+                    {
+                        var message = String.Format("GetInvoiceByMonthAsExcel: Unable to find resource. Resource \"{0}\" may not exist.", id.ToString());
+                        HttpError err = new HttpError(message);
+                        response = Request.CreateErrorResponse(HttpStatusCode.NotFound, err);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var message = String.Format("GetInvoiceByMonthAsExcel: Exceptional error.\r\n{0}", ex.ToString());
+                HttpError err = new HttpError(message);
+                response = Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, err);
+            }
+
+            return response;
+        }
+
+        [HttpGet]
         [Route("api/Invoice/ByKeyword/{id:int}/{keyword}/{workshop?}")]
         [JwtAuthentication]
         public IHttpActionResult GetInvoiceByKeyword(int id, String keyword, string workshop = null)
@@ -265,6 +348,87 @@ order by [InvoiceNumber]", _DateZero.ToString("yyyy-MM-dd"), id.ToString(), keyw
             {
                 return null;
             }
+        }
+
+        [HttpGet]
+        [Route("api/Invoice/ByKeyword/excel/{id:int}/{keyword}")]
+        [JwtAuthentication]
+        public HttpResponseMessage GetInvoiceByMonthAsExcel(int id, String keyword)
+        {
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.BadRequest);
+
+            try
+            {
+                using (var ctx = new xFilmEntities())
+                {
+                    #region construct query string: qry
+                    string qry = String.Format(@"
+SELECT TOP (1000) [ClientId]
+      ,[ClientName]
+      ,[ClientStatus]
+      ,[InvoiceID]
+      ,[InvoiceNumber]
+      ,[InvoiceDate]
+      ,[OsAmount]
+      ,[InvoiceAmount]
+      ,[Status]
+      ,[Paid]
+      ,[PaidOn]
+      ,[PaidAmount]
+      ,[PaidRef]
+      ,[Remarks]
+      ,[OrderID]
+      ,[CreatedOn]
+      ,[CreatedBy]
+      ,[LastModifiedOn]
+      ,[LastModifiedBy]
+      ,[WorkshopId]
+      ,[WorkshopName]
+FROM [dbo].[vwInvoiceList_All]
+where ([ClientStatus] = 1) and [InvoiceDate] >= '{0}' and (ClientId = {1}) and ((InvoiceNumber like '%{2}%' or (convert(nvarchar(10), InvoiceDate, 120) like '%{2}%')))
+order by [InvoiceNumber]", _DateZero.ToString("yyyy-MM-dd"), id.ToString(), keyword);
+                    #endregion
+
+                    var list = ctx.Database.SqlQuery<vwInvoiceList_All>(qry).ToList();
+                    if (list.Count > 0)
+                    {
+                        var docName = String.Format("Invoice_{0}.xlsx", id.ToString());
+
+                        var wb = ClosedXmlHelper.GetInvoiceListAsExcel(list);
+                        MemoryStream memStream = new System.IO.MemoryStream();
+                        wb.SaveAs(memStream);
+                        memStream.Seek(0, SeekOrigin.Begin);
+
+                        //200
+                        //successful
+                        var statuscode = HttpStatusCode.OK;
+                        response = Request.CreateResponse(statuscode);
+                        response.Content = new StreamContent(memStream);
+                        response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.ms-excel");
+                        response.Content.Headers.ContentLength = memStream.Length;
+
+                        ContentDispositionHeaderValue contentDisposition = null;
+                        if (ContentDispositionHeaderValue.TryParse("attachment; filename=" + docName, out contentDisposition))
+                        {
+                            response.Content.Headers.ContentDisposition = contentDisposition;
+                        }
+                    }
+                    else
+                    {
+                        var message = String.Format("GetInvoiceByMonthAsExcel: Unable to find resource. Resource \"{0}\" may not exist.", id.ToString());
+                        HttpError err = new HttpError(message);
+                        response = Request.CreateErrorResponse(HttpStatusCode.NotFound, err);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var message = String.Format("GetInvoiceByMonthAsExcel: Exceptional error.\r\n{0}", ex.ToString());
+                HttpError err = new HttpError(message);
+                response = Request.CreateErrorResponse(HttpStatusCode.ExpectationFailed, err);
+            }
+
+            return response;
         }
 
         [HttpGet]
