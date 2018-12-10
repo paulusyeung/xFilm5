@@ -139,12 +139,12 @@ namespace xFilm5.Bot.Controllers
             {
                 BackgroundJob.Enqueue(() => CloudDiskHelper.ApiLowResTiffUploadFile(tiffFileName));
 
-                log.Info(String.Format("[bot, CloudDisk, ApiTiffUploadFile] \r\nHangfire accepted the Job\r\nTiffFileName = {0}", tiffFileName));
+                log.Info(String.Format("[bot, CloudDisk, ApiLowResTiffUploadFile] \r\nHangfire accepted the Job\r\nTiffFileName = {0}", tiffFileName));
 
                 return StatusCode(HttpStatusCode.Accepted);     // 202 or use: return new StatusCodeResult(202);
             }
 
-            log.Info(String.Format("[bot, CloudDisk, ApiTiffUploadFile] \r\nError found before submitting to Hangfire\r\nTiffFileName = {0}", tiffFileName));
+            log.Info(String.Format("[bot, CloudDisk, ApiLowResTiffUploadFile] \r\nError found before submitting to Hangfire\r\nTiffFileName = {0}", tiffFileName));
 
             return BadRequest();
         }
