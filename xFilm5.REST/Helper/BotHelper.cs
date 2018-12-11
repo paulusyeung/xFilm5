@@ -792,7 +792,8 @@ namespace xFilm5.REST.Helper
         /// 2018.11.17 paulus: 將 SpeedBox 收到嘅檔案上載去 CloudDisk，同時抄１份去　hotfolder
         /// </summary>
         /// <param name="clientId"></param>
-        /// <param name="filepath"></param>
+        /// <param name="filepath: guid_originalfilename"></param>
+        /// <param name="filename: Plate.filenam or Film.P.U.originalfilenamee"></param>
         public static void PostSpeedBox(int clientId, String filepath, String filename)
         {
             String botServer = ConfigurationManager.AppSettings["BotServer"];
