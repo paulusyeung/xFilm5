@@ -18,185 +18,195 @@ namespace xFilm5.REST.Helper
 
             using (var ctx = new xFilmEntities())
             {
-                using (var scope = ctx.Database.BeginTransaction())
+                // 2019.01.22 paulus: 因為手機 app 落單會 double，原因未明，暫時用個 Remarks 嚟決定係咪重複咗
+                bool isOrderPosted = (data.Remarks != null) ? false : ctx.OrderHeader.Where(x => x.Remarks == data.Remarks).Any();
+                if (isOrderPosted)
                 {
-                    try
+                    var order = ctx.OrderHeader.Where(x => x.Remarks == data.Remarks).SingleOrDefault();
+                    result = order.ID;
+                }
+                else
+                {
+                    using (var scope = ctx.Database.BeginTransaction())
                     {
-                        var workshop = ctx.vwWorkshopList.Where(x => x.WorkshopName == data.Workshop).SingleOrDefault();
-
-                        #region dbo.OrderHeader
-                        var oHeader = new OrderHeader();
-
-                        oHeader.ClientID = data.ClientId;
-                        oHeader.UserID = userId;
-                        oHeader.ServiceType = (int)EnumHelper.Order.OrderType.Plate5;
-                        oHeader.PrePressOp = 0;
-                        oHeader.Priority = data.Priority;
-                        oHeader.ProofingOp = workshop != null ? workshop.WorkshopId : 0;
-
-                        oHeader.Attachment = false;
-                        oHeader.AttachmentURL = String.Empty;
-
-                        oHeader.Remarks = (data.Remarks == null) ? String.Empty : data.Remarks;
-                        oHeader.Status = (int)EnumHelper.Order.Workflow.Ready;      //2016.06.17 paulus: 直接跳級至 Queuing => Ready
-                        oHeader.DateReceived = DateTime.Now;
-                        oHeader.DateCompleted = DateTime.Parse("1900-01-01 00:00:00");
-                        oHeader.PaidOn = DateTime.Parse("1900-01-01 00:00:00");
-                        oHeader.PaidRef = String.Empty;
-                        oHeader.Amount = 0;
-
-                        ctx.OrderHeader.Add(oHeader);
-                        ctx.SaveChanges();
-                        #endregion
-
-                        #region dbo.Order_Details
-                        var oDetails = new Order_Details();
-
-                        oDetails.OrderID = oHeader.ID;
-
-                        oDetails.Pages = (short)data.Items.Count;
-                        oDetails.DeliveryMethod = data.Pickup ? (int)EnumHelper.Order.DeliveryMethod.PickUp : (int)EnumHelper.Order.DeliveryMethod.DeliverTo;
-                        oDetails.DeliveryAddr = (data.Deliver) ? data.DeliverTo : 0;
-
-                        ctx.Order_Details.Add(oDetails);
-                        ctx.SaveChanges();
-                        #endregion
-
-                        #region dbo.Order_Internal
-                        // 冇咗 PrepressOp，不過都要 update dbo.Internal，吉嘅都要，避免 related tables 麻煩
-                        var oInternal = new Order_Internal();
-
-                        oInternal.OrderID = oHeader.ID;
-                        oInternal.OutputBy = 0;
-                        oInternal.DateUpdated = DateTime.Parse("1900-01-01 00:00:00");
-                        oInternal.UpdateCounter = 0;
-
-                        ctx.Order_Internal.Add(oInternal);
-                        ctx.SaveChanges();
-                        #endregion
-
-                        /** data.Remarks != comment, 所以要 skip
-                        #region dbo.OrderComment: save 書版資料 => comment
-                        if ((oHeader.ID != 0) && (!String.IsNullOrEmpty(data.Remarks)))
+                        try
                         {
-                            var oComment = new OrderComment();
-                            oComment.OrderID = oHeader.ID;
-                            oComment.Comment = data.Remarks;
+                            var workshop = ctx.vwWorkshopList.Where(x => x.WorkshopName == data.Workshop).SingleOrDefault();
 
-                            ctx.OrderComment.Add(oComment);
-                            ctx.SaveChanges();
-                        }
-                        #endregion
-                        */
+                            #region dbo.OrderHeader
+                            var oHeader = new OrderHeader();
 
-                        #region dbo.Order_Journal
-                        var oLog = new Order_Journal();
-                        oLog.OrderID = oHeader.ID; ;
-                        oLog.UserID = userId;
-                        oLog.Status = (int)EnumHelper.Order.Workflow.Ready;
-                        oLog.DateUpdated = DateTime.Now;
+                            oHeader.ClientID = data.ClientId;
+                            oHeader.UserID = userId;
+                            oHeader.ServiceType = (int)EnumHelper.Order.OrderType.Plate5;
+                            oHeader.PrePressOp = 0;
+                            oHeader.Priority = data.Priority;
+                            oHeader.ProofingOp = workshop != null ? workshop.WorkshopId : 0;
 
-                        ctx.Order_Journal.Add(oLog);
-                        ctx.SaveChanges();
-                        #endregion
+                            oHeader.Attachment = false;
+                            oHeader.AttachmentURL = String.Empty;
 
-                        #region post order items
-                        foreach (vwPrintQueueVpsList_AvailablePlate item in data.Items)
-                        {
-                            #region dbo.OrderPkPrintQueueVps
-                            var pkVpsExist = ctx.OrderPkPrintQueueVps.Where(x => x.OrderHeaderId == oHeader.ID && x.PrintQueueVpsId == item.VpsPrintQueueID).Any();
-                            OrderPkPrintQueueVps pkVps = null;
-                            if (pkVpsExist)
-                            {
-                                pkVps = ctx.OrderPkPrintQueueVps.Where(x => x.OrderHeaderId == oHeader.ID && x.PrintQueueVpsId == item.VpsPrintQueueID).Single();
-                            }
-                            else
-                            {
-                                pkVps = new OrderPkPrintQueueVps();
-                                pkVps.OrderHeaderId = oHeader.ID;
-                                pkVps.PrintQueueVpsId = item.VpsPrintQueueID;
-                                pkVps.CheckedCip3 = false;           // 手機 apps 冇得選
-                                pkVps.CheckedBlueprint = false;
+                            oHeader.Remarks = (data.Remarks == null) ? String.Empty : data.Remarks;
+                            oHeader.Status = (int)EnumHelper.Order.Workflow.Ready;      //2016.06.17 paulus: 直接跳級至 Queuing => Ready
+                            oHeader.DateReceived = DateTime.Now;
+                            oHeader.DateCompleted = DateTime.Parse("1900-01-01 00:00:00");
+                            oHeader.PaidOn = DateTime.Parse("1900-01-01 00:00:00");
+                            oHeader.PaidRef = String.Empty;
+                            oHeader.Amount = 0;
 
-                                pkVps.CreatedOn = DateTime.Now;
-                                pkVps.CreatedBy = userId;
-                                pkVps.Retired = false;
-                                pkVps.RetiredOn = DateTime.Parse("1900-01-01 00:00:00");
-                                pkVps.RetiredBy = 0;
-                            }
-                            //var pkVps = new OrderPkPrintQueueVps();
-
-                            //pkVps.OrderHeaderId = oHeader.ID;
-                            //pkVps.PrintQueueVpsId = item.VpsPrintQueueID;
-
-                            pkVps.CheckedPlate = true;
-                            //pkVps.CheckedCip3 = false;           // 手機 apps 冇得選
-                            //pkVps.CheckedBlueprint = false;
-
-                            //pkVps.CreatedOn = DateTime.Now;
-                            //pkVps.CreatedBy = userId;
-                            pkVps.ModifiedOn = DateTime.Now;
-                            pkVps.ModifiedBy = userId;
-                            //pkVps.Retired = false;
-                            //pkVps.RetiredOn = DateTime.Parse("1900-01-01 00:00:00");
-                            //pkVps.RetiredBy = 0;
-
-                            if (!pkVpsExist)
-                                ctx.OrderPkPrintQueueVps.Add(pkVps);
+                            ctx.OrderHeader.Add(oHeader);
                             ctx.SaveChanges();
                             #endregion
 
-                            #region dbo.PrintQueue_LifeCycle
-                            //因為用咗 BeginTransaction，要用同一個 context 先可以 RollBack, 所以要喺 local 搞個 Log
-                            //PrintQueueHelper.WriteLogWithVpsId(item.VpsPrintQueueID, EnumHelper.Order.PrintQSubitemType.Order, userId);
-                            var vps = ctx.PrintQueue_VPS.Where(x => x.ID == item.VpsPrintQueueID).SingleOrDefault();
-                            if (vps != null)
-                            {
-                                var log = new PrintQueue_LifeCycle();
-                                log.PrintQueueId = vps.PrintQueueID;
-                                log.PrintQueueVpsId = vps.ID;
-                                log.PrintQSubitemType = (int)EnumHelper.Order.PrintQSubitemType.Order;
-                                log.Status = (int)EnumHelper.Common.Status.Active;
-                                log.CreatedOn = DateTime.Now;
-                                log.CreatedBy = userId;
+                            #region dbo.Order_Details
+                            var oDetails = new Order_Details();
 
-                                ctx.PrintQueue_LifeCycle.Add(log);
+                            oDetails.OrderID = oHeader.ID;
+
+                            oDetails.Pages = (short)data.Items.Count;
+                            oDetails.DeliveryMethod = data.Pickup ? (int)EnumHelper.Order.DeliveryMethod.PickUp : (int)EnumHelper.Order.DeliveryMethod.DeliverTo;
+                            oDetails.DeliveryAddr = (data.Deliver) ? data.DeliverTo : 0;
+
+                            ctx.Order_Details.Add(oDetails);
+                            ctx.SaveChanges();
+                            #endregion
+
+                            #region dbo.Order_Internal
+                            // 冇咗 PrepressOp，不過都要 update dbo.Internal，吉嘅都要，避免 related tables 麻煩
+                            var oInternal = new Order_Internal();
+
+                            oInternal.OrderID = oHeader.ID;
+                            oInternal.OutputBy = 0;
+                            oInternal.DateUpdated = DateTime.Parse("1900-01-01 00:00:00");
+                            oInternal.UpdateCounter = 0;
+
+                            ctx.Order_Internal.Add(oInternal);
+                            ctx.SaveChanges();
+                            #endregion
+
+                            /** data.Remarks != comment, 所以要 skip
+                            #region dbo.OrderComment: save 書版資料 => comment
+                            if ((oHeader.ID != 0) && (!String.IsNullOrEmpty(data.Remarks)))
+                            {
+                                var oComment = new OrderComment();
+                                oComment.OrderID = oHeader.ID;
+                                oComment.Comment = data.Remarks;
+
+                                ctx.OrderComment.Add(oComment);
                                 ctx.SaveChanges();
                             }
                             #endregion
+                            */
 
-                            #region Set Plate Ordered To True
-                            var pqVps = ctx.PrintQueue_VPS.Where(x => x.ID == item.VpsPrintQueueID).SingleOrDefault();
-                            if (pqVps != null)
+                            #region dbo.Order_Journal
+                            var oLog = new Order_Journal();
+                            oLog.OrderID = oHeader.ID; ;
+                            oLog.UserID = userId;
+                            oLog.Status = (int)EnumHelper.Order.Workflow.Ready;
+                            oLog.DateUpdated = DateTime.Now;
+
+                            ctx.Order_Journal.Add(oLog);
+                            ctx.SaveChanges();
+                            #endregion
+
+                            #region post order items
+                            foreach (vwPrintQueueVpsList_AvailablePlate item in data.Items)
                             {
-                                pqVps.PlateOrdered = true;
-                                pqVps.ModifiedOn = DateTime.Now;
-                                pqVps.ModifiedBy = userId;
+                                #region dbo.OrderPkPrintQueueVps
+                                var pkVpsExist = ctx.OrderPkPrintQueueVps.Where(x => x.OrderHeaderId == oHeader.ID && x.PrintQueueVpsId == item.VpsPrintQueueID).Any();
+                                OrderPkPrintQueueVps pkVps = null;
+                                if (pkVpsExist)
+                                {
+                                    pkVps = ctx.OrderPkPrintQueueVps.Where(x => x.OrderHeaderId == oHeader.ID && x.PrintQueueVpsId == item.VpsPrintQueueID).Single();
+                                }
+                                else
+                                {
+                                    pkVps = new OrderPkPrintQueueVps();
+                                    pkVps.OrderHeaderId = oHeader.ID;
+                                    pkVps.PrintQueueVpsId = item.VpsPrintQueueID;
+                                    pkVps.CheckedCip3 = false;           // 手機 apps 冇得選
+                                    pkVps.CheckedBlueprint = false;
 
+                                    pkVps.CreatedOn = DateTime.Now;
+                                    pkVps.CreatedBy = userId;
+                                    pkVps.Retired = false;
+                                    pkVps.RetiredOn = DateTime.Parse("1900-01-01 00:00:00");
+                                    pkVps.RetiredBy = 0;
+                                }
+                                //var pkVps = new OrderPkPrintQueueVps();
+
+                                //pkVps.OrderHeaderId = oHeader.ID;
+                                //pkVps.PrintQueueVpsId = item.VpsPrintQueueID;
+
+                                pkVps.CheckedPlate = true;
+                                //pkVps.CheckedCip3 = false;           // 手機 apps 冇得選
+                                //pkVps.CheckedBlueprint = false;
+
+                                //pkVps.CreatedOn = DateTime.Now;
+                                //pkVps.CreatedBy = userId;
+                                pkVps.ModifiedOn = DateTime.Now;
+                                pkVps.ModifiedBy = userId;
+                                //pkVps.Retired = false;
+                                //pkVps.RetiredOn = DateTime.Parse("1900-01-01 00:00:00");
+                                //pkVps.RetiredBy = 0;
+
+                                if (!pkVpsExist)
+                                    ctx.OrderPkPrintQueueVps.Add(pkVps);
                                 ctx.SaveChanges();
+                                #endregion
+
+                                #region dbo.PrintQueue_LifeCycle
+                                //因為用咗 BeginTransaction，要用同一個 context 先可以 RollBack, 所以要喺 local 搞個 Log
+                                //PrintQueueHelper.WriteLogWithVpsId(item.VpsPrintQueueID, EnumHelper.Order.PrintQSubitemType.Order, userId);
+                                var vps = ctx.PrintQueue_VPS.Where(x => x.ID == item.VpsPrintQueueID).SingleOrDefault();
+                                if (vps != null)
+                                {
+                                    var log = new PrintQueue_LifeCycle();
+                                    log.PrintQueueId = vps.PrintQueueID;
+                                    log.PrintQueueVpsId = vps.ID;
+                                    log.PrintQSubitemType = (int)EnumHelper.Order.PrintQSubitemType.Order;
+                                    log.Status = (int)EnumHelper.Common.Status.Active;
+                                    log.CreatedOn = DateTime.Now;
+                                    log.CreatedBy = userId;
+
+                                    ctx.PrintQueue_LifeCycle.Add(log);
+                                    ctx.SaveChanges();
+                                }
+                                #endregion
+
+                                #region Set Plate Ordered To True
+                                var pqVps = ctx.PrintQueue_VPS.Where(x => x.ID == item.VpsPrintQueueID).SingleOrDefault();
+                                if (pqVps != null)
+                                {
+                                    pqVps.PlateOrdered = true;
+                                    pqVps.ModifiedOn = DateTime.Now;
+                                    pqVps.ModifiedBy = userId;
+
+                                    ctx.SaveChanges();
+                                }
+                                #endregion
+                            }
+                            #endregion
+
+                            scope.Commit();
+                            result = oHeader.ID;
+
+                            #region 叫 Bot send Fcm Notifications
+                            BotHelper.PostSendFcmOnOrder(oHeader.ID);
+                            #endregion
+
+                            #region 叫 Bot 抄 tiff / cip3
+                            foreach (vwPrintQueueVpsList_AvailablePlate item in data.Items)
+                            {
+                                BotHelper.PostPlate(item.VpsPrintQueueID);
+                                //BotHelper.PostCip3(item.VpsPrintQueueID);     // 好似冇理 cip3，冇搞就無謂 call
                             }
                             #endregion
                         }
-                        #endregion
-
-                        scope.Commit();
-                        result = oHeader.ID;
-
-                        #region 叫 Bot send Fcm Notifications
-                        BotHelper.PostSendFcmOnOrder(oHeader.ID);
-                        #endregion
-
-                        #region 叫 Bot 抄 tiff / cip3
-                        foreach (vwPrintQueueVpsList_AvailablePlate item in data.Items)
+                        catch
                         {
-                            BotHelper.PostPlate(item.VpsPrintQueueID);
-                            //BotHelper.PostCip3(item.VpsPrintQueueID);     // 好似冇理 cip3，冇搞就無謂 call
+                            scope.Rollback();
                         }
-                        #endregion
-                    }
-                    catch
-                    {
-                        scope.Rollback();
                     }
                 }
             }
