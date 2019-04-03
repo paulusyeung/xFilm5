@@ -20,7 +20,7 @@ namespace xFilm5.Controls.Upload
     public partial class SpeedBox_Film : Form
     {
         private String _UploadFileType = @"^.*$";
-        private bool _Positive, _Negative, _EmulsionUp, _EmulsionDown;
+        private bool _Positive, _Negative, _EmulsionUp, _EmulsionDown, _ColorSeperation;
 
         public List<String> UploadedFiles = new List<String>();
 
@@ -67,6 +67,12 @@ namespace xFilm5.Controls.Upload
             get { return _EmulsionDown; }
             set { _EmulsionDown = value; }
         }
+
+        public bool ColorSeperation
+        {
+            get { return _ColorSeperation; }
+            set { _ColorSeperation = value; }
+        }
         #endregion
 
         public SpeedBox_Film()
@@ -106,6 +112,7 @@ namespace xFilm5.Controls.Upload
             chkNegative.Text = oDict.GetWord("negative");
             chkEmulsionUp.Text = oDict.GetWord("emulsion_up");
             chkEmulsionDown.Text = oDict.GetWord("emulsion_down");
+            chkColorSeperation.Text = oDict.GetWord("color_seperation");
         }
 
         private void SetAttributes()
@@ -123,6 +130,8 @@ namespace xFilm5.Controls.Upload
             chkEmulsionUp.Checked = true;
             _Positive = true;
             _EmulsionUp = true;
+
+            chkColorSeperation.Checked = false;
         }
 
         private void SetDropdowns()
@@ -237,6 +246,11 @@ namespace xFilm5.Controls.Upload
                 _EmulsionUp = false;
                 _EmulsionDown = true;
             }
+        }
+
+        private void chkColorSeperation_Click(object sender, EventArgs e)
+        {
+            _ColorSeperation = chkColorSeperation.Checked;
         }
         #endregion
     }

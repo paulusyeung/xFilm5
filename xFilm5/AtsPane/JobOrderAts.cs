@@ -165,7 +165,28 @@ namespace xFilm5.AtsPane
                                 File.Copy(filepath, tempFilePath, true);
                                 File.Delete(filepath);                      // Copy is synchronous operation, delete 應該唔會有 error
 
-                                filename = "Plate." + filename;
+                                #region 2019.04.03 paulus: 改版，加多啲 options: Ax, Bx
+                                var Ax = "A0";
+                                if (speedBox.Greyscale)
+                                    Ax = "A1";
+                                else if (speedBox.BlackOverprint && !speedBox.Spot2CMYK)
+                                    Ax = "A2";
+                                else if (speedBox.BlackOverprint && speedBox.Spot2CMYK)
+                                    Ax = "A3";
+                                else if (!speedBox.BlackOverprint && speedBox.Spot2CMYK)
+                                    Ax = "A4";
+
+                                var Bx = "B0";
+                                if (speedBox.DotGain50)
+                                    Bx = "B1";
+                                else if (speedBox.DotGain43)
+                                    Bx = "B2";
+                                else if (speedBox.DotGain40)
+                                    Bx = "B3";
+                                #endregion
+
+                                //filename = "Plate." + filename;
+                                filename = String.Format("Plate.(0).(1).(2)", Ax, Bx, filename);
                                 Helper.BotHelper.PostSpeedBox(clientId, tempfilename, filename);      // 再交俾 BotServer 處理
                             }
                             #endregion
@@ -230,7 +251,8 @@ namespace xFilm5.AtsPane
                                 File.Copy(filepath, tempFilePath, true);
                                 File.Delete(filepath);                      // Copy is synchronous operation, delete 應該唔會有 error
 
-                                filename = String.Format("Film.{0}.{1}.{2}",
+                                filename = String.Format("{0}.{1}.{2}.{3}",
+                                    speedBox.ColorSeperation ? "Film4C" : "Film",
                                     speedBox.Positive ? "P" : "N",
                                     speedBox.EmulsionUp ? "U" : "D",
                                     filename);

@@ -27,7 +27,7 @@ namespace xFilm5.Public
 
 #if (DEBUG)
             txtUserName.Text = "paulus@nustar.com";
-            txtPassword.Text = "py9546";
+            txtPassword.Text = "py@82279606";
 #endif
         }
 

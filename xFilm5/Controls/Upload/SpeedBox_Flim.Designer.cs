@@ -34,17 +34,20 @@ namespace xFilm5.Controls.Upload
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SpeedBox_Film));
             this.uploadBox = new Gizmox.WebGUI.Forms.UploadControl();
             this.topPanel = new Gizmox.WebGUI.Forms.Panel();
+            this.chkNegative = new Gizmox.WebGUI.Forms.CheckBox();
+            this.chkEmulsionDown = new Gizmox.WebGUI.Forms.CheckBox();
             this.lblClient = new Gizmox.WebGUI.Forms.Label();
             this.cboClient = new Gizmox.WebGUI.Forms.ComboBox();
             this.txtClientName = new Gizmox.WebGUI.Forms.TextBox();
             this.cmdClientInfo = new Gizmox.WebGUI.Forms.Button();
-            this.bottomPanel = new Gizmox.WebGUI.Forms.Panel();
-            this.chkEmulsionDown = new Gizmox.WebGUI.Forms.CheckBox();
             this.chkEmulsionUp = new Gizmox.WebGUI.Forms.CheckBox();
-            this.chkNegative = new Gizmox.WebGUI.Forms.CheckBox();
             this.chkPositive = new Gizmox.WebGUI.Forms.CheckBox();
+            this.bottomPanel = new Gizmox.WebGUI.Forms.Panel();
+            this.boxOptions = new Gizmox.WebGUI.Forms.GroupBox();
+            this.chkColorSeperation = new Gizmox.WebGUI.Forms.CheckBox();
             this.topPanel.SuspendLayout();
             this.bottomPanel.SuspendLayout();
+            this.boxOptions.SuspendLayout();
             this.SuspendLayout();
             // 
             // uploadBox
@@ -59,6 +62,7 @@ namespace xFilm5.Controls.Upload
             // 
             // topPanel
             // 
+            this.topPanel.Controls.Add(this.boxOptions);
             this.topPanel.Controls.Add(this.chkNegative);
             this.topPanel.Controls.Add(this.chkEmulsionDown);
             this.topPanel.Controls.Add(this.lblClient);
@@ -70,8 +74,26 @@ namespace xFilm5.Controls.Upload
             this.topPanel.Dock = Gizmox.WebGUI.Forms.DockStyle.Top;
             this.topPanel.Location = new System.Drawing.Point(0, 0);
             this.topPanel.Name = "topPanel";
-            this.topPanel.Size = new System.Drawing.Size(480, 95);
+            this.topPanel.Size = new System.Drawing.Size(480, 161);
             this.topPanel.TabIndex = 1;
+            // 
+            // chkNegative
+            // 
+            this.chkNegative.Location = new System.Drawing.Point(121, 64);
+            this.chkNegative.Name = "chkNegative";
+            this.chkNegative.Size = new System.Drawing.Size(104, 24);
+            this.chkNegative.TabIndex = 22;
+            this.chkNegative.Text = "Negative";
+            this.chkNegative.Click += new System.EventHandler(this.chkNegative_Click);
+            // 
+            // chkEmulsionDown
+            // 
+            this.chkEmulsionDown.Location = new System.Drawing.Point(348, 64);
+            this.chkEmulsionDown.Name = "chkEmulsionDown";
+            this.chkEmulsionDown.Size = new System.Drawing.Size(113, 21);
+            this.chkEmulsionDown.TabIndex = 24;
+            this.chkEmulsionDown.Text = "Emulsion Down";
+            this.chkEmulsionDown.Click += new System.EventHandler(this.chkEmulsionDown_Click);
             // 
             // lblClient
             // 
@@ -110,24 +132,6 @@ namespace xFilm5.Controls.Upload
             this.cmdClientInfo.TextImageRelation = Gizmox.WebGUI.Forms.TextImageRelation.ImageAboveText;
             this.cmdClientInfo.Click += new System.EventHandler(this.cmdClientInfo_Click);
             // 
-            // bottomPanel
-            // 
-            this.bottomPanel.Controls.Add(this.uploadBox);
-            this.bottomPanel.Dock = Gizmox.WebGUI.Forms.DockStyle.Fill;
-            this.bottomPanel.Location = new System.Drawing.Point(0, 95);
-            this.bottomPanel.Name = "bottomPanel";
-            this.bottomPanel.Size = new System.Drawing.Size(480, 225);
-            this.bottomPanel.TabIndex = 2;
-            // 
-            // chkEmulsionDown
-            // 
-            this.chkEmulsionDown.Location = new System.Drawing.Point(348, 64);
-            this.chkEmulsionDown.Name = "chkEmulsionDown";
-            this.chkEmulsionDown.Size = new System.Drawing.Size(113, 21);
-            this.chkEmulsionDown.TabIndex = 24;
-            this.chkEmulsionDown.Text = "Emulsion Down";
-            this.chkEmulsionDown.Click += new System.EventHandler(this.chkEmulsionDown_Click);
-            // 
             // chkEmulsionUp
             // 
             this.chkEmulsionUp.Location = new System.Drawing.Point(247, 64);
@@ -136,15 +140,6 @@ namespace xFilm5.Controls.Upload
             this.chkEmulsionUp.TabIndex = 23;
             this.chkEmulsionUp.Text = "Emulsion Up";
             this.chkEmulsionUp.Click += new System.EventHandler(this.chkEmusionUp_Click);
-            // 
-            // chkNegative
-            // 
-            this.chkNegative.Location = new System.Drawing.Point(121, 64);
-            this.chkNegative.Name = "chkNegative";
-            this.chkNegative.Size = new System.Drawing.Size(104, 24);
-            this.chkNegative.TabIndex = 22;
-            this.chkNegative.Text = "Negative";
-            this.chkNegative.Click += new System.EventHandler(this.chkNegative_Click);
             // 
             // chkPositive
             // 
@@ -155,6 +150,34 @@ namespace xFilm5.Controls.Upload
             this.chkPositive.Text = "Positive";
             this.chkPositive.CheckedChanged += new System.EventHandler(this.chkPositive_Click);
             // 
+            // bottomPanel
+            // 
+            this.bottomPanel.Controls.Add(this.uploadBox);
+            this.bottomPanel.Dock = Gizmox.WebGUI.Forms.DockStyle.Fill;
+            this.bottomPanel.Location = new System.Drawing.Point(0, 161);
+            this.bottomPanel.Name = "bottomPanel";
+            this.bottomPanel.Size = new System.Drawing.Size(480, 239);
+            this.bottomPanel.TabIndex = 2;
+            // 
+            // boxOptions
+            // 
+            this.boxOptions.Controls.Add(this.chkColorSeperation);
+            this.boxOptions.FlatStyle = Gizmox.WebGUI.Forms.FlatStyle.Flat;
+            this.boxOptions.Location = new System.Drawing.Point(15, 98);
+            this.boxOptions.Name = "boxOptions";
+            this.boxOptions.Size = new System.Drawing.Size(452, 50);
+            this.boxOptions.TabIndex = 25;
+            this.boxOptions.TabStop = false;
+            // 
+            // chkColorSeperation
+            // 
+            this.chkColorSeperation.Location = new System.Drawing.Point(15, 17);
+            this.chkColorSeperation.Name = "chkColorSeperation";
+            this.chkColorSeperation.Size = new System.Drawing.Size(422, 21);
+            this.chkColorSeperation.TabIndex = 21;
+            this.chkColorSeperation.Text = "Colour Seperation";
+            this.chkColorSeperation.Click += new System.EventHandler(this.chkColorSeperation_Click);
+            // 
             // SpeedBox_Film
             // 
             this.Controls.Add(this.bottomPanel);
@@ -162,11 +185,12 @@ namespace xFilm5.Controls.Upload
             this.FormBorderStyle = Gizmox.WebGUI.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Size = new System.Drawing.Size(480, 320);
+            this.Size = new System.Drawing.Size(480, 400);
             this.Text = "Uploader";
             this.Load += new System.EventHandler(this.Uploader_Load);
             this.topPanel.ResumeLayout(false);
             this.bottomPanel.ResumeLayout(false);
+            this.boxOptions.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -184,5 +208,7 @@ namespace xFilm5.Controls.Upload
         private CheckBox chkEmulsionDown;
         private CheckBox chkEmulsionUp;
         private CheckBox chkPositive;
+        private GroupBox boxOptions;
+        private CheckBox chkColorSeperation;
     }
 }

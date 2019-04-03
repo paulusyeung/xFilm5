@@ -1464,8 +1464,43 @@
     <cht>特快專遞（鋅）</cht>
   </keyword>
   <keyword key="speedbox_film">
-    <en>Speed Box (Film)</en>彤
+    <en>Speed Box (Film)</en>
     <chs>特快专递（胶片）</chs>
     <cht>特快專遞（菲林）</cht>
+  </keyword>
+  <keyword key="color_seperation">
+    <en>Colour Seperation</en>
+    <chs>分色输出</chs>
+    <cht>分色輸出</cht>
+  </keyword>
+  <keyword key="greyscale">
+    <en>Greyscale</en> 
+    <chs>灰阶输出</chs>
+    <cht>灰階輸出</cht>
+  </keyword>
+  <keyword key="black_overprint">
+    <en>Black Overprint</en>
+    <chs>黑色叠印</chs>
+    <cht>黑色疊印</cht>
+  </keyword>
+  <keyword key="spot_to_cmyk">
+    <en>Spot to CMYK</en>
+    <chs>专色转 CMYK</chs>
+    <cht>專色轉 CMYK</cht>
+  </keyword>
+  <keyword key="dot_gain_50">
+    <en>Dot Gain 50%</en>
+    <chs>无网点补偿</chs>
+    <cht>無網點補償</cht>
+  </keyword>
+  <keyword key="dot_gain_43">
+    <en>Dot Gain 43%</en>
+    <chs>网点补偿 43％</chs>
+    <cht>網點補償 43％</cht>
+  </keyword>
+  <keyword key="dot_gain_40">
+    <en>Dot Gain 40%</en>
+    <chs>网点补偿 40％</chs>
+    <cht>網點補償 40％</cht>
   </keyword>
 </root>
