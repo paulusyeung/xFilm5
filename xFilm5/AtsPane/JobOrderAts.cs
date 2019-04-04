@@ -186,7 +186,7 @@ namespace xFilm5.AtsPane
                                 #endregion
 
                                 //filename = "Plate." + filename;
-                                filename = String.Format("Plate.(0).(1).(2)", Ax, Bx, filename);
+                                filename = String.Format("Plate.{0}.{1}.{2}", Ax, Bx, filename);
                                 Helper.BotHelper.PostSpeedBox(clientId, tempfilename, filename);      // 再交俾 BotServer 處理
                             }
                             #endregion
