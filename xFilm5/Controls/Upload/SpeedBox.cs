@@ -135,6 +135,7 @@ namespace xFilm5.Controls.Upload
                 txtClientName.Visible = true;
             }
             chkDotGain50.Checked = true;
+            _DotGain50 = true;
         }
 
         private void SetDropdowns()
@@ -207,6 +208,21 @@ namespace xFilm5.Controls.Upload
         }
 
         #region options checkbox clicks
+        private void chkGreyscale_Click(object sender, EventArgs e)
+        {
+            _Greyscale = chkGreyscale.Checked;
+        }
+
+        private void chkBlackOverprint_Click(object sender, EventArgs e)
+        {
+            _BlackOverprint = chkBlackOverprint.Checked;
+        }
+
+        private void chkSpot2CMYK_Click(object sender, EventArgs e)
+        {
+            _Spot2CMYK = chkSpot2CMYK.Checked;
+        }
+
         private void chkDotGain50_Click(object sender, EventArgs e)
         {
             if (chkDotGain50.Checked)

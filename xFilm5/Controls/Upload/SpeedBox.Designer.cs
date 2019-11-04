@@ -123,6 +123,7 @@ namespace xFilm5.Controls.Upload
             this.chkGreyscale.Size = new System.Drawing.Size(110, 21);
             this.chkGreyscale.TabIndex = 21;
             this.chkGreyscale.Text = "Greyscale";
+            this.chkGreyscale.Click += new System.EventHandler(this.chkGreyscale_Click);
             // 
             // chkSpot2CMYK
             // 
@@ -131,6 +132,7 @@ namespace xFilm5.Controls.Upload
             this.chkSpot2CMYK.Size = new System.Drawing.Size(110, 21);
             this.chkSpot2CMYK.TabIndex = 23;
             this.chkSpot2CMYK.Text = "Spot to CMYK";
+            this.chkSpot2CMYK.Click += new System.EventHandler(this.chkSpot2CMYK_Click);
             // 
             // chkBlackOverprint
             // 
@@ -139,6 +141,7 @@ namespace xFilm5.Controls.Upload
             this.chkBlackOverprint.Size = new System.Drawing.Size(104, 24);
             this.chkBlackOverprint.TabIndex = 22;
             this.chkBlackOverprint.Text = "Black Overprint";
+            this.chkBlackOverprint.Click += new System.EventHandler(this.chkBlackOverprint_Click);
             // 
             // lblClient
             // 
