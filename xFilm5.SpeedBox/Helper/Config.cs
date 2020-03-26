@@ -12,6 +12,8 @@ namespace xFilm5.SpeedBox
 {
     public class Config
     {
+        private static String _CurrentPage = "";
+
         public static Guid SuperUserId { get; set; }
         public static Guid CurrentUserId { get; set; }
         public static String CurrentWordDict { get; set; }
@@ -21,16 +23,16 @@ namespace xFilm5.SpeedBox
         {
             get
             {
-                String theme = "";
-                if (HttpContext.Current.Request.Cookies["xPort5_SpeedBox_CurrentTheme"] != null)
+                String theme = "Vista";
+                if (HttpContext.Current.Request.Cookies["xFilm5_SpeedBox_CurrentTheme"] != null)
                 {
-                    theme = HttpContext.Current.Request.Cookies["xPort5_SpeedBox_CurrentTheme"].Value;
+                    theme = HttpContext.Current.Request.Cookies["xFilm5_SpeedBox_CurrentTheme"].Value;
                 }
-                return theme == String.Empty ? "Vista" : theme;
+                return theme;
             }
             set
             {
-                System.Web.HttpCookie oCookie = new System.Web.HttpCookie("xPort5_SpeedBox_CurrentTheme");
+                System.Web.HttpCookie oCookie = new System.Web.HttpCookie("xFilm5_SpeedBox_CurrentTheme");
 
                 if (value != null)
                 {
@@ -62,16 +64,24 @@ namespace xFilm5.SpeedBox
         {
             get
             {
-                String page = "";
-                if (HttpContext.Current.Request.Cookies["xPort5_SpeedBox_CurrentPage"] != null)
+                /** 隻 cookie 有時會唔識轉新 value，改用 _CurrentPage 喺 LoadOnce_AtAppBegin() 就讀入
+                String page = "Plate";
+                var request = HttpContext.Current.Request;
+
+                if (request.Cookies["xFilm5_SpeedBox_CurrentPage"] != null)
                 {
-                    page = HttpContext.Current.Request.Cookies["xPort5_SpeedBox_CurrentPage"].Value;
+                    page = request.Cookies["xFilm5_SpeedBox_CurrentPage"].Value;
                 }
-                return page == String.Empty ? "Plate" : page;
+                return page;
+                */
+                return _CurrentPage;
             }
             set
             {
-                System.Web.HttpCookie oCookie = new System.Web.HttpCookie("xPort5_SpeedBox_CurrentPage");
+                var response = HttpContext.Current.Response;
+                response.Cookies.Remove("xFilm5_SpeedBox_CurrentPage");
+
+                var oCookie = new HttpCookie("xFilm5_SpeedBox_CurrentPage");
 
                 if (value != null)
                 {
@@ -81,7 +91,7 @@ namespace xFilm5.SpeedBox
                     oCookie.Value = value.ToString() == String.Empty ? "Plate" : value.ToString();
                     oCookie.Expires = now.AddYears(1);
 
-                    System.Web.HttpContext.Current.Response.Cookies.Add(oCookie);
+                    response.Cookies.Add(oCookie);
                 }
                 else
                 {
@@ -91,8 +101,11 @@ namespace xFilm5.SpeedBox
                     oCookie.Value = value.ToString();
                     oCookie.Expires = now.AddDays(-1);
 
-                    System.Web.HttpContext.Current.Response.Cookies.Add(oCookie);
+                    response.Cookies.Add(oCookie);
                 }
+                response.Flush();
+
+                _CurrentPage = value.ToString();
             }
         }
 
@@ -100,6 +113,7 @@ namespace xFilm5.SpeedBox
         {
             LoadCurrentWordDict();
             LoadCurrentLanguageId();
+            LoadCurrentPage();
         }
 
         public static void LoadCurrentWordDict()
@@ -136,6 +150,17 @@ namespace xFilm5.SpeedBox
             CurrentLanguageId = result;
         }
 
+        public static void LoadCurrentPage()
+        {
+            String page = "Plate";
+            var request = HttpContext.Current.Request;
+
+            if (request.Cookies["xFilm5_SpeedBox_CurrentPage"] != null)
+            {
+                page = request.Cookies["xFilm5_SpeedBox_CurrentPage"].Value;
+            }
+            _CurrentPage = page;
+        }
         public static string InBox
         {
             get

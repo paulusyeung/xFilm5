@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Text;
 
 using Gizmox.WebGUI.Common;
@@ -15,15 +14,64 @@ using Gizmox.WebGUI.Common.Resources;
 
 #endregion
 
-namespace xFilm5.SpeedBox
+namespace xFilm5.SpeedBox.Forms
 {
-    public partial class Plate : Form
+    public partial class Plate : UserControl
     {
         private String _UploadFileType = @"^.*$";
         private bool _Greyscale, _BlackOverprint, _Spot2CMYK, _DotGain50, _DotGain43, _DotGain40;
 
         private const String _UserLogin = "User Login", _ChangeTheme = "Change Theme", _SwitchToFilm = "Switch to Film";
         public List<String> UploadedFiles = new List<String>();
+
+        #region public properties
+        /// <summary>
+        ///     Regular expression match string for valid filename and extension Default: "^.*$",
+        ///     means all files. Example: 1. "^.*\.(gif|jpe?g|png)$", means *.gif, *.jpg, *.jpeg,
+        ///     *.png  2. ^.*\.(rtf)$" means rtf only
+        /// </summary>
+        public String UploadedFileType
+        {
+            get { return _UploadFileType; }
+            set { _UploadFileType = value; }
+        }
+
+        public bool Greyscale
+        {
+            get { return _Greyscale; }
+            set { _Greyscale = value; }
+        }
+
+        public bool BlackOverprint
+        {
+            get { return _BlackOverprint; }
+            set { _BlackOverprint = value; }
+        }
+
+        public bool Spot2CMYK
+        {
+            get { return _Spot2CMYK; }
+            set { _Spot2CMYK = value; }
+        }
+
+        public bool DotGain50
+        {
+            get { return _DotGain50; }
+            set { _DotGain50 = value; }
+        }
+
+        public bool DotGain43
+        {
+            get { return _DotGain43; }
+            set { _DotGain43 = value; }
+        }
+
+        public bool DotGain40
+        {
+            get { return _DotGain40; }
+            set { _DotGain40 = value; }
+        }
+        #endregion
 
         public Plate()
         {
@@ -32,29 +80,15 @@ namespace xFilm5.SpeedBox
 
         private void Plate_Load(object sender, EventArgs e)
         {
-            #region if current default page == Film, goto Film()
-            if (Config.CurrentPage == "Film")
-            {
-                var page = new Film();
-                page.ShowPopup();
-            }
-            #endregion
-
-            Config.LoadOnce_AtAppBegins();
-            Context.CurrentTheme = Config.CurrentTheme;
-
             SetCaptions();
             SetAttributes();
             SetUploader();
-            SetMenu();
         }
 
         #region Set Cations Attributes
         private void SetCaptions()
         {
             nxStudio.BaseClass.WordDict oDict = new nxStudio.BaseClass.WordDict(Config.CurrentWordDict, Config.CurrentLanguageId);
-
-            lblTitle.Text = oDict.GetWord("plate");
 
             chkGreyscale.Text = oDict.GetWord("greyscale");
             chkBlackOverprint.Text = oDict.GetWord("black_overprint");
@@ -69,20 +103,6 @@ namespace xFilm5.SpeedBox
         {
             chkDotGain50.Checked = true;
             _DotGain50 = true;
-
-            cmdMenu.Image = new ImageResourceHandle("fa-bars.16.png");
-            cmdMenu.Visible = true;
-        }
-
-        private void SetMenu()
-        {
-            var menu = new ContextMenu();
-            var item1 = new MenuItem(_UserLogin, new EventHandler(menuItem_Click));
-            var item2 = new MenuItem(_ChangeTheme, new EventHandler(menuItem_Click));
-            var item3 = new MenuItem(_SwitchToFilm, new EventHandler(menuItem_Click));
-
-            menu.MenuItems.AddRange(new MenuItem[] { item1, item2, item3 });
-            cmdMenu.DropDownMenu = menu;
         }
 
         private void SetUploader()
@@ -100,30 +120,6 @@ namespace xFilm5.SpeedBox
         }
         #endregion
 
-        #region Menu Item Click
-        private void menuItem_Click(object sender, EventArgs e)
-        {
-            MenuItem menuItem = sender as MenuItem;
-            //MessageBox.Show(string.Format("Menu Item '{0}' has been clicked!", menuItem.Text));
-            switch (menuItem.Text)
-            {
-                case _UserLogin:
-                    var login = new Login();
-                    login.ShowDialog();
-                    break;
-                case _ChangeTheme:
-                    var theme = new Theme();
-                    theme.ShowDialog();
-                    break;
-                case _SwitchToFilm:
-                    Config.CurrentPage = "Film";
-                    var film = new Film();
-                    film.ShowPopup();
-                    break;
-            }
-        }
-        #endregion
-
         #region Uploader functions
         private void uploadBox_UploadFileCompleted(object sender, UploadCompletedEventArgs e)
         {
@@ -135,7 +131,7 @@ namespace xFilm5.SpeedBox
         {
 
             nxStudio.BaseClass.WordDict oDict = new nxStudio.BaseClass.WordDict(Config.CurrentWordDict, Config.CurrentLanguageId);
-            MessageBox.Show(this, oDict.GetWord("msg_speedbox_error"), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning, new EventHandler(cmdSave_Click));
+            MessageBox.Show(oDict.GetWord("msg_speedbox_error"), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning, new EventHandler(cmdSave_Click));
         }
 
         private void cmdSave_Click(object sender, EventArgs e)
@@ -149,7 +145,7 @@ namespace xFilm5.SpeedBox
 
         void uploadBox_UploadBatchCompleted(object sender, EventArgs e)
         {
-            this.Close();
+            //HACK: this.Close();
         }
         #endregion
 

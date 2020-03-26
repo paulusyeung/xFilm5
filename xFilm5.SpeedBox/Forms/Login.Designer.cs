@@ -1,7 +1,7 @@
 using Gizmox.WebGUI.Forms;
 using Gizmox.WebGUI.Common;
 
-namespace xFilm5.SpeedBox
+namespace xFilm5.SpeedBox.Forms
 {
     partial class Login
     {
@@ -42,6 +42,7 @@ namespace xFilm5.SpeedBox
             // lblUserName
             // 
             this.lblUserName.AutoSize = true;
+            this.lblUserName.Font = new System.Drawing.Font("Tahoma", 9F);
             this.lblUserName.Location = new System.Drawing.Point(20, 28);
             this.lblUserName.Name = "lblUserName";
             this.lblUserName.Size = new System.Drawing.Size(35, 13);
@@ -58,6 +59,7 @@ namespace xFilm5.SpeedBox
             // lblPassword
             // 
             this.lblPassword.AutoSize = true;
+            this.lblPassword.Font = new System.Drawing.Font("Tahoma", 9F);
             this.lblPassword.Location = new System.Drawing.Point(20, 54);
             this.lblPassword.Name = "lblPassword";
             this.lblPassword.Size = new System.Drawing.Size(35, 13);
@@ -74,6 +76,7 @@ namespace xFilm5.SpeedBox
             // 
             // button1
             // 
+            this.button1.Font = new System.Drawing.Font("Tahoma", 9F);
             this.button1.Location = new System.Drawing.Point(68, 104);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
@@ -83,6 +86,7 @@ namespace xFilm5.SpeedBox
             // 
             // button2
             // 
+            this.button2.Font = new System.Drawing.Font("Tahoma", 9F);
             this.button2.Location = new System.Drawing.Point(195, 104);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);

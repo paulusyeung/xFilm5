@@ -1,7 +1,7 @@
 using Gizmox.WebGUI.Forms;
 using Gizmox.WebGUI.Common;
 
-namespace xFilm5.SpeedBox
+namespace xFilm5.SpeedBox.Forms
 {
     partial class Theme
     {
@@ -39,7 +39,8 @@ namespace xFilm5.SpeedBox
             // 
             // cmdCancel
             // 
-            this.cmdCancel.Location = new System.Drawing.Point(51, 95);
+            this.cmdCancel.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.cmdCancel.Location = new System.Drawing.Point(41, 95);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(75, 23);
             this.cmdCancel.TabIndex = 0;
@@ -48,7 +49,8 @@ namespace xFilm5.SpeedBox
             // 
             // cmdOK
             // 
-            this.cmdOK.Location = new System.Drawing.Point(171, 95);
+            this.cmdOK.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.cmdOK.Location = new System.Drawing.Point(162, 95);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Size = new System.Drawing.Size(75, 23);
             this.cmdOK.TabIndex = 1;
@@ -58,18 +60,20 @@ namespace xFilm5.SpeedBox
             // radLight
             // 
             this.radLight.AutoSize = true;
+            this.radLight.Font = new System.Drawing.Font("Tahoma", 9F);
             this.radLight.Location = new System.Drawing.Point(51, 34);
             this.radLight.Name = "radLight";
-            this.radLight.Size = new System.Drawing.Size(48, 17);
+            this.radLight.Size = new System.Drawing.Size(52, 18);
             this.radLight.TabIndex = 2;
             this.radLight.Text = "Light";
             // 
             // radDark
             // 
             this.radDark.AutoSize = true;
+            this.radDark.Font = new System.Drawing.Font("Tahoma", 9F);
             this.radDark.Location = new System.Drawing.Point(171, 34);
             this.radDark.Name = "radDark";
-            this.radDark.Size = new System.Drawing.Size(47, 17);
+            this.radDark.Size = new System.Drawing.Size(49, 18);
             this.radDark.TabIndex = 3;
             this.radDark.Text = "Dark";
             // 

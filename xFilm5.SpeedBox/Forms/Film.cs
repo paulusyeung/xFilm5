@@ -17,16 +17,58 @@ using Gizmox.WebGUI.Common.Resources;
 
 #endregion
 
-namespace xFilm5.SpeedBox
+namespace xFilm5.SpeedBox.Forms
 {
-    public partial class Film : Form
+    public partial class Film : UserControl
     {
         private String _UploadFileType = @"^.*$";
         private bool _Positive, _Negative, _EmulsionUp, _EmulsionDown, _ColorSeperation;
-        private int _ClientId = 0;
 
         private const String _UserLogin = "User Login", _ChangeTheme = "Change Theme", _SwitchToPlate = "Switch to Plate";
         public List<String> UploadedFiles = new List<String>();
+
+        #region public properties
+        /// <summary>
+        ///     Regular expression match string for valid filename and extension Default: "^.*$",
+        ///     means all files. Example: 1. "^.*\.(gif|jpe?g|png)$", means *.gif, *.jpg, *.jpeg,
+        ///     *.png  2. ^.*\.(rtf)$" means rtf only
+        /// </summary>
+        public String UploadedFileType
+        {
+            get { return _UploadFileType; }
+            set { _UploadFileType = value; }
+        }
+
+        public bool Positive
+        {
+            get { return _Positive; }
+            set { _Positive = value; }
+        }
+
+        public bool Negative
+        {
+            get { return _Negative; }
+            set { _Negative = value; }
+        }
+
+        public bool EmulsionUp
+        {
+            get { return _EmulsionUp; }
+            set { _EmulsionUp = value; }
+        }
+
+        public bool EmulsionDown
+        {
+            get { return _EmulsionDown; }
+            set { _EmulsionDown = value; }
+        }
+
+        public bool ColorSeperation
+        {
+            get { return _ColorSeperation; }
+            set { _ColorSeperation = value; }
+        }
+        #endregion
 
         public Film()
         {
@@ -35,21 +77,9 @@ namespace xFilm5.SpeedBox
 
         private void Film_Load(object sender, EventArgs e)
         {
-            #region if current default page == Plate, goto Plate()
-            if (Config.CurrentPage == "Plate")
-            {
-                var page = new Plate();
-                page.ShowPopup();
-            }
-            #endregion
-
-            Config.LoadOnce_AtAppBegins();
-            Context.CurrentTheme = Config.CurrentTheme;
-
             SetCaptions();
             SetAttributes();
             SetUploader();
-            SetMenu();
         }
 
         #region prepare Client Name comboBox
@@ -57,7 +87,6 @@ namespace xFilm5.SpeedBox
         {
             nxStudio.BaseClass.WordDict oDict = new nxStudio.BaseClass.WordDict(Config.CurrentWordDict, Config.CurrentLanguageId);
 
-            lblTitle.Text = oDict.GetWord("film");
             chkPositive.Text = oDict.GetWord("positive");
             chkNegative.Text = oDict.GetWord("negative");
             chkEmulsionUp.Text = oDict.GetWord("emulsion_up");
@@ -73,20 +102,6 @@ namespace xFilm5.SpeedBox
             _EmulsionUp = true;
 
             chkColorSeperation.Checked = false;
-
-            cmdMenu.Image = new ImageResourceHandle("fa-bars.16.png");
-            cmdMenu.Visible = true;
-        }
-
-        private void SetMenu()
-        {
-            var menu = new ContextMenu();
-            var item1 = new MenuItem(_UserLogin, new EventHandler(menuItem_Click));
-            var item2 = new MenuItem(_ChangeTheme, new EventHandler(menuItem_Click));
-            var item3 = new MenuItem(_SwitchToPlate, new EventHandler(menuItem_Click));
-
-            menu.MenuItems.AddRange(new MenuItem[] { item1, item2, item3 });
-            cmdMenu.DropDownMenu = menu;
         }
 
         private void SetUploader()
@@ -104,30 +119,6 @@ namespace xFilm5.SpeedBox
         }
         #endregion
 
-        #region Menu Item Click
-        private void menuItem_Click(object sender, EventArgs e)
-        {
-            MenuItem menuItem = sender as MenuItem;
-            //MessageBox.Show(string.Format("Menu Item '{0}' has been clicked!", menuItem.Text));
-            switch (menuItem.Text)
-            {
-                case _UserLogin:
-                    var login = new Login();
-                    login.ShowDialog();
-                    break;
-                case _ChangeTheme:
-                    var theme = new Theme();
-                    theme.ShowDialog();
-                    break;
-                case _SwitchToPlate:
-                    Config.CurrentPage = "Plate";
-                    var plate = new Plate();
-                    plate.ShowPopup();
-                    break;
-            }
-        }
-        #endregion
-
         #region Uploader functions
         private void uploadBox_UploadFileCompleted(object sender, UploadCompletedEventArgs e)
         {
@@ -137,9 +128,10 @@ namespace xFilm5.SpeedBox
 
         private void uploadBox_UploadError(object sender, UploadErrorEventArgs e)
         {
- 
+
             nxStudio.BaseClass.WordDict oDict = new nxStudio.BaseClass.WordDict(Config.CurrentWordDict, Config.CurrentLanguageId);
-            MessageBox.Show(this, oDict.GetWord("msg_speedbox_error"), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning, new EventHandler(cmdSave_Click));
+            //MessageBox.Show(this, oDict.GetWord("msg_speedbox_error"), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning, new EventHandler(cmdSave_Click));
+            MessageBox.Show(oDict.GetWord("msg_speedbox_error"), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning, new EventHandler(cmdSave_Click));
         }
 
         private void cmdSave_Click(object sender, EventArgs e)
@@ -153,7 +145,7 @@ namespace xFilm5.SpeedBox
 
         void uploadBox_UploadBatchCompleted(object sender, EventArgs e)
         {
-            this.Close();
+            //HACK: this.Close();
         }
         #endregion
 

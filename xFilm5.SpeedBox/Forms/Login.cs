@@ -13,7 +13,7 @@ using Gizmox.WebGUI.Forms;
 
 #endregion
 
-namespace xFilm5.SpeedBox
+namespace xFilm5.SpeedBox.Forms
 {
     public partial class Login : Form
     {
