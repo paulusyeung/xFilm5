@@ -5,6 +5,8 @@ using System.Net;
 using System.Web;
 using System.Web.Http;
 using System.Web.Routing;
+using Thinktecture.IdentityModel.Http.Cors;
+using Thinktecture.IdentityModel.Http.Cors.IIS;
 
 namespace xFilm5.REST
 {
@@ -19,6 +21,23 @@ namespace xFilm5.REST
             #endregion
 
             GlobalConfiguration.Configure(WebApiConfig.Register);
+
+            ConfigureCors(UrlBasedCorsConfiguration.Configuration);
+        }
+
+        /// <summary>
+        /// 2020.04.06 paulus
+        /// 處理　CORS　帶嚟嘅麻煩，參考：
+        /// https://stackoverflow.com/questions/14248154/cors-support-in-webapi-mvc-and-iis-with-thinktecture-identitymodel
+        /// https://brockallen.com/2012/06/28/cors-support-in-webapi-mvc-and-iis-with-thinktecture-identitymodel/
+        /// </summary>
+        /// <param name="corsConfig"></param>
+        void ConfigureCors(CorsConfiguration corsConfig)
+        {
+            corsConfig
+               .ForResources("~/Handler1.ashx")
+               .ForOrigins("http://localhost:8080", "https://sb.directoutput.com.hk")
+               .AllowAll();
         }
     }
 }
