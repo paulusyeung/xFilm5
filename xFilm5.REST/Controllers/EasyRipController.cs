@@ -17,6 +17,9 @@ using log4net;
 using xFilm5.EF6;
 using xFilm5.REST.Filters;
 using xFilm5.REST.Helper;
+using Newtonsoft.Json;
+using System.Dynamic;
+using Newtonsoft.Json.Converters;
 
 namespace xFilm5.REST.Controllers
 {
@@ -68,14 +71,11 @@ namespace xFilm5.REST.Controllers
 
                         #region 解碼 FormData 
 
-                        //var fdata = provider.FormData;
-                        bool flag;
-
-                        var positive = HttpContext.Current.Request.Form["positive"] != null ? bool.TryParse(HttpContext.Current.Request.Form["positive"], out flag) : false;
-                        var negative = HttpContext.Current.Request.Form["negative"] != null ? bool.TryParse(HttpContext.Current.Request.Form["negative"], out flag) : false;
-                        var emulsionUp = HttpContext.Current.Request.Form["emulsion-up"] != null ? bool.TryParse(HttpContext.Current.Request.Form["emulsion-up"], out flag) : false;
-                        var emulsionDown = HttpContext.Current.Request.Form["emulsion-down"] != null ? bool.TryParse(HttpContext.Current.Request.Form["emulsion-down"], out flag) : false;
-                        var colorSeparation = HttpContext.Current.Request.Form["color-separation"] != null ? bool.TryParse(HttpContext.Current.Request.Form["color-separation"], out flag) : false;
+                        var positive = (HttpContext.Current.Request.Form["positive"]).ToLower() == "true" ? true : false;
+                        var negative = (HttpContext.Current.Request.Form["negative"]).ToLower() == "true" ? true : false;
+                        var emulsionUp = (HttpContext.Current.Request.Form["emulsion-up"]).ToLower() == "true" ? true : false;
+                        var emulsionDown = (HttpContext.Current.Request.Form["emulsion-down"]).ToLower() == "true" ? true : false;
+                        var colorSeparation = (HttpContext.Current.Request.Form["color-separation"]).ToLower() == "true" ? true : false;
 
                         #endregion
 
@@ -106,7 +106,6 @@ namespace xFilm5.REST.Controllers
                                 String tempFilePath = Path.Combine(tempPath, tempFileName);                                 // tempFilePath = \\[SpeedBox_ServerUri]\[SpeedBox_TempFolder]\[tempFileName]
                                 #endregion
 
-
                                 #region 用 NetworkConnection: 來自於 NetworkConnection.cs 用嚟做 impersonation 抄檔案
                                 using (new Impersonation(serverUri, userName, userPassword))
                                 {
@@ -116,10 +115,14 @@ namespace xFilm5.REST.Controllers
                                         File.Delete(tempFilePath);
                                     File.Move(srcFileNPath, tempFilePath);
 
-                                    //BotHelper.PostSpeedBox(clientId, tempFileName, moddedFileName);      // 通知 Bot Server 跟進
+                                    BotHelper.PostSpeedBox(clientId, tempFileName, moddedFileName);      // 通知 Bot Server 跟進
 
                                     log.Info(string.Format("[rest, easyrip, film] File [{0}] uploaded to [{1}]", orgFileName, tempFilePath));
                                 }
+                                #endregion
+
+                                #region 叫 Bot send Fcm Notifications
+                                BotHelper.PostSendFcmOnEasyRipUpload(user.UserId, orgFileName);
                                 #endregion
                             }
 
@@ -178,23 +181,17 @@ namespace xFilm5.REST.Controllers
 
                         #region 解碼 FormData 
 
-                        //var fdata = provider.FormData;
-                        bool flag;
-
-                        var greyscale = HttpContext.Current.Request.Form["greyscale"] != null ? bool.TryParse(HttpContext.Current.Request.Form["greyscale"], out flag) : false;
-                        var blackOverprint = HttpContext.Current.Request.Form["black-overprint"] != null ? bool.TryParse(HttpContext.Current.Request.Form["black-overprint"], out flag) : false;
-                        var spotToCMYK = HttpContext.Current.Request.Form["spot-to-cmyk"] != null ? bool.TryParse(HttpContext.Current.Request.Form["spot-to-cmyk"], out flag) : false;
-                        var dotGain50 = HttpContext.Current.Request.Form["dot-gain-50"] != null ? bool.TryParse(HttpContext.Current.Request.Form["dot-gain-50"], out flag) : false;
-                        var dotGain43 = HttpContext.Current.Request.Form["dot-gain-43"] != null ? bool.TryParse(HttpContext.Current.Request.Form["dot-gain-43"], out flag) : false;
-                        var dotGain40 = HttpContext.Current.Request.Form["dot-gain-40"] != null ? bool.TryParse(HttpContext.Current.Request.Form["dot-gain-40"], out flag) : false;
+                        var greyscale =(HttpContext.Current.Request.Form["greyscale"]).ToLower() == "true" ? true : false;
+                        var blackOverprint = (HttpContext.Current.Request.Form["black-overprint"]).ToLower() == "true" ? true : false;
+                        var spotToCMYK = (HttpContext.Current.Request.Form["spot-to-cmyk"]).ToLower() == "true" ? true : false;
+                        var dotGain50 = (HttpContext.Current.Request.Form["dot-gain-50"]).ToLower() == "true" ? true : false;
+                        var dotGain43 = (HttpContext.Current.Request.Form["dot-gain-43"]).ToLower() == "true" ? true : false;
+                        var dotGain40 = (HttpContext.Current.Request.Form["dot-gain-40"]).ToLower() == "true" ? true : false;
 
                         #endregion
 
                         if (provider.Contents.Count > 0)
                         {
-                            //var srcFileNPath = provider.FileData.First().LocalFileName;                                 // srcFilePath = [%TEMP%]\\BodyPart_[guid]
-                            //var orgFileName = provider.FileData.First().Headers.ContentDisposition.FileName.Replace("\"", string.Empty);
-
                             #region 準備啲 params
                             String serverUri = ConfigurationManager.AppSettings["SpeedBox_ServerUri"];
                             String userName = ConfigurationManager.AppSettings["SpeedBox_UserName"];
@@ -252,13 +249,17 @@ namespace xFilm5.REST.Controllers
                                         File.Delete(tempFilePath);
                                     File.Move(srcFileNPath, tempFilePath);
 
-                                    //BotHelper.PostSpeedBox(clientId, tempFileName, moddedFileName);      // 通知 Bot Server 跟進
+                                    BotHelper.PostSpeedBox(clientId, tempFileName, moddedFileName);      // 通知 Bot Server 跟進
 
                                     log.Info(string.Format("[rest, easyrip, plate] File [{0}] uploaded to [{1}]", orgFileName, tempFilePath));
                                 }
                                 #endregion
+
+                                #region 叫 Bot send Fcm Notifications
+                                BotHelper.PostSendFcmOnEasyRipUpload(user.UserId, orgFileName);
+                                #endregion
                             }
-                            
+
                             return Request.CreateResponse(HttpStatusCode.OK, "File uploaded.");
                         }
                         else
@@ -278,6 +279,132 @@ namespace xFilm5.REST.Controllers
                 log.Error("[rest, easyrip, plate] Upload failed...Invalid user");
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Upload failed...Invalid user");
             }
+        }
+
+        /// <summary>
+        /// 隻 x5 Easy RIP 用戶要 subscribe OnVps notifications.
+        /// 冇 <param name="item"></param>
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /api/easyrip/subscribe
+        ///     {
+        ///         "FCM": {
+        ///             "Token": "..."
+        ///         },
+        ///         "DeviceInfo": {
+        ///             "Id": "8269ab062db62d0938e33fe67b7a50f9",
+        ///             "Model": "Chrome 81",
+        ///             "Platform": "Mac OS",
+        ///             "Version": "10.15.4"
+        ///         }
+        ///     }
+        ///
+        /// </remarks>
+        /// <returns>冇嘢 nothing</returns>
+        /// <response code="200">Subscribed</response>
+        /// <response code="400">Subscribe failed</response>
+        [HttpPost]
+        [Route("subscribe")]
+        [JwtAuthentication]
+        public async Task<IHttpActionResult> PostSubscribe()
+        {
+            var identity = (ClaimsPrincipal)Thread.CurrentPrincipal;
+
+            Guid userSid = Guid.Empty;
+            userSid = Guid.TryParse(identity.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault(), out userSid) ? userSid : Guid.Empty;
+
+            //var requestContent = Request.Content;
+            //var json = await requestContent.ReadAsStringAsync();
+
+            var json = Request.Content.ReadAsStringAsync().Result;
+
+            #region 用 ExpandoObject 拆解個 json data
+            //refer: http://www.tomdupont.net/2014/02/deserialize-to-expandoobject-with.html
+            //var converter = new ExpandoObjectConverter(); //用唔用真係冇分別嘅
+            dynamic expando = JsonConvert.DeserializeObject<ExpandoObject>(json);
+            
+            //string fcmToken = expando.FCM.Token;
+            string deviceId = expando.DeviceInfo.Id;
+            //string deviceModel = expando.DeviceInfo.Model;
+            int platform = EasyRipHelper.PrasePlatform(expando.DeviceInfo.Platform);
+            //string version = expando.DeviceInfo.Version;
+            //DateTime registeredOn = ((DateTime)expando.RegisteredOn).ToLocalTime();
+
+            //dynamic options = expando.Options;
+            #endregion
+
+            if (expando != null)
+            {
+                using (var ctx = new xFilmEntities())
+                {
+                    var user = ctx.User.Where(x => x.UserSid == userSid).SingleOrDefault();
+                    if (user != null)
+                    {
+                        using (var scope = ctx.Database.BeginTransaction())
+                        {
+                            try
+                            {
+                                #region 選擇哩個短訊，創建 dbo.UserNotification record
+                                var notifyType = EnumHelper.User.NotifyType.OnVps;
+                                var ntype = (int)notifyType;
+
+                                var notify = ctx.UserNotification.Where(x => x.UserId == user.UserId && x.DeviceId == deviceId && x.NotifyType == ntype).SingleOrDefault();
+                                if (notify != null)
+                                {
+                                    notify.Platform = platform;
+                                    notify.MetadataXml = json;
+                                    ctx.SaveChanges();
+                                }
+                                else
+                                {
+                                    notify = new UserNotification();
+                                    notify.UserId = user.UserId;
+                                    notify.DeviceId = deviceId;
+                                    notify.NotifyType = ntype;
+                                    notify.Platform = platform;
+                                    notify.MetadataXml = json;
+                                    ctx.UserNotification.Add(notify);
+                                    ctx.SaveChanges();
+                                }
+                                #endregion
+
+                                #region 創建 dbo.UserAuth record
+                                var auth = ctx.UserAuth.Where(x => x.UserId == user.UserId && x.DeviceId == deviceId).SingleOrDefault();
+                                if (auth != null)
+                                {
+                                    auth.Platform = platform;
+                                    auth.AuthType = (int)EnumHelper.User.AuthType.Legacy;
+                                    auth.MetadataXml = json;
+                                    ctx.SaveChanges();
+                                }
+                                else
+                                {
+                                    auth = new UserAuth();
+                                    auth.UserId = user.UserId;
+                                    auth.DeviceId = deviceId;
+                                    auth.AuthType = (int)EnumHelper.User.AuthType.Legacy;
+                                    auth.Platform = platform;
+                                    auth.MetadataXml = json;
+                                    ctx.UserAuth.Add(auth);
+                                    ctx.SaveChanges();
+                                }
+                                #endregion
+
+                                scope.Commit();
+                                return Ok();
+                            }
+                            catch
+                            {
+                                scope.Rollback();
+                            }
+                        }
+                    }
+                }
+            }
+
+            return NotFound();
         }
     }
 }

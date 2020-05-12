@@ -9,6 +9,7 @@ using System.Linq;
 using System.Printing;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using xFilm5.REST.Models;
 
 namespace xFilm5.REST.Helper
@@ -218,6 +219,30 @@ namespace xFilm5.REST.Helper
             request.AddBody(new
             {
                 OrderId = orderId.ToString(),
+                AnotherParam = 19.99
+            });
+            var response = client.Execute(request);
+            return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
+        }
+
+        public static bool PostSendFcmOnEasyRipUpload(int userId, string filename)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            //#if (DEBUG)
+            //            botServer = "http://localhost:35543/";
+            //#endif
+            var client = new RestClient(botServer);
+            var request = new RestRequest("FCM/SendMessage/OnEasyRipUploaded/", Method.POST);
+            //request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+            request.RequestFormat = DataFormat.Json;
+
+            //request.AddParameter("ReceiptId", receiptId.ToString());
+            //request.AddParameter("LanguageId", DAL.Common.Config.CurrentLanguageId.ToString());
+            //request.AddParameter("PrinterName", printerName);
+            request.AddBody(new
+            {
+                UserId = userId.ToString(),
+                FileName = filename,
                 AnotherParam = 19.99
             });
             var response = client.Execute(request);

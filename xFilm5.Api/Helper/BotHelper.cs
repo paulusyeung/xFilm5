@@ -202,6 +202,30 @@ namespace xFilm5.Api.Helper
             return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
         }
 
+        public static bool PostSendFcmOnVps(int clientId, string vpsFileName)
+        {
+            String botServer = ConfigurationManager.AppSettings["BotServer"];
+            //#if (DEBUG)
+            //            botServer = "http://localhost:35543/";
+            //#endif
+            var client = new RestClient(botServer);
+            var request = new RestRequest("FCM/SendMessage/OnVps/", Method.POST);
+            //request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+            request.RequestFormat = DataFormat.Json;
+
+            //request.AddParameter("ReceiptId", receiptId.ToString());
+            //request.AddParameter("LanguageId", DAL.Common.Config.CurrentLanguageId.ToString());
+            //request.AddParameter("PrinterName", printerName);
+            request.AddBody(new
+            {
+                ClientId = clientId.ToString(),
+                VpsFileName = vpsFileName,
+                AnotherParam = 19.99
+            });
+            var response = client.Execute(request);
+            return ((response.StatusCode == System.Net.HttpStatusCode.OK) ? true : false);
+        }
+
         public static bool PostSendFcmOnOrder(int orderId)
         {
             String botServer = ConfigurationManager.AppSettings["BotServer"];

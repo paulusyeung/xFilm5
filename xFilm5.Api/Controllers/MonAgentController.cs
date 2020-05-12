@@ -242,6 +242,10 @@ namespace xFilm5.Api.Controllers
                             BotHelper.PostCloudDisk_ApiVpsUploadFile(String.Format("{0}.{1}", clientId.ToString(), vpsFileName));
                             #endregion
 
+                            #region 2020.05.11 paulus: send FCM on VPS
+                            BotHelper.PostSendFcmOnVps(clientId, vpsFileName);
+                            #endregion
+
                             log.Info("[vps] " + jsonData.ToString());
                             return Ok();
                         }

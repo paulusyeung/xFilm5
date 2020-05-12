@@ -72,6 +72,36 @@ namespace xFilm5.Bot.Controllers
         }
 
         [HttpPost]
+        [Route("FCM/SendMessage/OnVps")]
+        public IHttpActionResult PostSendOnVps([FromBody] JObject jsonData)
+        {
+            if (jsonData == null)
+            {
+                log.Error("[bot, FCM, SendMessage OnVps] jsonData == null");
+                return NotFound();
+            }
+            else
+            {
+                int clientId = jsonData["ClientId"].Value<int>();
+                String vpsFileName = jsonData["VpsFileName"].Value<String>();
+
+                var result = FCMHelper.SendOnVps(clientId, vpsFileName);
+
+                if (result)
+                {
+                    log.Info(String.Format("[bot, FCM, PostSendMessage OnVps] \r\nFirebase return success\r\nClient Id = {0}, VpsFileName = {1}", clientId.ToString(), vpsFileName));
+                    return Ok();
+                }
+                else
+                {
+                    log.Error(String.Format("[bot, FCM, PostSendMessage OnVps] \r\nFirebase return failure\r\nClient Id = {0}, VpsFileName = {1}", clientId.ToString(), vpsFileName));
+                }
+
+                return NotFound();
+            }
+        }
+
+        [HttpPost]
         [Route("FCM/SendMessage/OnOrder/{orderId}")]
         public IHttpActionResult PostSendOnOrder(int orderId)
         {
@@ -107,6 +137,36 @@ namespace xFilm5.Bot.Controllers
             }
 
             return NotFound();
+        }
+
+        [HttpPost]
+        [Route("FCM/SendMessage/OnEasyRipUploaded")]
+        public IHttpActionResult PostSendOnEasyRipUploaded([FromBody] JObject jsonData)
+        {
+            if (jsonData == null)
+            {
+                log.Error("[bot, FCM, SendMessage OnEasyRipUploaded] jsonData == null");
+                return NotFound();
+            }
+            else
+            {
+                int userId = jsonData["UserId"].Value<int>();
+                String filename = jsonData["FileName"].Value<String>();
+
+                var result = FCMHelper.SendOnEasyRipUploaded(userId, filename);
+
+                if (result)
+                {
+                    log.Info(String.Format("[bot, FCM, PostSendMessage OnEasyRipUploadedr] \r\nFirebase return success\r\nOrder Id = {0}", filename));
+                    return Ok();
+                }
+                else
+                {
+                    log.Error(String.Format("[bot, FCM, PostSendMessage OnEasyRipUploadedr] \r\nFirebase return failure\r\nOrder Id = {0}", filename));
+                }
+
+                return NotFound();
+            }
         }
 
         [HttpPost]
