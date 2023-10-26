@@ -2,7 +2,7 @@
 var doCache = true;
 
 // Name our cache
-var CACHE_NAME = 'xfilm5-speedbox';
+var CACHE_NAME = 'x5-speedbox';
 
 // Delete old caches that are not our current one!
 self.addEventListener("activate", event => {
@@ -30,7 +30,7 @@ self.addEventListener('install', function (event) {
                 // This is because webpack hashes it
                 fetch("asset-manifest.json")
                     .then(response => {
-                        response.json();
+                        response.json(); 
                     })
                     .then(assets => {
                         // Open a cache and cache our files
@@ -54,6 +54,12 @@ self.addEventListener('install', function (event) {
 // if we have them
 self.addEventListener('fetch', function (event) {
     if (doCache) {
+        // SOLUTION: 
+        // i) detect your upload endpoint 
+        // ii) return so that you can use XHR
+        if (event.request.url.indexOf('BaseForm') !== -1) {
+            return;
+        }
         event.respondWith(
             caches.match(event.request).then(function (response) {
                 return response || fetch(event.request);

@@ -33,6 +33,7 @@ namespace xFilm5.SpeedBox
             Context.CurrentTheme = Config.CurrentTheme;
 
             SetAttributes();
+
             LoadChildForm();
         }
 
@@ -81,6 +82,11 @@ namespace xFilm5.SpeedBox
                 case _ChangeTheme:
                     var theme = new Forms.Theme();
                     theme.ShowDialog();
+                    break;
+                case _FactoryReset:
+                    Helper.Common.FactoryReset();
+                    Context.Session.IsLoggedOn = false;
+                    MessageBox.Show("Current Settings resetted.");
                     break;
                 case _SwitchForm:
                     var page = Config.CurrentPage.ToLower();

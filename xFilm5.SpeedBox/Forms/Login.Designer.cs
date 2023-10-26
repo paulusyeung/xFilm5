@@ -31,12 +31,14 @@ namespace xFilm5.SpeedBox.Forms
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.lblUserName = new Gizmox.WebGUI.Forms.Label();
             this.txtUserName = new Gizmox.WebGUI.Forms.TextBox();
             this.lblPassword = new Gizmox.WebGUI.Forms.Label();
             this.txtPassword = new Gizmox.WebGUI.Forms.TextBox();
-            this.button1 = new Gizmox.WebGUI.Forms.Button();
-            this.button2 = new Gizmox.WebGUI.Forms.Button();
+            this.cmdCancel = new Gizmox.WebGUI.Forms.Button();
+            this.cmdLogin = new Gizmox.WebGUI.Forms.Button();
+            this.errorProvider = new Gizmox.WebGUI.Forms.ErrorProvider(this.components);
             this.SuspendLayout();
             // 
             // lblUserName
@@ -74,30 +76,35 @@ namespace xFilm5.SpeedBox.Forms
             this.txtPassword.Size = new System.Drawing.Size(199, 20);
             this.txtPassword.TabIndex = 3;
             // 
-            // button1
+            // cmdCancel
             // 
-            this.button1.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.button1.Location = new System.Drawing.Point(68, 104);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "Cancel";
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.cmdCancel.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.cmdCancel.Location = new System.Drawing.Point(68, 104);
+            this.cmdCancel.Name = "cmdCancel";
+            this.cmdCancel.Size = new System.Drawing.Size(75, 23);
+            this.cmdCancel.TabIndex = 4;
+            this.cmdCancel.Text = "Cancel";
+            this.cmdCancel.Click += new System.EventHandler(this.cmdCancel_Click);
             // 
-            // button2
+            // cmdLogin
             // 
-            this.button2.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.button2.Location = new System.Drawing.Point(195, 104);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 5;
-            this.button2.Text = "OK";
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.cmdLogin.Font = new System.Drawing.Font("Tahoma", 9F);
+            this.cmdLogin.Location = new System.Drawing.Point(195, 104);
+            this.cmdLogin.Name = "cmdLogin";
+            this.cmdLogin.Size = new System.Drawing.Size(75, 23);
+            this.cmdLogin.TabIndex = 5;
+            this.cmdLogin.Text = "OK";
+            this.cmdLogin.Click += new System.EventHandler(this.cmdLogin_Click);
+            // 
+            // errorProvider
+            // 
+            this.errorProvider.BlinkRate = 3;
             // 
             // Login
             // 
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.AcceptButton = this.cmdLogin;
+            this.Controls.Add(this.cmdLogin);
+            this.Controls.Add(this.cmdCancel);
             this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.lblPassword);
             this.Controls.Add(this.txtUserName);
@@ -119,7 +126,8 @@ namespace xFilm5.SpeedBox.Forms
         private TextBox txtUserName;
         private Label lblPassword;
         private TextBox txtPassword;
-        private Button button1;
-        private Button button2;
+        private Button cmdCancel;
+        private Button cmdLogin;
+        private ErrorProvider errorProvider;
     }
 }

@@ -80,6 +80,12 @@ namespace xFilm5.SpeedBox.Forms
             SetCaptions();
             SetAttributes();
             SetUploader();
+
+#if (DEBUG)
+            txtFooter.Visible = true;
+#else
+            txtFooter.Visible = false;
+#endif
         }
 
         #region prepare Client Name comboBox
@@ -113,9 +119,15 @@ namespace xFilm5.SpeedBox.Forms
             uploadBox.UploadText = oDict.GetWord("msg_UploaderVWG");        // @"選出檔案或是拖拉檔案至此";
             uploadBox.AllowDrop = true;
             uploadBox.Dock = DockStyle.Fill;
-            uploadBox.UploadFileCompleted += new UploadFileCompletedHandler(uploadBox_UploadFileCompleted);
-            uploadBox.UploadError += new UploadErrorHandler(uploadBox_UploadError);
-            uploadBox.UploadBatchCompleted += new UploadEventHandler(uploadBox_UploadBatchCompleted);
+            //uploadBox.UploadFileCompleted += new UploadFileCompletedHandler(uploadBox_UploadFileCompleted);
+            //uploadBox.UploadError += new UploadErrorHandler(uploadBox_UploadError);
+            //uploadBox.UploadBatchCompleted += new UploadEventHandler(uploadBox_UploadBatchCompleted);
+            //uploadBox.UploadBatchStarting += new UploadEventHandler(uploadBox_UploadBatchStarting);
+        }
+
+        private void uploadBox_UploadBatchStarting(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
         #endregion
 
@@ -124,6 +136,8 @@ namespace xFilm5.SpeedBox.Forms
         {
             UploadFileResult result = e.Result;
             UploadedFiles.Add(result.TempFileFullName);
+
+            //txtFooter.Text += result.TempFileFullName + Environment.NewLine;
         }
 
         private void uploadBox_UploadError(object sender, UploadErrorEventArgs e)
@@ -146,6 +160,15 @@ namespace xFilm5.SpeedBox.Forms
         void uploadBox_UploadBatchCompleted(object sender, EventArgs e)
         {
             //HACK: this.Close();
+            int counter = 1;
+            txtFooter.Text = String.Empty;
+            foreach (var file in UploadedFiles)
+            {
+                System.Diagnostics.Debug.WriteLine(file);
+                txtFooter.Text += counter.ToString() + ": " + file + Environment.NewLine;
+                ++counter;
+            }
+            UploadedFiles.Clear();
         }
         #endregion
 

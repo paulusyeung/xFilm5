@@ -14,8 +14,8 @@ namespace xFilm5.SpeedBox
     {
         private static String _CurrentPage = "";
 
-        public static Guid SuperUserId { get; set; }
-        public static Guid CurrentUserId { get; set; }
+        public static int SuperUserId { get; set; }
+        public static int CurrentUserId { get; set; }
         public static String CurrentWordDict { get; set; }
         public static int CurrentLanguageId { get; set; }
 
@@ -161,6 +161,7 @@ namespace xFilm5.SpeedBox
             }
             _CurrentPage = page;
         }
+
         public static string InBox
         {
             get

@@ -38,6 +38,7 @@ namespace xFilm5.SpeedBox.Forms
             this.chkPositive = new Gizmox.WebGUI.Forms.CheckBox();
             this.uploadBox = new Gizmox.WebGUI.Forms.UploadControl();
             this.bottomPanel = new Gizmox.WebGUI.Forms.Panel();
+            this.txtFooter = new Gizmox.WebGUI.Forms.TextBox();
             this.chkEmulsionDown = new Gizmox.WebGUI.Forms.CheckBox();
             this.topPanel = new Gizmox.WebGUI.Forms.Panel();
             this.boxOptions.SuspendLayout();
@@ -101,16 +102,21 @@ namespace xFilm5.SpeedBox.Forms
             // 
             // uploadBox
             // 
-            this.uploadBox.Location = new System.Drawing.Point(107, 173);
+            this.uploadBox.Location = new System.Drawing.Point(82, 121);
             this.uploadBox.Name = "uploadBox";
             this.uploadBox.Size = new System.Drawing.Size(214, 139);
             this.uploadBox.TabIndex = 0;
             this.uploadBox.UploadMaxFileSize = ((long)(0));
             this.uploadBox.UploadMinFileSize = ((long)(0));
             this.uploadBox.UploadTempFilePath = "C:\\Users\\paulus\\AppData\\Local\\Temp\\";
+            this.uploadBox.UploadFileCompleted += new Gizmox.WebGUI.Forms.UploadFileCompletedHandler(this.uploadBox_UploadFileCompleted);
+            this.uploadBox.UploadBatchStarting += new Gizmox.WebGUI.Forms.UploadEventHandler(this.uploadBox_UploadBatchStarting);
+            this.uploadBox.UploadBatchCompleted += new Gizmox.WebGUI.Forms.UploadEventHandler(this.uploadBox_UploadBatchCompleted);
+            this.uploadBox.UploadError += new Gizmox.WebGUI.Forms.UploadErrorHandler(this.uploadBox_UploadError);
             // 
             // bottomPanel
             // 
+            this.bottomPanel.Controls.Add(this.txtFooter);
             this.bottomPanel.Controls.Add(this.uploadBox);
             this.bottomPanel.Dock = Gizmox.WebGUI.Forms.DockStyle.Fill;
             this.bottomPanel.Location = new System.Drawing.Point(0, 0);
@@ -118,6 +124,16 @@ namespace xFilm5.SpeedBox.Forms
             this.bottomPanel.Name = "bottomPanel";
             this.bottomPanel.Size = new System.Drawing.Size(412, 370);
             this.bottomPanel.TabIndex = 2;
+            // 
+            // txtFooter
+            // 
+            this.txtFooter.Dock = Gizmox.WebGUI.Forms.DockStyle.Bottom;
+            this.txtFooter.Location = new System.Drawing.Point(0, 304);
+            this.txtFooter.Multiline = true;
+            this.txtFooter.Name = "txtFooter";
+            this.txtFooter.ScrollBars = Gizmox.WebGUI.Forms.ScrollBars.Vertical;
+            this.txtFooter.Size = new System.Drawing.Size(412, 56);
+            this.txtFooter.TabIndex = 1;
             // 
             // chkEmulsionDown
             // 
@@ -169,5 +185,6 @@ namespace xFilm5.SpeedBox.Forms
         private Panel bottomPanel;
         private CheckBox chkEmulsionDown;
         private Panel topPanel;
+        private TextBox txtFooter;
     }
 }
