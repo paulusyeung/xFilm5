@@ -77,10 +77,13 @@
       <HintPath>..\packages\FastMember.Signed.1.3.0\lib\net45\FastMember.Signed.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Gizmox.WebGUI.Common, Version=, Culture=neutral, PublicKeyToken=263fa4ef694acff6" />
     <Reference Include="Gizmox.WebGUI.Common, Version=4.5.25701.0, Culture=neutral, PublicKeyToken=263fa4ef694acff6, processorArchitecture=MSIL" />
-    <Reference Include="Gizmox.WebGUI.Forms, Version=, Culture=neutral, PublicKeyToken=c508b41386c60f1d" />
-    <Reference Include="Gizmox.WebGUI.Server, Version=, Culture=neutral, PublicKeyToken=3de6eb684226c24d" />
+    <Reference Include="Gizmox.WebGUI.Forms, Version=, Culture=neutral, PublicKeyToken=c508b41386c60f1d">
+      <HintPath>..\..\..\Program Files (x86)\Gizmox\Visual WebGUI\SDK 4.5.2\Assemblies\Gizmox.WebGUI.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="Gizmox.WebGUI.Server, Version=, Culture=neutral, PublicKeyToken=3de6eb684226c24d">
+      <HintPath>..\..\..\Program Files (x86)\Gizmox\Visual WebGUI\SDK 4.5.2\Assemblies\Gizmox.WebGUI.Server.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>

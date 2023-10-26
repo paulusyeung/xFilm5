@@ -111,7 +111,7 @@
       <HintPath>..\..\..\Program Files\Common Files\nxStudio\nxStudio.dll</HintPath>
     </Reference>
     <Reference Include="owncloud-sharp">
-      <HintPath>..\..\owncloud-sharp-master\owncloud-sharp\bin\Release\owncloud-sharp.dll</HintPath>
+      <HintPath>..\..\owncloud-sharp\owncloud-sharp\bin\Release\owncloud-sharp.dll</HintPath>
     </Reference>
     <Reference Include="PrinterUtility, Version=1.0.1.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\PrinterUtility.1.1.2\lib\PrinterUtility.dll</HintPath>
